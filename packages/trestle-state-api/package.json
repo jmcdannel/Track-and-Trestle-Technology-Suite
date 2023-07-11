@@ -1,5 +1,5 @@
 {
-  "name": "Trestle-TT-State-Api",
+  "name": "@trestle-tt/trestle-tt-state-api",
   "version": "0.0.1",
   "description": "Deno REST Api to read/write turnout and effect state",
   "main": "index.mts",

@@ -1,0 +1,47 @@
+{
+  "layoutId": "betatrack",
+  "name": "Beta Track Junction",
+  "modules": [
+    "turnouts",
+    "locos",
+    "effects"
+  ],
+  "devices": [
+    {
+      "type": "arduino",
+      "id": "cmd",
+      "desc": "Command Station EX"
+    },
+    {
+      "type": "pi",
+      "id": "jmripi",
+      "desc": "RPi w/JMRI"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "cmd-serial",
+      "type": "serial",
+      "device": "cmd",
+      "serial": "/dev/ttyACM0",
+      "baud": 115200
+    },
+    {
+      "id": "jmripi-GPIO",
+      "type": "GPIO",
+      "device": "jmripi"
+    },
+    {
+      "id": "jmripi-PCA9685",
+      "type": "PCA9685",
+      "device": "jmripi"
+    },
+    {
+      "id": "jmripi-ServoKit",
+      "type": "ServoKit",
+      "device": "jmripi"
+    }
+  ],
+  "apiHost": "localhost",
+  "jmri": "http://localhost:12080/json/"
+}

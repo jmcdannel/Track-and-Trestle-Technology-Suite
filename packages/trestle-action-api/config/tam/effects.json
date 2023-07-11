@@ -1,0 +1,261 @@
+[
+  {
+    "actions": [
+      {
+        "file": "departing-train.wav",
+        "interface": "audio"
+      }
+    ],
+    "effectId": 202,
+    "name": "Departing",
+    "state": 0,
+    "type": "sound"
+  },
+  {
+    "actions": [
+      {
+        "file": "bike-horn-1.wav",
+        "interface": "audio"
+      }
+    ],
+    "effectId": 203,
+    "name": "Bike Horn",
+    "state": 0,
+    "type": "sound"
+  },
+  {
+    "actions": [
+      {
+        "file": "diesel-train-arrives-and-departs.wav",
+        "interface": "audio"
+      }
+    ],
+    "effectId": 204,
+    "name": "Traain Come & Go",
+    "state": 0,
+    "type": "sound"
+  },
+  {
+    "actions": [
+      {
+        "file": "noisy-street-car-moving.wav",
+        "interface": "audio"
+      }
+    ],
+    "effectId": 205,
+    "name": "Street Car Moving",
+    "state": 0,
+    "type": "sound"
+  },
+  {
+    "actions": [
+      {
+        "file": "train-upon-us.wav",
+        "interface": "audio"
+      }
+    ],
+    "effectId": 206,
+    "name": "Train Ariving",
+    "state": 0,
+    "type": "sound"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 41
+      }
+    ],
+    "effectId": 201,
+    "name": "Tam Station Parking Lot",
+    "state": 0,
+    "type": "light"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 39
+      }
+    ],
+    "effectId": 207,
+    "name": "Tam Station Heritage Lounge",
+    "state": 1,
+    "type": "light"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 43
+      }
+    ],
+    "effectId": 208,
+    "name": "Tam Station Heritage Platform",
+    "state": 0,
+    "type": "light"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 36,
+        "state": "green"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 35,
+        "state": "yellow"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 34,
+        "state": "red"
+      }
+    ],
+    "effectId": 101,
+    "name": "Station Signal 1",
+    "state": "red",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 24,
+        "state": "green"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 22,
+        "state": "yellow"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 23,
+        "state": "red"
+      }
+    ],
+    "effectId": 102,
+    "name": "Station Signal 2",
+    "state": "green",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 27,
+        "state": "green"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 25,
+        "state": "yellow"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 26,
+        "state": "red"
+      }
+    ],
+    "effectId": 103,
+    "name": "Station Signal 3",
+    "state": "green",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 30,
+        "state": "green"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 28,
+        "state": "yellow"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 29,
+        "state": "red"
+      }
+    ],
+    "effectId": 104,
+    "name": "Station Signal 4",
+    "state": "red",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 33,
+        "state": "green"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 31,
+        "state": "yellow"
+      },
+      {
+        "interface": "station-serial-north",
+        "pin": 32,
+        "state": "red"
+      }
+    ],
+    "effectId": 105,
+    "name": "Station Signal 5",
+    "state": "green",
+    "type": "signal"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 51
+      }
+    ],
+    "effectId": 1011,
+    "name": "TS X S1 Frog 1",
+    "state": 1,
+    "type": "frog"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 49
+      }
+    ],
+    "effectId": 1012,
+    "name": "TS X S1 Frog 2",
+    "state": 0,
+    "type": "frog"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 47
+      }
+    ],
+    "effectId": 1021,
+    "name": "TS S2 Frog ",
+    "state": 0,
+    "type": "frog"
+  },
+  {
+    "actions": [
+      {
+        "interface": "station-serial-north",
+        "pin": 45
+      }
+    ],
+    "effectId": 1031,
+    "name": "TS S3 Frog ",
+    "state": 0,
+    "type": "frog"
+  }
+]

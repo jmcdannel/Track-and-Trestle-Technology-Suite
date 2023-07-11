@@ -1,12 +1,24 @@
 {
-  "name": "Trestle-TT-Action-Api",
+  "name": "@trestle-tt/trestle-tt-action-api",
   "version": "0.0.1",
   "description": "NodeJS Websocket Server that processes action and turnout commands",
-  "main": "index.mts",
+  "main": "index.mjs",
   "author": "Josh McDannel",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "deno run ./index.mts"
+    "start": "node ./index.mjs"
+  },
+  "dependencies": {
+    "afplay": "^1.0.4",
+    "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security",
+    "play-sound": "^1.1.5",
+    "react-native-logs": "^5.0.1",
+    "serialport": "^10.5.0",
+    "signale": "^1.4.0",
+    "tone": "^14.7.77",
+    "ws": "^8.13.0"
   }
 }
