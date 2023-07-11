@@ -1,0 +1,12 @@
+{
+  "name": "Trestle-TT-Layout-Api",
+  "version": "0.0.1",
+  "description": "Deno REST Api to read from data store [MongoDB]",
+  "main": "index.mts",
+  "author": "Josh McDannel",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "deno run ./index.mts"
+  }
+}
