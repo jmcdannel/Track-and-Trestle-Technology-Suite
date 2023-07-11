@@ -7,6 +7,6 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "deno run ./index.mts"
+    "start": "deno run --allow-sys --allow-read --allow-net --allow-env ./index.mts"
   }
 }
