@@ -1,0 +1,19 @@
+{
+  "name": "trestle-tt-suite",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^7.1.1"
+  },
+  "description": "Monorepo of apps and apis for the Trestle TT Suite",
+  "version": "0.0.1",
+  "main": "index.mts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lerna run start --parallel"
+  },
+  "author": "Josh McDannel",
+  "license": "MIT"
+}

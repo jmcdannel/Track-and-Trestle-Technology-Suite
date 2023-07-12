@@ -1,0 +1,12 @@
+{
+  "name": "Trestle-TT-DCC-Api",
+  "version": "0.0.1",
+  "description": "NodeJS Websocket Server that processes DCC commands and sends them via Serial over USB to an Arduino Mega running DCC-EX EX-CommandStation.",
+  "main": "index.mts",
+  "author": "Josh McDannel",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "deno run ./index.mts"
+  }
+}
