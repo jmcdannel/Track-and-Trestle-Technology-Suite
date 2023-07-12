@@ -1,5 +1,4 @@
-// import log from './core/logger.mjs';
-import 'dotenv/config';
+// import 'dotenv/config';
 import waitOn from 'wait-on';
 import server from './src/server.mjs';
 import dcc from './src/dcc.mjs';
@@ -19,7 +18,7 @@ var opts = {
 async function main() {
   console.log('@trestle-tt/trestle-tt-dcc-api', '[MAIN]');
   try {
-    await waitOn(opts, () => console.log('waitOn'));
+    await waitOn(opts, () => console.trace('DCC waitOn'));
     await dcc.connect();
     await server.connect();
   } catch (err) {
