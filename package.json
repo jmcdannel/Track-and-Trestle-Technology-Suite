@@ -12,8 +12,13 @@
   "main": "index.mts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "lerna run start --parallel"
+    "package:layout-api": "lerna run --scope @trestle-tt/trestle-tt-layout-api --stream dev",
+    "package:dispatcher-app": "lerna run start --scope @trestle-tt/trestle-tt-dispatcher-app --verbose --stream",
+    "start": "lerna run start --stream"
   },
   "author": "Josh McDannel",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "wait-on": "^7.0.1"
+  }
 }

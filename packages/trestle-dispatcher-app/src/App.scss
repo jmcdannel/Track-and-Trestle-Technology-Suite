@@ -1,0 +1,147 @@
+@import "./theme";
+
+html,
+body,
+#root {
+	height: 100%;
+  background-color: $background;
+}
+
+.App {
+  text-align: center;
+}
+
+.app-header-menu.MuiAppBar-root {
+  background: $bg-pink-orange-1;
+  background: $bg-grad-pink-orange-1;
+}
+
+.app-footer.MuiBottomNavigation-root {
+  background-color: $background-light-1;  
+}
+
+.title {
+  flex-grow: 1;
+}
+
+.App-content {
+  overflow: auto;
+
+  .MuiPaper-root {
+    background-image: none;
+    background-color: $background-light-2;    
+  }
+}
+
+.App-content-column {
+  height: 100%;
+  overflow: auto;
+}
+
+// Utility Classes
+.grow {
+  flex: 1;
+}
+.flex {
+  display: flex;
+}
+.height100 {
+  height: 100%;
+}
+.width100 {
+  width: 100%;
+}
+.textLeft {
+  text-align: left;
+}
+
+// Status Monitor
+.status-monitor {
+  .MuiChip-root {
+    margin: 0 1em;
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+    padding-right: .5rem;
+    border-width: 3px;
+    border-color: rgb(128, 128, 128);
+    padding-left: .5rem;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,.5));
+  }
+  &__layout.MuiChip-root {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+  }
+  &__jmri.MuiChip-root {
+    background: $bg-purple-violet-1;
+    background: $bg-grad-purple-violet-1;
+  }
+  &__api.MuiChip-root {
+
+    background: $bg-yellow-orange-1;
+    background: $bg-grad-yellow-orange-1;
+  }
+  &__cmdex.MuiChip-root {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+  }
+  &__usb.MuiChip-root {
+    background: $bg-purple-violet-1;
+    background: $bg-grad-purple-violet-1;
+  }
+  &--unknown.MuiChip-root {
+    animation: flickerAnimation 1s infinite;
+  }
+  &--connected.MuiChip-root {
+    border-color: rgb(14, 192, 14);
+    // border-radius: 50%;
+  }
+  &--timeout.MuiChip-root,
+  &--disconnected.MuiChip-root {
+    border-color: rgb(211, 0, 0);
+    // border-radius: 50%;
+  }
+}
+
+.header-button.MuiIconButton-root {
+  // border: 1px solid white;
+  border-radius: 10px;
+  background: $bg-purple-violet-1;
+  background: $bg-grad-purple-violet-1;
+  margin: 0 .25rem;
+}
+
+.power {
+  &-on, 
+  &-off, 
+  &-unknown, 
+  &-pending {
+  }
+  &-on {
+   svg.MuiSvgIcon-root {
+    background-color: rgb(14, 192, 14);
+   }
+  }
+  &-off {
+    svg.MuiSvgIcon-root {
+     background-color: rgb(211, 0, 0);
+    }
+
+  }
+  &-unknown {
+    svg.MuiSvgIcon-root {
+     background-color: rgb(129, 129, 129);
+    }
+  }
+
+  &-pending {
+    svg.MuiSvgIcon-root {
+      fill: #999;
+      animation: flickerAnimation 1s infinite;
+    }
+  }
+}
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:.5; }
+  100% { opacity:1; }
+}

@@ -1,0 +1,8 @@
+{
+    "layoutId": "betatrack",
+    "name": "Betatrack",
+    "api": "ws://localhost:8080",
+    "actionApi": "ws://localhost:8080",
+    "layoutApi": "http://localhost:5001/api",
+    "jmri": "http://localhost:12080/json/"
+}

@@ -1,0 +1,63 @@
+{
+  "layoutId": "tam",
+  "name": "Tamarack Junction",
+  "modules": [
+    "turnouts",
+    "routes",
+    "locos",
+    "effects"
+  ],
+  "devices": [
+    {
+      "type": "arduino",
+      "id": "cmd",
+      "desc": "Command Station EX"
+    },
+    {
+      "type": "arduino",
+      "id": "station-north",
+      "desc": "Tamarack Station North Arduino"
+    },
+    {
+      "type": "arduino",
+      "id": "station-south",
+      "desc": "Tamarack Station South Arduino"
+    },
+    {
+      "type": "macOS",
+      "id": "MacMini",
+      "desc": "MacMini w/JMRI",
+      "connectedDevices": ["cmd", "station-north", "station-south"]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "cmd-serial",
+      "type": "serial",
+      "device": "cmd",
+      "serial": "/dev/ttyACM2",
+      "baud": 115200
+    },
+    {
+      "id": "station-north-serial",
+      "type": "serial",
+      "device": "station",
+      "serial": "/dev/ttyACM3",
+      "baud": 115200
+    },
+    {
+      "id": "station-south-serial",
+      "type": "serial",
+      "device": "station",
+      "serial": "/dev/ttyACM3",
+      "baud": 115200
+    },
+    {
+      "id": "audio",
+      "type": "audio",
+      "device": "MacMini"
+    }
+  ],
+  "apiHost": "localhost",
+  "jmri": "http://localhost:12080/json/"
+}

@@ -1,0 +1,286 @@
+{
+  "destinations": [
+    {
+      "name": "VLY NB - CANYON",
+      "routeId": 1,
+      "line": "Valley",
+      "svgId": "VLYNB1"
+    },
+    {
+      "name": "VLY SB - CANYON",
+      "routeId": 2,
+      "line": "Valley",
+      "svgId": "VLYSB1"
+    },
+    {
+      "name": "VLY NB - STATION",
+      "routeId": 3,
+      "line": "Valley",
+      "svgId": "VLYNB2"
+    },
+    {
+      "name": "VLY SB - STATION",
+      "routeId": 4,
+      "line": "Valley",
+      "svgId": "VLYSB2"
+    },
+    {
+      "name": "TS 1",
+      "routeId": 5,
+      "line": "Tamarack Station",
+      "svgId": "TS1"
+    },
+    {
+      "name": "TS 2",
+      "routeId": 6,
+      "line": "Tamarack Station",
+      "svgId": "TS2"
+    },
+    {
+      "name": "TS 3",
+      "routeId": 7,
+      "line": "Tamarack Station",
+      "svgId": "TS3"
+    },
+    {
+      "name": "TS 4",
+      "routeId": 8,
+      "line": "Tamarack Station",
+      "svgId": "TS4"
+    },
+    {
+      "name": "TS F1",
+      "routeId": 9,
+      "line": "Tamarack Station",
+      "svgId": "TSF1"
+    },
+    {
+      "name": "ENG1",
+      "routeId": 10,
+      "line": "Tamarack Station",
+      "svgId": "ENG1"
+    },
+    {
+      "name": "ENG2",
+      "routeId": 11,
+      "line": "Tamarack Station",
+      "svgId": "ENG2"
+    },
+    {
+      "name": "UL",
+      "routeId": 12,
+      "line": "Valley City",
+      "svgId": "UL"
+    },
+    {
+      "name": "IND1",
+      "routeId": 13,
+      "line": "Valley City",
+      "svgId": "IND1"
+    },
+    {
+      "name": "IND2",
+      "routeId": 14,
+      "line": "Valley City",
+      "svgId": "IND2"
+    },
+    {
+      "name": "VLY NB - CITY",
+      "routeId": 15,
+      "line": "Valley",
+      "svgId": "VLYNB3"
+    },
+    {
+      "name": "VLY SB - CITY",
+      "routeId": 16,
+      "line": "Valley",
+      "svgId": "VLYSB3"
+    }
+  ],
+  "paths": [
+    {
+      "destinations": [1,5], 
+      "turnouts": [
+        { "turnoutId": 302, "state": false },
+        { "turnoutId": 303, "state": false },
+        { "turnoutId": 304, "state": true },
+        { "turnoutId": 305, "state": true }
+      ]
+    },
+    { 
+      "destinations": [1,6], 
+      "turnouts": [
+        { "turnoutId": 302, "state": false },
+        { "turnoutId": 303, "state": false },
+        { "turnoutId": 304, "state": true },
+        { "turnoutId": 305, "state": false }
+      ]
+    },
+    { 
+      "destinations": [1,7], 
+      "turnouts": [
+        { "turnoutId": 302, "state": false },
+        { "turnoutId": 303, "state": false },
+        { "turnoutId": 304, "state": false },
+        { "turnoutId": 307, "state": false },
+        { "turnoutId": 306, "state": true }
+      ]
+    },
+    { 
+      "destinations": [1,8], 
+      "turnouts": [
+        { "turnoutId": 302, "state": false },
+        { "turnoutId": 303, "state": false },
+        { "turnoutId": 304, "state": false },
+        { "turnoutId": 307, "state": false },
+        { "turnoutId": 306, "state": false }
+      ]
+    },
+    {
+      "destinations": [2,5], 
+      "turnouts": [
+        { "turnoutId": 301, "state": false },
+        { "turnoutId": 303, "state": true },
+        { "turnoutId": 304, "state": true },
+        { "turnoutId": 305, "state": true }
+      ]
+    },
+    { 
+      "destinations": [2,6], 
+      "turnouts": [
+        { "turnoutId": 301, "state": false },
+        { "turnoutId": 303, "state": true },
+        { "turnoutId": 304, "state": true },
+        { "turnoutId": 305, "state": false }
+      ]
+    },
+    { 
+      "destinations": [2,7], 
+      "turnouts": [
+        { "turnoutId": 301, "state": false },
+        { "turnoutId": 303, "state": true },
+        { "turnoutId": 304, "state": false },
+        { "turnoutId": 307, "state": false },
+        { "turnoutId": 306, "state": true }
+      ]
+    },
+    { 
+      "destinations": [2,8], 
+      "turnouts": [
+        { "turnoutId": 301, "state": false },
+        { "turnoutId": 303, "state": true },
+        { "turnoutId": 304, "state": false },
+        { "turnoutId": 307, "state": false },
+        { "turnoutId": 306, "state": false }
+      ]
+    },
+    { 
+      "destinations": [1,4], 
+      "turnouts": [
+        { "turnoutId": 300, "state": false }
+      ]
+    },
+    { 
+      "destinations": [1,3], 
+      "turnouts": [
+        { "turnoutId": 300, "state": true }
+      ]
+    },
+    { 
+      "destinations": [15,4], 
+      "turnouts": [
+        { "turnoutId": 101, "state": false }
+      ]
+    },
+    { 
+      "destinations": [15,3], 
+      "turnouts": [
+        { "turnoutId": 101, "state": true }
+      ]
+    },
+    {
+      "destinations": [15,5], 
+      "turnouts": [
+        { "turnoutId": 102, "state": false },
+        { "turnoutId": 104, "state": true },
+        { "turnoutId": 107, "state": true }
+      ]
+    },
+    { 
+      "destinations": [15,6], 
+      "turnouts": [
+        { "turnoutId": 102, "state": false },
+        { "turnoutId": 104, "state": false },
+        { "turnoutId": 105, "state": true }
+      ]
+    },
+    { 
+      "destinations": [15,7], 
+      "turnouts": [
+        { "turnoutId": 102, "state": false },
+        { "turnoutId": 104, "state": false },
+        { "turnoutId": 105, "state": false },
+        { "turnoutId": 108, "state": true },
+        { "turnoutId": 109, "state": true }
+      ]
+    },
+    { 
+      "destinations": [15,8], 
+      "turnouts": [
+        { "turnoutId": 102, "state": false },
+        { "turnoutId": 104, "state": false },
+        { "turnoutId": 105, "state": false },
+        { "turnoutId": 108, "state": false },
+        { "turnoutId": 110, "state": false }
+      ]
+    },
+    { 
+      "destinations": [16,5], 
+      "turnouts": [
+        { "turnoutId": 103, "state": false },
+        { "turnoutId": 106, "state": true },
+        { "turnoutId": 107, "state": false }
+      ]
+    },
+    { 
+      "destinations": [16,7], 
+      "turnouts": [
+        { "turnoutId": 103, "state": false },
+        { "turnoutId": 106, "state": false },
+        { "turnoutId": 109, "state": false }
+      ]
+    },
+    { 
+      "destinations": [7,10], 
+      "turnouts": [
+        { "turnoutId": 308, "state": false },
+        { "turnoutId": 307, "state": true },
+        { "turnoutId": 306, "state": true }
+      ]
+    },
+    { 
+      "destinations": [7,11], 
+      "turnouts": [
+        { "turnoutId": 308, "state": true },
+        { "turnoutId": 307, "state": true },
+        { "turnoutId": 306, "state": true }
+      ]
+    },
+    { 
+      "destinations": [8,10], 
+      "turnouts": [
+        { "turnoutId": 308, "state": false },
+        { "turnoutId": 307, "state": true },
+        { "turnoutId": 306, "state": false }
+      ]
+    },
+    { 
+      "destinations": [8,11], 
+      "turnouts": [
+        { "turnoutId": 308, "state": true },
+        { "turnoutId": 307, "state": true },
+        { "turnoutId": 306, "state": false }
+      ]
+    }
+  ]
+}

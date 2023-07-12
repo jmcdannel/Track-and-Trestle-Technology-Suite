@@ -1,0 +1,57 @@
+{
+  "layoutId": "betatrack",
+  "name": "Beta Track Junction",
+  "modules": [
+    "turnouts",
+    "routes",
+    "locos",
+    "effects"
+  ],
+  "devices": [
+    {
+      "type": "arduino",
+      "id": "cmd",
+      "desc": "Command Station EX"
+    },
+    {
+      "type": "arduino",
+      "id": "betatrack-serial",
+      "desc": "Arduino Direct Serial Control"
+    },
+    {
+      "type": "macOS",
+      "id": "MacMini",
+      "desc": "MacMini w/JMRI",
+      "connectedDevices": [
+        "cmd",
+        "betatrack-serial"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "cmd-serial",
+      "type": "cmd-ex",
+      "device": "cmd",
+      "serial": "/dev/tty.usbmodem2401",
+      "baud": 115200,
+      "status": "fail"
+    },
+    {
+      "id": "betatrack-layout",
+      "type": "serial",
+      "device": "betatrack-serial",
+      "serial": "/dev/tty.usbserial-230",
+      "baud": 115200,
+      "status": "fail"
+    },
+    {
+      "id": "audio",
+      "type": "audio",
+      "device": "MacMini",
+      "connection": {}
+    }
+  ],
+  "apiHost": "localhost",
+  "jmri": "http://localhost:12080/json/"
+}

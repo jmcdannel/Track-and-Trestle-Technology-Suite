@@ -1,0 +1,66 @@
+@import "../theme";
+
+.effects {
+  .effects__grid-item {
+    flex-basis: 25%;
+    min-width: 24rem;
+    .MuiAvatar-root {
+      background: $bg-pink-orange-1;
+      background: $bg-grad-pink-orange-1;        
+    }
+    &:nth-child(2n) .MuiAvatar-root {
+      background: $bg-blue-green-1;
+      background: $bg-grad-blue-green-1;
+    }
+    &:nth-child(3n) .MuiAvatar-root  {
+      background: $bg-purple-violet-1;
+      background: $bg-grad-purple-violet-1;
+    }
+    &:nth-child(4n) .MuiAvatar-root  {
+      background: $bg-red-orange-1;
+      background: $bg-grad-red-orange-1;
+    }
+    &:nth-child(5n) .MuiAvatar-root  {
+      background: $bg-yellow-orange-1;
+      background: $bg-grad-yellow-orange-1;
+    }
+    &:nth-child(6n) .MuiAvatar-root  {
+      background: $bg-green-blue-1;
+      background: $bg-grad-green-blue-1;
+    }
+    :nth-child(7n)  .MuiAvatar-root  {
+      background: $bg-pink-orange-1;
+      background: $bg-grad-pink-orange-1;        
+    }
+    :nth-child(8n)  .MuiAvatar-root  {
+      background: $bg-purple-violet-1;
+      background: $bg-grad-purple-violet-1;    
+    }
+  }  
+  .effect {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    &__meta {
+      display: none;
+    }
+    .MuiCardHeader-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9rem;
+      padding-left: 1rem;
+    }
+    .MuiCardHeader-root {
+      padding: 0.25rem;
+    }
+    .MuiCardContent-root {
+      padding: 0.25rem;
+    }
+    .MuiCardHeader-avatar {
+      margin-right: 0;
+    }
+  }
+  
+}
