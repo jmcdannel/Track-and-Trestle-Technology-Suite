@@ -1,0 +1,134 @@
+$greenline: rgb(0, 171, 0);
+
+.dispatcher {
+  &__routemap {
+    svg {
+      display: block;
+      width: 100vw;
+    }
+  }
+}
+.App-content__conductor .turnouts {
+  align-content: flex-start;
+  .turnout__container {
+    flex-basis: 33%;
+  }
+}
+
+.turnout {
+  max-width: 10rem;
+}
+
+g.turnout {
+  pointer-events: bounding-box;
+  opacity: 1;
+  cursor: pointer;
+  path {
+    fill:none;
+    stroke-linecap:butt;
+  }
+}
+
+g.turnout:hover {
+  opacity: .5;
+}
+
+$turnouts: 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 201, 202, 203, 204, 205, 300, 301, 302, 303, 304, 305, 306, 307, 308;
+
+$routes: 'VLYNB1', 'VLYSB1', 'VLYNB2', 'VLYSB2', 'TS1', 'TS2', 'TS3', 'TS4', 'TSF1', 'ENG1', 'ENG2', 'UL', 'IND1', 'IND2', 'VLYNB3', 'VLYSB3';
+
+#Turnouts {
+  > g {
+    visibility: hidden;
+  }
+}
+#TurnoutLabels {
+  > g {
+    cursor: pointer;
+    &:hover {
+      path {
+        stroke: #a0e12f !important;
+      }
+    }
+  }
+  .hide-turnouts & {
+    display: none;
+  }
+}
+#Routes {
+  > g {
+    cursor: pointer;
+    &:hover {
+      path {
+        stroke: #a0e12f !important;
+      }
+    }
+  }
+  .hide-routes & {
+    display: none;
+  }
+}
+
+@each $turnout in $turnouts {
+  .turnout-#{$turnout}-straight {
+    #_#{$turnout} {
+      visibility: visible;
+      cursor: pointer;
+      path:nth-child(1) {
+        visibility: hidden;
+      }
+      path:nth-child(2) {
+        stroke: black !important;
+        visibility: visible;
+      }
+    }
+  }
+  .turnout-#{$turnout}-divergent {
+    #_#{$turnout} {
+      display:block;
+      cursor: pointer;
+      path:nth-child(1) {
+        stroke: black !important;
+        visibility: visible;
+      }
+      path:nth-child(2) {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
+@each $route in $routes {
+  .route-#{$route}-origin {
+    ##{$route} {
+      path {
+        stroke:rgb(0, 88, 0) !important;
+        fill:rgb(0, 171, 0) !important;
+      }
+    }
+  }
+  .route-#{$route}-destination {
+    ##{$route} {
+      path {
+        stroke:rgb(189, 9, 9) !important;
+        fill:rgb(213, 87, 87) !important;
+      }
+    }
+  }
+  .route-#{$route}-available {
+    ##{$route} {
+      path {
+        stroke:rgb(0, 41, 174) !important;
+        fill:rgba(0, 41, 174, 1) !important;
+      }
+    }
+  }
+  .route-#{$route}-unavailable {
+    ##{$route} {
+      visibility: hidden;
+      path, text {
+        stroke:rgb(55, 55, 55) !important;
+      }
+    }
+  }
+}

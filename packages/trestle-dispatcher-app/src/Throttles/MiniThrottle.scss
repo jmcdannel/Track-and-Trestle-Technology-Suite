@@ -1,0 +1,98 @@
+@use "sass:color";
+@mixin linear-gradient($direction, $color-stops...) {
+  // Direction has been omitted and happens to be a color-stop
+  @if is-direction($direction) == false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+$green: #26ac14;
+$blue: #146fac;
+$red: #f44336;
+$orange: #f89719;
+
+.mini-throttle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  width: auto;
+
+  &__stop {
+    width: auto;
+    height: 100%;
+  }
+
+  .throttle__speed {
+    width: 4rem;
+    // flex: 1;
+    height: 100%;
+    padding: 0;
+    margin: 0 .5rem;
+    &:after, &:before {
+      display: none;
+    }
+  }
+  .throttle__controls__group {
+    padding: 0 .5rem;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+  }
+  &__acquired {
+    .throttle__controls__group {
+      .MuiIconButton-root {
+        border: 1px solid rgba(255,255,255, 0.5);
+        padding: 0.7rem .7rem; 
+
+        &.speed-up-btn {
+          border-radius: 0 1rem 1rem 0;
+          border-left: none;
+          color: $green;
+        }
+        &.speed-stop-btn {
+          border-radius: 0;
+        }
+        &.speed-down-btn {
+          border-radius: 1rem 0 0 1rem;
+          border-right: none;
+          color: #f44336;
+        }
+
+      }
+    }
+  }
+
+
+  &.MuiPaper-root {
+    @include linear-gradient(darken($red, 30%), darken($red, 40%));
+  }
+  &--BNSF,
+  &--GN-317 {
+    &.MuiPaper-root {
+      @include linear-gradient(darken($green, 20%), darken($green, 30%));
+    }
+  }
+
+  &--BNSF-5931 {
+    &.MuiPaper-root {
+      @include linear-gradient(darken($orange, 20%), darken($orange, 30%));
+    }
+  }
+
+  &--BNSF-5917, 
+  &--BNSF-5918,
+  &--BNSF-5919,
+  &--Amtrack-150 {
+    &.MuiPaper-root {
+      @include linear-gradient(darken($blue, 20%), darken($blue, 30%));
+    }
+  }
+
+}

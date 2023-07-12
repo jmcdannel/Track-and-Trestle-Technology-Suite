@@ -1,0 +1,12 @@
+{
+  "name": "@trestle-tt/trestle-tt-dispatcher-app",
+  "version": "0.0.1",
+  "description": "React App to allow control of entire layout",
+  "main": "index.mts",
+  "author": "Josh McDannel",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "deno run ./index.mts"
+  }
+}

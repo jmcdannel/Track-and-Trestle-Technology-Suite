@@ -13,6 +13,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "package:layout-api": "lerna run --scope @trestle-tt/trestle-tt-layout-api --stream dev",
+    "package:dispatcher-app": "lerna run start --scope @trestle-tt/trestle-tt-dispatcher-app --verbose --stream",
     "start": "lerna run start --stream"
   },
   "author": "Josh McDannel",

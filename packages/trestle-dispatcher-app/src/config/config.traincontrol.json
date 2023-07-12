@@ -1,0 +1,32 @@
+{
+  "layoutId": "traincontrol",
+  "name": "Train Control Dev",
+  "modules": [
+    "turnouts",
+    "throttles",
+    "locos",
+    "signals",
+    "sensors",
+    "effects"
+  ],
+  "api": "http://traincontrol:5000",
+  "apiHost": "0.0.0.0",
+  "jmri": "http://traincontrol:12080/json/",
+  "serial": "/dev/ttyACM0",
+  "turnouts": {
+      "device": "arduino",
+      "interface": "serial"
+  },
+  "signals": {
+      "device": "arduino",
+      "interface": "serial"
+  },
+  "sensors": {
+      "device": "arduino",
+      "interface": "serial"
+  },
+  "effects": {
+      "arduino": ["serial"],
+      "pi": ["serial"]
+  }
+}

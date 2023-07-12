@@ -1,0 +1,40 @@
+@use "sass:color";
+
+// Background
+$background: rgb(12, 15, 21);
+
+$background-light-1: color.scale($background, $lightness: 10%);
+$background-light-2: color.scale($background, $lightness: 20%);
+$background-light-2: color.scale($background, $lightness: 30%);
+$background-light-4: color.scale($background, $lightness: 40%);
+
+$background-dark-1: color.scale($background, $lightness: -10%);
+$background-dark-2: color.scale($background, $lightness: -20%);
+$background-dark-2: color.scale($background, $lightness: -30%);
+$background-dark-4: color.scale($background, $lightness: -40%);
+
+$primary: rgb(10, 249, 78);
+$secondary: rgb(31, 121, 255);
+
+// Highlight Gradients
+$bg-pink-orange-1: rgb(254,0,107);
+$bg-grad-pink-orange-1: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
+
+$bg-blue-green-1: rgb(23,82,255);
+$bg-grad-blue-green-1: linear-gradient(90deg, rgba(23,82,255,1) 0%, rgba(0,199,83,1) 100%);
+
+$bg-yellow-orange-1: rgb(255,221,23);
+$bg-grad-yellow-orange-1: linear-gradient(90deg, rgba(255,221,23,1) 0%, rgba(255,120,10,1) 100%);
+
+$bg-red-orange-1: rgb(255,23,133);
+$bg-grad-red-orange-1: linear-gradient(90deg, rgba(255,23,133,1) 0%, rgba(255,68,0,1) 100%);
+
+$bg-purple-violet-1: rgb(132,0,255);
+$bg-grad-purple-violet-1: linear-gradient(90deg, rgba(132,0,255,1) 0%, rgba(201,0,255,1) 100%);
+
+$bg-green-blue-1: rgb(23,255,206);
+$bg-grad-green-blue-1: linear-gradient(90deg, rgb(22, 179, 145) 0%, rgb(0, 100, 162) 100%);
+
+// Dark BG Gradients
+
+
