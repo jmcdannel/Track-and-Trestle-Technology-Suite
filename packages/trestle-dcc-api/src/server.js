@@ -1,10 +1,9 @@
 import { WebSocketServer } from 'ws';
-import interfaces from '../communication/interfaces.mjs';
-import log from './logger.mjs'
+import dcc from './dcc.mjs';
 
 let server
-const port = 8080; // TODO: move to config
-const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
+const port = 8081; // TODO: move to config
+const serverId = 'DCCEXWebsocketServer'; // TODO: move to config
 
 const MSG_CONNECTED = JSON.stringify({
   action: 'message',
@@ -30,11 +29,10 @@ const handleConnection = (ws, resolve) => {
 
   // handling what to do when messageis recieved
   server.on('message', async (msg) => 
-    await interfaces.handleMessage(JSON.parse(msg), server));
+    await dcc.send(msg, server));
 
   // sending message to client
   server.send(MSG_CONNECTED);
-  server.send(JSON.stringify({ "action": "interfaceStatus", "payload": interfaces.interfaces }));
 
   resolve(ws);
 }
@@ -44,7 +42,7 @@ const connect = async () => {
     try {
       const wss = new WebSocketServer({ port });
       wss.on('connection', (ws) => handleConnection(ws, resolve));
-      log.start('[SERVER] WebSocket server started', serverId, port);
+      log.start('[SERVER] WebSocket server started', port, serverId);
     } catch (err) {
       log.error('[SERVER] error', err);
       reject(err);
