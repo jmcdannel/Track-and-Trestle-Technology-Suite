@@ -3,6 +3,7 @@
   import { debounce } from 'vue-debounce'
   import axios from "axios";
   import { LAYOUT_ID } from '../constants.js';
+  import dccApi from '../connections/dccApi.js';
 
   const locos = ref(null);
 
@@ -53,6 +54,7 @@
 
   async function sendLocoSpeed() {
     console.log('sendLocoSpeed', currentSpeed.value);
+    dccApi.setSpeed(loco.value.address, currentSpeed.value);
   }
 
   watch(currentSpeed, sendLocoSpeed)

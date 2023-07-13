@@ -1,4 +1,5 @@
 import { WebSocketServer } from 'ws';
+import log from './logger.mjs';
 import dcc from './dcc.mjs';
 
 let server
@@ -28,8 +29,7 @@ const handleConnection = (ws, resolve) => {
   server.on('close', handleClose);
 
   // handling what to do when messageis recieved
-  server.on('message', async (msg) => 
-    await dcc.send(msg, server));
+  server.on('message', dcc.handleMessage);
 
   // sending message to client
   server.send(MSG_CONNECTED);
