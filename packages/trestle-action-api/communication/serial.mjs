@@ -3,9 +3,6 @@ import log from '../core/logger.mjs';
 
 
 const connect = (com) => {
-
-  log.debug('[SERIAL] connect');
-
   return new Promise(function(resolve, reject) {
     const path = com.serial;
     const baudRate = com.baud;

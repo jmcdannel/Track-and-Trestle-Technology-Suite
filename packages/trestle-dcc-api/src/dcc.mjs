@@ -5,10 +5,8 @@ let port;
 
 const connect = () => {
 
-  log.debug('[SERIAL] connect');
-
   return new Promise(function(resolve, reject) {
-    const path = '/dev/tty.usbmodem2401';
+    const path = '/dev/tty.usbmodem2301';
     const baudRate = 115200;
 
     log.await('[SERIAL] attempting to connect to:', path);
@@ -68,8 +66,9 @@ const handleMessage = async (msg) => {
 
 const sendSpeed = ({ address, speed }) => {
   const direction = speed > 0 ? 1 : 0;
+  const absSpeed = Math.abs(speed);
   log.star('sendSpeed', address, speed, direction);
-  const cmd = `t 01 ${address} ${speed} ${direction}`;
+  const cmd = `t 01 ${address} ${absSpeed} ${direction}`;
   send(cmd);
 }
 

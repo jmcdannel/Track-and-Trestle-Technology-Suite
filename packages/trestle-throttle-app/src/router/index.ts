@@ -18,7 +18,7 @@ const router = createRouter({
       component: () => import('../views/EffectsView.vue')
     },
     {
-      path: '/throttle',
+      path: '/throttle/:locoId?',
       name: 'throttle',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

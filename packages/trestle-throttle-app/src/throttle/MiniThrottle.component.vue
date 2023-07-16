@@ -1,60 +1,60 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
+  import { ref, watch } from 'vue';
   import { debounce } from 'vue-debounce'
-  import axios from "axios";
-  import { LAYOUT_ID } from '../constants.js';
   import dccApi from '../connections/dccApi.js';
 
-  const locos = ref(null);
-
-  onMounted(async () => {
-    console.log('MiniThrottle.onMounted');
-    getLocos(LAYOUT_ID);
-  });
-
-  async function getLocos(layoutId:string) {
-    try {
-      const { data } = await axios.get(`/api/${layoutId}/locos`);
-
-      console.log('data', data);
-      locos.value = data;
-    } catch (err) {
-      console.error(err);
+  const props = defineProps({
+    loco: {
+        type: Object
     }
-  }
-
+  });
   const rangeValue = ref(0);
   const currentSpeed = ref(0);
+  const loco = ref(props.loco);
 
   const setSpeed = debounce(val => currentSpeed.value = val, '400ms')
 
-  const DEFAULT_LOCO =   {
-    "address": 31,
-    "autoStop": true,
-    "cruiseControl": false,
-    "forward": true,
-    "idleByDefault": true,
-    "isAcquired": false,
-    "maxSpeed": 30,
-    "name": "BNSF-5931",
-    "road": "BNSF",
-    "speed": 0
-  }
-
-  const props = defineProps({
-    address: Number
-  });
-
   function onSlider(e) {
-    rangeValue.value = parseInt(e.target.value);
-    setSpeed(parseInt(e.target.value));
+    const newSpeed = parseInt(e.target.value);
+    rangeValue.value = newSpeed;
+    setSpeed(newSpeed);
   }
 
-  const loco = ref(DEFAULT_LOCO);
+  async function handleStop() {
+    currentSpeed.value = 0;
+    rangeValue.value = currentSpeed.value;
+  }
 
-  async function sendLocoSpeed() {
-    console.log('sendLocoSpeed', currentSpeed.value);
-    dccApi.setSpeed(loco.value.address, currentSpeed.value);
+  async function handleUp() {
+    currentSpeed.value = currentSpeed.value + 1;
+    rangeValue.value = currentSpeed.value;
+  }
+
+  async function handleDown() {
+    currentSpeed.value = currentSpeed.value - 1;
+    rangeValue.value = currentSpeed.value;
+  }
+
+  async function sendLocoSpeed(newSpeed:number, oldSpeed:number) {
+
+    console.log('new-old', newSpeed, oldSpeed);
+    let delay = 0;
+    if (newSpeed > 0 && oldSpeed < 0) {
+      //change direction to forward
+      console.log('change direction to forward');
+      await dccApi.setSpeed(loco.value.address, 0);
+      delay = 1000;
+    } else if (newSpeed < 0 && oldSpeed > 0) {
+      //change direction to reverse
+      console.log('change direction to reverse');
+      await dccApi.setSpeed(loco.value.address, 0);
+      delay = 1000;
+    }
+    setTimeout(() => {
+      console.log('sendLocoSpeed', currentSpeed.value);
+      dccApi.setSpeed(loco.value.address, currentSpeed.value);
+    }, delay);
+    
   }
 
   watch(currentSpeed, sendLocoSpeed)
@@ -77,19 +77,15 @@
       <input type="range" min="-100" max="100" step="1" :value="rangeValue" @input="onSlider" class="range-style bg-slate-800 px-3 rounded-md" />
     </section>
     <section>
-      <div class="current-speed direction-fwd">
-        {{ rangeValue }}
+      <div class="current-speed direction-fwd flex justify-center">
+        <span class="[min-width:8rem] text-center text-5xl p-4 rounded-xl shadow-inner bg-gradient-to-r from-purple-500 to-pink-600">{{ rangeValue }}</span>
       </div>
-      <div class="px-2 py-4">
-        <button class="btn btn-accent btn-sm">+</button>
-        <button class="btn btn-primary btn-sm">stop</button>
-        <button class="btn btn-accent btn-sm">-</button>
+      <div class="px-2 py-4 flex flex-row">
+        <button class="btn btn-accent btn-sm px-8" @click="handleDown">-</button>
+        <button class="btn btn-primary btn-sm flex-grow" @click="handleStop">stop</button>
+        <button class="btn btn-accent btn-sm px-8" @click="handleUp">+</button>
       </div>
     </section>
-    <footer class="p-1 text-gray-900 bg-accent">
-      [connected]
-    </footer>
-    <pre>{{  locos  }}</pre>
   </main>
   
 </template>

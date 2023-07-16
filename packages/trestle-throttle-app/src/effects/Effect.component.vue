@@ -1,9 +1,6 @@
 <script setup>
-    import { ref } from 'vue';
-  import api from '../connections/api.js'
-
-  // q: in VueJS, how do I get the v-model in a child component?
-  // a: https://stackoverflow.com/questions/66332325/in-vuejs-how-do-i-get-the-v-model-in-a-child-component
+  import { ref } from 'vue';
+  import api from '../api/api.ts'
 
   const props = defineProps({
     efx: {
@@ -13,10 +10,10 @@
   })
   const emit = defineEmits(['update:efx'])
 
-  const efx = ref(props?.efx)
+  const efx = ref(props.efx)
 
   const handleEffect = async () => {
-    efx.value.state = !efx.value.state;
+    efx.value = { ...efx.value, state: !efx.value.state };
     const { effectId, state } = efx.value;
     await api.effects.put({ effectId, state: !state });
     await emit('update:efx', { ...efx.value, state: !state });

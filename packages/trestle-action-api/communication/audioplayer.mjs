@@ -28,7 +28,8 @@ const write = (data, onError) => {
 
 const connect = () => {
   log.start('[AUDIOPLAYER] connected');
-  return {write }
+  // return write;
+  return { write }
 };
 
 const send = (port, data) => {

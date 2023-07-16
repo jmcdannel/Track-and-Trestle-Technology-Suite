@@ -1,48 +1,55 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+  import { ref, onMounted } from 'vue';
+  import { RouterView } from 'vue-router'
+  import HeaderView from './views/HeaderView.vue'
+  import SelectLayout from './views/SelectLayout.vue'
+  import dccApi from './connections/dccApi.js'
+  import api from './api/api.ts';
+
+  dccApi.connect();
+  console.log('api.layoutId', api.getLayoutId());
+
+  const layoutId = ref(api.getLayoutId());
+  const layouts:any = ref(null);
+
+  onMounted(async () => {
+    console.log('[App].onMounted');
+    layoutId.value && api.connect(layoutId.value);
+    
+    layouts.value = await api.layouts.get();
+  });
+
+  const handleLayoutIdUpdated = async (newLayoutId:string) => {
+    console.log('handleLayoutIdUpdated', newLayoutId);
+    api.connect(newLayoutId);
+    await localStorage.setItem('layoutId', newLayoutId);
+    layoutId.value = newLayoutId;
+  }
+
+  const clearLayoutId = async () => {
+    console.log('clearLayoutId');
+    await localStorage.removeItem('layoutId');
+    layoutId.value = null;
+  }
+
 </script>
 
 <template>
-  <header></header>
-  <!-- <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
-  <header>
-    <div class="navbar bg-base-100">
-      <div class="navbar-start">
-        <div class="dropdown">
-          <label tabindex="0" class="btn btn-ghost btn-circle">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
-          </label>
-          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow rounded-box w-52 bg-slate-950">
-            <li><RouterLink to="/">Home</RouterLink></li>
-            <li><RouterLink to="/throttle">Throttle</RouterLink></li>
-            <li><RouterLink to="/effects">Effects</RouterLink></li>
-            <li><RouterLink to="/turnouts">Turnouts</RouterLink></li>
-            <li><RouterLink to="/routes">Routes</RouterLink></li>
-          </ul>
-        </div>
-      </div>
-      <div class="navbar-center">
-        <a class="btn btn-ghost normal-case text-xl">Trestle Throttle</a>
-      </div>
-      <div class="navbar-end">
-        <button class="btn btn-ghost btn-circle">
-          <div class="indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-            <span class="badge badge-xs badge-primary indicator-item"></span>
-          </div>
+  <main class="flex flex-col h-screen">
+    <HeaderView />
+    <main class="flex-grow">
+      <RouterView v-if="layoutId" />
+      <SelectLayout v-else :layouts="layouts" v-model="layoutId" @update:layout-id="handleLayoutIdUpdated" />  
+    </main>
+    <footer>
+      <section class="layout-id flex flex-row items-center px-3 py-1">
+        <div class="badge badge-primary mr-2">{{ layoutId  }}</div>
+        <button class="btn btn-circle btn-outline btn-xs" @click="clearLayoutId">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
-      </div>
-    </div>
-  </header>
-
-  <RouterView />
+      </section>
+    </footer>
+  </main>
 </template>
 
 <style scoped>

@@ -12,15 +12,15 @@ const MSG_CONNECTED = JSON.stringify({
 });
 
 const handleClose = () => {
-  log.info('[SERVER] connection closed', serverId);
+  log.info('[DCC WS SERVER] connection closed', serverId);
 }
 
 const handleError = err => {
-  log.error('[SERVER] Unexpected error occurred', serverId, err);
+  log.error('[DCC WS  SERVER] Unexpected error occurred', serverId, err);
 }
 
 const handleConnection = (ws, resolve) => {
-  log.success('[SERVER] new client connected', serverId);
+  log.success('[DCC WS SERVER] new client connected', serverId);
   server = ws;
   // handling client connection error
   server.onerror = handleError;
@@ -42,9 +42,9 @@ const connect = async () => {
     try {
       const wss = new WebSocketServer({ port });
       wss.on('connection', (ws) => handleConnection(ws, resolve));
-      log.start('[SERVER] WebSocket server started', port, serverId);
+      log.start('[DCC WS SERVER] WebSocket server started', port, serverId);
     } catch (err) {
-      log.error('[SERVER] error', err);
+      log.error('[DCC WS SERVER] error', err);
       reject(err);
     }
   });

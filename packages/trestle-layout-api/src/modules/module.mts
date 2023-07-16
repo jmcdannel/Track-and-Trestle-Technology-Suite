@@ -9,7 +9,7 @@ export async function getAll(layoutId: string, collectionName = 'layouts') {
 
 export async function getById(
   layoutId: string, 
-  id: string, 
+  id: any, 
   idField: string, 
   collectionName: string
   ) {
@@ -20,6 +20,7 @@ export async function getById(
         [`${collectionName}.${idField}`]: id,
       },
     };
+    console.log('getById', query);
     const projection = {
       "$project": {
         "obj": {
@@ -36,6 +37,7 @@ export async function getById(
       query,
       projection,
     ]).toArray();
+    console.log('getById', result, collectionName, query);
     return result?.[0]?.["obj"]?.[0];
   } catch (e) {
     console.error(e);
@@ -50,7 +52,7 @@ export async function handleGetAll({ response, params }: any, collectionName: st
 
 export async function handleGetById(
   { response, params }: any,
-  id: string,
+  id: any,
   idField: string,
   collectionName: string,
 ) {

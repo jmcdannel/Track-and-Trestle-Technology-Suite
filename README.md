@@ -9,7 +9,7 @@
   >>`curl -fsSL https://deno.land/x/install/install.sh | sh`
 
   or
-  
+
   >>`brew install deno`
 - Yarn
   >>` npm install -g yarn`
@@ -18,6 +18,10 @@
 
 ### Run
 ```
+$ nvm install 16.16.0
+
+...
+
 $ lerna run start
 ```
 

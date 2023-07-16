@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue';
-  import api from '../connections/api.js'
+  // import api from '../connections/api.js'
 
   const port = ref(null);
 
@@ -48,8 +48,8 @@
 
   async function connect() {
     try {
-      const ports = await api.ports.get();
-      console.log('ports', ports);
+      // const ports = await api.ports.get();
+      // console.log('ports', ports);
       // const port = await navigator.serial.requestPort(); // prompt user to select device connected to a com port
       // await port.open({ baudRate: 115200 });         // open the port at the proper supported baud rate
       // connected.value = true;
