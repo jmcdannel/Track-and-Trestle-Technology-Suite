@@ -122,8 +122,7 @@ export const send = (commands) => {
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     try {
-      log.debug('[COMMANDS] interfaces',  interfaces.interfaces);
-      log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces[iFaceId]);
+      log.debug('[COMMANDS] interface', iFaceId);
       const { send, connection } = interfaces.interfaces[iFaceId];
       send(connection, commands.map(cmdFormatter));
     } catch (err) {
