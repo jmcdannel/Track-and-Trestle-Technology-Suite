@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import UsbIcon from '@mui/icons-material/Usb';
 import UsbOffIcon from '@mui/icons-material/UsbOff';
 import Tooltip from '@mui/material/Tooltip';
-import { getAppConfig, jmriHosts, apiHosts, layoutIds, updateConfig } from '../config/config';
+import { jmriHosts, apiHosts, layoutIds, updateConfig } from '../config/config';
 import { Context } from '../Store/Store';
 import { CmdExDialog } from './CmdExDialog';
 import log from '../Shared/utils/logger';

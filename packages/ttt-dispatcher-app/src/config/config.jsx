@@ -3,17 +3,17 @@ import log from '../Shared/utils/logger';
 
 const storageKey = 'lcConfig';
 
-export const getAppConfig = () => {
-    try {
-        let config = getlocalStorageConfig();
-        return config
-            ? config
-            : require('./config.local.json');
-    } catch (e) {
-        log.warn('Loading default config');
-        return require('./config.default.json');
-    }
-}
+// export const getAppConfig = () => {
+//     try {
+//         let config = getlocalStorageConfig();
+//         return config
+//             ? config
+//             : require('./config.local.json');
+//     } catch (e) {
+//         log.warn('Loading default config');
+//         return require('./config.default.json');
+//     }
+// }
 
 export const jmriHosts = [
     'http://tamarackpi:12080/json/',
@@ -88,4 +88,4 @@ export const getEffectColor = effectId => {
     return effect ? effect.color : defaultColor;
 }
 
-export default getAppConfig;
+export default {};

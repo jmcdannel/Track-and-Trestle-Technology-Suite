@@ -1,8 +1,18 @@
-import { getAppConfig } from './config/config';
+// import { getAppConfig } from './config/config';
 import log from './Shared/utils/logger';
 
-const appConfig = getAppConfig();
-const { layoutId } = appConfig;
+// const appConfig = getAppConfig();
+// const { layoutId } = appConfig;
+
+const appConfig = {
+  "layoutId": "betatrack",
+  "name": "Betatrack",
+  "api": "ws://localhost:8080",
+  "actionApi": "ws://localhost:8080",
+  "layoutApi": "http://localhost:5001/api",
+  "jmri": "http://localhost:12080/json/"
+}
+const layoutId = 'betatrack'; // TODO: remove hardcode
 
 let ws;
 let dispatch;
