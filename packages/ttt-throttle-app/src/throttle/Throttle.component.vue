@@ -9,6 +9,8 @@
         type: Object
     }
   });
+  const emit = defineEmits(['update:loco'])
+
   const rangeValue = ref(0);
   const currentSpeed = ref(0);
   const loco = ref(props.loco);
@@ -63,6 +65,11 @@
     
   }
 
+  async function clearLoco() {
+    await emit('update:loco');
+    loco.value = null;
+  }
+
   watch(currentSpeed, sendLocoSpeed)
 
 </script>
@@ -78,6 +85,9 @@
       </div> 
       
       {{ loco?.name }}
+      <button class="btn btn-circle btn-outline text-black btn-xs" @click="clearLoco">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
     </header>
     <section class="throttle flex flex-row flex-row-reverse flex-grow">
       <section class="py-8 px-3 text-center  flex-1">

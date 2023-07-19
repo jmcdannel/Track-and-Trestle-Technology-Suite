@@ -26,13 +26,18 @@
     }
   });
 
-  const loadLoco = async (address:number) => {
+  async function loadLoco(address:number) {
     const selectedLoco = await api.selectLoco(address);
     console.log('loadLoco', selectedLoco);
     loco.value = selectedLoco;
   }
 
-  const handleLocoSelected = ({ loco }) =>  {
+  function clearSelectedLoco()  {
+    console.log('[ThrottleView].clearSelectedLoco');
+    loco.value = null;
+  }
+
+  function handleLocoSelected({ loco })  {
     console.log('[ThrottleView].handleLocoSelected', loco);
     loadLoco(loco);
   }
@@ -41,7 +46,7 @@
 
 <template>
   <template v-if="isMounted">
-    <Throttle v-if="loco" :loco="loco" />
+    <Throttle v-if="loco" :loco="loco" @update:loco="clearSelectedLoco" />
     <SelectLoco v-else @update:loco="handleLocoSelected" />  
   </template>
   <template v-else>
