@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue';
+  import api from '../api/api.ts'
 
 
   const props = defineProps({
@@ -7,6 +8,7 @@
         type: Object
     }
   });
+  const emit = defineEmits(['update:turnout'])
 
   const turnout = ref(props.turnout);
 
@@ -15,6 +17,9 @@
   const toggleTurnout = async (e) => {
     console.log('TURNOUT.toggleTurnout', turnout.value);
     turnout.value = { ...turnout.value, state: !turnout.value.state };
+    const { turnoutId, state } = turnout.value;
+    await api.turnouts.put({ turnoutId, state: !state });
+    await emit('update:turnout', { ...turnout.value, state: !state });
   }
 
 </script>

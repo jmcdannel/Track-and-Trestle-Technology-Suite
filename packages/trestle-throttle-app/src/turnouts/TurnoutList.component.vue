@@ -26,7 +26,7 @@
 <template>
   <ul class="p-2" v-if="turnouts?.length > 0">
     <li class="mb-2" v-for="(trn, idx) in turnouts" :key="trn.turnoutId">
-      <Turnout :turnout="trn"  />
+      <Turnout :turnout="turnouts[idx]"  />
     </li>
   </ul>
 </template>

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "vite",
+    "start": "vite --host",
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
@@ -14,7 +14,13 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.17",
+    "@vue/apollo-composable": "^4.0.0-beta.8",
+    "apollo-client": "^2.6.10",
     "axios": "^1.4.0",
+    "graphql": "^16.7.1",
+    "graphql-tag": "^2.12.6",
+    "realm-web": "^2.0.0",
     "vue": "^3.3.4",
     "vue-debounce": "^4.0.0",
     "vue-router": "^4.2.2"

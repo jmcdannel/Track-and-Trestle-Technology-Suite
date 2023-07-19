@@ -1,23 +1,50 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import MiniThrottle from '../throttle/MiniThrottle.component.vue'
-  import dccApi from '../connections/dccApi.js';
+  import { ref, onMounted } from 'vue';
+  import Throttle from '../throttle/Throttle.component.vue'
+  import SelectLoco from '../throttle/SelectLoco.component.vue'
+  import { useRoute } from 'vue-router'
+  import api from '../api/api.ts'
 
-  const power = ref(true)
+  const route = useRoute();
+  const loco = ref(null);
+  const isMounted = ref(false);
 
-  async function handlePower() {
-    power.value = !power.value;
-    console.log('handlePower',  power);
-    dccApi.setPower(power.value ? 1 : 0);
+  onMounted(async () => {
+    try {
+      const locoId = route.params.locoId
+        ? route.params.locoId
+        : api.getSelectedLocoId();
+
+      if (locoId) {
+        await loadLoco(locoId);
+      }
+      
+      console.log('loco', loco, loco.value);
+      isMounted.value = true;
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  const loadLoco = async (address:number) => {
+    const selectedLoco = await api.selectLoco(address);
+    console.log('loadLoco', selectedLoco);
+    loco.value = selectedLoco;
+  }
+
+  const handleLocoSelected = ({ loco }) =>  {
+    console.log('[ThrottleView].handleLocoSelected', loco);
+    loadLoco(loco);
   }
 
 </script>
 
 <template>
-  <button class="btn bg-lime-600" @click="handlePower">Power</button>
-  <MiniThrottle :address="31" />
+  <template v-if="isMounted">
+    <Throttle v-if="loco" :loco="loco" />
+    <SelectLoco v-else @update:loco="handleLocoSelected" />  
+  </template>
+  <template v-else>
+    <div>Loading...</div>
+  </template>
 </template>
-
-<style>
-
-</style>

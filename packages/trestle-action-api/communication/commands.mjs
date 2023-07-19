@@ -5,7 +5,10 @@ import log from '../core/logger.mjs';
 
 const layoutId = 'betatrack'; // TODO: move to config
 
+const baseUri = `http://127.0.0.1:5001/api/${layoutId}`;
+
 const tunroutCommand = turnout => {
+  console.log('tunroutCommand', turnout);
   switch(turnout.config.type) {
     case 'kato':
       return {
@@ -71,9 +74,14 @@ export const build = async (msg) => {
   log.debug('[COMMANDS] build', msg);
   const { action, payload } = msg;
   let commandList = [];
+  let uri;
+  let resp;
   switch(action) {
     case 'turnouts':
-      const turnout = payload;
+      uri = `${baseUri}/turnouts/${payload.turnoutId}`;
+      log.log('[COMMANDS] turnouts.uri', uri);
+      resp = await axios.get(uri);
+      const turnout = {...resp.data, state: payload.state};
       commandList.push(tunroutCommand(turnout));
       // TO DO: refactor
       // turnout.effects && turnout.effects.filter(efx => !efx.delay).map(turnoutEffect => {
@@ -84,8 +92,13 @@ export const build = async (msg) => {
       // });
       break;
     case 'effects':
-      const resp = await axios.get(`http://127.0.0.1:5001/api/${layoutId}/effects/${payload.effectId}`);
-      const effect = resp.data;
+      uri = `${baseUri}/effects/${payload.effectId}`;
+      log.log('[COMMANDS] effect.uri', uri);
+      resp = await axios.get(uri);
+      log.log('[COMMANDS] effect.resp', resp, resp.data);
+            // return json from axios response
+
+      let effect = resp.data;
       effect.state = payload.state;
       
       log.debug('[COMMANDS] effect', effect, resp.data, typeof effect, typeof resp.data, msg);
@@ -109,6 +122,7 @@ export const send = (commands) => {
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     try {
+      log.debug('[COMMANDS] interface', iFaceId);
       const { send, connection } = interfaces.interfaces[iFaceId];
       send(connection, commands.map(cmdFormatter));
     } catch (err) {

@@ -2,6 +2,7 @@
 import waitOn from 'wait-on';
 import server from './src/server.mjs';
 import dcc from './src/dcc.mjs';
+import log from './src/logger.mjs';
 
 var opts = {
   resources: [
@@ -18,9 +19,9 @@ var opts = {
 async function main() {
   console.log('@trestle-tt/trestle-tt-dcc-api', '[MAIN]');
   try {
-    await waitOn(opts, () => console.trace('DCC waitOn'));
-    await dcc.connect();
+    await waitOn(opts, () => log.pending('DCC waitOn'));
     await server.connect();
+    await dcc.connect();
   } catch (err) {
     console.error('main', err);
     // log.fatal('main', err);

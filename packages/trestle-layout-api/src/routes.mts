@@ -31,7 +31,7 @@ router.get("/api/layouts/:layoutId", layouts.handleGetById);
 router.get("/api/:layoutId/locos", locos.handleGetAll);
 
 // create a route for getting a single locos
-router.get("/api/:layoutId/locos/:locoId", locos.handleGetById);
+router.get("/api/:layoutId/locos/:id", locos.handleGetById);
 
 // create a route for getting all effects
 router.get("/api/:layoutId/effects", effects.handleGetAll);

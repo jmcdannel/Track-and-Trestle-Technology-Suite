@@ -17,8 +17,6 @@ const getLayout = async layoutId => {
   const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
   try {
     const { data } = await axios.get(uri);
-
-    console.log('[GETLAYOUT] data', data);
     return data;
   } catch (err) {
     console.error('[GETLAYOUT]', uri, err?.message, err);
@@ -31,11 +29,11 @@ const identifySerialConnections = async () => {
 }
 
 export const handleMessage = async (msg, ws) => {
-  const commandActions = ['effets', 'turnouts'];
+  const commandActions = ['effects', 'turnouts'];
   const reponseActions = ['ports'];
 
-  log.info('[INTERFACES] handleMessage', msg);
-  if (commandActions.includes(msg.action)) { // command actions
+  log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
+  if (commandActions.includes(msg?.action)) { // command actions
     const commandList = await commands.build(msg);
     log.info('[INTERFACES] commandList', commandList);
     await commands.send(commandList);
@@ -72,16 +70,16 @@ const intialize = async (com) => {
         log.error(err);
       }
       break;
-    case 'cmd-ex':
-      try {
-        com.connection = await cmdex.connect(com);
-        com.send = cmdex.send;
-        com.status = 'connected';
-      } catch (err) {
-        com.status = 'fail';
-        log.error(err);
-      }
-      break;
+    // case 'cmd-ex':
+    //   try {
+    //     com.connection = await cmdex.connect(com);
+    //     com.send = cmdex.send;
+    //     com.status = 'connected';
+    //   } catch (err) {
+    //     com.status = 'fail';
+    //     log.error(err);
+    //   }
+    //   break;
     case 'audio':
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
@@ -94,9 +92,8 @@ const intialize = async (com) => {
 }
 
 export const connect = async () => {
-  log.start('Connecting Interfaces');
+  log.start('Connecting Interfaces', process.env.LAYOUT_ID);
   await identifySerialConnections();
-  log.debug('LayoutID', process.env.LAYOUT_ID);
   const layoutConfig = await getLayout(process.env.LAYOUT_ID);
   layoutConfig.interfaces.map(await intialize);
 }
