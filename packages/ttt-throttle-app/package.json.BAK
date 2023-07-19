@@ -1,0 +1,12 @@
+{
+  "name": "@ttt/throttle-app",
+  "version": "0.0.1",
+  "description": "Vue.JS App to allow simple/restricted control of layout",
+  "main": "index.mts",
+  "author": "Josh McDannel",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "deno run ./index.mts"
+  }
+}
