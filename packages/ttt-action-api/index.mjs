@@ -1,8 +1,8 @@
-import log from './core/logger.mjs';
 import 'dotenv/config';
 import waitOn from 'wait-on';
-import server from './core/server.mjs';
-import interfaces from './communication/interfaces.mjs';
+import server from './src/core/server.mjs';
+import interfaces from './src/communication/interfaces.mjs';
+import log from './src/core/logger.mjs';
 
 var opts = {
   resources: [
