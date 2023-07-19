@@ -1,5 +1,5 @@
 {
-  "name": "@trestle-tt/trestle-tt-dispatcher-app",
+  "name": "@ttt/dispatcher-app",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",

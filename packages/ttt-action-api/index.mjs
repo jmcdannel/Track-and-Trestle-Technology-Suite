@@ -17,7 +17,7 @@ var opts = {
 };
 
 async function main() {
-  console.log('@trestle-tt/trestle-tt-action-api', '[MAIN]');
+  console.log('@ttt/action-api', '[MAIN]');
   try {
     await waitOn(opts);
     await interfaces.connect();
