@@ -15,10 +15,10 @@ const props = defineProps({
 
 <template>
   <main class="py-3 px-2">
-    <h2 class="fancy-title placeholder:font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-cyan-300 to-violet-600">
+    <h2 class="fancy-title placeholder:font-extrabold text-transparent te text-5xl bg-clip-text bg-gradient-to-r from-cyan-300 to-violet-600">
       Select
       Your
-      <strong class="text-9xl uppercase">Layout</strong>
+      <strong class="text-7xl uppercase">Layout</strong>
     </h2>
     <ul class="p-2 flex flex-col items-center" v-if="layouts?.length > 0">
       <li class="mb-2" v-for="layout in layouts" :key="layout._id">
@@ -32,5 +32,11 @@ const props = defineProps({
 <style scoped>
   .fancy-title {
     word-spacing: 90vw; 
+  }
+
+  @media screen and (max-width: 640px) {
+    .fancy-title {
+      word-spacing: normal;
+    }
   }
 </style>

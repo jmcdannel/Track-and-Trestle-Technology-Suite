@@ -1,12 +1,33 @@
 import layoutApi from './layoutApi.ts';
 import actionApi from './actionApi.ts';
 
-let layoutId = localStorage?.getItem('layoutId');
+const SELECTED_LOCO_ID = 'selectedLocoId';
+const LAYOUT_ID = 'layoutId';
+
+let layoutId = localStorage?.getItem(LAYOUT_ID);
+let selectedLocoId = localStorage?.getItem(SELECTED_LOCO_ID);
 // TO DO: implement tanStack query
 
 const selectLayout = async (layoutId: string) => {
-  console.log('selectLayout', layoutId);
-  // localStorage.setItem('layoutId', layoutId);
+  try {
+    console.log('selectLayout', layoutId);
+    localStorage.setItem(LAYOUT_ID, layoutId);
+    const selected = await api.layouts.get(layoutId);
+    return selected;
+  } catch (e) {
+    console.error('selectLayout', e);
+  }
+}
+
+const selectLoco = async (address: number) => {
+  try {
+    console.log('selectLoco', address);
+    localStorage.setItem(SELECTED_LOCO_ID, address.toString());
+    const selected = await api.locos.get(address);
+    return selected;
+  } catch (e) {
+    console.error('selectLoco', e);
+  }
 }
 
 const connect = async (layoutId: string) => {
@@ -19,6 +40,8 @@ const connect = async (layoutId: string) => {
 }
 
 const getLayoutId = () => layoutId;
+
+const getSelectedLocoId = () => selectedLocoId;
 
 export const api = {
   layouts: {
@@ -34,7 +57,10 @@ export const api = {
     put: actionApi.turnouts.put
   },
   connect,
-  getLayoutId
+  getLayoutId,
+  getSelectedLocoId,
+  selectLoco,
+  selectLayout
 }
 
 export default api;

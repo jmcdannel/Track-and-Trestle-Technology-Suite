@@ -1,19 +1,24 @@
 <script setup lang="ts">  
-  import api from '../api/api.ts'
   import { ref, onMounted } from 'vue';
-import { RouterLink } from 'vue-router'
+  import { RouterLink } from 'vue-router'
+  import api from '../api/api.ts'
 
   const locos:any = ref(null);
 
+  const emit = defineEmits(['update:loco'])
+
   onMounted(async () => {
-    console.log('[SelectLayout]].onMounted');
+    console.log('[SelectLoco].onMounted');
     locos.value = await api.locos.get();
-    console.log('locos.value', locos.value);
   });
-  
+
+
+  const selectLoco = async (e) => {
+    console.log('SELECTLOCO.selectLoco', e.target.value);
+    await emit('update:loco', { loco: parseInt(e.target.value) });
+  }
 
 </script>
-
 <template>
   <main class="py-3 px-2">
     <h2 class="[word-spacing: 90vw] placeholder:font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-300 to-pink-600">
@@ -23,9 +28,12 @@ import { RouterLink } from 'vue-router'
     </h2>
     <ul class="p-2 flex flex-col items-center" v-if="locos?.length > 0">
       <li class="mb-2" v-for="loco in locos" :key="loco._id">
-        <RouterLink :to="`/throttle/${loco.address}`"
-          class="btn bg-gradient-to-br from-orange-500 to-emerald-700 text-white text-lg btn-wide btn-lg"
-          >{{loco.name}}</RouterLink>
+        <button @click="selectLoco" :value="loco.address" class="btn bg-gradient-to-br from-orange-700 to-rose-500 text-white text-lg btn-wide btn-lg">
+          {{loco.name}}
+        </button>
+        <!-- <RouterLink :to="`/throttle/${loco.address}`"
+          
+          >{{loco.name}}</RouterLink> -->
       </li>
     </ul>
   </main>
