@@ -35,7 +35,7 @@ const connect = async (layoutId: string) => {
   if (layoutId) {
     selectLayout(layoutId);
     await layoutApi.connect(layoutId);
-    await actionApi.connect('ws://localhost:8080');
+    await actionApi.connect('ws://joshs-mac-mini.local:8080');
   }
 }
 

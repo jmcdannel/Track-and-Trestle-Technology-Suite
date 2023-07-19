@@ -3,7 +3,7 @@ import axios from 'axios';
 let layoutId: string;
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5001/api'
+  baseURL: 'http://joshs-mac-mini.local:5001/api'
 });
 
 async function get(type:string, Id = null) {

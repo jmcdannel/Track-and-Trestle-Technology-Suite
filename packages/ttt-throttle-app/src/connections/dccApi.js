@@ -18,7 +18,7 @@ function onMessage(event) {
 }
 
 async function connect() {
-  wsDCC = new WebSocket('ws://localhost:8081');
+  wsDCC = new WebSocket('ws://joshs-mac-mini.local:8081');
   wsDCC.onerror = onError;
   wsDCC.addEventListener('open', onOpen);   
   wsDCC.addEventListener('message',  onMessage);
