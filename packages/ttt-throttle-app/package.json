@@ -1,5 +1,5 @@
 {
-  "name": "@trestle-tt/trestle-tt-throttle-app",
+  "name": "@ttt/throttle-app",
   "version": "0.0.1",
   "private": true,
   "scripts": {

@@ -1,11 +1,11 @@
-# `@trestle-tt/trestle-tour-api`
+# `@ttt/tour-api`
 
 > TODO: description
 
 ## Usage
 
 ```
-const trestleTourApi = require('@trestle-tt/trestle-tour-api');
+const trestleTourApi = require('@ttt/tour-api');
 
 // TODO: DEMONSTRATE API
 ```

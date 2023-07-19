@@ -17,7 +17,7 @@ var opts = {
 };
 
 async function main() {
-  console.log('@trestle-tt/trestle-tt-dcc-api', '[MAIN]');
+  console.log('@ttt/dcc-api', '[MAIN]');
   try {
     await waitOn(opts, () => log.pending('DCC waitOn'));
     await server.connect();
