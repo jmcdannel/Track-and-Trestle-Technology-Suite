@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Stop from './Stop';
 import Power from './Power';
 import Settings from './Settings';
-import StatusMonitor from './StatusMonitor';
+// import StatusMonitor from './StatusMonitor';
 import { getByLink } from '../Shared/Config/Navigation';
 import { useLocation } from "react-router-dom";
 
@@ -44,7 +44,7 @@ export const Header = props => {
             {navItem ? navItem.label : '[unknown]'}
           </Typography>
           <Paper sx={{ padding: '.6rem', marginRight: '2rem' }}>
-            <StatusMonitor jmriReady={jmriReady} apiReady={apiReady} />
+            {/* <StatusMonitor jmriReady={jmriReady} apiReady={apiReady} /> */}
           </Paper>
           <Stop jmriApi={jmriApi} jmriReady={jmriReady} />
           <Power jmriApi={jmriApi} jmriReady={jmriReady} />

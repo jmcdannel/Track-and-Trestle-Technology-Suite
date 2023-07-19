@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as Colors from '@mui/material/colors';
-import { ReactComponent as TurnoutStriaghtImage } from '../Shared/Images/turnout-straight.svg';
-import { ReactComponent as TurnoutDivergentImage } from '../Shared/Images/turnout-divergent.svg';
+// import { ReactComponent as TurnoutStriaghtImage } from '../Shared/Images/turnout-straight.svg';
+// import { ReactComponent as TurnoutDivergentImage } from '../Shared/Images/turnout-divergent.svg';
 import Settings from './Settings';
 
 import Box from '@mui/material/Box';
@@ -125,7 +125,7 @@ export const Turnout = props => {
           >
             <div className="svg-wrapper">
               {/* <Logo width="90" className={`turnout-image ${isDivergent ? 'divergent' : 'straight'}`} /> */}
-              {isDivergent ? <TurnoutDivergentImage width="90" /> : <TurnoutStriaghtImage width="90" />}
+              {/* {isDivergent ? <TurnoutDivergentImage width="90" /> : <TurnoutStriaghtImage width="90" />} */}
             </div>
             {isLoading && (<CircularProgress color="primary" className="spinner" />)}
           </CardMedia>

@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { getAppConfig } from '../config/config';
+// import { getAppConfig } from '../config/config';
 import jmriApi from '../Shared/jmri/jmriApi';
 import log from 'loglevel';
+
+// const appConfig = {
+//   "layoutId": "betatrack",
+//   "name": "Betatrack",
+//   "api": "ws://localhost:8080",
+//   "actionApi": "ws://localhost:8080",
+//   "layoutApi": "http://localhost:5001/api",
+//   "jmri": "http://localhost:12080/json/"
+// }
+const jmriHost = 'http://localhost:12080/json/'; // TODO: remove hard-coded host
 
 function JmriEngine(props) {
 
   const { onReady } = props;
   const [ init, setInit ] = useState(false);
-  const appConfig = getAppConfig();
 
   // Initialize JMRI Websocket connection
   useEffect(() => {
@@ -16,7 +25,7 @@ function JmriEngine(props) {
         jmriApi.on('ready', 'TrackMaster', isReady => {
           onReady(isReady);
         });
-        await jmriApi.setup(appConfig.jmri);
+        await jmriApi.setup(jmriHost);
         setInit(true);
       } catch (err) {
         setInit(false);
@@ -24,7 +33,7 @@ function JmriEngine(props) {
       }
     };
     !init && initJmri();
-  }, [appConfig.jmri, onReady, init]);
+  }, [onReady, init]);
 
   return (<></>);
 }
