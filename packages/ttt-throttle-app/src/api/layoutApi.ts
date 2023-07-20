@@ -21,7 +21,7 @@ async function get(type:string, Id = null) {
   }
 }
 
-async function getLayouts(Id:string) {
+async function getLayouts(Id:string | undefined) {
   try {
     const uri = Id
         ? `/layouts/${Id}`
@@ -36,7 +36,7 @@ async function getLayouts(Id:string) {
 
 async function connect(_layoutId: string) {
   layoutId = _layoutId;
-  console.log('Layout api connect', layoutId, await getLayouts(layoutId));
+  console.log('Layout api connect', layoutId);
 }
 
 export const api = {

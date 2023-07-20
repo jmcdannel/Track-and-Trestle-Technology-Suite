@@ -1,3 +1,4 @@
+import { store } from '../store/store.tsx';
 import layoutApi from './layoutApi.ts';
 import actionApi from './actionApi.ts';
 
@@ -8,7 +9,7 @@ let layoutId = localStorage?.getItem(LAYOUT_ID);
 let selectedLocoId = localStorage?.getItem(SELECTED_LOCO_ID);
 // TO DO: implement tanStack query
 
-const selectLayout = async (layoutId: string) => {
+async function selectLayout(layoutId: string) {
   try {
     console.log('selectLayout', layoutId);
     localStorage.setItem(LAYOUT_ID, layoutId);
@@ -19,7 +20,11 @@ const selectLayout = async (layoutId: string) => {
   }
 }
 
-const selectLoco = async (address: number) => {
+async function clearLayout() {
+  localStorage.removeItem(LAYOUT_ID);
+} 
+
+async function selectLoco(address: number) {
   try {
     console.log('selectLoco', address);
     localStorage.setItem(SELECTED_LOCO_ID, address.toString());
@@ -30,7 +35,11 @@ const selectLoco = async (address: number) => {
   }
 }
 
-const connect = async (layoutId: string) => {
+async function clearLoco() {
+  localStorage.removeItem(SELECTED_LOCO_ID);
+} 
+
+async function connect(layoutId: string) {
   console.log('API.connect', layoutId);
   if (layoutId) {
     selectLayout(layoutId);
@@ -39,9 +48,20 @@ const connect = async (layoutId: string) => {
   }
 }
 
+async function disconnect() {
+  console.log('API.disconnect', layoutId);
+  if (layoutId) {
+    clearLoco();
+    clearLayout();
+    await actionApi.disconnect();
+  }
+}
+
 const getLayoutId = () => layoutId;
 
 const getSelectedLocoId = () => selectedLocoId;
+
+layoutId && connect(layoutId);
 
 export const api = {
   layouts: {
@@ -57,10 +77,13 @@ export const api = {
     put: actionApi.turnouts.put
   },
   connect,
+  disconnect,
   getLayoutId,
   getSelectedLocoId,
   selectLoco,
-  selectLayout
+  selectLayout,
+  clearLayout,
+  clearLoco
 }
 
 export default api;

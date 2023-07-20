@@ -10,13 +10,11 @@
   <header>
     <div class="navbar bg-base-100">
       <div class="navbar-start">
-        <Power />
-      </div>
-      <div class="navbar-center">
        <Title />
       </div>
       <div class="navbar-end">
         <Layout />
+        <Power />
       </div>
     </div>
   </header>

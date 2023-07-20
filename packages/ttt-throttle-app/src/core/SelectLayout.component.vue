@@ -1,16 +1,20 @@
 <script setup lang="ts">
+  import { onMounted, ref, watch } from 'vue';
+  import api from '../api/api.ts';
 
-const props = defineProps({
-    layouts: {
-        type: Array<Object>
-    }
-  })
-  const emit = defineEmits(['update:layoutId'])
+  const layouts:any = ref(null);
 
-  const handleSelectLayout = async (e:any) => {
+  const emit = defineEmits(['update:layoutId']);
+
+  onMounted(async () => {
+    layouts.value = await api.layouts.get();
+  });
+
+  async function handleSelectLayout (e:any) {
     console.log('handleSelectLayout', e.target.value);
     await emit('update:layoutId', e.target.value);
   }
+
 </script>
 
 <template>

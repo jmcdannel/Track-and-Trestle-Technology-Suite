@@ -39,6 +39,10 @@ async function connect(uri) {
   ws.addEventListener('message',  onMessage);
 }
 
+async function disconnect() {
+  ws.close();
+}
+
 async function getWS(type ) {
   try {    
     if (Object.keys(apiPromises).includes(type)) {
@@ -73,6 +77,7 @@ const apiPromises = {
 
 export const api = {
   connect,
+  disconnect,
   get: getWS,
   put: putWS,
   turnouts: {
