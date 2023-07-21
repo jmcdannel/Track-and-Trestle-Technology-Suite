@@ -1,3 +1,4 @@
+import actions from '../store/actions.tsx';
 
 let ws;
 
@@ -11,24 +12,28 @@ function onError(event) {
 
 function onMessage(event) {
   try {
-    const { action, payload } = JSON.parse(event.data);
-    console.log('[API] onMessage', action, payload, JSON.parse(event.data));
-    switch (action) {
-      case 'turnouts':
-        console.log('turnouts', payload);
-        break;
-      case 'effects':
-        console.log('effects', payload);
-        break;
-      case 'ports':
-        console.log('ports', payload);
-        apiPromises.ports.resolve(payload);
-        break;
-      default:
-        console.log('Unknown action', action);
+    const { success, data } = JSON.parse(event.data);
+    console.log('[API] onMessage', success, data, JSON.parse(event.data));
+    if (success) {
+      const { action, payload } = data;
+      switch (action) {
+        case 'turnouts':
+          console.log('turnouts', payload);
+          actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
+          break;
+        case 'effects':
+          console.log('effects', payload);
+          break;
+        case 'ports':
+          console.log('ports', payload);
+          apiPromises.ports.resolve(payload);
+          break;
+        default:
+          console.log('Unknown action', action);
+      }
     }
-  } catch { 
-    console.warn('Message not in JSON format.', event.data); 
+  } catch (err) { 
+    console.error(err); 
   }
 }
 

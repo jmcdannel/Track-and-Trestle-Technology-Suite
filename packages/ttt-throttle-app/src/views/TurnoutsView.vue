@@ -3,8 +3,9 @@
 </script>
 
 <template>
-  <h2>Turnout View</h2>
-  <TurnoutsList />
+  <main class="flex flex-grow sky-background">
+    <TurnoutsList />
+  </main>
 </template>
 
 <style>

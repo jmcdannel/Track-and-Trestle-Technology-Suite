@@ -7,20 +7,19 @@
   const handleLayoutIdUpdated = async (newLayoutId:string) => {
     try {
       console.log('connectApi', newLayoutId, router);
+      const layout = await api.connect(newLayoutId);
+      console.log('layout.layoutId', layout);
       store.layoutId = newLayoutId;
-      api.connect(newLayoutId);
       router.push(`/throttle`);
     } catch (err) {
       console.error(err);
     }
   }
 
-  console.log('store.layoutId', store.layoutId);
-
 </script>
 
 <template>
-  <main>
+  <main class="flex">
     <template v-if="!store.layoutId">
       <SelectLayout
         v-model="store.layoutId" 

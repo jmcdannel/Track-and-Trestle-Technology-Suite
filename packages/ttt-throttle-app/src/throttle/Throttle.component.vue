@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import { debounce } from 'vue-debounce'
-  import TurnoutsList from '../turnouts/TurnoutList.component.vue'
   import dccApi from '../connections/dccApi.js';
+
+  const DEBOUNCE_DELAY = 100;
+  const SWITCH_DIR_DELAY = 1000;
 
   const props = defineProps({
     loco: {
@@ -15,7 +17,7 @@
   const currentSpeed = ref(0);
   const loco = ref(props.loco);
 
-  const setSpeed = debounce(val => currentSpeed.value = val, '400ms')
+  const setSpeed = debounce(val => currentSpeed.value = val, `${DEBOUNCE_DELAY}ms`)
 
   function onSlider(e) {
     const newSpeed = parseInt(e.target.value);
@@ -51,12 +53,12 @@
       //change direction to forward
       console.log('change direction to forward');
       loco.value?.address && await dccApi.setSpeed(loco.value.address, 0);
-      delay = 1000;
+      delay = SWITCH_DIR_DELAY;
     } else if (newSpeed < 0 && oldSpeed > 0) {
       //change direction to reverse
       console.log('change direction to reverse');
       loco.value?.address && await dccApi.setSpeed(loco.value.address, 0);
-      delay = 1000;
+      delay = SWITCH_DIR_DELAY;
     }
     setTimeout(() => {
       console.log('sendLocoSpeed', currentSpeed.value);
@@ -66,6 +68,7 @@
   }
 
   async function clearLoco() {
+    await handleStop();
     await emit('update:loco');
     loco.value = null;
   }
@@ -77,7 +80,7 @@
 <template>
 
   <main class="card m-5 bg-slate-600 shadow-xl flex-grow">
-    <header class="p-2 text-xl text-gray-900 bg-gradient-to-r from-green-500 to-cyan-500">
+    <header class="p-2 text-lg text-gray-900 bg-gradient-to-r from-green-500 to-cyan-500 flex  items-center justify-between">
       <div class="avatar placeholder">
         <div class="bg-orange-600 text-neutral-content rounded-full w-8">
           <span class="text-sm">{{ loco?.address }}</span>
@@ -94,8 +97,7 @@
         <input type="range" min="-100" max="100" step="1" :value="rangeValue" @input="onSlider" class="throttle-slider range-style bg-slate-800 px-3 rounded-md" />
       </section>
       <section class="py-8 px-3 flex flex-col items-center justify-between flex-1">
-        <TurnoutsList />
-        <div class=" direction-fwd flex justify-center">
+       <div class=" direction-fwd flex justify-center">
           <span class="current-speed [min-width:8rem] shadow-lg shadow-blue-500/50 text-center text-5xl p-4 rounded-xl shadow-inner bg-gradient-to-r from-purple-500 to-pink-600">{{ rangeValue }}</span>
         </div>
         <div class="px-2 py-4 flex flex-col">

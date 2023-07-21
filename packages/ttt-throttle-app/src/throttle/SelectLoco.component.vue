@@ -20,7 +20,7 @@
 
 </script>
 <template>
-  <main class="py-3 px-2">
+  <main class="py-3 px-2 viaduct-background bg-opacity-50">
     <h2 class="[word-spacing: 90vw] placeholder:font-extrabold text-transparent text-8xl bg-clip-text bg-gradient-to-r from-purple-300 to-pink-600">
       Select
       Your
@@ -38,6 +38,3 @@
     </ul>
   </main>
 </template>
-
-<style scoped>
-</style>

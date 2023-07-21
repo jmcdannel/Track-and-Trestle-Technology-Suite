@@ -1,19 +1,21 @@
 import { store } from '../store/store.tsx';
 import layoutApi from './layoutApi.ts';
 import actionApi from './actionApi.ts';
+import favoritesApi from './favoritesApi.ts';
 
-const SELECTED_LOCO_ID = 'selectedLocoId';
-const LAYOUT_ID = 'layoutId';
+const SELECTED_LOCO_ID = '@ttt/selectedLocoId';
+const LAYOUT_ID = '@ttt/layoutId';
 
 let layoutId = localStorage?.getItem(LAYOUT_ID);
 let selectedLocoId = localStorage?.getItem(SELECTED_LOCO_ID);
 // TO DO: implement tanStack query
 
-async function selectLayout(layoutId: string) {
+async function selectLayout(newLayoutId: string) {
   try {
-    console.log('selectLayout', layoutId);
-    localStorage.setItem(LAYOUT_ID, layoutId);
-    const selected = await api.layouts.get(layoutId);
+    console.log('selectLayout', newLayoutId);
+    localStorage.setItem(LAYOUT_ID, newLayoutId);
+    const selected = await api.layouts.get(newLayoutId);
+    store.layoutId = newLayoutId;
     return selected;
   } catch (e) {
     console.error('selectLayout', e);
@@ -37,6 +39,7 @@ async function selectLoco(address: number) {
 
 async function clearLoco() {
   localStorage.removeItem(SELECTED_LOCO_ID);
+  selectedLocoId = null;
 } 
 
 async function connect(layoutId: string) {
@@ -83,7 +86,8 @@ export const api = {
   selectLoco,
   selectLayout,
   clearLayout,
-  clearLoco
+  clearLoco,
+  favorites: favoritesApi
 }
 
 export default api;
