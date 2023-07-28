@@ -19,6 +19,7 @@ const connect = () => {
 
     port.open(function (err) {
       if (err) {
+        log.fatal('[SERIAL] Error opening port: ', err.message);
         reject(`[SERIAL] Error opening port: ${err.message}`);
         return;
       }
@@ -51,13 +52,17 @@ const send = async (data) => {
 
 const handleMessage = async (msg) => {
   const { action, payload } = JSON.parse(msg);
-  log.star('handleMessage', action, payload);
+  log.star('[DCC] handleMessage', action, payload);
   switch (action) {
     case 'power':
       send(payload);
       break;
     case 'throttle':
       sendSpeed(payload);
+      break;
+    case 'function':
+      log.star('sendFunction',payload);
+      sendFunction(payload);
       break;
     default:
       //noop
@@ -69,6 +74,12 @@ const sendSpeed = ({ address, speed }) => {
   const absSpeed = Math.abs(speed);
   log.star('sendSpeed', address, speed, direction);
   const cmd = `t 01 ${address} ${absSpeed} ${direction}`;
+  send(cmd);
+}
+
+const sendFunction = ({ address, func, state }) => {
+  log.star('sendFunction', address, func);
+  const cmd = `F ${address} ${func} ${state ? 1 : 0}`;
   send(cmd);
 }
 

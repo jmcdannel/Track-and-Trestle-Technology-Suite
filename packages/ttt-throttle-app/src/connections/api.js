@@ -33,7 +33,7 @@ function onMessage(event) {
 }
 
 async function connect() {
-  ws = new WebSocket('ws://localhost:8080');
+  ws = new WebSocket('ws://joshs-mac-mini.local:8080');
   ws.onerror = onError;
   ws.addEventListener('open', onOpen);   
   ws.addEventListener('message',  onMessage);
