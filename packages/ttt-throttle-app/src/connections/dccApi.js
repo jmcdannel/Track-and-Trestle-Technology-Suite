@@ -26,9 +26,7 @@ async function connect() {
 
 async function setPower(payload) {
   try {   
-    wsDCC.send(JSON.stringify({
-      action: 'power', payload
-    }));
+    send('power', payload);
   } catch (err) {
     console.error('[DCC API].setPower', err);
     throw new Error('Unable to read', err, type);
@@ -37,19 +35,39 @@ async function setPower(payload) {
 
 async function setSpeed(address, speed) {
   try {   
-    wsDCC.send(JSON.stringify({
-      action: 'throttle', payload: { address, speed }
-    }));
+    send('throttle', { address, speed });
   } catch (err) {
     console.error('[DCC API].setPower', err);
     throw new Error('Unable to read', err, type);
   }
 }
 
+async function setFunction(address, func) {
+  try {   
+    send({
+      action: 'function', payload: { address, func }
+    });
+  } catch (err) {
+    console.error('[DCC API].setPower', err);
+    throw new Error('Unable to read', err, type);
+  }
+}
+
+async function send(action, payload) {
+  try {   
+    wsDCC.send(JSON.stringify({ action, payload  }));
+  } catch (err) {
+    console.error('[DCC API].send', err);
+    throw new Error('Unable to send', err, action, payload);
+  }
+}
+
 export const dccApi = {
   connect,
+  send,
   setPower,
-  setSpeed
+  setSpeed,
+  setFunction
 }
 
 export default dccApi;

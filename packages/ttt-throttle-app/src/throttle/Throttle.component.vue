@@ -16,6 +16,7 @@
   const rangeValue = ref(0);
   const currentSpeed = ref(0);
   const loco = ref(props.loco);
+  const func1State = ref(false);
 
   const setSpeed = debounce(val => currentSpeed.value = val, `${DEBOUNCE_DELAY}ms`)
 
@@ -52,12 +53,12 @@
     if (newSpeed > 0 && oldSpeed < 0) {
       //change direction to forward
       console.log('change direction to forward');
-      loco.value?.address && await dccApi.setSpeed(loco.value.address, 0);
+      loco.value?.address && await dccApi.setSpeed(loco.value.address, 0); // stop
       delay = SWITCH_DIR_DELAY;
     } else if (newSpeed < 0 && oldSpeed > 0) {
       //change direction to reverse
       console.log('change direction to reverse');
-      loco.value?.address && await dccApi.setSpeed(loco.value.address, 0);
+      loco.value?.address && await dccApi.setSpeed(loco.value.address, 0); // stop
       delay = SWITCH_DIR_DELAY;
     }
     setTimeout(() => {
@@ -65,6 +66,16 @@
       loco.value?.address && dccApi.setSpeed(loco.value.address, currentSpeed.value);
     }, delay);
     
+  }
+
+  async function cabFuction(func) {
+    func1State.value = !func1State.value;
+    console.log('cabFuction', func);
+    loco.value?.address && dccApi.send('function', { 
+        address: loco.value.address, 
+        state: func1State.value,
+        func
+      });
   }
 
   async function clearLoco() {
@@ -92,6 +103,14 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
       </button>
     </header>
+    <section class="functions p-3 bg-gradient-to-r from-cyan-900 to-blue-900">
+      <button class="btn btn-outline btn-secondary" @click="cabFuction(0)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        </svg>
+      </button>
+
+    </section>
     <section class="throttle flex flex-row flex-row-reverse flex-grow">
       <section class="py-8 px-3 text-center  flex-1">
         <input type="range" min="-100" max="100" step="1" :value="rangeValue" @input="onSlider" class="throttle-slider range-style bg-slate-800 px-3 rounded-md" />
@@ -189,8 +208,8 @@
     height: auto;
   }
   .throttle {
-    background-color: #15141c;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='105' viewBox='0 0 80 105'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='death-star' fill='%23455b60' fill-opacity='0.4'%3E%3Cpath d='M20 10a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm15 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zM20 75a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zm30-65a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm0 65a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zM35 10a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zM5 45a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zm60 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-color: #0d0c14;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='105' viewBox='0 0 80 105'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='death-star' fill='%23000000' fill-opacity='0.4'%3E%3Cpath d='M20 10a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm15 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zM20 75a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zm30-65a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm0 65a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zM35 10a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zM5 45a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zm60 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
 </style>
