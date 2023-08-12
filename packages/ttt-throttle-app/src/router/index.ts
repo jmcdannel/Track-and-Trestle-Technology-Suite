@@ -26,6 +26,11 @@ const router = createRouter({
       component: () => import('../views/ThrottleView.vue')
     },
     {
+      path: '/locos',
+      name: 'locos',
+      component: () => import('../throttle/SelectLoco.component.vue')
+    },
+    {
       path: '/turnouts',
       name: 'turnouts',
       component: () => import('../views/TurnoutsView.vue')

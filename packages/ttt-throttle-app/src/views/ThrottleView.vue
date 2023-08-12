@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import Throttle from '../throttle/Throttle.component.vue'
-  import SelectLoco from '../throttle/SelectLoco.component.vue'
   import { useRoute } from 'vue-router'
   import api from '../api/api.ts'
 
@@ -27,7 +26,8 @@
   });
 
   async function loadLoco(address:number) {
-    const selectedLoco = await api.config.selectLoco(address);
+    await api.config.loco.set(address);
+    const selectedLoco = await api.locos.get(address);
     console.log('loadLoco', selectedLoco);
     loco.value = selectedLoco;
   }
@@ -37,17 +37,11 @@
     loco.value = null;
   }
 
-  function handleLocoSelected({ loco })  {
-    console.log('[ThrottleView].handleLocoSelected', loco);
-    loadLoco(loco);
-  }
-
 </script>
 
 <template>
   <template v-if="isMounted">
     <Throttle v-if="loco" :loco="loco" @update:loco="clearSelectedLoco" />
-    <SelectLoco v-else @update:loco="handleLocoSelected" />  
   </template>
   <template v-else>
     <div>Loading...</div>
