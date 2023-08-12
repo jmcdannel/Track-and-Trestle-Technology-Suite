@@ -6187,6 +6187,11 @@ pify@^4.0.1:
   resolved "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
+pina@^0.20.2204228:
+  version "0.20.2204228"
+  resolved "https://registry.yarnpkg.com/pina/-/pina-0.20.2204228.tgz#b57ff2862142f90c2b891396bdcfd21a17eb7385"
+  integrity sha512-osNVZg36DsDAEPHskmnTINhM5APSLsu+y8guYYX65nidbRPmnv/trAoPnacpfh8aCpsowGWR/DAYtQHZyZq8wQ==
+
 pinkie-promise@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.1.tgz"

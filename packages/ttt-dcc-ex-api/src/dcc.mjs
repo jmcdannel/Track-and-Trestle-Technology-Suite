@@ -1,12 +1,14 @@
 import { SerialPort } from 'serialport';
-import log from './logger.mjs';
+import log from './utils/logger.mjs';
+import getPorts from './utils/listPorts.mjs';
+import server from './server.mjs';
 
 let port;
 
-const connect = () => {
+const connect = (payload) => {
 
   return new Promise(function(resolve, reject) {
-    const path = '/dev/tty.usbmodem2301';
+    const path = payload.serial;
     const baudRate = 115200;
 
     log.await('[SERIAL] attempting to connect to:', path);
@@ -30,14 +32,20 @@ const connect = () => {
     });
 
     // The open event is always emitted
-    port.on('open', function() {
+    port.on('open', async function() {
       // open logic
       log.start('[SERIAL] Serial port opened', path, baudRate);
+      await server.send({ 'action': 'connected', payload: { path, baudRate } });
       resolve(port);
     });
   });
 }
 
+const listPorts = async () => {
+  const payload = await getPorts();
+  server.send({ 'action': 'listPorts', payload });
+  log.info('[SERIAL] listPorts', payload);
+}
 
 const send = async (data) => {
   const cmd = `<${data}>\n`
@@ -54,6 +62,12 @@ const handleMessage = async (msg) => {
   const { action, payload } = JSON.parse(msg);
   log.star('[DCC] handleMessage', action, payload);
   switch (action) {
+    case 'connect':
+      connect(payload);
+      break;
+    case 'listPorts':
+      listPorts(payload);
+      break;
     case 'power':
       send(payload);
       break;

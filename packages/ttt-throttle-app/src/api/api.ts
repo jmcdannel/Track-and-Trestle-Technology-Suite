@@ -1,57 +1,60 @@
 import { store } from '../store/store.tsx';
+import dccApi from './dccApi.ts';
 import layoutApi from './layoutApi.ts';
 import actionApi from './actionApi.ts';
 import favoritesApi from './favoritesApi.ts';
+import config from './config.ts';
 
-const SELECTED_LOCO_ID = '@ttt/selectedLocoId';
-const LAYOUT_ID = '@ttt/layoutId';
-
-let layoutId = localStorage?.getItem(LAYOUT_ID);
-let selectedLocoId = localStorage?.getItem(SELECTED_LOCO_ID);
-// TO DO: implement tanStack query
-
-async function selectLayout(newLayoutId: string) {
+async function connect() {
   try {
-    console.log('selectLayout', newLayoutId);
-    localStorage.setItem(LAYOUT_ID, newLayoutId);
-    const selected = await api.layouts.get(newLayoutId);
-    store.layoutId = newLayoutId;
-    return selected;
+    const host = await config.host.get();
+    const layoutId = await config.layoutId.get();
+    console.log('API.connect', host, layoutId);
+    if (!host) throw new Error('No host specified');
+    if (!store?.conections) throw new Error('No store connections object');
+    const connected = host
+      ? await layoutApi.connect(host, layoutId)
+      : false;
+    if (connected && store?.conections) {
+      store.layoutApi = { connected, host };
+    }
+    (connected && layoutId) 
+      && await connectInterfaces(host, layoutId);
   } catch (e) {
-    console.error('selectLayout', e);
+    throw e;
   }
 }
 
-async function clearLayout() {
-  localStorage.removeItem(LAYOUT_ID);
-} 
+async function connectInterfaces(host, layoutId) {
 
-async function selectLoco(address: number) {
   try {
-    console.log('selectLoco', address);
-    localStorage.setItem(SELECTED_LOCO_ID, address.toString());
-    const selected = await api.locos.get(address);
-    return selected;
+    console.log('connectInterfaces', layoutId, store);
+    // await dccApi.connect(host);
+    const layout = await layoutApi.layouts.get(layoutId);
+    console.log('interfaces', layout?.interfaces);
+    layout?.interfaces.map(async iface => {
+    switch (iface.type) {
+      case 'dcc-js-api':
+        await dccApi.connect(host, iface);
+        break;
+      };
+    });
   } catch (e) {
-    console.error('selectLoco', e);
+    throw e;
   }
 }
 
-async function clearLoco() {
-  localStorage.removeItem(SELECTED_LOCO_ID);
-  selectedLocoId = null;
-} 
-
-async function connect(layoutId: string) {
-  console.log('API.connect', layoutId);
-  if (layoutId) {
-    selectLayout(layoutId);
-    await layoutApi.connect(layoutId);
-    await actionApi.connect('ws://joshs-mac-mini.local:8080');
-  }
-}
+// async function connect(layoutId: string) {
+//   console.log('API.connect', layoutId);
+//   if (layoutId) {
+//     selectLayout(layoutId);
+//     await layoutApi.connect(layoutId);
+//     await actionApi.connect('ws://joshs-mac-mini.local:8080');
+//   }
+// }
 
 async function disconnect() {
+  const layoutId = await config.layoutId.get();
   console.log('API.disconnect', layoutId);
   if (layoutId) {
     clearLoco();
@@ -60,13 +63,8 @@ async function disconnect() {
   }
 }
 
-const getLayoutId = () => layoutId;
-
-const getSelectedLocoId = () => selectedLocoId;
-
-layoutId && connect(layoutId);
-
 export const api = {
+  dcc: dccApi,
   layouts: {
     get: layoutApi.layouts.get
   },
@@ -81,12 +79,7 @@ export const api = {
   },
   connect,
   disconnect,
-  getLayoutId,
-  getSelectedLocoId,
-  selectLoco,
-  selectLayout,
-  clearLayout,
-  clearLoco,
+  config,
   favorites: favoritesApi
 }
 

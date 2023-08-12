@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import { debounce } from 'vue-debounce'
-  import dccApi from '../connections/dccApi.js';
+  import dccApi from '../api/dccApi.js';
 
   const DEBOUNCE_DELAY = 100;
   const SWITCH_DIR_DELAY = 1000;
@@ -89,6 +89,8 @@
 </script>
 
 <template>
+
+  <!-- TODO: break into small components -->
 
   <main class="card m-5 bg-slate-600 shadow-xl flex-grow">
     <header class="p-2 text-lg text-gray-900 bg-gradient-to-r from-green-500 to-cyan-500 flex  items-center justify-between">
@@ -212,4 +214,4 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='105' viewBox='0 0 80 105'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='death-star' fill='%23000000' fill-opacity='0.4'%3E%3Cpath d='M20 10a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm15 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zM20 75a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zm30-65a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm0 65a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zM35 10a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zM5 45a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zm60 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
-</style>
+</style>../api/dccApi.js

@@ -9,12 +9,16 @@
 [x] ~quick links to locos~
 [x] fix turnout bug/delay
 [x] ui beatification
+[-] environemnt config
+[ ] tam junc config - servos
 [ ] transition exploration
 [ ] pico led w/json
 [ ] stop all
-[ ] convert dispatcher to dcc api
+[ ] convert dispatcher to dcc api (remove jmri dep)
+[ ] convert to typescript
+[ ] write unit tests
 
-# DCC-JS
+### DCC-JS
 
 [ ] Fork DCC-JS
   - DCC-JS EX-API Server
@@ -24,3 +28,8 @@
     - DCC-JS Programmer (hosted, self hosted)
     - DCC-JS (hosted, self hosted)
     - Plugins (custom serial connections, servers, automation)
+
+
+### TODO
+
+[ ] determine storage options for locos, effetcts, turnouts, sensors, config

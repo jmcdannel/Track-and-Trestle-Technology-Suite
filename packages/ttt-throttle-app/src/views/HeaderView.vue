@@ -3,11 +3,12 @@
   import Title from '../core/Title.component.vue';
   import Power from '../core/Power.component.vue';
   import Favorites from '../core/Favorites.coponent.vue';
-  import Layout from '../connections/Layout.component.vue';
+  // import Layout from '../connections/Layout.component.vue';
   import router from '../router/index.ts';
   import { store } from '../store/store.tsx';
 
-  console.log('HeaderView', router?.currentRoute.value.name);
+  const connections = ref(store.connections);
+  console.log('HeaderView', router?.currentRoute.value.name, store.connections?.layoutApi?.url);
 </script>
 
 <template>
@@ -17,7 +18,9 @@
        <Title />
       </div>
       <div class="navbar-end">
-        <Layout />
+        <!-- <Layout /> -->
+        <span>{{ connections?.layoutApi?.connected }}</span>
+        <span>{{ connections?.layoutApi?.url }}</span>
         <Power />
       </div>
     </div>

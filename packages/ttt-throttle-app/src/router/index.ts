@@ -2,6 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { store } from '../store/store.tsx';
 import HomeView from '../views/HomeView.vue';
 
+const isRouteAllowed = (to, store) => {
+  const isAllowed = (to.path === '/' || to.path.includes('connect'));
+  console.log('isRouteAllowed', isAllowed, to, store);
+  return isAllowed;
+
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,48 +20,49 @@ const router = createRouter({
     {
       path: '/effects',
       name: 'effects',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/EffectsView.vue')
     },
     {
       path: '/throttle/:locoId?',
       name: 'throttle',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/ThrottleView.vue')
     },
     {
       path: '/turnouts',
       name: 'turnouts',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/TurnoutsView.vue')
     },
     {
       path: '/routes',
       name: 'routes',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/RoutesView.vue')
+    },
+    {
+      path: '/connect/layoutapi',
+      name: 'layoutapi',
+      component: () => import('../connections/layout-api/LayoutApiConnect.component.vue')
+    },
+    {
+      path: '/connect/layoutId',
+      name: 'layoutId',
+      component: () => import('../connections/layout-api/SelectLayout.component.vue')
+    },
+    {
+      path: '/connect/dcc-ex',
+      name: 'dcc-ex',
+      component: () => import('../connections/dcc-ex/DccExConnect.component.vue')
     }
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path !== '/' && !store.layoutId) {
-    console.log('router.beforeEach', to.path, from.path, store.layoutId);
-    // router.replace('/');
-    next({ name: 'home' });
-  } else  if (to.path === '/' && store.layoutId) {
-    next({ name: 'throttle' });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (!isRouteAllowed(to, store)) {
+//     console.log('router.beforeEach', to.path, from.path, store.layoutId);
+//     // router.replace('/');
+//     next({ name: 'home' });
+//   } else  if (to.path === '/' && store.layoutId) {
+//     next();
+//   }
+// });
 
 export default router

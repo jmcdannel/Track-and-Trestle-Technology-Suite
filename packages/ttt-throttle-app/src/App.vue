@@ -1,10 +1,18 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue'
   import { RouterView } from 'vue-router'
   import HeaderView from './views/HeaderView.vue'
   import FooterView from './views/FooterView.vue'
-  import dccApi from './connections/dccApi.js'
+  import { store } from './store/store.tsx'
+  import api from './api/api.ts'
 
-  dccApi.connect();
+  onMounted(async () => {
+    try {
+      await api.connect();
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
 </script>
 
@@ -17,3 +25,4 @@
     <FooterView />
   </main>
 </template>
+./api/dccApi.js

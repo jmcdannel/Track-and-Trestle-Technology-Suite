@@ -2,7 +2,7 @@
 import waitOn from 'wait-on';
 import server from './src/server.mjs';
 import dcc from './src/dcc.mjs';
-import log from './src/logger.mjs';
+import log from './src/utils/logger.mjs';
 
 var opts = {
   resources: [
@@ -21,7 +21,7 @@ async function main() {
   try {
     await waitOn(opts, () => log.pending('DCC waitOn'));
     await server.connect();
-    await dcc.connect();
+    // await dcc.connect();
   } catch (err) {
     console.error('main', err);
     // log.fatal('main', err);

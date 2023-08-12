@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import { debounce } from 'vue-debounce'
-  import dccApi from '../connections/dccApi.js';
+  import dccApi from '../api/dccApi.js';
 
   const props = defineProps({
     loco: {
@@ -138,4 +138,4 @@
     background-color: rgb(53, 103, 184);
     border-radius: 50%;
   }
-</style>
+</style>../api/dccApi.js

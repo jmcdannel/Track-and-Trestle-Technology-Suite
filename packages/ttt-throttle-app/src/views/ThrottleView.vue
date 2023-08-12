@@ -13,7 +13,7 @@
     try {
       const locoId = route.params.locoId
         ? route.params.locoId
-        : api.getSelectedLocoId();
+        : api.config.getSelectedLocoId();
 
       if (locoId) {
         await loadLoco(locoId);
@@ -27,7 +27,7 @@
   });
 
   async function loadLoco(address:number) {
-    const selectedLoco = await api.selectLoco(address);
+    const selectedLoco = await api.config.selectLoco(address);
     console.log('loadLoco', selectedLoco);
     loco.value = selectedLoco;
   }
