@@ -1,16 +1,27 @@
-import { store } from '../store/store.jsx';
+import { useConfigStore } from '../store/configStore.jsx';
 let wsDCC;
 let connectionId;
+let serial;
 
 const defaultProtocol = 'ws';
 const defaultPort = 8081;
 
 function onOpen() {
-  console.log('[DCC API] onOpen', store?.connections, connectionId, store?.connections?.[connectionId]);
-  if (store?.connections?.[connectionId]) {
-    store.connections[connectionId].api = true;
-    // store.connections[connectionId].connected = true;
+  const store = useConfigStore();
+  store.setDCCApi({ api: true });
+  // const 
+  // console.log('[DCC API] onOpen', store?.connections, connectionId, store?.connections?.[connectionId]);
+  // if (store?.connections?.[connectionId]) {
+  //   store.connections[connectionId].api = true;
+  //   // store.connections[connectionId].connected = true;
+  // }
+}
+
+async function connectSerial() {
+  if (serial) {
+    await send('connect', { serial });
   }
+
 }
 
 function onError(event) {
@@ -20,13 +31,19 @@ function onError(event) {
 function onMessage(event) {
   try {
     const { action, payload } = JSON.parse(event.data);
-    console.log('[DCC API] onMessage', action, payload, connectionId, store.connections[connectionId]);
+    const store = useConfigStore();
+    console.log('[DCC API] onMessage', action, payload);
     switch (action) {
       case 'listPorts':
-        store.connections[connectionId].ports = payload;
+        store.setDCCApi({ ports: payload });
+        // store.connections[connectionId].ports = payload;
+        break;
+      case 'socketConnected':
+        connectSerial();
         break;
       case 'connected':
-        store.connections[connectionId].connected = true;
+        console.log('onMessage.connected', serial);
+        store.setDCCApi({ connected: true });
         break;
     }
   } catch { 
@@ -34,9 +51,10 @@ function onMessage(event) {
   }
 }
 
-async function connect(host, iface) {
+async function connect(host, iface, _serial) {
   console.log('[DCC API] connect', host, iface?.id);
   connectionId = iface?.id;
+  serial = _serial;
   wsDCC = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
   wsDCC.onerror = onError;
   wsDCC.addEventListener('open', onOpen);   

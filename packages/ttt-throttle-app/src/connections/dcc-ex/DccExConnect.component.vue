@@ -1,43 +1,46 @@
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
+  import { storeToRefs } from 'pinia';
   import { RouterLink } from 'vue-router';
+  import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
   import router from '../../router/index.ts';
   import api from '../../api/api.ts';
-  import { store } from '../../store/store.tsx';
+  import { useConfigStore } from '../../store/configStore.tsx';
 
-  const connectionId = ref( api.dcc.getConnectionId());
-  const connection = ref(store?.connections?.[connectionId.value]);
-  console.log('connectionId', connectionId.value, connection.value);
+  const configStore = useConfigStore();
+  const { layoutId, dccApi } = storeToRefs(configStore);
+
+  const connectionId = ref(api.dcc.getConnectionId());
+  // const connection = ref(store?.connections?.[connectionId.value]);
+  // console.log('connectionId', connectionId.value, connection.value);
 
   onMounted(() => {
-    api.dcc.send('listPorts', { connectionId });
+    console.log('[DccExConnect] onMounted', connectionId.value, dccApi);
+    if (dccApi?.api) {
+      api.dcc.send('listPorts', { });
+    }
   });
 
   const handlePortClick = async (e) => {
     try {
       e.preventDefault();
-      console.log('handlePortClick', e.target.value);
-      // TODO: save serial port config
-      await api.config.set(connectionId.value, e.target.value);
-      await api.dcc.send('connect', { serial: e.target.value });
-      // host.value = await api.setHost(e.target.value);
-      // const layouts = await api.connect();
-      // connStatus.value = layouts.length > 0;   
-      // console.log('handleHostClick', host.value, connStatus.value);
-      // if (connections.value?.layoutApi) {
-      //   store.connections = {...connections.value, ... {
-      //     layoutApi: {
-      //       connected: true,
-      //       url: host.value
-      //     }
-      //   }}
-      // }
-
+      const serial = e.target.value;
+      console.log('handlePortClick', serial);
+      // TODO: move save serial port config to dccApi
+      await api.config.set(connectionId.value, serial);
+      await api.dcc.send('connect', { serial });
       router.push({ name: 'home' });
     } catch (err) {
       console.error(err);
     }
   }
+
+  watch(dccApi, (newVal, oldVal) => {
+    console.log('[DccExConnect] watch.dccApi', newVal, oldVal);
+    if (newVal?.api && !oldVal?.api) {
+      api.dcc.send('listPorts', { });
+    }
+  });
 
 </script>
 
@@ -57,8 +60,15 @@
       </h2>
     </header>
     <main class="my-1 pt-8 flex-grow">  
+      
+      <div class="p-2 text-error">
+          <ConnectionStatus :connected="dccApi?.connected" />
+          <!-- <pre>dccApi: {{ dccApi }}</pre>
+          <pre>dccApi?.connected: {{ dccApi?.connected }}</pre> -->
+        </div> 
+        <div className="divider"></div> 
       <ul>
-        <li v-for="port in connection.ports" :key="port">
+        <li v-for="port in dccApi?.ports" :key="port">
           <button class="btn btn-sm btn-outline w-full border-teal-500" :value="port" @click="handlePortClick">{{ port }}</button>
           <div className="divider"></div> 
         </li>

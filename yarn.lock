@@ -6187,10 +6187,13 @@ pify@^4.0.1:
   resolved "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pina@^0.20.2204228:
-  version "0.20.2204228"
-  resolved "https://registry.yarnpkg.com/pina/-/pina-0.20.2204228.tgz#b57ff2862142f90c2b891396bdcfd21a17eb7385"
-  integrity sha512-osNVZg36DsDAEPHskmnTINhM5APSLsu+y8guYYX65nidbRPmnv/trAoPnacpfh8aCpsowGWR/DAYtQHZyZq8wQ==
+pinia@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/pinia/-/pinia-2.1.6.tgz#e88959f14b61c4debd9c42d0c9944e2875cbe0fa"
+  integrity sha512-bIU6QuE5qZviMmct5XwCesXelb5VavdOWKWaB17ggk++NUwQWWbP5YnsONTk3b752QkW9sACiR81rorpeOMSvQ==
+  dependencies:
+    "@vue/devtools-api" "^6.5.0"
+    vue-demi ">=0.14.5"
 
 pinkie-promise@^2.0.0:
   version "2.0.1"
@@ -7778,6 +7781,11 @@ vue-debounce@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/vue-debounce/-/vue-debounce-4.0.0.tgz"
   integrity sha512-+BrcKfLpyDpUJ58ZrAvI35irRCgYHFpnF3NJZwwaz8/kkKmEq6TWPXBIhLh2HQAsUZNwo52K/vQyiEFsJ/1RYA==
+
+vue-demi@>=0.14.5:
+  version "0.14.5"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.5.tgz#676d0463d1a1266d5ab5cba932e043d8f5f2fbd9"
+  integrity sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==
 
 vue-demi@^0.13.1:
   version "0.13.11"

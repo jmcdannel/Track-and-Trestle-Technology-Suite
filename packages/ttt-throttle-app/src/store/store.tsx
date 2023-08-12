@@ -3,7 +3,7 @@ import api from '../api/api.ts';
 
 export const store = reactive({
   // connections: 
-  conections: {},
+  connections: {},
   layoutId: await api.config.getLayoutId(),
   favorites: await api.favorites.get(),
 });

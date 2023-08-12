@@ -3,11 +3,12 @@
   import { RouterView } from 'vue-router'
   import HeaderView from './views/HeaderView.vue'
   import FooterView from './views/FooterView.vue'
-  import { store } from './store/store.tsx'
+  import { useConfigStore } from './store/configStore.tsx'
   import api from './api/api.ts'
 
   onMounted(async () => {
     try {
+      // store.i
       await api.connect();
     } catch (err) {
       console.error(err);
@@ -25,4 +26,4 @@
     <FooterView />
   </main>
 </template>
-./api/dccApi.js
+./api/dccApi.js./store/configStore

@@ -4,41 +4,55 @@ import getPorts from './utils/listPorts.mjs';
 import server from './server.mjs';
 
 let port;
+let isConnected = false;
 
-const connect = (payload) => {
+const connect = async (payload) => {
+  try {
 
-  return new Promise(function(resolve, reject) {
+    log.star('[SERIAL] connect', payload);
     const path = payload.serial;
     const baudRate = 115200;
+    if (isConnected) {
+      await server.send({ 'action': 'connected', payload: { serial: path, baudRate } });
+      return Promise.resolve(true);
+    }
 
-    log.await('[SERIAL] attempting to connect to:', path);
-    // Create a port
-    port = new SerialPort({
-      path,
-      baudRate,
-      autoOpen: false,
+    return new Promise(function(resolve, reject) {
+
+      log.await('[SERIAL] attempting to connect to:', path);
+      // Create a port
+      port = new SerialPort({
+        path,
+        baudRate,
+        autoOpen: false,
+      });
+
+      port.open(function (err) {
+        if (err) {
+          log.fatal('[SERIAL] Error opening port: ', err.message);
+          reject(`[SERIAL] Error opening port: ${err.message}`);
+          return;
+        }
+        log.start('[SERIAL] open');
+
+        isConnected = true;
+
+        // Because there's no callback to write, write errors will be emitted on the port:
+        port.write('main screen turn on\n');
+      });
+
+      // The open event is always emitted
+      port.on('open', async function() {
+        // open logic
+        log.start('[SERIAL] Serial port opened', path, baudRate);
+        await server.send({ 'action': 'connected', payload: { serial: path, baudRate } });
+        resolve(port);
+      });
     });
 
-    port.open(function (err) {
-      if (err) {
-        log.fatal('[SERIAL] Error opening port: ', err.message);
-        reject(`[SERIAL] Error opening port: ${err.message}`);
-        return;
-      }
-      log.start('[SERIAL] open');
-
-      // Because there's no callback to write, write errors will be emitted on the port:
-      port.write('main screen turn on\n');
-    });
-
-    // The open event is always emitted
-    port.on('open', async function() {
-      // open logic
-      log.start('[SERIAL] Serial port opened', path, baudRate);
-      await server.send({ 'action': 'connected', payload: { path, baudRate } });
-      resolve(port);
-    });
-  });
+  } catch (err) {
+    log.fatal('[SERIAL] Error opening port: ', err.message);
+  }
 }
 
 const listPorts = async () => {

@@ -4,6 +4,6 @@
 
 <template>
   <main class="flex">
-      <SelectConnections />  
+    <SelectConnections />  
   </main>
 </template>

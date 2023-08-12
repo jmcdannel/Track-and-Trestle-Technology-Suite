@@ -1,12 +1,17 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
   import { RouterLink } from 'vue-router';
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import { store } from '../../store/store.tsx';
 
-  const connection = ref(store?.layoutApi);
-  const connected = ref(connection?.connected);
-  console.log('store', connected.value, connection.value, store?.connections);
+const props = defineProps({
+    connection: {
+        type: Object
+    },
+    statusLabel: {
+        type: String
+    }
+  });
+
+  // console.log('LayoutApiStatus', connection);
 
 </script>
 <template>
@@ -23,21 +28,21 @@
       </h2>
       <div class="card-actions justify-between items-center">
         <div class="p-2 text-error">
-          <ConnectionStatus :connected="connected" :connected-label="store.layoutId" />
+          <ConnectionStatus :connected="connection?.connected" :connected-label="statusLabel" />
 
         </div> 
         <router-link
           to="/connect/layoutapi"
           custom
           v-slot="{ navigate }"
-          v-if="!connected"
         >
           <button
             @click="navigate"
             role="link"
             class="btn btn-primary btn-outline"
           >
-          Connect
+          <span v-if="!connection?.connected">Connect</span>
+          <span v-else>Configure</span>
           </button>
         </router-link>
         
@@ -45,7 +50,7 @@
           to="/connect/layoutId"
           custom
           v-slot="{ navigate }"
-          v-else-if="!store.layoutId"
+          v-if="!statusLabel"
         >
           <button
             @click="navigate"

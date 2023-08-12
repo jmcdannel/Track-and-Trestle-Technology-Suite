@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { store } from '../store/store.tsx';
 import HomeView from '../views/HomeView.vue';
 
-const isRouteAllowed = (to, store) => {
+const isRouteAllowed = (to) => {
   const isAllowed = (to.path === '/' || to.path.includes('connect'));
-  console.log('isRouteAllowed', isAllowed, to, store);
+  console.log('isRouteAllowed', isAllowed, to);
   return isAllowed;
-
 }
 
 const router = createRouter({

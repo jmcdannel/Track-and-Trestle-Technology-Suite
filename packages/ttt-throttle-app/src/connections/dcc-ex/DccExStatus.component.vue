@@ -1,18 +1,22 @@
 <script setup lang="ts">
   import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
   import { RouterLink } from 'vue-router';
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import { store } from '../../store/store.tsx';
+  import { useConfigStore } from '../../store/configStore.tsx';
 
+  const configStore = useConfigStore();
+  const { dccApi } = storeToRefs(configStore);
   const props = defineProps({
+    connection: {
+        type: Object
+    },
     iface: {
         type: Object
     }
   });
 
-  const connected = ref(store?.connections?.[props.iface?.id]?.connected);
-
-  console.log('DccExStatus', connected.value);
+  console.log('DccExStatus', dccApi);
 
 </script>
 
@@ -32,22 +36,28 @@
         <div class="flex">
           <div class="p-2 text-error">
             
-            <ConnectionStatus :connected="connected" :connected-label="'DCC EX Command Station'" />
+            <ConnectionStatus :connected="dccApi?.api" :connected-label="'DCC.JS API'" />
+            <ConnectionStatus :connected="dccApi?.connected" :connected-label="'DCC EX Command Station'" />
 
           </div> 
         </div>
+          <!-- <pre>dccApi: {{ dccApi }}</pre>
+          <pre>dccApi?.connected: {{ dccApi?.connected }}</pre> -->
         
         <router-link
           to="/connect/dcc-ex"
           custom
           v-slot="{ navigate }"
+          
         >
           <button
             @click="navigate"
             role="link"
             class="btn btn-primary btn-outline"
           >
-          Connect
+          <span v-if="!dccApi?.connected">Connect</span>
+          <span v-else>Configure</span>
+          
           </button>
         </router-link>
       </div>
