@@ -9,6 +9,7 @@ export const useConfigStore = defineStore('config', {
     layoutApi: {},
     dccApi: {},
     layoutId: api.config.layoutId.get(),
+    locoId: api.config.loco.get(),
     favorites: []
   }),
   actions: {
@@ -32,6 +33,9 @@ export const useConfigStore = defineStore('config', {
     },
     setLayoutId(layoutId) {
       this.layoutId = layoutId;
+    },
+    setLocoId(locoId) {
+      this.locoId = locoId;
     }
   }
 })

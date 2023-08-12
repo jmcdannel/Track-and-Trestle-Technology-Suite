@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue';
   import Throttle from '../throttle/Throttle.component.vue'
   import { useRoute } from 'vue-router'
+  import router from '../router/index.ts';
   import api from '../api/api.ts'
 
   const route = useRoute();
@@ -12,7 +13,7 @@
     try {
       const locoId = route.params.locoId
         ? route.params.locoId
-        : api.config.getSelectedLocoId();
+        : api.config.loco.get();
 
       if (locoId) {
         await loadLoco(locoId);
@@ -35,6 +36,8 @@
   function clearSelectedLoco()  {
     console.log('[ThrottleView].clearSelectedLoco');
     loco.value = null;
+    api.config.loco.clear();
+    router.push({ name: 'locos' });
   }
 
 </script>
