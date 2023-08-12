@@ -47,9 +47,9 @@ async function selectLayout(newLayoutId: string) {
   try {
     console.log('selectLayout', newLayoutId);
     localStorage.setItem(LAYOUT_ID, newLayoutId);
-    const selected = await api.layouts.get(newLayoutId);
+    // const selected = await api.layouts.get(newLayoutId);
     store.layoutId = newLayoutId;
-    return selected;
+    return newLayoutId;
   } catch (e) {
     console.error('selectLayout', e);
   }
@@ -63,8 +63,7 @@ async function selectLoco(address: number) {
   try {
     console.log('selectLoco', address);
     localStorage.setItem(SELECTED_LOCO_ID, address.toString());
-    const selected = await api.locos.get(address);
-    return selected;
+    return address;
   } catch (e) {
     console.error('selectLoco', e);
   }
@@ -161,6 +160,11 @@ export const config = {
     set: selectLayout,
     get: getLayoutId,
     clear: clearLayout
+  },
+  loco: {
+    set: selectLoco,
+    get: getSelectedLocoId,
+    clear: clearLoco
   },
   // TODO: deprecate:
   getLayoutId,

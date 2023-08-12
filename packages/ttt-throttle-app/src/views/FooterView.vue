@@ -4,6 +4,10 @@
 
   const route = useRoute();
   
+  const throttleLink = route?.params?.locoId
+    ? `/throttle/${route.params.locoId}`
+    : `/locos`;
+  
 </script>
 <template>
   <footer>
@@ -20,7 +24,7 @@
         </button>
       </router-link>
       <router-link
-        to="/throttle"
+        :to="throttleLink"
         custom
         v-slot="{ navigate }"
       >
