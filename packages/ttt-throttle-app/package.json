@@ -20,6 +20,7 @@
     "axios": "^1.4.0",
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6",
+    "pinia": "^2.1.6",
     "realm-web": "^2.0.0",
     "vue": "^3.3.4",
     "vue-debounce": "^4.0.0",

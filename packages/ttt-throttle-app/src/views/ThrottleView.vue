@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import Throttle from '../throttle/Throttle.component.vue'
-  import SelectLoco from '../throttle/SelectLoco.component.vue'
   import { useRoute } from 'vue-router'
+  import router from '../router/index.ts';
   import api from '../api/api.ts'
 
   const route = useRoute();
@@ -13,7 +13,7 @@
     try {
       const locoId = route.params.locoId
         ? route.params.locoId
-        : api.getSelectedLocoId();
+        : api.config.loco.get();
 
       if (locoId) {
         await loadLoco(locoId);
@@ -27,7 +27,8 @@
   });
 
   async function loadLoco(address:number) {
-    const selectedLoco = await api.selectLoco(address);
+    await api.config.loco.set(address);
+    const selectedLoco = await api.locos.get(address);
     console.log('loadLoco', selectedLoco);
     loco.value = selectedLoco;
   }
@@ -35,11 +36,8 @@
   function clearSelectedLoco()  {
     console.log('[ThrottleView].clearSelectedLoco');
     loco.value = null;
-  }
-
-  function handleLocoSelected({ loco })  {
-    console.log('[ThrottleView].handleLocoSelected', loco);
-    loadLoco(loco);
+    api.config.loco.clear();
+    router.push({ name: 'locos' });
   }
 
 </script>
@@ -47,7 +45,6 @@
 <template>
   <template v-if="isMounted">
     <Throttle v-if="loco" :loco="loco" @update:loco="clearSelectedLoco" />
-    <SelectLoco v-else @update:loco="handleLocoSelected" />  
   </template>
   <template v-else>
     <div>Loading...</div>

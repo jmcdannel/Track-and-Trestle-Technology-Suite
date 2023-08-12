@@ -2,6 +2,9 @@
   import { ref } from 'vue';
 
   const port = ref(null);
+
+  let outputDone;
+  let outputStream: WritableStream<string>;
   
   const props = defineProps({
     iface: {
@@ -9,7 +12,7 @@
     }
   });
 
-  const connected = ref(false);
+  const connected = ref(props?.iface?.status === 'connected');
 
   function handleConnection(e:any) {
     connected.value = e.state;
@@ -44,10 +47,12 @@
 
   async function connect() {
     try {
-      const port = await navigator.serial.requestPort(); // prompt user to select device connected to a com port
-      await port.open({ baudRate: 115200 });         // open the port at the proper supported baud rate
-      connected.value = true;
-      // emitConn('connection', { state: connected.value, port });
+      // const ports = await api.ports.get();
+      // console.log('ports', ports);
+      // const port = await navigator.serial.requestPort(); // prompt user to select device connected to a com port
+      // await port.open({ baudRate: 115200 });         // open the port at the proper supported baud rate
+      // connected.value = true;
+      // // emitConn('connection', { state: connected.value, port });
     } catch (err) {
       console.error('SERIAL failed', err);
     }
@@ -56,16 +61,19 @@
 
 <template>
   <main>
-    <div class="card w-96 bg-base-100 shadow-xl">
-      <div class="card-body">
-        <h2 class="card-title text-purple-400 text-opacity-75">{{ iface?.device }}</h2>
-        <pre>{{ iface?.serial }}</pre>
-        <p>
-          Status:
-          <strong v-if="connected" class="text-green-600 text-opacity-75">CONNECTED</strong>
-          <strong v-else class="text-red-600 text-opacity-75">NOT CONNECTED</strong>
-        </p>
-        <div class="card-actions justify-end">
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body flex-row">
+        <div class="card-content flex-1">
+          <h2 class="card-title text-purple-400 text-opacity-75">{{ iface?.device }}</h2>
+          <pre>{{ iface?.serial }}</pre>
+          <p>
+            Status:
+            <strong v-if="connected" class="text-green-600 text-opacity-75">CONNECTED</strong>
+            <strong v-else class="text-red-600 text-opacity-75">NOT CONNECTED</strong>
+          </p>
+        </div>
+
+        <div class="card-actions flex-none">
           <button v-if="connected" class="btn btn-secondary btn-sm">Reset</button>
           <button v-else class="btn btn-primary btn-sm" @click="connect">Connect</button>
         </div>

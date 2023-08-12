@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import log from './logger.mjs';
+import log from './utils/logger.mjs';
 import dcc from './dcc.mjs';
 
 let server
@@ -7,8 +7,8 @@ const port = 8081; // TODO: move to config
 const serverId = 'DCCEXWebsocketServer'; // TODO: move to config
 
 const MSG_CONNECTED = JSON.stringify({
-  action: 'message',
-  payload: `${serverId} is connected`
+  action: 'socketConnected',
+  payload: { serverId }
 });
 
 const handleClose = () => {
@@ -37,6 +37,12 @@ const handleConnection = (ws, resolve) => {
   resolve(ws);
 }
 
+const send = async (data) => {
+  if (server) {
+    await server.send(JSON.stringify(data));
+  }
+}
+
 const connect = async () => {
   return new Promise((resolve, reject) => {
     try {
@@ -50,4 +56,4 @@ const connect = async () => {
   });
 }
 
-export default { connect };
+export default { connect, send };

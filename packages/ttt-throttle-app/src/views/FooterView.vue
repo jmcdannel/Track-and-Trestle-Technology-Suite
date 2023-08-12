@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { RouterLink } from 'vue-router'
-  import { useRoute } from 'vue-router'
+  import { storeToRefs } from 'pinia';
+  import { useConfigStore } from '../store/configStore.tsx';
 
-  const route = useRoute();
+  const configStore = useConfigStore();
+  const { locoId } = storeToRefs(configStore);
   
 </script>
 <template>
@@ -20,11 +21,11 @@
         </button>
       </router-link>
       <router-link
-        to="/throttle"
+        :to="locoId ? `/throttle/${locoId}` : `/locos`"
         custom
         v-slot="{ navigate }"
       >
-        <button class="text-primary" :class="{ active: (route?.name === 'throttle') }" @click="navigate" role="link">
+        <button class="text-primary" :class="{ active: (route?.name === 'throttle' || route?.name === 'locos') }" @click="navigate" role="link">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
           </svg>
