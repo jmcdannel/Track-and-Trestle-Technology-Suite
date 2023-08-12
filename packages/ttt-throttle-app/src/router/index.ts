@@ -51,7 +51,7 @@ const router = createRouter({
       component: () => import('../connections/layout-api/SelectLayout.component.vue')
     },
     {
-      path: '/connect/dcc-ex',
+      path: '/connect/dcc-ex/:connectionId',
       name: 'dcc-ex',
       component: () => import('../connections/dcc-ex/DccExConnect.component.vue')
     }

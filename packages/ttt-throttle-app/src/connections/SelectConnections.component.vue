@@ -8,7 +8,7 @@
   import { useConfigStore } from '../store/configStore.tsx';
 
   const configStore = useConfigStore();
-  const { connections, layoutId, layoutApi, dccApi } = storeToRefs(configStore);
+  const { layoutId, layoutApi, dccApi } = storeToRefs(configStore);
   const interfaces:any = ref(null);
 
 
@@ -19,9 +19,10 @@
   }
 
   onMounted(async () => {
-    // connections.value = await api.config.getConnections();
-    // console.log('connections', connections.value, store?.layoutId);
-    layoutId && loadLayout(layoutId.value);
+    console.log('layoutId.value', layoutId.value);
+    if (layoutId.value) {
+      loadLayout(layoutId.value);
+    }
   });
 
   // watch(layoutId, loadLayout);

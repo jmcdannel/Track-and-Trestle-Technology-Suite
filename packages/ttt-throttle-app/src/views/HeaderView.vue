@@ -10,7 +10,7 @@
 
   const configStore = useConfigStore();
   const { layoutId, layoutApi, dccApi } = storeToRefs(configStore);
-  const layoutConnected = ref(!!layoutId);
+  const layoutConnected = ref(!!layoutId.value);
 
   const showFavs = () => {
     const to = router?.currentRoute?.value?.name;
@@ -43,7 +43,7 @@
           :connected-label="'DCC'" 
           :disconnected-label="'DCC'" 
         />
-        <Power />
+        <Power :disabled="!dccApi?.connected" />
       </div>
     </div>
     <section v-if="showFavs()">

@@ -50,7 +50,7 @@ const props = defineProps({
           to="/connect/layoutId"
           custom
           v-slot="{ navigate }"
-          v-if="!statusLabel"
+          v-if="connection?.connected && !statusLabel"
         >
           <button
             @click="navigate"

@@ -45,7 +45,7 @@
           <pre>dccApi?.connected: {{ dccApi?.connected }}</pre> -->
         
         <router-link
-          to="/connect/dcc-ex"
+          :to="`/connect/dcc-ex/${iface?.id}`"
           custom
           v-slot="{ navigate }"
           
