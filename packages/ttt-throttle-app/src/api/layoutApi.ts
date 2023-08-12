@@ -1,10 +1,9 @@
 import axios from 'axios';
 
 let layoutId: string;
+let baseUrl: string;
 
-const instance = axios.create({
-  baseURL: 'http://joshs-mac-mini.local:5001/api'
-});
+const instance = axios.create();
 
 async function get(type:string, Id = null) {
   try {
@@ -34,9 +33,23 @@ async function getLayouts(Id:string | undefined) {
   }
 }
 
-async function connect(_layoutId: string) {
+async function setLayout(_layoutId: string) {
   layoutId = _layoutId;
-  console.log('Layout api connect', layoutId);
+  console.log('setLayout', layoutId);
+}
+
+async function connect(uri: string, _layoutId?:string) {
+  try {
+    console.log('Layout api connect - uri', uri, _layoutId );  
+    layoutId = _layoutId ? _layoutId : layoutId;
+    instance.defaults.baseURL = `http://${uri}:5200/api`;
+    const apiResponse = await instance.get('/');
+    console.log('apiResponse',  apiResponse, !!apiResponse?.data);
+    return !!apiResponse?.data;
+  }catch (err) {
+    console.error(err);
+    throw new Error(`Unable to connect to ${uri}`);
+  }
 }
 
 export const api = {

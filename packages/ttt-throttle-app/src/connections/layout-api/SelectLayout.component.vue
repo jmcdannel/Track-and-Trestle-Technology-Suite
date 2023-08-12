@@ -1,18 +1,24 @@
 <script setup lang="ts">
   import { onMounted, ref, watch } from 'vue';
-  import api from '../api/api.ts';
+  import api from '../../api/api.ts';
+  import router from '../../router/index.ts';
+  import { store } from '../../store/store.tsx';
 
   const layouts:any = ref(null);
-
-  const emit = defineEmits(['update:layoutId']);
 
   onMounted(async () => {
     layouts.value = await api.layouts.get();
   });
 
   async function handleSelectLayout (e:any) {
-    console.log('handleSelectLayout', e.target.value);
-    await emit('update:layoutId', e.target.value);
+    try {
+    const newLayoutId:string = e.target.value;
+      const layout = await api.config.selectLayout(newLayoutId);
+      store.layoutId = newLayoutId;
+      router.push({ name: 'home' });
+    } catch (err) {
+      console.error(err);
+    }
   }
 
 </script>

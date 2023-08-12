@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue'
   import { store } from '../store/store.tsx';
-  import dccApi from '../connections/dccApi.js';
+  import dccApi from '../api/dccApi.ts';
 
   const power = ref(false);
 
@@ -32,4 +32,4 @@
       <span class="w-1 h-1 bg-red-500 rounded-full absolute top-0.5"></span>
     </button>
 
-</template>
+</template>../api/dccApi.js

@@ -5,6 +5,8 @@
 
   // const layoutId = ref(store.layoutId);
 
+  // TODO: rename to Layout Status Indicator or something similar
+
   async function clearLayoutId() {
     api.disconnect();
     store.layoutId = null;
@@ -16,6 +18,7 @@
 <template>
   <section class="layout-id flex flex-row items-center">
     <template v-if="store.layoutId">
+      <!-- TODO:  move to separate component (core/CurrentLayout.component.vue)-->
       <button class="btn btn-ghost" @click="clearLayoutId">
         <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
           <span class="w-2 h-2 mr-1 bg-green-500 rounded-full"></span>

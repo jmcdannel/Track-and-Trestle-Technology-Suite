@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useLocation} from 'react-router-dom';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import TrainIcon from '@mui/icons-material/Train';
 import navConfig from '../Shared/Config/Navigation';
-import { useLocation } from "react-router-dom";
 import { Context } from '../Store/Store';
 
 export const Footer = () => {
