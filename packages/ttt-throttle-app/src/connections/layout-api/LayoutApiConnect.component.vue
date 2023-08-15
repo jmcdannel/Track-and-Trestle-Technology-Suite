@@ -28,16 +28,16 @@
       e.preventDefault();
       host.value = await api.config.setHost(e.target.value);
       const layouts = await api.connect();
-      connStatus.value = layouts.length > 0;   
-      console.log('handleHostClick', host.value, connStatus.value);
-      if (connections.value?.layoutApi) {
-        store.connections = {...connections.value, ... {
-          layoutApi: {
-            connected: true,
-            url: host.value
-          }
-        }}
-      }
+      connStatus.value = (layouts?.length > 0);
+      // console.log('handleHostClick', host.value, connStatus.value);
+      // if (connections.value?.layoutApi) {
+      //   store.connections = {...connections.value, ... {
+      //     layoutApi: {
+      //       connected: true,
+      //       url: host.value
+      //     }
+      //   }}
+      // }
 
       router.push({ name: 'layoutId' });
     } catch (err) {

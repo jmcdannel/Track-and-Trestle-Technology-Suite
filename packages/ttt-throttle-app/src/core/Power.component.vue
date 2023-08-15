@@ -3,6 +3,10 @@
   import { store } from '../store/store.tsx';
   import dccApi from '../api/dccApi.ts';
 
+  const props = defineProps({
+    disabled: Boolean
+  });
+
   const power = ref(false);
 
   async function handlePower() {
@@ -20,11 +24,12 @@
 <template>
 
   <button @click="handlePower"
-    :disabled="!store.layoutId"
+    :disabled="disabled"
     class="btn btn-ghost btn-circle relative"
     :class="{
-      'text-success': power,
-      'text-error': !power,  
+      'text-gray-500': disabled,
+      'text-success': !disabled && power,
+      'text-error': !disabled && !power,  
     }">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" />

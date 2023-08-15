@@ -52,9 +52,9 @@ function onMessage(event) {
 }
 
 async function connect(host, iface, _serial) {
-  console.log('[DCC API] connect', host, iface?.id);
   connectionId = iface?.id;
   serial = _serial;
+  console.log('[DCC API] connect', host, iface?.id, connectionId, serial);
   wsDCC = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
   wsDCC.onerror = onError;
   wsDCC.addEventListener('open', onOpen);   

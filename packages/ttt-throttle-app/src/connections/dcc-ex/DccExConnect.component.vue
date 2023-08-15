@@ -2,6 +2,7 @@
   import { onMounted, ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import { RouterLink } from 'vue-router';
+  import { useRoute } from 'vue-router'
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
   import router from '../../router/index.ts';
   import api from '../../api/api.ts';
@@ -10,7 +11,8 @@
   const configStore = useConfigStore();
   const { layoutId, dccApi } = storeToRefs(configStore);
 
-  const connectionId = ref(api.dcc.getConnectionId());
+  const route = useRoute();
+  const connectionId = ref(route?.params?.connectionId);
   // const connection = ref(store?.connections?.[connectionId.value]);
   // console.log('connectionId', connectionId.value, connection.value);
 
@@ -25,7 +27,7 @@
     try {
       e.preventDefault();
       const serial = e.target.value;
-      console.log('handlePortClick', serial);
+      console.log('handlePortClick', serial, connectionId.value);
       // TODO: move save serial port config to dccApi
       await api.config.set(connectionId.value, serial);
       await api.dcc.send('connect', { serial });
