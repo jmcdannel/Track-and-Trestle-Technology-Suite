@@ -1,4 +1,3 @@
-// import { store } from '../store/store.tsx';
 import { useConfigStore } from '../store/configStore.jsx';
 import dccApi from './dccApi.ts';
 import actionApi from './actionApi.ts';
@@ -19,7 +18,7 @@ async function connect() {
       : false;
     console.log('connected', connected);
     if (connected) {
-      await store.setConnection('layoutApi',   { connected, host });
+      await store.setConnection('layoutApi', { connected, host });
       await store.setLayoutApi({ connected, host });
     }
     (connected && layoutId) 
@@ -43,6 +42,9 @@ async function connectInterfaces(host, layoutId) {
         await dccApi.connect(host, iface, dccSerial);
 
         break;
+      case 'action-api':
+        await actionApi.connect(host, iface);
+        break;
       };
     });
   } catch (e) {
@@ -50,21 +52,12 @@ async function connectInterfaces(host, layoutId) {
   }
 }
 
-// async function connect(layoutId: string) {
-//   console.log('API.connect', layoutId);
-//   if (layoutId) {
-//     selectLayout(layoutId);
-//     await layoutApi.connect(layoutId);
-//     await actionApi.connect('ws://joshs-mac-mini.local:8080');
-//   }
-// }
-
 async function disconnect() {
   const layoutId = await config.layoutId.get();
   console.log('API.disconnect', layoutId);
   if (layoutId) {
-    clearLoco();
-    clearLayout();
+    config.loco.clear();
+    config.layoutId.clear();
     await actionApi.disconnect();
   }
 }

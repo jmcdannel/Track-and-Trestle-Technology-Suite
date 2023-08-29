@@ -2,7 +2,6 @@
   import { onMounted, ref, watch } from 'vue';
   import api from '../../api/api.ts';
   import router from '../../router/index.ts';
-  import { store } from '../../store/store.tsx';
 
   const layouts:any = ref(null);
 
@@ -13,8 +12,7 @@
   async function handleSelectLayout (e:any) {
     try {
     const newLayoutId:string = e.target.value;
-      const layout = await api.config.selectLayout(newLayoutId);
-      store.layoutId = newLayoutId;
+      await api.config.layoutId.set(newLayoutId);
       router.push({ name: 'home' });
     } catch (err) {
       console.error(err);

@@ -7,8 +7,8 @@ const port = 8080; // TODO: move to config
 const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
 
 const MSG_CONNECTED = JSON.stringify({
-  action: 'message',
-  payload: `${serverId} is connected`
+  action: 'socketConnected',
+  payload: { serverId }
 });
 
 const handleClose = () => {

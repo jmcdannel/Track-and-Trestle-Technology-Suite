@@ -9,12 +9,16 @@
 [x] ~quick links to locos~
 [x] fix turnout bug/delay
 [x] ui beatification
-[-] environemnt config
+[x] environemnt config
+[ ] connect to serial devices, action api
 [ ] tam junc config - servos
 [ ] transition exploration
 [ ] pico led w/json
 [ ] stop all
-[ ] convert dispatcher to dcc api (remove jmri dep)
+[ ] verrical UI (or respnsive horiztonal?)
+[ ] keep alive
+[ ] disconnect bug
+[ ] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
 [ ] convert to typescript
 [ ] write unit tests
 

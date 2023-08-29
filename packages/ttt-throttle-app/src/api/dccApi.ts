@@ -6,9 +6,10 @@ let serial;
 const defaultProtocol = 'ws';
 const defaultPort = 8081;
 
-function onOpen() {
+async function onOpen() {
   const store = useConfigStore();
   store.setDCCApi({ api: true });
+  await store.setConnection('dccApi', { api: true });
   // const 
   // console.log('[DCC API] onOpen', store?.connections, connectionId, store?.connections?.[connectionId]);
   // if (store?.connections?.[connectionId]) {
@@ -28,7 +29,7 @@ function onError(event) {
   console.log('[DCC API] Websocket error', event);
 }
 
-function onMessage(event) {
+async function onMessage(event) {
   try {
     const { action, payload } = JSON.parse(event.data);
     const store = useConfigStore();
@@ -36,6 +37,7 @@ function onMessage(event) {
     switch (action) {
       case 'listPorts':
         store.setDCCApi({ ports: payload });
+        await store.setConnection('dccApi', { ports: payload });
         // store.connections[connectionId].ports = payload;
         break;
       case 'socketConnected':
@@ -44,6 +46,7 @@ function onMessage(event) {
       case 'connected':
         console.log('onMessage.connected', serial);
         store.setDCCApi({ connected: true });
+        await store.setConnection('dccApi', { connected: true });
         break;
     }
   } catch { 
@@ -63,6 +66,7 @@ async function connect(host, iface, _serial) {
 
 async function setPower(payload) {
   try {   
+    console.log('[DCC API].setPower', payload);
     send('power', payload);
   } catch (err) {
     console.error('[DCC API].setPower', err);

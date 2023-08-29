@@ -3,7 +3,9 @@
   import { storeToRefs } from 'pinia';
   import LayoutApiStatus from './layout-api/LayoutApiStatus.component.vue';
   import DccExStatus from './dcc-ex/DccExStatus.component.vue';
+  import SerialStatus from './serial/SerialStatus.component.vue';
   import EmulatorStatus from './emulator/EmulatorStatus.component.vue';
+  import ActionApiStatus from './action-api/ActionApiStatus.component.vue';
   import api from '../api/api.ts';
   import { useConfigStore } from '../store/configStore.tsx';
 
@@ -57,12 +59,12 @@
       </template>
       <template v-if="iface.type === 'action-api'">
         <div class="divider"></div>
-        <EmulatorStatus /> 
+        <ActionApiStatus /> 
       </template>
-      <!-- <template v-if="iface.type === 'serial'">
+      <template v-if="iface.type === 'serial'">
         <div class="divider"></div>
-        <EmulatorStatus /> 
-      </template> -->
+        <SerialStatus :iface="iface" /> 
+      </template>
     </template>
 
   </main>

@@ -1,11 +1,10 @@
 import { reactive } from 'vue';
-import api from '../api/api.ts';
 
 export const store = reactive({
   // connections: 
   connections: {},
-  layoutId: await api.config.getLayoutId(),
-  favorites: await api.favorites.get(),
+  layoutId: null,
+  favorites: null,
 });
 
 export default store;

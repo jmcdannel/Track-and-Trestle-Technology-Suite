@@ -1,44 +1,48 @@
+import { useConfigStore } from '../store/configStore.jsx';
 import actions from '../store/actions.tsx';
 
-let ws;
+let ws:WebSocket;
+let connectionId:string;
 
-function onOpen() {
-  console.log('[API] onOpen');
+const defaultProtocol = 'ws';
+const defaultPort = 8080;
+
+async function onOpen() {
+  console.log('[ACTION API] onOpen');
 }
 
-function onError(event) {
-  console.log('[API] Websocket error', event);
+function onError(event:any) {
+  console.log('[ACTION API] Websocket error', event);
 }
 
-function onMessage(event) {
+async function onMessage(event:any) {
   try {
-    const { success, data } = JSON.parse(event.data);
-    console.log('[API] onMessage', success, data, JSON.parse(event.data));
-    if (success) {
-      const { action, payload } = data;
-      switch (action) {
-        case 'turnouts':
-          console.log('turnouts', payload);
-          actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
-          break;
-        case 'effects':
-          console.log('effects', payload);
-          break;
-        case 'ports':
-          console.log('ports', payload);
-          apiPromises.ports.resolve(payload);
-          break;
-        default:
-          console.log('Unknown action', action);
-      }
+    const store = useConfigStore();
+    const { action, payload } = JSON.parse(event.data);
+    console.log('[ACTION API] onMessage', action, payload);
+    switch (action) {
+      case 'turnouts':
+        console.log('turnouts', payload);
+        actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
+        break;
+      case 'effects':
+        console.log('effects', payload);
+        break;
+      case 'socketConnected':
+        await store.setConnection(connectionId, { connected: true });
+        break;
+      default:
+        console.log('Unknown action', action);
     }
   } catch (err) { 
     console.error(err); 
   }
 }
 
-async function connect(uri) {
-  ws = new WebSocket(uri);
+async function connect(host, iface) {
+  console.log('[ACTION API] connect', host, iface?.id);
+  connectionId = iface?.id;
+  ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
   ws.onerror = onError;
   ws.addEventListener('open', onOpen);   
   ws.addEventListener('message',  onMessage);
@@ -50,34 +54,23 @@ async function disconnect() {
 
 async function getWS(type ) {
   try {    
-    if (Object.keys(apiPromises).includes(type)) {
-      const promise = new Promise((resolve, reject) => {
-        apiPromises[type] = { resolve, reject };
-      })
-    }
     ws.send(JSON.stringify({
       action: type
     }));
   } catch (err) {
-    console.error('api.get', err);
+    console.error('[ACTION API] api.get', err);
     throw new Error('Unable to read', err, type);
   }
 }
 
 async function putWS(action, payload) {
   try {
-    console.log('putWS', { action, payload });
+    console.log('[ACTION API] putWS', { action, payload });
     ws.send(JSON.stringify({ action, payload }));
   } catch (err) {
-    console.error('api.put', err)
+    console.error('[ACTION API] api.put', err)
     throw new Error('Unable to update', err, type, data);
   }
-}
-
-const apiPromises = {
-  turnouts: null,
-  effects: null,
-  ports: null
 }
 
 export const api = {

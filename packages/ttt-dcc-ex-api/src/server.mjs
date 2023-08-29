@@ -22,18 +22,10 @@ const handleError = err => {
 const handleConnection = (ws, resolve) => {
   log.success('[DCC WS SERVER] new client connected', serverId);
   server = ws;
-  // handling client connection error
   server.onerror = handleError;
-
-  // handling what to do when clients disconnects from server
   server.on('close', handleClose);
-
-  // handling what to do when messageis recieved
   server.on('message', dcc.handleMessage);
-
-  // sending message to client
   server.send(MSG_CONNECTED);
-
   resolve(ws);
 }
 

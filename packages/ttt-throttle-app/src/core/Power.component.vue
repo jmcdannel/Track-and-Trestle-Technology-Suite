@@ -1,18 +1,18 @@
 <script setup>
   import { ref } from 'vue'
-  import { store } from '../store/store.tsx';
-  import dccApi from '../api/dccApi.ts';
+  import { storeToRefs } from 'pinia';
+  import { useConfigStore } from '../store/configStore.tsx';
+  import dccJSApi from '../api/dccApi.ts';
 
-  const props = defineProps({
-    disabled: Boolean
-  });
+  const configStore = useConfigStore();
+  const { dccApi } = storeToRefs(configStore);
 
   const power = ref(false);
 
   async function handlePower() {
     try {
       console.log('handlePower',  power);
-      await dccApi.setPower(power.value ? 0 : 1);
+      await dccJSApi.setPower(power.value ? 0 : 1);
       power.value = !power.value;
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@
 <template>
 
   <button @click="handlePower"
-    :disabled="disabled"
+    :disabled="!dccApi?.connected"
     class="btn btn-ghost btn-circle relative"
     :class="{
       'text-gray-500': disabled,

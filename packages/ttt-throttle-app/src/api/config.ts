@@ -1,7 +1,5 @@
 
-import { store } from '../store/store.tsx';
-import layoutApi from './layoutApi.ts';
-import dccApi from './dccApi.ts';
+import { useConfigStore } from '../store/configStore.jsx';
 
 const lsPrefix = '@ttt';
 
@@ -45,10 +43,11 @@ async function clearConfig(key: string) {
 
 async function selectLayout(newLayoutId: string) {
   try {
+    const store = useConfigStore();
     console.log('selectLayout', newLayoutId);
     localStorage.setItem(LAYOUT_ID, newLayoutId);
     // const selected = await api.layouts.get(newLayoutId);
-    store.layoutId = newLayoutId;
+    store.setLayoutId(newLayoutId);
     return newLayoutId;
   } catch (e) {
     console.error('selectLayout', e);
@@ -61,9 +60,10 @@ async function clearLayout() {
 
 async function selectLoco(address: number) {
   try {
+    const store = useConfigStore();
     console.log('selectLoco', address);
     localStorage.setItem(SELECTED_LOCO_ID, address.toString());
-    store.locoId = address;
+    store.setLocoId(address);
     return address;
   } catch (e) {
     console.error('selectLoco', e);

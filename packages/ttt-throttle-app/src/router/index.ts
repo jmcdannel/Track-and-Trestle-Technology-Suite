@@ -54,6 +54,16 @@ const router = createRouter({
       path: '/connect/dcc-ex/:connectionId',
       name: 'dcc-ex',
       component: () => import('../connections/dcc-ex/DccExConnect.component.vue')
+    },
+    {
+      path: '/connect/actionapi',
+      name: 'actionapi',
+      component: () => import('../connections/action-api/ActionApiConnect.component.vue')
+    },
+    {
+      path: '/connect/serial/:ifaceId',
+      name: 'serial',
+      component: () => import('../connections/serial/SerialConnect.component.vue')
     }
   ]
 });

@@ -1,83 +1,58 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { RouterLink } from 'vue-router';
+import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
+import { useConfigStore } from '../../store/configStore.tsx';
 
-  const port = ref(null);
-
-  let outputDone;
-  let outputStream: WritableStream<string>;
   
+  const configStore = useConfigStore();
+  const { connections } = storeToRefs(configStore);
   const props = defineProps({
+    connection: {
+        type: Object
+    },
     iface: {
         type: Object
     }
   });
 
-  const connected = ref(props?.iface?.status === 'connected');
-
-  function handleConnection(e:any) {
-    connected.value = e.state;
-    port.value = e.port;
-
-    console.log('handleConnection', e, e.port);
-    // create a text encoder output stream and pipe the stream to port.writeable
-    const encoder = new TextEncoderStream();
-    outputDone = encoder.readable.pipeTo(e.port.writable);
-    outputStream = encoder.writable;
-  }
-
-  function writeToStream(...lines:any[]) {
-    // Stops data being written to nonexistent port if using emulator
-    let stream:any = null;
-    if (port) {
-      stream = outputStream.getWriter();
-    }
-
-    lines.forEach((line) => {
-        if (line == "\x03" || line == "echo(false);") {
-
-        } else {
-            console.log('[SEND]'+line.toString());
-        }
-        const packet = `${line}\n`;
-        stream.write(packet)
-        console.log(packet)
-    });
-    stream.releaseLock();
-  }
-
-  async function connect() {
-    try {
-      // const ports = await api.ports.get();
-      // console.log('ports', ports);
-      // const port = await navigator.serial.requestPort(); // prompt user to select device connected to a com port
-      // await port.open({ baudRate: 115200 });         // open the port at the proper supported baud rate
-      // connected.value = true;
-      // // emitConn('connection', { state: connected.value, port });
-    } catch (err) {
-      console.error('SERIAL failed', err);
-    }
-  }
 </script>
 
 <template>
-  <main>
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body flex-row">
-        <div class="card-content flex-1">
-          <h2 class="card-title text-purple-400 text-opacity-75">{{ iface?.device }}</h2>
-          <pre>{{ iface?.serial }}</pre>
-          <p>
-            Status:
-            <strong v-if="connected" class="text-green-600 text-opacity-75">CONNECTED</strong>
-            <strong v-else class="text-red-600 text-opacity-75">NOT CONNECTED</strong>
-          </p>
-        </div>
+ <div class="card bg-base-100 bg-opacity-70 shadow-xl border-teal-900 border-2 mb-2">
+    <div class="card-body">
+      <h2 class="card-title">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 border-teal-500 border-2 rounded-xl p-2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+        </svg>
+        
+        Serial
 
-        <div class="card-actions flex-none">
-          <button v-if="connected" class="btn btn-secondary btn-sm">Reset</button>
-          <button v-else class="btn btn-primary btn-sm" @click="connect">Connect</button>
+      </h2>
+      <div class="card-actions justify-between items-center">
+        <div class="flex">
+          <div class="p-2 text-error">            
+            <ConnectionStatus :connected="connection?.connected" :connected-label="'Serial Device'" />
+          </div> 
         </div>
+        
+        <router-link
+          :to="`/connect/serial/${iface?.id}`"
+          custom
+          v-slot="{ navigate }"          
+        >
+          <button
+            @click="navigate"
+            role="link"
+            class="btn btn-primary btn-outline"
+          >
+          <span v-if="!connection?.connected">Connect</span>
+          <span v-else>Configure</span>
+          
+          </button>
+        </router-link>
       </div>
     </div>
-  </main>
+  </div>
 </template>

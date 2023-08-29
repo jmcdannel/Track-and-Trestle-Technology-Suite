@@ -1,22 +1,23 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { storeToRefs } from 'pinia';
   import Title from '../core/Title.component.vue';
   import Power from '../core/Power.component.vue';
+  import StatusMenu from '../core/StatusMenu.component.vue';
+  import { ref } from 'vue';
+  import { storeToRefs } from 'pinia';
   import Favorites from '../core/Favorites.coponent.vue';
-  import ConnectionStatus from '../core/ConnectionStatus.component.vue';
   import router from '../router/index.ts';
   import { useConfigStore } from '../store/configStore.tsx';
 
-  const configStore = useConfigStore();
-  const { layoutId, layoutApi, dccApi } = storeToRefs(configStore);
-  const layoutConnected = ref(!!layoutId.value);
+  // const configStore = useConfigStore();
+  // const { layoutId } = storeToRefs(configStore);
+  // const layoutConnected = ref(!!layoutId.value);
+  // const layoutConnected = ref(false);
 
-  const showFavs = () => {
-    const to = router?.currentRoute?.value?.name;
-    const allowed = ['effects', 'throttle'];
-    return layoutConnected.value && allowed.includes(to);
-  }
+  // const showFavs = () => {
+  //   const to = router?.currentRoute?.value?.name;
+  //   const allowed = ['effects', 'throttle'];
+  //   return layoutConnected.value && allowed.includes(to);
+  // }
 
 </script>
 
@@ -27,27 +28,12 @@
        <Title />
       </div>
       <div class="navbar-end">
-        <!-- <Layout /> -->
-        <ConnectionStatus 
-          :connected="layoutConnected" 
-          :connected-label="layoutId" 
-          :disconnected-label="'Layout'" 
-        />
-        <ConnectionStatus 
-          :connected="layoutApi?.connected" 
-          :connected-label="'API'" 
-          :disconnected-label="'API'" 
-        />
-        <ConnectionStatus 
-          :connected="dccApi?.connected" 
-          :connected-label="'DCC'" 
-          :disconnected-label="'DCC'" 
-        />
-        <Power :disabled="!dccApi?.connected" />
+        <StatusMenu /> 
+        <Power />
       </div>
     </div>
-    <section v-if="showFavs()">
+    <!-- <div class="navbar bg-base-100" v-if="showFavs()">
       <Favorites />
-    </section>
+    </div> -->
   </header>
 </template>
