@@ -1,25 +1,23 @@
-import { useConfigStore } from '../store/configStore.jsx';
+import { useConnectionStore } from '../store/connectionStore.jsx';
 import dccApi from './dccApi.ts';
 import actionApi from './actionApi.ts';
 import layoutApi from './layoutApi.ts';
 import favoritesApi from './favoritesApi.ts';
-import config from './config.ts';
+import config from './config.ts'; // TODO: replace with configStore
 
 async function connect() {
   try {
     const host = await config.host.get();
     const layoutId = await config.layoutId.get();
-    const store = useConfigStore();
-    console.log('API.connect', host, layoutId, store);
+    const connStore = useConnectionStore();
+    console.log('API.connect', host, layoutId);
     if (!host) throw new Error('No host specified');
-    // if (!store?.connections) throw new Error('No store connections object');
     const connected = host
       ? await layoutApi.connect(host, layoutId)
       : false;
     console.log('connected', connected);
     if (connected) {
-      await store.setConnection('layoutApi', { connected, host });
-      await store.setLayoutApi({ connected, host });
+      await connStore.setConnection('layoutApi', { connected, host });
     }
     (connected && layoutId) 
       && await connectInterfaces(host, layoutId);

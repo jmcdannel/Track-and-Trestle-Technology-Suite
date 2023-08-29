@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { storeToRefs } from 'pinia';
   import { RouterLink } from 'vue-router';
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import { useConfigStore } from '../../store/configStore.tsx';
 
-  const configStore = useConfigStore();
-  const { dccApi } = storeToRefs(configStore);
+  const DCCJS_LABEL = 'DCC-JS API';
+  const DCCEX_LABEL = 'EX Command Station';
+  
   const props = defineProps({
     connection: {
         type: Object
@@ -14,8 +13,6 @@
         type: Object
     }
   });
-
-  console.log('DccExStatus', dccApi);
 
 </script>
 
@@ -35,8 +32,8 @@
         <div class="flex">
           <div class="p-2 text-error">
             
-            <ConnectionStatus :connected="dccApi?.api" :connected-label="'DCC.JS API'" />
-            <ConnectionStatus :connected="dccApi?.connected" :connected-label="'DCC EX Command Station'" />
+            <ConnectionStatus :connected="connection?.api" :connected-label="DCCJS_LABEL" :disconnected-label="DCCJS_LABEL" />
+            <ConnectionStatus :connected="connection?.connected" :connected-label="DCCEX_LABEL" :disconnected-label="DCCEX_LABEL" />
 
           </div> 
         </div>

@@ -1,4 +1,4 @@
-import { useConfigStore } from '../store/configStore.jsx';
+import { useConnectionStore } from '../store/connectionStore.jsx';
 let wsDCC;
 let connectionId;
 let serial;
@@ -7,22 +7,14 @@ const defaultProtocol = 'ws';
 const defaultPort = 8081;
 
 async function onOpen() {
-  const store = useConfigStore();
-  store.setDCCApi({ api: true });
-  await store.setConnection('dccApi', { api: true });
-  // const 
-  // console.log('[DCC API] onOpen', store?.connections, connectionId, store?.connections?.[connectionId]);
-  // if (store?.connections?.[connectionId]) {
-  //   store.connections[connectionId].api = true;
-  //   // store.connections[connectionId].connected = true;
-  // }
+  const connStore = useConnectionStore();
+  await connStore.setConnection(connectionId, { api: true });
 }
 
 async function connectSerial() {
   if (serial) {
     await send('connect', { serial });
   }
-
 }
 
 function onError(event) {
@@ -32,21 +24,18 @@ function onError(event) {
 async function onMessage(event) {
   try {
     const { action, payload } = JSON.parse(event.data);
-    const store = useConfigStore();
+    const connStore = useConnectionStore();
     console.log('[DCC API] onMessage', action, payload);
     switch (action) {
       case 'listPorts':
-        store.setDCCApi({ ports: payload });
-        await store.setConnection('dccApi', { ports: payload });
-        // store.connections[connectionId].ports = payload;
+        await connStore.setConnection(connectionId, { ports: payload });
         break;
       case 'socketConnected':
         connectSerial();
         break;
       case 'connected':
         console.log('onMessage.connected', serial);
-        store.setDCCApi({ connected: true });
-        await store.setConnection('dccApi', { connected: true });
+        await connStore.setConnection(connectionId, { connected: true });
         break;
     }
   } catch { 

@@ -18,19 +18,19 @@
 
   function allConnected() {
     const conn = (layoutConnected.value && dccConnected.value && apiConnected.value);
-    console.log('allConnected', conn, layoutConnected.value, dccConnected.value, apiConnected.value);
+    // console.log('allConnected', conn, layoutConnected.value, dccConnected.value, apiConnected.value);
     return conn;
   }
 
   function allDisconnected() {
     const conn = !layoutConnected.value && !layoutApi?.connected && !dccApi?.connected;
-    console.log('allDisconnected', conn);
+    // console.log('allDisconnected', conn);
     return conn;
   }
 
   function anyConnected() {
     const conn = !allConnected() && (layoutConnected.value || !!layoutApi?.connected || !!dccApi?.connected);
-    console.log('anyConnected', conn);
+    // console.log('anyConnected', conn);
     return conn;
   }
 

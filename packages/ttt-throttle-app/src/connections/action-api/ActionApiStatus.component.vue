@@ -1,25 +1,16 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { storeToRefs } from 'pinia';
-import type { log } from 'console';
   import { RouterLink } from 'vue-router';
-  import { useConfigStore } from '../../store/configStore.jsx';
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
 
-
-  const configStore = useConfigStore();
-  // const { getConnection } = storeToRefs(configStore);
-  // const connection = ref()
-
-  console.log('ActionApiStatus', configStore, configStore.getConnection('action-api'))
 
   const props = defineProps({
     iface: {
         type: Object
+    },
+    connection: {
+        type: Object
     }
   });
-
-  // console.log('LayoutApiStatus', connection);
 
 </script>
 <template>
@@ -36,7 +27,7 @@ import type { log } from 'console';
       </h2>
       <div class="card-actions justify-between items-center">
         <div class="p-2 text-error">
-          <ConnectionStatus :connected="connection?.connected" :connected-label="'Action Api'" />
+          <ConnectionStatus :connected="connection?.connected" :connected-label="connection?.connectionId" />
 
         </div> 
         <router-link

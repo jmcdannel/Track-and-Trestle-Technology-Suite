@@ -27,16 +27,16 @@ export const useConfigStore = defineStore('config', {
     },
   },
   actions: {
-    setConnection(connectionId, connection) {
-      let conn = this.connections.find(c => { c.connectionId === connectionId });
-      console.log('setConnection', conn, connectionId, connection);
-      if (conn) {
-        conn = {...conn, ...connection };
-      } else {  
-        this.connections.push({ connectionId, ...connection });
-      }
-      console.log('setConnection', this.connections);
-    },
+    // setConnection(connectionId, connection) {
+    //   let conn = this.connections.find(c => { c.connectionId === connectionId });
+    //   console.log('setConnection', conn, connectionId, connection);
+    //   if (conn) {
+    //     conn = {...conn, ...connection };
+    //   } else {  
+    //     this.connections.push({ connectionId, ...connection });
+    //   }
+    //   console.log('setConnection', this.connections);
+    // },
     setLayoutApi(connection) {
       this.layoutApi = {...this.layoutApi, ...connection };
       console.log('setLayoutApi', this.layoutApi)

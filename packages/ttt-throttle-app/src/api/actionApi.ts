@@ -1,4 +1,4 @@
-import { useConfigStore } from '../store/configStore.jsx';
+import { useConnectionStore } from '../store/connectionStore.jsx';
 import actions from '../store/actions.tsx';
 
 let ws:WebSocket;
@@ -17,7 +17,6 @@ function onError(event:any) {
 
 async function onMessage(event:any) {
   try {
-    const store = useConfigStore();
     const { action, payload } = JSON.parse(event.data);
     console.log('[ACTION API] onMessage', action, payload);
     switch (action) {
@@ -29,7 +28,8 @@ async function onMessage(event:any) {
         console.log('effects', payload);
         break;
       case 'socketConnected':
-        await store.setConnection(connectionId, { connected: true });
+        const connStore = useConnectionStore();
+        await connStore.setConnection(connectionId, { connected: true });
         break;
       default:
         console.log('Unknown action', action);
@@ -42,6 +42,8 @@ async function onMessage(event:any) {
 async function connect(host, iface) {
   console.log('[ACTION API] connect', host, iface?.id);
   connectionId = iface?.id;
+  const connStore = useConnectionStore();
+  await connStore.setConnection(connectionId, { connected: false });
   ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
   ws.onerror = onError;
   ws.addEventListener('open', onOpen);   

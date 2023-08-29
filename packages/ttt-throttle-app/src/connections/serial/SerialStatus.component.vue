@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
 import { RouterLink } from 'vue-router';
 import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-import { useConfigStore } from '../../store/configStore.tsx';
-
   
-  const configStore = useConfigStore();
-  const { connections } = storeToRefs(configStore);
   const props = defineProps({
     connection: {
         type: Object

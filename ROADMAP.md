@@ -11,8 +11,11 @@
 [x] ui beatification
 [x] environemnt config
 [ ] connect to serial devices, action api
+[ ] icons to svg files
+[ ] slots/compose/inherit base component for status list
 [ ] tam junc config - servos
 [ ] transition exploration
+[ ] release v0.1.0?
 [ ] pico led w/json
 [ ] stop all
 [ ] verrical UI (or respnsive horiztonal?)
