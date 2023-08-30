@@ -43,6 +43,15 @@ async function connectInterfaces(host, layoutId) {
       case 'action-api':
         await actionApi.connect(host, iface);
         break;
+      case 'serial':
+        // await actionApi.connect(host, iface);
+        const serial = await config.get(iface.id);
+        console.log('connect serial', serial, iface);
+        await actionApi.put('serialConnect', { connectionId: iface.id, serial });
+        break;
+      default:
+        console.warn('Unknown interface type', iface.type, iface);
+        break;
       };
     });
   } catch (e) {
@@ -62,6 +71,7 @@ async function disconnect() {
 
 export const api = {
   dcc: dccApi,
+  actionApi,
   layouts: {
     get: layoutApi.layouts.get
   },

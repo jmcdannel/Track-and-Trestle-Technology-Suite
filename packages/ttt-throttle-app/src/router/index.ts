@@ -61,7 +61,7 @@ const router = createRouter({
       component: () => import('../connections/action-api/ActionApiConnect.component.vue')
     },
     {
-      path: '/connect/serial/:ifaceId',
+      path: '/connect/serial/:connectionId',
       name: 'serial',
       component: () => import('../connections/serial/SerialConnect.component.vue')
     }

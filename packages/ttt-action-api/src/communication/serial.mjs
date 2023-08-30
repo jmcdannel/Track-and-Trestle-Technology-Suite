@@ -1,38 +1,45 @@
 import { SerialPort } from 'serialport';
 import log from '../core/logger.mjs';
 
+let isConnected = false;
 
 const connect = (com) => {
-  return new Promise(function(resolve, reject) {
-    const path = com.serial;
-    const baudRate = com.baud;
+  if (isConnected) {
+    return Promise.resolve(com.connection);
+  } else {
+    return new Promise(function(resolve, reject) {
 
-    log.await('[SERIAL] attempting to connect to:', path);
-    // Create a port
-    const port = new SerialPort({
-      path,
-      baudRate,
-      autoOpen: false,
-    });
+      const path = com.serial;
+      const baudRate = com.baudRate;
 
-    port.open(function (err) {
-      if (err) {
-        reject(`[SERIAL] Error opening port: ${err.message}`);
-        return;
+      if (!path) reject('[SERIAL] No serial port specified');
+
+      log.await('[SERIAL] attempting to connect to:', path);
+
+      const handleOpen = err => {
+        if (err) {
+          reject(`[SERIAL] Error opening port: ${err.message}`);
+          return;
+        }
+        log.start('[SERIAL] open');
+
+        isConnected = true;
       }
-      log.start('[SERIAL] open');
 
-      // Because there's no callback to write, write errors will be emitted on the port:
-      port.write('main screen turn on\n');
-    });
+      const handleOpened = async () => {
+        log.start('[SERIAL] Serial port opened', path, baudRate);
+        resolve(port);
+      }
+      
+      // Create a port
+      const port = new SerialPort({ path, baudRate, autoOpen: false });
+      port.open(handleOpen);
+      port.on('open', handleOpened);
 
-    // The open event is always emitted
-    port.on('open', function() {
-      // open logic
-      log.start('[SERIAL] Serial port opened', path, baudRate);
-      resolve(port);
+      log.info('[SERIAL] port', port.isOpen, port.settings);
+
     });
-  });
+  }
 }
 
 const send = (port, data) => {

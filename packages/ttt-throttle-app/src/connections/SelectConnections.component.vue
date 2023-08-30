@@ -25,17 +25,16 @@
   }
 
   onMounted(async () => {
-    console.log('layoutId.value', layoutId.value);
     if (layoutId.value) {
       loadLayout(layoutId.value);
     }
   });
 
 
-  watch(connStore.connections, (o, n) => {
-    // this.connections.value = n;
-    console.log('CONNECTIONS.WATCH', o, n);
-  });
+  // watch(connStore.connections, (o, n) => {
+  //   // this.connections.value = n;
+  //   console.log('CONNECTIONS.WATCH', o, n);
+  // });
 
 
 </script>
@@ -49,28 +48,31 @@
     </h2>
     
     <LayoutApiStatus
-      :connection="connections.find(el => el.connectionId === CONNECTION_ID)"  />
+      :connection="connections.get(CONNECTION_ID)"  />
     <div class="divider"></div>
-    <!-- <template v-for="conn in connections" :key="conn.connectionId">
+    <template v-for="conn in connections" :key="conn.connectionId">
       <pre>conn: {{ conn }}</pre>
-    </template> -->
+    </template>
     <template v-for="iface in interfaces" :key="iface.id">
       <template v-if="iface.type === 'dcc-js-api'">
         <DccExStatus 
           :iface="iface" 
-          :connection="connections.find(el => el.connectionId === iface.id)" 
+          :connection="connections.get(iface.id)" 
         />
       </template>
       <template v-if="iface.type === 'action-api'">
         <div class="divider"></div>
         <ActionApiStatus 
           :iface="iface" 
-          :connection="connections.find(el => el.connectionId === iface.id)" 
+          :connection="connections.get(iface.id)" 
         /> 
       </template>
       <template v-if="iface.type === 'serial'">
         <div class="divider"></div>
-        <SerialStatus :iface="iface" /> 
+        <SerialStatus 
+          :iface="iface" 
+          :connection="connections.get(iface.id)" 
+        /> 
       </template>
     </template>
 

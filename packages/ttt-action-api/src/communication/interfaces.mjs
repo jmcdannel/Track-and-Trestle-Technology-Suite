@@ -12,6 +12,7 @@ import { getPorts } from '../scripts/listPorts.mjs';
 import log from '../core/logger.mjs';
 
 const interfaces = {};
+const baudRate = 115200;
 
 const getLayout = async layoutId => {
   const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
@@ -30,7 +31,7 @@ const identifySerialConnections = async () => {
 
 export const handleMessage = async (msg, ws) => {
   const commandActions = ['effects', 'turnouts'];
-  const reponseActions = ['ports'];
+  const reponseActions = ['ports', 'serialConnect'];
 
   log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
   if (commandActions.includes(msg?.action)) { // command actions
@@ -44,6 +45,22 @@ export const handleMessage = async (msg, ws) => {
         const response = await getPorts();
         log.info('[INTERFACES] response', response);
         ws.send(JSON.stringify({ action: msg.action, payload: response }));
+        break;
+      case 'serialConnect':
+        try {
+          const com = { ...interfaces[msg.payload.connectionId], ...msg.payload, baudRate };
+          log.info('[INTERFACES] serialConnect', msg, com, baudRate);
+          com.connection = await serial.connect(com);
+          com.send = serial.send;
+          com.status = 'connected';
+          // com.connection = await serial.connect(com);
+          // com.send = serial.send;
+          // com.status = 'connected';
+          interfaces[msg.payload.connectionId] = com;
+          ws.send(JSON.stringify({ action: 'connected', payload: msg.payload }));
+        } catch (err) {
+          log.error('[INTERFACES] connect', err);
+        }
         break;
       default:
         // no op
@@ -62,7 +79,7 @@ const intialize = async (com) => {
       break;
     case 'serial':
       try {
-        com.connection = await serial.connect(com);
+        com.serial && (com.connection = await serial.connect(com));
         com.send = serial.send;
         com.status = 'connected';
       } catch (err) {

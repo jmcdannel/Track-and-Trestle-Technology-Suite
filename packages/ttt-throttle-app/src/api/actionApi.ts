@@ -3,21 +3,40 @@ import actions from '../store/actions.tsx';
 
 let ws:WebSocket;
 let connectionId:string;
+let queue = [];
 
 const defaultProtocol = 'ws';
 const defaultPort = 8080;
 
+async function processQueeue() {
+  console.log('[ACTION API] processQueeue', queue);
+  queue.map(async ({ action, payload }) => {
+    await putWS(action, payload);
+  });
+  queue = [];
+}
+
 async function onOpen() {
   console.log('[ACTION API] onOpen');
+  const connStore = useConnectionStore();
+  await connStore.setConnection(connectionId, { connected: true });
+  processQueeue();
 }
 
 function onError(event:any) {
   console.log('[ACTION API] Websocket error', event);
 }
 
+async function connectSerial(serial) {
+  if (serial) {
+    await putWS('serialConnect', { serial });
+  }
+}
+
 async function onMessage(event:any) {
   try {
     const { action, payload } = JSON.parse(event.data);
+    const connStore = useConnectionStore();
     console.log('[ACTION API] onMessage', action, payload);
     switch (action) {
       case 'turnouts':
@@ -27,12 +46,19 @@ async function onMessage(event:any) {
       case 'effects':
         console.log('effects', payload);
         break;
+      case 'connected':
+        console.log('[ACTION API] setConnection', payload.connectionId, action, payload);
+        await connStore.setConnection(payload.connectionId, { connected: true });
+        break;
       case 'socketConnected':
-        const connStore = useConnectionStore();
-        await connStore.setConnection(connectionId, { connected: true });
+        console.log('[ACTION API] socketConnected', action, payload);
+        // connectSerial(payload.serial);
+        break;
+      case 'ports':
+        await connStore.setConnection(connectionId, { ports: payload });
         break;
       default:
-        console.log('Unknown action', action);
+        console.log('Unknown action', action, payload);
     }
   } catch (err) { 
     console.error(err); 
@@ -67,11 +93,12 @@ async function getWS(type ) {
 
 async function putWS(action, payload) {
   try {
-    console.log('[ACTION API] putWS', { action, payload });
+    console.log('[ACTION API] putWS', { action, payload }, ws);
     ws.send(JSON.stringify({ action, payload }));
   } catch (err) {
+    queue.push({ action, payload });
     console.error('[ACTION API] api.put', err)
-    throw new Error('Unable to update', err, type, data);
+    throw new Error('Unable to update', err, action, payload);
   }
 }
 

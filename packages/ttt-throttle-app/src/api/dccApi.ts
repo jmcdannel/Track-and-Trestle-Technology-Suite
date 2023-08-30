@@ -32,6 +32,7 @@ async function onMessage(event) {
         break;
       case 'socketConnected':
         connectSerial();
+        await connStore.setConnection(connectionId, { connected: true });
         break;
       case 'connected':
         console.log('onMessage.connected', serial);
@@ -84,11 +85,14 @@ async function setFunction(address, func) {
 }
 
 async function send(action, payload) {
-  try {   
-    wsDCC.send(JSON.stringify({ action, payload  }));
+  try { 
+    if (wsDCC) {  
+      wsDCC.send(JSON.stringify({ action, payload  }));
+    } else {
+      throw new Error('Not connected', connectionId);
+    }
   } catch (err) {
     console.error('[DCC API].send', err);
-    throw new Error('Unable to send', err, action, payload);
   }
 }
 

@@ -10,7 +10,7 @@
 [x] fix turnout bug/delay
 [x] ui beatification
 [x] environemnt config
-[ ] connect to serial devices, action api
+[x] connect to serial devices, action api
 [ ] icons to svg files
 [ ] slots/compose/inherit base component for status list
 [ ] tam junc config - servos
@@ -24,6 +24,9 @@
 [ ] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
 [ ] convert to typescript
 [ ] write unit tests
+[ ] handheld throttle
+[ ] status display
+[ ] ad hoc loco
 
 ### DCC-JS
 

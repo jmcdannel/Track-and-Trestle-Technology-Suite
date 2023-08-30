@@ -12,11 +12,11 @@ const openSerialPort = (resolve, reject) => {
 
   const handleOpen = err => {
     if (err) {
-      log.fatal('[SERIAL] Error opening port: ', err.message);
-      reject(`[SERIAL] Error opening port: ${err.message}`);
+      log.fatal('[DCC] Error opening port: ', err.message);
+      reject(`[DCC] Error opening port: ${err.message}`);
       return;
     }
-    log.start('[SERIAL] open');
+    log.start('[DCC] open');
   
     isConnected = true;
   
@@ -24,12 +24,12 @@ const openSerialPort = (resolve, reject) => {
   }
   
   const handleOpened = async () => {
-     log.start('[SERIAL] Serial port opened', path, baudRate);
+     log.start('[DCC] Serial port opened', path, baudRate);
      await server.send({ 'action': 'connected', payload: { serial: path, baudRate } });
      resolve(port);
   }
 
-  log.await('[SERIAL] attempting to connect to:', path);
+  log.await('[DCC] attempting to connect to:', path);
   // Create a port
   port = new SerialPort({ path, baudRate, autoOpen: false });
   port.open(handleOpen);
@@ -63,7 +63,7 @@ const handleMessage = async (msg) => {
 
 const connect = async (payload) => {
   try {
-    log.star('[SERIAL] connect', payload);
+    log.star('[DCC] connect', payload);
     path = payload.serial;
     if (isConnected) {
       await server.send({ 'action': 'connected', payload: { serial: path, baudRate } });
@@ -72,22 +72,22 @@ const connect = async (payload) => {
       return new Promise(openSerialPort);
     }
   } catch (err) {
-    log.fatal('[SERIAL] Error opening port: ', err.message);
+    log.fatal('[DCC] Error opening port: ', err.message);
   }
 };
 
 const listPorts = async () => {
   const payload = await getPorts();
   server.send({ 'action': 'listPorts', payload });
-  log.info('[SERIAL] listPorts', payload);
+  log.info('[DCC] listPorts', payload);
 };
 
 const send = async (data) => {
   const cmd = `<${data}>\n`
-  log.await('[SERIAL] writing to port', data);
+  log.await('[DCC] writing to port', data);
   await port.write(cmd, err => {
     if (err) {
-      return log.error('[SERIAL] Error on write: ', err.message);
+      return log.error('[DCC] Error on write: ', err.message);
     }
     log.log('data written', cmd);
   });

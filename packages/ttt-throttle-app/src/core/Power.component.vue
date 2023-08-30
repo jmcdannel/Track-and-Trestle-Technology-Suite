@@ -1,11 +1,15 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { storeToRefs } from 'pinia';
-  import { useConfigStore } from '../store/configStore.tsx';
+  import { useConnectionStore } from '../store/connectionStore.tsx';
   import dccJSApi from '../api/dccApi.ts';
 
-  const configStore = useConfigStore();
-  const { dccApi } = storeToRefs(configStore);
+  const connStore = useConnectionStore();
+  const { connections } = storeToRefs(connStore);
+
+  const dccApi = computed(() => {
+    return connections.value.get('dcc-js-api');
+  })
 
   const power = ref(false);
 
@@ -37,4 +41,4 @@
       <span class="w-1 h-1 bg-red-500 rounded-full absolute top-0.5"></span>
     </button>
 
-</template>../api/dccApi.js
+</template>
