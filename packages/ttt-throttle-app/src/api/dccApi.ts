@@ -4,7 +4,7 @@ let connectionId;
 let serial;
 
 const defaultProtocol = 'ws';
-const defaultPort = 8081;
+const defaultPort = 8082;
 
 async function onOpen() {
   const connStore = useConnectionStore();

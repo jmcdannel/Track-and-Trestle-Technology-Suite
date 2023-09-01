@@ -1440,6 +1440,16 @@
   resolved "https://registry.npmjs.org/@tsconfig/node18/-/node18-2.0.1.tgz"
   integrity sha512-UqdfvuJK0SArA2CxhKWwwAWfnVSXiYe63bVpMutc27vpngCntGUZQETO24pEJ46zU6XM+7SpqYoMgcO3bM11Ew==
 
+"@ttt/dcc-api@jmcdannel/EX-JS-API#main":
+  version "0.0.1"
+  resolved "https://codeload.github.com/jmcdannel/EX-JS-API/tar.gz/7def3b3c14e485408f6263f4d6f58b3fd9b8ff44"
+  dependencies:
+    dotenv "^16.3.1"
+    serialport "^11.0.0"
+    signale "^1.4.0"
+    wait-on "^7.0.1"
+    ws "^8.13.0"
+
 "@tufjs/canonical-json@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@tufjs/canonical-json/-/canonical-json-1.0.0.tgz"

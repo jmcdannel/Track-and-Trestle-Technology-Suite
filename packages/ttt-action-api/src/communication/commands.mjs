@@ -58,6 +58,8 @@ const effectCommand = (effect, action, delay) => {
   switch(effect.type) {
     case 'light':
     case 'frog':
+    case 'relay':
+    case 'pin':
       log.debug('[COMMANDS] light', effect);
       return pinCommand(action, effect.state, delay);
     case 'signal':

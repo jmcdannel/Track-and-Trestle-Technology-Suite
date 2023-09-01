@@ -8,5 +8,8 @@
   "private": false,
   "scripts": {
     "start": "deno run --allow-sys --allow-read --allow-net --allow-env ./index.mts"
+  },
+  "dependencies": {
+    "@ttt/dcc-api": "jmcdannel/EX-JS-API#main"
   }
 }

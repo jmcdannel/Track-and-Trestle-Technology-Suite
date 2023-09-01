@@ -11,26 +11,26 @@
 [x] ui beatification
 [x] environemnt config
 [x] connect to serial devices, action api
-[ ] icons to svg files
-[ ] slots/compose/inherit base component for status list
+[ ] pico led w/json
+[ ] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
 [ ] tam junc config - servos
+[ ] slots/compose/inherit base component for status list
 [ ] transition exploration
 [ ] release v0.1.0?
-[ ] pico led w/json
 [ ] stop all
 [ ] verrical UI (or respnsive horiztonal?)
 [ ] keep alive
 [ ] disconnect bug
-[ ] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
 [ ] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle
 [ ] status display
 [ ] ad hoc loco
+[ ] icons to svg files
 
 ### DCC-JS
 
-[ ] Fork DCC-JS
+[x] Fork DCC-JS
   - DCC-JS EX-API Server
   - DCC-JS Throttle (hosted, self hosted)
   - DCC-JS Dispatcher (hosted, self hosted)
