@@ -12,11 +12,15 @@ import Footer from './Core/Footer';
 import Modules from './Core/Modules';
 import ApiEngine from './Core/ApiEngine';
 import JmriEngine from './Core/JmriEngine';
-import SensorEngine from './Core/SensorEngine';
-import jmriApi from './Shared/jmri/jmriApi';
+// import SensorEngine from './Core/SensorEngine';
+// import jmriApi from './Shared/jmri/jmriApi';
+import dccApi from './Shared/dcc/dccApi';
 
 import Store from './Store/Store';
 import './App.scss';
+
+// const dccApi = 'exJsApi'; // jmprApi;
+
 
 function App() {
 
@@ -30,12 +34,10 @@ function App() {
         <BrowserRouter>
           <ApiEngine onReady={() => setApiReady(true)} />
           {apiReady && (<JmriEngine onReady={() => setJmriReady(true)} />)}
-          {jmriReady && (<SensorEngine jmriApi={jmriApi} />)}
+          {/* {jmriReady && (<SensorEngine jmriApi={jmriApi} />)} */}
           <Box display="flex" flexDirection="column" height="100%">
             <Box>
               <Header 
-                jmriApi={jmriApi}
-                jmriReady={jmriReady}
                 apiReady={apiReady}
               /> 
             </Box>

@@ -25,4 +25,3 @@
     <FooterView />
   </main>
 </template>
-./api/dccApi.js./store/configStore

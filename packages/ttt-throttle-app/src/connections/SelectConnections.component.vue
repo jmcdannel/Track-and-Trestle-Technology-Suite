@@ -13,7 +13,7 @@
   const CONNECTION_ID = 'layoutApi';
   const configStore = useConfigStore();
   const connStore = useConnectionStore();
-  const { layoutId, dccApi } = storeToRefs(configStore);
+  const { layoutId } = storeToRefs(configStore);
   const { connections } = storeToRefs(connStore);
   const interfaces:any = ref(null);
 

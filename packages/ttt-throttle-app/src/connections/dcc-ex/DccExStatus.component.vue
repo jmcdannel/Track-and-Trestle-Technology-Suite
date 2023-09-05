@@ -51,7 +51,7 @@
             role="link"
             class="btn btn-primary btn-outline"
           >
-          <span v-if="!dccApi?.connected">Connect</span>
+          <span v-if="!connection?.connected">Connect</span>
           <span v-else>Configure</span>
           
           </button>

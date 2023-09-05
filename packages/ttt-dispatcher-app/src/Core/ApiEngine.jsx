@@ -19,11 +19,12 @@ function ApiEngine(props) {
   useEffect(() => {
     const initialize = async function() {
       try {
+        if (init) return;
         setInit(true);
         const apiSuccess = await api.initialize(dispatch);
         const wsSuccess = await api.initializeWS();
       } catch (err) {
-        setInit(false);
+        setInit(true);
         log.error('api initialization error', err);
       }
     };

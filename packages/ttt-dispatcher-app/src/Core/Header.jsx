@@ -21,8 +21,6 @@ export const Header = props => {
 
 
   const { 
-    jmriApi, 
-    jmriReady, 
     apiReady
   } = props;
 
@@ -46,8 +44,8 @@ export const Header = props => {
           <Paper sx={{ padding: '.6rem', marginRight: '2rem' }}>
             {/* <StatusMonitor jmriReady={jmriReady} apiReady={apiReady} /> */}
           </Paper>
-          <Stop jmriApi={jmriApi} jmriReady={jmriReady} />
-          <Power jmriApi={jmriApi} jmriReady={jmriReady} />
+          <Stop />
+          <Power />
           <Settings />
           <IconButton
               className="header-button"

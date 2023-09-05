@@ -2,13 +2,24 @@ import { useConnectionStore } from '../store/connectionStore.jsx';
 let wsDCC;
 let connectionId;
 let serial;
+let queue = [];
 
 const defaultProtocol = 'ws';
 const defaultPort = 8082;
 
+async function processQueeue() {
+  console.log('[DCC API] processQueeue', queue);
+  queue.map(async ({ action, payload }) => {
+    await sendRaw(JSON.stringify({ action, payload  }));
+  });
+  queue = [];
+}
+
 async function onOpen() {
   const connStore = useConnectionStore();
   await connStore.setConnection(connectionId, { api: true });
+  processQueeue();
+
 }
 
 async function connectSerial() {
@@ -37,6 +48,13 @@ async function onMessage(event) {
       case 'connected':
         console.log('onMessage.connected', serial);
         await connStore.setConnection(connectionId, { connected: true });
+
+        // try {   
+        //   await send('output', [{ id: 50, pin: 50  }]);
+        // } catch (err) {
+        //   console.error('[DCC API].setPower', err);
+        //   throw new Error('Unable to read', err, type);
+        // }
         break;
     }
   } catch { 
@@ -57,38 +75,49 @@ async function connect(host, iface, _serial) {
 async function setPower(payload) {
   try {   
     console.log('[DCC API].setPower', payload);
-    send('power', payload);
+    await send('power', payload);
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
   }
 }
 
 async function setSpeed(address, speed) {
   try {   
-    send('throttle', { address, speed });
+    await send('throttle', { address, speed });
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
   }
 }
 
 async function setFunction(address, func) {
   try {   
-    send({
+    await send({
       action: 'function', payload: { address, func }
     });
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
+  }
+}
+
+async function sendOutput(pin, state) {
+  try {   
+    console.log('[DCC API].sendOutput', pin, state);
+    await send( 'output', { pin, state });
+  } catch (err) {
+    console.error('[DCC API].setPower', err);
+    throw new Error('Unable to read', err, pin, state);
   }
 }
 
 async function send(action, payload) {
   try { 
     if (wsDCC) {  
-      wsDCC.send(JSON.stringify({ action, payload  }));
+      await wsDCC.send(JSON.stringify({ action, payload  }));
     } else {
+      queue.push({ action, payload });
       throw new Error('Not connected', connectionId);
     }
   } catch (err) {
@@ -106,6 +135,7 @@ export const dccApi = {
   setPower,
   setSpeed,
   setFunction,
+  sendOutput,
   getConnectionId
 }
 
