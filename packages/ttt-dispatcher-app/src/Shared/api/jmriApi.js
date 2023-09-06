@@ -1,5 +1,3 @@
-import log from '../utils/logger';
-
 let isSetup = false;
 let isReady = false;
 var $jmri = null;

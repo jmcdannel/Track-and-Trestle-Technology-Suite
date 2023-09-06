@@ -50,6 +50,7 @@ export const Turnout = props => {
     try {
       setIsLoading(true);
       setIsPristine(false);
+      console.log('[Turnout] handleToggle', turnout)
       await handleTurnoutChange({ 
         turnoutId: turnout.turnoutId, 
         state: !turnout.state 
@@ -126,6 +127,7 @@ export const Turnout = props => {
             <div className="svg-wrapper">
               {/* <Logo width="90" className={`turnout-image ${isDivergent ? 'divergent' : 'straight'}`} /> */}
               {/* {isDivergent ? <TurnoutDivergentImage width="90" /> : <TurnoutStriaghtImage width="90" />} */}
+              {isDivergent ? 'divergent' : 'straight'}
             </div>
             {isLoading && (<CircularProgress color="primary" className="spinner" />)}
           </CardMedia>

@@ -7,7 +7,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
 import Button from '@mui/material/Button';
 import { Context } from '../Store/Store';
-import jmriApi from '../Shared/jmri/jmriApi';
+// import jmriApi from '../Shared/jmri/jmriApi';
 
 import './MiniThrottle.scss';
 
@@ -32,10 +32,12 @@ export const AvailableThrottle = props => {
         setIsLoading(false);
         return;
       }
-      setIsLoading(true);
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx } });
-      await jmriApi.requestLoco(address);
-      setIsLoading(false);
+      // setIsLoading(true);
+      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx, isAcquired: true } });
+      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx } });
+      // await jmriApi.requestLoco(address);
+      // setIsLoading(false);
       if (onLocoClick) {
         await onLocoClick(loco);
       }
@@ -45,11 +47,11 @@ export const AvailableThrottle = props => {
     
   }
 
-  useEffect(() => {
-    jmriApi.on('acquire', 'Throttles',  async (address) => {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   jmriApi.on('acquire', 'Throttles',  async (address) => {
+  //     await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+  //   });
+  // }, [dispatch]);
 
   return (
     <Paper 

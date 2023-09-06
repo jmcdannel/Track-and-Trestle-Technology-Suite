@@ -1,50 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-
-const powerStates = {
-  unknown: 0, 
-  on: 2, 
-  off: 4
-};
+import dccApi from '../Shared/api/dccApi';
 
 export const Power = props => {
 
-  const { jmriApi, jmriReady } = props;
-
-  const [ powerStatus, setPowerStatus ] = useState(powerStates.unknown);
-  const [ initialized, setInitialized ] = useState(false);
+  const [ powerStatus, setPowerStatus ] = useState(false);
+  const { isConnected } = dccApi;
 
 
-  useEffect(() => {
-    const handlePowerStateChange = state => {
-      setPowerStatus(state);
-    }
+  useEffect(async () => {
+      await dccApi.setPower(powerStatus);
+  }, [ powerStatus ]);
 
-    if (jmriReady && !initialized) {
-      jmriApi.on('power', 'Power', handlePowerStateChange);
-      jmriApi.power();
-      setInitialized(true);
-    }
-  }, [ initialized, jmriReady, jmriApi, setPowerStatus ]);
-
-  const handlePowerClick = () => {
-    if (powerStatus === powerStates.unknown || powerStatus === powerStates.off) {
-      jmriApi.power(powerStates.on);
-    } else if (powerStatus === powerStates.on) {
-      jmriApi.power(powerStates.off);
-    }
+  const handlePowerClick = async () => {
+    setPowerStatus(!powerStatus);
   }
 
-  const getCurrentStateKey = () => {
-    const currState = Object.keys(powerStates)
-      .filter(key => powerStates[key] === powerStatus);
-    return currState.length ? currState[0] : 'unknown';
-  }
+  const getCurrentStateKey = () => powerStatus ? 'on' : 'off';
 
-  const getClassName = () => jmriApi.getState().ready && initialized
-      ? `header-button power-${getCurrentStateKey()}`
-      : 'header-button power-pending';
+  const getClassName = () => `header-button power-${getCurrentStateKey()}`;
 
   return (
     <IconButton

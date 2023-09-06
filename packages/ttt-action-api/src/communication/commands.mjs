@@ -97,7 +97,7 @@ export const build = async (msg) => {
       uri = `${baseUri}/effects/${payload.effectId}`;
       log.log('[COMMANDS] effect.uri', uri);
       resp = await axios.get(uri);
-      log.log('[COMMANDS] effect.resp', resp, resp.data);
+      log.log('[COMMANDS] effect.resp', resp?.data);
             // return json from axios response
 
       let effect = resp.data;

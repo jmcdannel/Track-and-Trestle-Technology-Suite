@@ -12,11 +12,15 @@ import Footer from './Core/Footer';
 import Modules from './Core/Modules';
 import ApiEngine from './Core/ApiEngine';
 import JmriEngine from './Core/JmriEngine';
-import SensorEngine from './Core/SensorEngine';
-import jmriApi from './Shared/jmri/jmriApi';
+// import SensorEngine from './Core/SensorEngine';
+// import jmriApi from './Shared/jmri/jmriApi';
 
 import Store from './Store/Store';
 import './App.scss';
+
+
+// const dccApi = 'exJsApi'; // jmprApi;
+
 
 function App() {
 
@@ -29,15 +33,14 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <ApiEngine onReady={() => setApiReady(true)} />
-          {apiReady && (<JmriEngine onReady={() => setJmriReady(true)} />)}
-          {jmriReady && (<SensorEngine jmriApi={jmriApi} />)}
+          {/* <ApiEngine onReady={() => setApiReady(true)} />
+          {apiReady && (<JmriEngine onReady={() => setJmriReady(true)} />)} */}
+          {/* {jmriReady && (<SensorEngine jmriApi={jmriApi} />)} */}
           <Box display="flex" flexDirection="column" height="100%">
             <Box>
               <Header 
-                jmriApi={jmriApi}
-                jmriReady={jmriReady}
-                apiReady={apiReady}
-              /> 
+                apiReady={apiReady} 
+              />
             </Box>
             <Box flexGrow={1} display="flex" width="100%" height="100%" alignContent="center" className="App-content" mt={2}>
               {apiReady && ( <Modules /> )}

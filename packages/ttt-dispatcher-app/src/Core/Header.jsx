@@ -13,16 +13,14 @@ import Typography from '@mui/material/Typography';
 import Stop from './Stop';
 import Power from './Power';
 import Settings from './Settings';
-// import StatusMonitor from './StatusMonitor';
-import { getByLink } from '../Shared/Config/Navigation';
+import StatusMonitor from '../Connections/StatusMonitor';
+import { getByLink } from '../Shared/components/Config/Navigation';
 import { useLocation } from "react-router-dom";
 
 export const Header = props => {
 
 
   const { 
-    jmriApi, 
-    jmriReady, 
     apiReady
   } = props;
 
@@ -45,9 +43,10 @@ export const Header = props => {
           </Typography>
           <Paper sx={{ padding: '.6rem', marginRight: '2rem' }}>
             {/* <StatusMonitor jmriReady={jmriReady} apiReady={apiReady} /> */}
+            <StatusMonitor apiReady={apiReady} />
           </Paper>
-          <Stop jmriApi={jmriApi} jmriReady={jmriReady} />
-          <Power jmriApi={jmriApi} jmriReady={jmriReady} />
+          <Stop />
+          <Power />
           <Settings />
           <IconButton
               className="header-button"

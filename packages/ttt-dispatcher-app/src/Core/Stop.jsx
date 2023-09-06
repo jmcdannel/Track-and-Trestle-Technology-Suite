@@ -7,7 +7,6 @@ const STOP = '0.0';
 
 export const Stop = props => {
 
-  const { jmriApi, jmriReady } = props;
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
@@ -16,7 +15,8 @@ export const Stop = props => {
     locos && locos.filter(loco => loco.isAcquired).map(async loco => {
       console.log('Stopping', { address: loco.address, speed: STOP }, STOP);
       try {
-        await jmriApi.throttle(loco.address, STOP);
+        // await jmriApi.throttle(loco.address, STOP);
+        // TODO implement DCC-EX-JS-API
       } catch (err) { console.error(err); }
       try {
         await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, speed: STOP } });
@@ -31,7 +31,6 @@ export const Stop = props => {
       onClick={handleStopClick} 
       color="inherit"
       variant="outlined"
-      disabled={!jmriReady}
     >
       <PanToolIcon />
     </IconButton>)

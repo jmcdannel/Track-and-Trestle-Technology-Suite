@@ -11,7 +11,7 @@ const appConfig = {
   "actionApi": "ws://localhost:8080",
   "layoutApi": "http://localhost:5001/api",
   "jmri": "http://localhost:12080/json/"
-}
+} // TODO: refactor to use config
 const layoutId = 'betatrack'; // TODO: remove hardcode
 
 let ws;

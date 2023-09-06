@@ -4,7 +4,7 @@ import Throttle from './Throttle';
 import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
 import { Context } from '../Store/Store';
-import jmriApi from '../Shared/jmri/jmriApi';
+import jmriApi from '../Shared/api/jmriApi';
 
 import './Throttles.scss';
 
