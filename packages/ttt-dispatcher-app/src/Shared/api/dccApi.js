@@ -4,6 +4,8 @@ let connectionId;
 let serial;
 let isConnected = false;
 let queue = [];
+let dispatch;
+let host;
 
 const defaultProtocol = 'ws';
 const defaultPort = 8082;
@@ -16,10 +18,9 @@ async function processQueeue() {
   queue = [];
 }
 async function onOpen() {
-  console.log('[DCC API] Websocket open');
   isConnected = true;
-  let connStore; //useConnectionStore();
-  // await connStore.setConnection(connectionId, { api: true });
+  console.log('[DCC API] Websocket open', { connectionId, connected: isConnected, host });
+  await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, api: isConnected, host } });
   processQueeue();
 }
 
@@ -40,15 +41,14 @@ async function onMessage(event) {
     console.log('[DCC API] onMessage', action, payload);
     switch (action) {
       case 'listPorts':
-        // await connStore.setConnection(connectionId, { ports: payload });
+        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, ports: payload } });
         break;
       case 'socketConnected':
         connectSerial();
-        // await connStore.setConnection(connectionId, { connected: true });
         break;
       case 'connected':
         console.log('[DCC API] onMessage.connected', serial);
-        // await connStore.setConnection(connectionId, { connected: true });
+        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true, host } });
         break;
     }
   } catch (err) { 
@@ -56,8 +56,10 @@ async function onMessage(event) {
   }
 }
 
-async function connect(host, iface, _serial) {
+async function connect(_dispatch, _host, iface, _serial) {
   try {
+    dispatch = _dispatch;
+    host = _host;
     connectionId = iface?.id;
     serial = _serial;
     console.log('[DCC API] connect', host, iface?.id, connectionId, serial);

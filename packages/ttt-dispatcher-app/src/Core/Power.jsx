@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import dccApi from '../Shared/dcc/dccApi';
+import dccApi from '../Shared/api/dccApi';
 
 export const Power = props => {
 

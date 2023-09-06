@@ -3,7 +3,7 @@ import { Link , useLocation} from 'react-router-dom';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import TrainIcon from '@mui/icons-material/Train';
-import navConfig from '../Shared/Config/Navigation';
+import navConfig from '../Shared/components/Config/Navigation';
 import { Context } from '../Store/Store';
 
 export const Footer = () => {

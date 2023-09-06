@@ -29,9 +29,10 @@ import CompressIcon from '@mui/icons-material/Compress';
 import ThrottleSlider from './ThrottleSlider';
 import ThrottleSpeed from './ThrottleSpeed';
 import JmriThrottleController from './JmriThrottleController';
+import DccExThrottleController from './DccExThrottleController';
 import Functions from './Functions';
 import { Context } from '../Store/Store';
-import useDebounce from '../Shared/Hooks/useDebounce';
+import useDebounce from '../Shared/hooks/useDebounce';
 import api from '../Api';
 import './Throttle.scss';
 
@@ -174,13 +175,18 @@ export const Throttle = props => {
           {(true || loco.isAcquired) && 
             <Grid container spacing={1} className="grow">
               <Grid item xs={4} flexGrow={1} display="flex">
-                  {isAcquired && (
+                  {/* {isAcquired && (
                     <JmriThrottleController 
                       speed={debouncedSpeed} 
                       address={address} 
                       forward={(debouncedSpeed >= 0)} 
                     />
-                  )}
+                  )} */}
+                  <DccExThrottleController 
+                    speed={debouncedSpeed} 
+                    address={address} 
+                    forward={(debouncedSpeed >= 0)} 
+                  />
                   <ThrottleSlider 
                     max={maxSpeed} 
                     className="throttle__slider__control" 
@@ -192,7 +198,7 @@ export const Throttle = props => {
               <Grid item xs={8} display="flex" className="throttle__controls">
                 <Grid container spacing={1} className="grow" alignContent="space-between">
                   <Grid item xs={12}>
-                    <img alt={`${loco.name}`} src={`${process.env.PUBLIC_URL}/images/tam/locos/${loco.address}.jpg`} className="throttle__locoimg" />
+                    {/* <img alt={`${loco.name}`} src={`${process.env.PUBLIC_URL}/images/tam/locos/${loco.address}.jpg`} className="throttle__locoimg" /> */}
 
                       {/* <pre>speed={loco.speed}</pre>
                       <pre>uiSpeed={uiSpeed}</pre> */}

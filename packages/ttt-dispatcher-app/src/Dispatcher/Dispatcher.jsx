@@ -14,7 +14,7 @@ import './Dispatcher.scss';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const TURNOUT_DELAY = 1000; // ms
+const TURNOUT_DELAY = 10; // ms
 
 export const Dispatcher = props => {
 
@@ -32,7 +32,8 @@ export const Dispatcher = props => {
 
   const handleTurnoutChange = async delta => {
     try {
-      await api.turnouts.put(delta);
+      console.log('handleTurnoutChange', delta);
+      // await api.turnouts.put(delta);
       await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
     } catch (err) {
       console.error(err);

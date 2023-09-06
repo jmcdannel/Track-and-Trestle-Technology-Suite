@@ -6,33 +6,48 @@ import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import { Context } from '../Store/Store';
-import api from '../Api';
+import api from '../Shared/api/api';
 
-export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
+export const UsbDialog = ({ onClose, open, currentPort }) => {
 
 
   const [ state, ] = useContext(Context);
-  const { ports } = state;
+  const { connections } = state;
+  const actionApiConn = connections.get('action-api');
 
+
+  const [usbConnection, setUsbconnection] = useState(null);
+  const [ports, setPorts] = useState([]);
   const [usbPort, setUsbPort] = useState(currentPort ? currentPort : '');
-  const [portList, setPortList] = useState(currentPort ? [currentPort] : []);
 
   useEffect(async () => {
-    ports && ports.length && setPortList(portList => [...ports, ...portList])
-  }, [ports]);
+    console.log('[UsbDialog] ports', ports, connections, actionApiConn);
+
+    console.log('[UsbDialog] actionApiConn', actionApiConn);
+    actionApiConn?.ports && setPorts(actionApiConn.ports);
+  }, [actionApiConn, ports]);
 
   useEffect(async () => {
-    open && await api.ports.get();
+    console.log('[UsbDialog] usbConnection', usbConnection, connections);
+    if (usbConnection) { return; }
+
+    const usbConn = connections.get('betatrack-io');
+    console.log('[UsbDialog] usbConn', usbConn);
+    usbConn && setUsbconnection(usbConn);
+
+  }, [connections, usbConnection]);
+
+  useEffect(async () => {
+    open && await api.actionApi.put('ports', { });
   }, [open]);
   
 
   const handleUpdate = async () => {
-    console.log('handleUpdate');
-    await api.interfaces.put({
-      id: cmdExInterface.id,
-      serial: usbPort
-    });
+    console.log('[UsbDialog] handleUpdate', usbPort);
+    await api.config.set('betatrack-io', usbPort);
+    await api.actionApi.put('serialConnect', { connectionId: 'betatrack-io', serial: usbPort });
     // window.location.reload(false);
+    onClose();
   }
 
   return (
@@ -42,13 +57,7 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
             sx={{ padding: '1rem', width: '360px' }}
             id="cmd-ex-port"
             freeSolo
-            onInputChange={(event, newValue) => {
-              setUsbPort(newValue);
-            }}
-            onChange={(event, newValue) => {
-              setUsbPort(newValue);
-            }}
-            options={portList}
+            options={ports}
             value={usbPort}
             renderInput={(params) => <TextField {...params} label="CMD-EX Port" />}
           />
@@ -64,4 +73,4 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
 
 }
 
-export default CmdExDialog;
+export default UsbDialog;

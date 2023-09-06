@@ -11,9 +11,15 @@
 [x] ui beatification
 [x] environemnt config
 [x] connect to serial devices, action api
-[ ] pico led w/json
-[ ] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
-[ ] tam junc config - servos
+[x] pico led w/json
+[x] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
+[ ] dispatcher interface connection refactor 4:20
+[ ] dcc-ex turnouts 6:30
+[ ] signals 7:30
+[ ] effects 8:30
+[ ] fix sounds 9:00
+[ ] effect macros 12:00
+[ ] tam junc config - servos 
 [ ] slots/compose/inherit base component for status list
 [ ] transition exploration
 [ ] release v0.1.0?
@@ -23,9 +29,9 @@
 [ ] disconnect bug
 [ ] convert to typescript
 [ ] write unit tests
-[ ] handheld throttle
-[ ] status display
-[ ] ad hoc loco
+[ ] handheld throttle (bluetooth?)
+[ ] status display (mounted screen/tv?)
+[ ] ad hoc loco (enter loco address:___ [Acquire])
 [ ] icons to svg files
 
 ### DCC-JS

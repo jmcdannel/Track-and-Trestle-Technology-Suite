@@ -1,5 +1,5 @@
 // import { getAppConfig } from './config/config';
-import log from './Shared/utils/logger';
+import log from '../utils/logger';
 
 // const appConfig = getAppConfig();
 // const { layoutId } = appConfig;

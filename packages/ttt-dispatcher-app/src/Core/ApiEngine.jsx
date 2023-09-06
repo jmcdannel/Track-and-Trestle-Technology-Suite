@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import api from '../Api';
+// import api from '../Api';
+import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 import log from '../Shared/utils/logger';
 
@@ -10,7 +11,7 @@ function ApiEngine(props) {
   const [ init, setInit ] = useState(false);
   const { layout } = state;
 
-  console.log('state', state, layout);
+  console.log('[ApiEngine] layout', layout);
 
   useEffect(() => {
     layout && onReady();
@@ -20,9 +21,11 @@ function ApiEngine(props) {
     const initialize = async function() {
       try {
         if (init) return;
+        console.log('[ApiEngine] connect');
+        await api.connect(dispatch);
         setInit(true);
-        const apiSuccess = await api.initialize(dispatch);
-        const wsSuccess = await api.initializeWS();
+        // const apiSuccess = await api.initialize(dispatch);
+        // const wsSuccess = await api.initializeWS();
       } catch (err) {
         setInit(true);
         log.error('api initialization error', err);

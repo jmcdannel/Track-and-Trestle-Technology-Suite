@@ -7,6 +7,17 @@ const Reducer = (state, action) => {
       console.log('Reducer INIT_STATE', action.payload);
       return {...state, ...action.payload };
 
+    case 'UPDATE_CONNECTIONS':
+      return {
+        ...state,
+        connections: action.payload
+      };
+
+    case 'UPDATE_CONNECTION':
+      const orig = state.connections.get(action.payload.connectionId);
+      state.connections.set(action.payload.connectionId, {...orig, ...action.payload });
+      return state;
+
     case 'UPDATE_LOCOS':
       return {
         ...state,

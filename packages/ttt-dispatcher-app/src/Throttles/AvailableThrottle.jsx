@@ -32,10 +32,12 @@ export const AvailableThrottle = props => {
         setIsLoading(false);
         return;
       }
-      setIsLoading(true);
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx } });
+      // setIsLoading(true);
+      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx, isAcquired: true } });
+      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx } });
       // await jmriApi.requestLoco(address);
-      setIsLoading(false);
+      // setIsLoading(false);
       if (onLocoClick) {
         await onLocoClick(loco);
       }
