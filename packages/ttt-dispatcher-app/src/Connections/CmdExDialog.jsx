@@ -19,16 +19,16 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
   const [ports, setPorts] = useState([]);
   const [usbPort, setUsbPort] = useState(currentPort ? currentPort : '');
 
-  useEffect(async () => {
-    const dccConn = connections.get('dcc-js-api');
-    console.log('dccConn', dccConn);
-    setDccconnection(dccConn);
-    dccConn?.ports && setPorts(dccConn.ports);
-    // if (!dccConnection) {
-    //   setDccconnection(connections.get('dcc-js-api'));
-    //   console.log('[CmdExDialog]', connections.get('dcc-js-api'));
-    // }
-  }, [connections, dccConnection, ports]);
+  // useEffect(async () => {
+  //   const dccConn = connections.get('dcc-js-api');
+  //   console.log('dccConn', dccConn);
+  //   setDccconnection(dccConn);
+  //   dccConn?.ports && setPorts(dccConn.ports);
+  //   // if (!dccConnection) {
+  //   //   setDccconnection(connections.get('dcc-js-api'));
+  //   //   console.log('[CmdExDialog]', connections.get('dcc-js-api'));
+  //   // }
+  // }, [connections, dccConnection, ports]);
 
   // useEffect(async () => {
   //   dccConnection?.ports && dccConnection.ports.length && setPortList(portList => [...dccConnection.ports, ...portList])
@@ -42,13 +42,22 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
   const handleUpdate = async () => {
     const serial = usbPort;
     console.log('handleUpdate', usbPort);
-    await api.config.set(dccConnection.connectionId, serial);
+    await api.config.set('dcc-js-api', serial);
     await api.dcc.send('connect', { serial });
     // await api.interfaces.put({
     //   id: cmdExInterface.id,
     //   serial: usbPort
     // });
     window.location.reload(false);
+  }
+
+  const getPortList = () => {
+    const conn = connections.get('dcc-js-api');
+    if (conn && conn.ports) {
+      return conn.ports;
+    } else {
+      return [];
+    }
   }
 
   return (
@@ -64,7 +73,7 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
             onChange={(event, newValue) => {
               setUsbPort(newValue);
             }}
-            options={ports}
+            options={getPortList()}
             value={usbPort}
             renderInput={(params) => <TextField {...params} label="CMD-EX Port" />}
           />

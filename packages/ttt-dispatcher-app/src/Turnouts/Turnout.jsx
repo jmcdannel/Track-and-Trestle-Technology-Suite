@@ -52,7 +52,7 @@ export const Turnout = props => {
       setIsPristine(false);
       console.log('[Turnout] handleToggle', turnout)
       await handleTurnoutChange({ 
-        turnoutId: turnout.turnoutId, 
+        ...turnout,
         state: !turnout.state 
       });
     } catch (err) {

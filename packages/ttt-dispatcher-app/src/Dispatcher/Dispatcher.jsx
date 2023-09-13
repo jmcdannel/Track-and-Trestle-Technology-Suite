@@ -7,7 +7,7 @@ import Routes from '../Routes/Routes';
 import RouteMap from '../Routes/RouteMap';
 import Turnout from '../Turnouts/Turnout';
 
-import api from '../Api';
+import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 
 import './Dispatcher.scss';
@@ -33,7 +33,7 @@ export const Dispatcher = props => {
   const handleTurnoutChange = async delta => {
     try {
       console.log('handleTurnoutChange', delta);
-      // await api.turnouts.put(delta);
+      await api.turnouts.put(delta);
       await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
     } catch (err) {
       console.error(err);

@@ -62,6 +62,22 @@ async function connectInterfaces(host, layoutId) {
   }
 }
 
+async function handleTurnout(turnout) {
+  console.log('API.handleTurnout', turnout);
+  switch(turnout?.config?.interface) {
+    case 'dcc-js-api':
+      dccApi.setTurnout(turnout.config.dccExId, turnout.state);
+      break;
+    case 'betatrack-io':
+    case 'action-api':
+      actionApi.turnouts.put(turnout);
+      break;
+    default:
+      console.warn('Unknown interface type', turnout?.config?.interface, turnout);
+      break;
+  }
+}
+
 async function disconnect() {
   const layoutId = await config.layoutId.get();
   console.log('API.disconnect', layoutId);
@@ -85,7 +101,7 @@ export const api = {
     put: actionApi.effects.put
   },
   turnouts: {
-    put: actionApi.turnouts.put
+    put: handleTurnout
   },
   connect,
   disconnect,

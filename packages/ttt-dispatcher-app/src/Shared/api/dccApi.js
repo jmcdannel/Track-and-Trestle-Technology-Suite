@@ -79,7 +79,7 @@ async function setPower(payload) {
     send('power', payload ? 1 : 0);
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
   }
 }
 
@@ -88,7 +88,16 @@ async function setSpeed(address, speed) {
     send('throttle', { address, speed });
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
+  }
+}
+
+async function setTurnout(turnoutId, state) {
+  try {   
+    send('turnout', { turnoutId, state });
+  } catch (err) {
+    console.error('[DCC API].setTurnout', err);
+    throw new Error('Unable to read', err);
   }
 }
 
@@ -99,7 +108,7 @@ async function setFunction(address, func) {
     });
   } catch (err) {
     console.error('[DCC API].setPower', err);
-    throw new Error('Unable to read', err, type);
+    throw new Error('Unable to read', err);
   }
 }
 
@@ -133,6 +142,7 @@ export const dccApi = {
   send,
   setPower,
   setSpeed,
+  setTurnout,
   setFunction,
   getConnectionId,
   isConnected

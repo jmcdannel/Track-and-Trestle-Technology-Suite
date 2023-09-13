@@ -13,20 +13,24 @@
 [x] connect to serial devices, action api
 [x] pico led w/json
 [x] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
-[ ] dispatcher interface connection refactor 4:20
-[ ] dcc-ex turnouts 6:30
-[ ] signals 7:30
-[ ] effects 8:30
+[x] dispatcher interface connection refactor
+[x] dcc-ex turnouts
+[x] action api servos
+[ ] dispatcher effects
 [ ] fix sounds 9:00
-[ ] effect macros 12:00
+[ ] signals
+[ ] dispatcher macros
+
 [ ] tam junc config - servos 
-[ ] slots/compose/inherit base component for status list
-[ ] transition exploration
-[ ] release v0.1.0?
+[ ] update readme with sccreenshots
+[ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
+[ ] transition exploration (vue throttle app)
+[ ] release v0.1.0? DCC-EX-JS-API
 [ ] stop all
 [ ] verrical UI (or respnsive horiztonal?)
 [ ] keep alive
 [ ] disconnect bug
+[ ] GrpahQL
 [ ] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)

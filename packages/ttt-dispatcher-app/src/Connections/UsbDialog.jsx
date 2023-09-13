@@ -25,7 +25,7 @@ export const UsbDialog = ({ onClose, open, currentPort }) => {
 
     console.log('[UsbDialog] actionApiConn', actionApiConn);
     actionApiConn?.ports && setPorts(actionApiConn.ports);
-  }, [actionApiConn, ports]);
+  }, [connections, actionApiConn, ports]);
 
   useEffect(async () => {
     console.log('[UsbDialog] usbConnection', usbConnection, connections);
@@ -50,16 +50,26 @@ export const UsbDialog = ({ onClose, open, currentPort }) => {
     onClose();
   }
 
+  const getPortList = () => {
+    const conn = connections.get('action-api');
+    if (conn && conn.ports) {
+      return conn.ports;
+    } else {
+      return [];
+    }
+  }
+
   return (
     <Dialog onClose={onClose} open={open}>
-        <DialogTitle>CMD-EX Port</DialogTitle>
+        <DialogTitle>USB Serial Port</DialogTitle>
         <Autocomplete
             sx={{ padding: '1rem', width: '360px' }}
             id="cmd-ex-port"
             freeSolo
-            options={ports}
+            options={getPortList()}
             value={usbPort}
-            renderInput={(params) => <TextField {...params} label="CMD-EX Port" />}
+            onChange={(event, newValue) => setUsbPort(newValue)}
+            renderInput={(params) => <TextField {...params} label="USB Serial Port" />}
           />
           <Button 
             size="large" 
