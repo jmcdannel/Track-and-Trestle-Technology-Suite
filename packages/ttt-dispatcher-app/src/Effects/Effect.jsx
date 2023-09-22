@@ -14,7 +14,7 @@ import TrafficIcon from '@mui/icons-material/Traffic';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import Signal from './Signal';
 import { Context } from '../Store/Store';
-import api from '../Api';
+import api from '../Shared/api/api';
 
 const PLAY_SOUND_DELAY = 2000;
 
@@ -26,13 +26,13 @@ export const Effect = props => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSwitchChange = (event) => {
-    updateEffect({ effectId, state: event.target.checked ? 1 : 0 });;
+    updateEffect({ ...effect, state: event.target.checked ? 1 : 0 });;
   };
 
   const handleButtonClick = (event) => {
-    updateEffect({ effectId, state: 1 });
+    updateEffect({ ...effect, state: 1 });
     setTimeout(async () => {
-      updateEffect({ effectId, state: 0 });
+      updateEffect({ ...effect, state: 0 });
     }, PLAY_SOUND_DELAY);
   };
 
@@ -41,9 +41,10 @@ export const Effect = props => {
       return;
     }
     try {
+      console.log('[Effect] updateEffect');
       setIsLoading(true);
-      const newEffect = await api.effects.put(changedEffect, 'effectId');
-      // await dispatch({ type: 'UPDATE_EFFECT', payload: newEffect });
+      await api.effects.put(changedEffect, 'effectId');
+      await dispatch({ type: 'UPDATE_EFFECT', payload: changedEffect });
     } catch (err) {
       console.error(err);
     } finally {

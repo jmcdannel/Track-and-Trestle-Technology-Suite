@@ -16,21 +16,25 @@
 [x] dispatcher interface connection refactor
 [x] dcc-ex turnouts
 [x] action api servos
-[ ] dispatcher effects
-[ ] fix sounds 9:00
+[x] dispatcher effects
+[ ] led strips
+[x] fix sounds
 [ ] signals
 [ ] dispatcher macros
-
+[ ] DCC functions
+--
+[ ] clean up connections / env / config
 [ ] tam junc config - servos 
 [ ] update readme with sccreenshots
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
 [ ] transition exploration (vue throttle app)
-[ ] release v0.1.0? DCC-EX-JS-API
+[ ] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
+
 [ ] stop all
 [ ] verrical UI (or respnsive horiztonal?)
 [ ] keep alive
 [ ] disconnect bug
-[ ] GrpahQL
+[ ] GrpahQL / better state management
 [ ] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)
@@ -41,15 +45,22 @@
 ### DCC-JS
 
 [x] Fork DCC-JS
+  [ ] release v0.1.0? DCC-EX-JS-API [DEJA.js - the DCC-EX JavaScript API by Track & Trestle Technology (Josh McDannel)]
+
+
   - DCC-JS EX-API Server
-  - DCC-JS Throttle (hosted, self hosted)
-  - DCC-JS Dispatcher (hosted, self hosted)
+  - DCC-JS DEJA Throttle (hosted, self hosted)
+  - DCC-JS DEJA Dispatcher (hosted, self hosted)
   - Future:
     - DCC-JS Programmer (hosted, self hosted)
-    - DCC-JS (hosted, self hosted)
+    - DCC-JS (hosted, self hosted-wifi)
     - Plugins (custom serial connections, servers, automation)
+
+
+#### Bugs:
+[ ] WS Disconnect
+[ ] Double audio file play
 
 
 ### TODO
 
-[ ] determine storage options for locos, effetcts, turnouts, sensors, config

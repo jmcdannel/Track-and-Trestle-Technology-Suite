@@ -27,7 +27,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { Context } from '../Store/Store';
-import api from '../Api';
+// import api from '../Api';
 
 const getInverse = degrees => {
   return degrees < 90
@@ -81,15 +81,15 @@ export const Settings = props => {
     try {
       setIsLoading(true);
       setHasError(false);
-      const resp = await api.turnouts.put({
-        turnoutId,
-        name,
-        config: {
-          type: turnout?.config?.type,
-          straight,
-          divergent
-        }
-      });
+      // const resp = await api.turnouts.put({
+      //   turnoutId,
+      //   name,
+      //   config: {
+      //     type: turnout?.config?.type,
+      //     straight,
+      //     divergent
+      //   }
+      // });
       await dispatch({ type: 'UPDATE_TURNOUT', payload: resp });
       onClose();
     } catch (err) {
@@ -132,7 +132,7 @@ export const Settings = props => {
     }
   }
   const sendDegrees = async degrees => {
-    const turnout = await api.turnouts.put({ turnoutId, current: parseInt(degrees) });
+    // const turnout = await api.turnouts.put({ turnoutId, current: parseInt(degrees) });
     await dispatch({ type: 'UPDATE_TURNOUT', payload: turnout });
     return turnout;
   }

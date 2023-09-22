@@ -78,6 +78,40 @@ async function handleTurnout(turnout) {
   }
 }
 
+async function handleEffect(effect) {
+  console.log('API.handleEffect', effect);
+  if (effect?.actions.some(action => action.interface === 'dcc-js-api')) {
+    effect.actions.filter(action => action.interface === 'dcc-js-api').map(action => {
+      dccApi.setOutput(action.pin, effect.state);
+    });
+  }
+  if (effect?.actions.some(action => action.interface === 'action-api')) {
+    actionApi.effects.put(effect);
+  }
+  if (effect?.actions.some(action => action.interface === 'betatrack-io')) {
+    actionApi.effects.put(effect);
+  }
+  if (effect?.actions.some(action => action.interface === 'audio')) {
+    actionApi.effects.put(effect);
+  }
+  // effect.actions.map(action => handleAction(effect, action));
+}
+
+async function handleAction(effect, action) {
+  console.log('API.handleAction', action);
+  switch(action.interface) {
+    case 'dcc-js-api':
+      break;
+    case 'betatrack-io':
+    case 'action-api':
+      actionApi.effects.put(effect);
+      break;
+    default:
+      console.warn('Unknown interface type', action);
+      break;
+  }
+}
+
 async function disconnect() {
   const layoutId = await config.layoutId.get();
   console.log('API.disconnect', layoutId);
@@ -98,7 +132,7 @@ export const api = {
     get: layoutApi.locos.get
   },
   effects: {
-    put: actionApi.effects.put
+    put: handleEffect
   },
   turnouts: {
     put: handleTurnout

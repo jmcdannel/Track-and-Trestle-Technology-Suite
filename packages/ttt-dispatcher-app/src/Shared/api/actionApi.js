@@ -4,6 +4,7 @@
 let ws;
 let connectionId;
 let serial;
+let isConnected = false;
 let queue = [];
 let dispatch;
 
@@ -13,12 +14,13 @@ const defaultPort = 8080;
 async function processQueeue() {
   console.log('[ACTION API] processQueeue', queue);
   queue.map(async ({ action, payload }) => {
-    await putWS(action, payload);
+    await send(action, payload);
   });
   queue = [];
 }
 
 async function onOpen() {
+  isConnected = true;
   console.log('[ACTION API] onOpen');
   await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true } });
   processQueeue();
@@ -30,7 +32,7 @@ function onError(event) {
 
 async function connectSerial() {
   if (serial) {
-    await putWS('serialConnect', { serial });
+    await send('serialConnect', { serial });
   }
 }
 
@@ -93,14 +95,24 @@ async function getWS(type ) {
   }
 }
 
-async function putWS(action, payload) {
-  try {
-    console.log('[ACTION API] putWS', { action, payload }, ws);
-    ws.send(JSON.stringify({ action, payload }));
+async function send(action, payload) {
+  try { 
+    if (ws && isConnected) {  
+      sendRaw(JSON.stringify({ action, payload  }));
+    } else {
+      queue.push({ action, payload });
+      // throw new Error('Not connected', connectionId);
+    }
   } catch (err) {
-    queue.push({ action, payload });
-    console.error('[ACTION API] api.put', err)
-    throw new Error('Unable to update', err, action, payload);
+    console.error('[ACTION API].send', err, action, payload);
+  }
+}
+
+async function sendRaw(data) {
+  try { 
+    ws.send(data);
+  } catch (err) {
+    console.error('[ACTION API].sendRaw', err, data);
   }
 }
 
@@ -108,16 +120,17 @@ export const api = {
   connect,
   disconnect,
   get: getWS,
-  put: putWS,
+  put: send,
   turnouts: {
-    put: (...args)  => putWS('turnouts', ...args)
+    put: (...args)  => send('turnouts', ...args)
   },
   effects: {
-    put: (...args) => putWS('effects', ...args)
+    put: (...args) => send('effects', ...args)
   },
   ports: {
     get: (...args) => getWS('ports', ...args)
-  }
+  },
+  isConnected
 }
 
 export default api;

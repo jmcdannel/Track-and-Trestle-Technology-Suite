@@ -49,7 +49,7 @@ export const handleMessage = async (msg, ws) => {
       case 'serialConnect':
         try {
           const com = { ...interfaces[msg.payload.connectionId], ...msg.payload, baudRate };
-          log.info('[INTERFACES] serialConnect', msg, com, baudRate);
+          log.info('[INTERFACES] serialConnect', msg, com?.serial, baudRate);
           com.connection = await serial.connect(com);
           com.send = serial.send;
           com.status = 'connected';

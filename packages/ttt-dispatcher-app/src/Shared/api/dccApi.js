@@ -101,6 +101,15 @@ async function setTurnout(turnoutId, state) {
   }
 }
 
+async function setOutput(pin, state) {
+  try {   
+    send('output', { pin, state });
+  } catch (err) {
+    console.error('[DCC API].setTurnout', err);
+    throw new Error('Unable to read', err);
+  }
+}
+
 async function setFunction(address, func) {
   try {   
     send({
@@ -140,6 +149,7 @@ function getConnectionId() {
 export const dccApi = {
   connect,
   send,
+  setOutput,
   setPower,
   setSpeed,
   setTurnout,

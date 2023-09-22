@@ -33,7 +33,7 @@ import DccExThrottleController from './DccExThrottleController';
 import Functions from './Functions';
 import { Context } from '../Store/Store';
 import useDebounce from '../Shared/hooks/useDebounce';
-import api from '../Api';
+// import api from '../Api';
 import './Throttle.scss';
 
 export const Throttle = props => {
@@ -114,7 +114,7 @@ export const Throttle = props => {
   const handleStickyThrottleClick = async () => {
     try {
       const newAutoStop = !loco.autoStop;
-      await api.locos.put({ address, autoStop: newAutoStop });
+      // await api.locos.put({ address, autoStop: newAutoStop });
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, autoStop: newAutoStop } });
     } catch (err) {
       console.error(err);
@@ -134,7 +134,7 @@ export const Throttle = props => {
       setMaxSpeed(event.target.value);
       setMinSpeed(-event.target.value);
       setPrecisonDialog(false);
-      await api.locos.put({ address, maxSpeed: event.target.value });
+      // await api.locos.put({ address, maxSpeed: event.target.value });
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed: event.target.value } });
     } catch (err) {
       console.error(err);
