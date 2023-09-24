@@ -77,7 +77,7 @@ async function clearLoco() {
 
 async function setHost(uri) {
   try {
-    console.log('setLayoutApiHost', uri);
+    console.log('setHost', uri);
     localStorage.setItem(LAYOUT_HOST, `${uri}`);
     return uri
   } catch (e) {

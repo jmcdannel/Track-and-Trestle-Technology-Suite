@@ -36,18 +36,21 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
   const [ state, dispatch ] = useContext(Context);
   const { layout, connections } = state;
   console.log('[StatusMonitor]', layout, connections,  connections?.get('layoutApi')?.connected);
+  console.log('[StatusMonitor].getHost', api.config.getHost());
+  console.log('[StatusMonitor].getLayoutId', api.config.getLayoutId());
 
   const [apiConfigOpen, setAPIConfigOpen] = useState(false);
   const [layoutConfigOpen, setLayoutConfigOpen] = useState(false);
   const [cmdExConfigOpen, setCmdExConfigOpen] = useState(false);
   const [usbConfigOpen, setUsbConfigOpen] = useState(false);
 
-  const [apiHost, setAPIHost] = useState(api.config.getHost());
-  const [layoutId, setLayoutId] = useState(api.config.getLayoutId());
+  const [apiHost, setAPIHost] = useState(api.config.getHost() || '');
+  const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
 
   const handleAPIUpdate = async () => {
+    console.log('handleAPIUpdate', apiHost);
     await api.config.setHost(apiHost);
-    window.location.reload(false);
+    // window.location.reload(false);
   }
 
   const handleLayoutUpdate = async () => {
@@ -179,6 +182,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
             freeSolo
             options={layoutIds}
             value={layoutId}
+            handleChange={(e) =>  setLayoutId(e.target.value) }
             renderInput={(params) => <TextField {...params} label="Layout ID" />}
           />
           <IconButton 
@@ -190,14 +194,23 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
 
       <Dialog onClose={() => setAPIConfigOpen(false)} open={apiConfigOpen}>
         <DialogTitle>API Host</DialogTitle>
-        <Autocomplete
+        {/* <Autocomplete
             sx={{ padding: '1rem', width: '360px' }}
             id="api-host"
             freeSolo
             options={apiHosts}
             value={apiHost}
             renderInput={(params) => <TextField {...params} label="API Host" />}
-          />
+          /> */}
+          <Autocomplete
+              sx={{ padding: '1rem', width: '360px' }}
+              id="layout-id"
+              freeSolo
+              options={apiHosts}
+              value={apiHost}
+              handleChange={(e) =>  setLayoutId(e.target.value) }
+              renderInput={(params) => <TextField {...params} label="Layout ID" />}
+            />
           <IconButton 
             size="large" 
             onClick={handleAPIUpdate}>

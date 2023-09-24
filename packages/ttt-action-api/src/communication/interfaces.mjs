@@ -37,8 +37,12 @@ export const handleMessage = async (msg, ws) => {
   if (commandActions.includes(msg?.action)) { // command actions
     const commandList = await commands.build(msg);
     log.info('[INTERFACES] commandList', commandList);
-    await commands.send(commandList);
-    ws.send(JSON.stringify({ success: true, data: msg }));
+    if (commandList && commandList.length > 0) {
+      await commands.send(commandList);
+      ws.send(JSON.stringify({ success: true, data: msg }));
+    } else {
+      ws.send(JSON.stringify({ success: false, data: msg }));
+    }
   } else if (reponseActions.includes(msg.action)) { // response actions
     switch(msg.action) { 
       case 'ports':
@@ -100,6 +104,18 @@ const intialize = async (com) => {
     case 'audio':
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
+      break;
+    case 'ialed':
+      const uri =
+      com.connection = `${com.config.address}/led`;
+      com.send = async (uri, data) => {
+        try {
+          const resp = await axios.post(uri, JSON.stringify(data?.[0].payload));
+          return resp?. data;
+        } catch (err) {
+          console.error('[IALED ERROR]', uri, err?.message, JSON.stringify(data?.[0].payload), err);
+        }
+      };
       break;
     case 'default':
       log.warn('[INTERFACES] Interface type not found', com.type);

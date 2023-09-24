@@ -79,22 +79,37 @@ async function handleTurnout(turnout) {
 }
 
 async function handleEffect(effect) {
-  console.log('API.handleEffect', effect);
-  if (effect?.actions.some(action => action.interface === 'dcc-js-api')) {
-    effect.actions.filter(action => action.interface === 'dcc-js-api').map(action => {
-      dccApi.setOutput(action.pin, effect.state);
-    });
+  try {
+    console.log('API.handleEffect', effect);
+
+    if (effect?.config?.interface === 'dcc-js-api') {
+      dccApi.setOutput(effect.config.pin, effect.state);
+    } else {
+      actionApi.effects.put(effect);
+    }
+
+  } catch (error) {
+    console.error('API.handleEffect', error, effect);
   }
-  if (effect?.actions.some(action => action.interface === 'action-api')) {
-    actionApi.effects.put(effect);
-  }
-  if (effect?.actions.some(action => action.interface === 'betatrack-io')) {
-    actionApi.effects.put(effect);
-  }
-  if (effect?.actions.some(action => action.interface === 'audio')) {
-    actionApi.effects.put(effect);
-  }
-  // effect.actions.map(action => handleAction(effect, action));
+
+
+
+    // if (effect?.actions.some(action => action.interface === 'dcc-js-api')) {
+    //   effect.actions.filter(action => action.interface === 'dcc-js-api').map(action => {
+    //     dccApi.setOutput(action.pin, effect.state);
+    //   });
+    // }
+    // if (effect?.actions.some(action => action.interface === 'action-api')) {
+    //   actionApi.effects.put(effect);
+    // }
+    // if (effect?.actions.some(action => action.interface === 'betatrack-io')) {
+    //   actionApi.effects.put(effect);
+    // }
+    // if (effect?.actions.some(action => action.interface === 'audio')) {
+    //   actionApi.effects.put(effect);
+    // }
+    // effect.actions.map(action => handleAction(effect, action));
+
 }
 
 async function handleAction(effect, action) {
