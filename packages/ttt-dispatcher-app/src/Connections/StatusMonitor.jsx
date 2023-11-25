@@ -15,16 +15,11 @@ import Tooltip from '@mui/material/Tooltip';
 // import { jmriHosts, apiHosts, layoutIds, updateConfig } from '../config/config';
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
+import { HostDialog } from './HostDialog';
 import { CmdExDialog } from './CmdExDialog';
 import { UsbDialog } from './UsbDialog';
 import log from '../Shared/utils/logger';
 
-export const apiHosts = [
-  'tamarackjunctionmbp.local',
-  'joshs-mac-mini.local',
-  'localhost',
-  '127.0.0.1'
-];
 
 export const layoutIds = [
   'tam',
@@ -44,14 +39,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
   const [cmdExConfigOpen, setCmdExConfigOpen] = useState(false);
   const [usbConfigOpen, setUsbConfigOpen] = useState(false);
 
-  const [apiHost, setAPIHost] = useState(api.config.getHost() || '');
   const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
-
-  const handleAPIUpdate = async () => {
-    console.log('handleAPIUpdate', apiHost);
-    await api.config.setHost(apiHost);
-    // window.location.reload(false);
-  }
 
   const handleLayoutUpdate = async () => {
     await api.config.selectLayout(layoutId);
@@ -90,7 +78,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
 
   return (
     <div className="status-monitor">
-      <Tooltip title={`${apiHost}`}>
+      <Tooltip title="HOST">
         <Chip
           className={`status-monitor__api ${apiClassName}`}
           variant="outlined"
@@ -112,17 +100,6 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           onClick={() => setLayoutConfigOpen(true)}
         />
       </Tooltip>
-      {/* <Tooltip title="JMRI Connection Status">
-        <Chip
-          className={`status-monitor__jmri ${jmriClassName}`}
-          variant="outlined"
-          icon={<UnfoldMoreIcon />}
-          label="JMRI"
-          size="small"
-          color="default"
-          onClick={() => setJMRIConfigOpen(true)}
-        />
-      </Tooltip> */}
       <Tooltip title="CMD-EX">
         <Chip
           className={`status-monitor__cmd-ex ${cmdExClassName}`}
@@ -157,6 +134,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           onClick={() => setUsbConfigOpen(true)}
         />
       </Tooltip>
+
     <CmdExDialog 
         onClose={() => setCmdExConfigOpen(false)} 
         open={cmdExConfigOpen}
@@ -192,16 +170,13 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           </IconButton>
       </Dialog>
 
-      <Dialog onClose={() => setAPIConfigOpen(false)} open={apiConfigOpen}>
+      <HostDialog 
+        onClose={() => setAPIConfigOpen(false)} 
+        open={apiConfigOpen}
+      />
+
+      {/* <Dialog onClose={() => setAPIConfigOpen(false)} open={apiConfigOpen}>
         <DialogTitle>API Host</DialogTitle>
-        {/* <Autocomplete
-            sx={{ padding: '1rem', width: '360px' }}
-            id="api-host"
-            freeSolo
-            options={apiHosts}
-            value={apiHost}
-            renderInput={(params) => <TextField {...params} label="API Host" />}
-          /> */}
           <Autocomplete
               sx={{ padding: '1rem', width: '360px' }}
               id="layout-id"
@@ -216,7 +191,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
             onClick={handleAPIUpdate}>
               <SaveIcon />
           </IconButton>
-      </Dialog>
+      </Dialog> */}
 
       {/* <Dialog onClose={() => setJMRIConfigOpen(false)} open={jmriConfigOpen}>
         <DialogTitle>JMRI Host</DialogTitle>

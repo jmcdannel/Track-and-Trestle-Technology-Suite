@@ -19,9 +19,9 @@
 [x] dispatcher effects
 [ ] led strips
 [x] fix sounds
-[ ] signals
+[x] signals
 [ ] dispatcher macros
-[ ] DCC functions
+[x] DCC functions
 --
 [ ] clean up connections / env / config
 [ ] tam junc config - servos 

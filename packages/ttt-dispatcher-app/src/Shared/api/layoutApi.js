@@ -61,7 +61,12 @@ async function connect(_dispatch, uri, _layoutId) {
     console.log('[layoutApi] Layout api connect', uri, _layoutId );  
     layoutId = _layoutId ? _layoutId : layoutId;
     instance.defaults.baseURL = `http://${uri}:5200/api`;
-    await initialize();
+    if (layoutId) {
+      await initialize();
+    } else {
+      const payload = await getLayouts();
+      console.log('getLayouts apiResponse',  payload);
+    }
     // const apiResponse = await getLayouts(layoutId);
     // console.log('apiResponse',  apiResponse);
     return true;
