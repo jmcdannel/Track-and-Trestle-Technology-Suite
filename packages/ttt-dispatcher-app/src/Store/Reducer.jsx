@@ -15,8 +15,13 @@ const Reducer = (state, action) => {
 
     case 'UPDATE_CONNECTION':
       const orig = state.connections.get(action.payload.connectionId);
-      state.connections.set(action.payload.connectionId, {...orig, ...action.payload });
-      return state;
+      const newConn = new Map(state.connections);
+      newConn.set(action.payload.connectionId, {...orig, ...action.payload });
+      // state.connections = new Map(state.connections)
+      // state.connections.set(action.payload.connectionId, {...orig, ...action.payload });
+      console.log('REDUCER', state, action);
+      // return state;
+      return {...state, connections: newConn };
 
     case 'UPDATE_LOCOS':
       return {

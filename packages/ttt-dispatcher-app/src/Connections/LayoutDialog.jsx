@@ -7,47 +7,34 @@ import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import api from '../Shared/api/api';
 
-export const apiHosts = [
-  'tamarackjunctionmbp.local',
-  'joshs-mac-mini.local',
-  'localhost',
-  '127.0.0.1'
-];
+const layoutIds = ['tam', 'betatrack'];
 
-export const HostDialog = ({ onClose, open }) => {
+export const LayoutDialog = ({ onClose, open }) => {
 
-  const [apiHost, setAPIHost] = useState(null);
-
-  useEffect(() => {
-    async function loadHost() {
-      const host = await api.config.getHost();
-      setAPIHost(host);
-    }
-    loadHost();
-  }, []);
+  const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
 
   const handleUpdate = async () => {
-    console.log('handleAPIUpdate', apiHost);
-    await api.config.setHost(apiHost);
+    console.log('handleLayoutIdUpdate', layoutId);
+    await api.config.selectLayout(layoutId);
     window.location.reload(false);
   }
 
   return (
     <Dialog onClose={onClose} open={open}>
-      <DialogTitle>API Host</DialogTitle>
+      <DialogTitle>Layout ID</DialogTitle>
       <Autocomplete
           sx={{ padding: '1rem', width: '360px' }}
-          id="cmd-ex-port"
+          id="layout-id"
           freeSolo
+          options={layoutIds}
+          value={layoutId}
           onInputChange={(event, newValue) => {
-            setAPIHost(newValue);
+            setLayoutId(newValue);
           }}
           onChange={(event, newValue) => {
-            setAPIHost(newValue);
+            setLayoutId(newValue);
           }}
-          options={apiHosts}
-          value={apiHost}
-          renderInput={(params) => <TextField {...params} label="HOST (@TTT Layout API Server" />}
+          renderInput={(params) => <TextField {...params} label="Layout ID" />}
         />
         <Button 
           size="large" 
@@ -59,4 +46,4 @@ export const HostDialog = ({ onClose, open }) => {
   )
 }
 
-export default HostDialog;
+export default LayoutDialog;

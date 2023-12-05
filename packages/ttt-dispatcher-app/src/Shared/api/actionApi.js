@@ -38,8 +38,9 @@ async function connectSerial() {
 
 async function onMessage(event) {
   try {
-    const { action, payload } = JSON.parse(event.data);
-    console.log('[ACTION API] onMessage', action, payload);
+    const { data, success } = JSON.parse(event.data);
+    const { action, payload } = data;
+    console.log('[ACTION API] onMessage', data, success, action, payload);
     switch (action) {
       case 'turnouts':
         console.log('turnouts', payload);

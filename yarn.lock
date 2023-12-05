@@ -396,6 +396,11 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
+"@bundled-es-modules/axios@^0.27.2":
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/@bundled-es-modules/axios/-/axios-0.27.2.tgz#bf7bf6e314ad294f15ef794d1629b8c80a12fef0"
+  integrity sha512-PO/CUWB4KzesrPCHgpoLWBTl6v0jXdod84msF6J/8KyaK+BHahnfv1FvMCJpUnpdP2naMhIIBOzMl1ydBZmCRA==
+
 "@emotion/babel-plugin@^11.11.0":
   version "11.11.0"
   resolved "https://registry.npmjs.org/@emotion/babel-plugin/-/babel-plugin-11.11.0.tgz"

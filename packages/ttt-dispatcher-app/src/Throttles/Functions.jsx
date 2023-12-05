@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
 import ShareIcon from '@mui/icons-material/Share';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -8,7 +9,7 @@ import DeviceHubIcon from '@mui/icons-material/DeviceHub';
 
 export const Functions = props => {
 
-  const { onFunctionClick } = props;
+  const { onFunctionClick, show, onHide } = props;
 
   const handleFunctionClick = functionIndex => {
     if (onFunctionClick) {
@@ -48,25 +49,31 @@ export const Functions = props => {
   });
 
   return (
-    <div className="throttle__functions">
-      <div className="throttle__functions__viewport">
+    <Drawer
+      anchor={'right'}
+      open={show}
+      onClose={onHide}
+      >
+      <div className="throttle__functions">
+        <div className="throttle__functions__viewport">
 
-        {functionButtons.map((btn, idx) => (
-          <Button
-            variant="outlined"
-            key={btn.label}
-            size="small"
-            color="primary"
-            className="throttle__functions__btn"
-            startIcon={btn.icon}
-            onClick={() => handleFunctionClick(idx)}
-          >
-            {btn.label}
-          </Button>
-        ))}
+          {functionButtons.map((btn, idx) => (
+            <Button
+              variant="outlined"
+              key={btn.label}
+              size="small"
+              color="primary"
+              className="throttle__functions__btn"
+              startIcon={btn.icon}
+              onClick={() => handleFunctionClick(idx)}
+            >
+              {btn.label}
+            </Button>
+          ))}
 
+        </div>
       </div>
-    </div>
+    </Drawer>
   );
 
 }

@@ -24,15 +24,17 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ExpandIcon from '@mui/icons-material/Expand';
 import ThermostatAutoIcon from '@mui/icons-material/ThermostatAuto';
-import CompressIcon from '@mui/icons-material/Compress';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import ThrottleSlider from './ThrottleSlider';
 import ThrottleSpeed from './ThrottleSpeed';
+import SpeedControl from './SpeedControl';
 import JmriThrottleController from './JmriThrottleController';
 import DccExThrottleController from './DccExThrottleController';
 import Functions from './Functions';
 import { Context } from '../Store/Store';
 import useDebounce from '../Shared/hooks/useDebounce';
+import { roadClassName, formattedAddress } from './throttleUtils';
 // import api from '../Api';
 import './Throttle.scss';
 
@@ -56,7 +58,7 @@ export const Throttle = props => {
   const initialUiSpeed = calcSpeed(speed);
 
   const [ , dispatch ] = useContext(Context);
-  // const [ initialized, setInitialized ] = useState(false);
+  const [ showFunctions, setShowFunctions ] = useState(false);
   const [ uiSpeed, setUiSpeed ] = useState(initialUiSpeed);
   const [ maxSpeed, setMaxSpeed ] = useState(initialMaxSpeed);
   const [ minSpeed, setMinSpeed ] = useState(-initialMaxSpeed);
@@ -90,6 +92,14 @@ export const Throttle = props => {
     if (onLocoClick) {
       onLocoClick(loco);
     }
+  }
+
+  const handleShowFunctionClick = () => {
+    setShowFunctions(true);
+  }
+
+  const handleFunctionClick = async functionIndex => {
+
   }
 
   const handleCruiceControlClick = async () => {
@@ -139,19 +149,7 @@ export const Throttle = props => {
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const handleFunctionClick = async functionIndex => {
-
   }
-
-  const roadClassName = () => {
-    return loco.road.toLowerCase().replace(/ /g, '-');
-  }
-
-  const formattedAddress = () => loco.address && loco.address.length > 2
-    ? loco.address.substring(0, 2)
-    : loco.address;
 
   return (
     <>
@@ -161,7 +159,7 @@ export const Throttle = props => {
         <CardHeader
           title={loco.name}
           avatar={
-            <Avatar onClick={handleLocoClick} variant="square">{formattedAddress()}</Avatar>
+            <Avatar onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
             // <Chip
             //     label={`${formattedAddress()}`}
             //     icon={<TrainIcon />}
@@ -205,61 +203,42 @@ export const Throttle = props => {
                   </Grid>
                   <Grid item xs={12}>
 
-                    <Grid container spacing={1} className="grow" alignContent="space-between" direction="row">
+                    <Grid container spacing={1} className="grow" alignContent="center" direction="column">
                       <Grid item xs={5}>
-                        <Paper elevation={3} className="" display="flex" direction="column" square>
-                          <ThrottleSpeed speed={uiSpeed} />
-                          <ButtonGroup
-                              orientation="vertical"
-                              className="throttle__controls__group"
-                              aria-label="vertical outlined primary button group"
-                            >
-                            <IconButton 
-                              className="speed-up-btn"
-                              size="large" 
-                              disabled={uiSpeed === maxSpeed} 
-                              onClick={handleUpClick}>
-                                <AddIcon />
-                              </IconButton>
-                            <IconButton 
-                              className="speed-stop-btn"
-                              size="large" 
-                              color="primary" 
-                              onClick={handleStopClick} >
-                                <PanToolIcon />
-                              </IconButton>
-                            <IconButton 
-                              className="speed-down-btn"
-                              size="large" 
-                              disabled={uiSpeed === minSpeed} 
-                              onClick={handleDownClick}>
-                                <RemoveIcon />
-                            </IconButton>
-                          </ButtonGroup>
-                        </Paper>
+                        <SpeedControl 
+                          uiSpeed={uiSpeed} 
+                          maxSpeed={maxSpeed} 
+                          minSpeed={minSpeed} 
+                          handleUpClick={handleUpClick}
+                          handleStopClick={handleStopClick}
+                          handleDownClick={handleDownClick}
+                        />
                       </Grid>
                       <Grid item  xs={7}>
                         <Paper elevation={3} className="" display="flex" direction="column" square>
                           <ButtonGroup
-                              orientation="vertical" size="large"
+                              orientation="vertical" size="small"
                               aria-label="vertical outlined primary button group"
                             >
-                            <Button className="width100 textLeft" disabled size="large" label="Functions" variant="outlined" startIcon={<TrainIcon />}>Settings</Button>
+                            <Button className="width100 textLeft" disabled label="Functions" variant="outlined" startIcon={<SettingsIcon />}>Settings</Button>
                             
-                            <Button className="width100 textLeft" size="large" label="Functions" variant="outlined" onClick={handleCruiceControlClick} startIcon={<TrainIcon />}>Functions</Button>
+                            <Button className="width100 textLeft" label="Functions" variant="outlined" onClick={handleShowFunctionClick} startIcon={<TrainIcon />}>Functions</Button>
                             
-                            <Button className="width100 textLeft" disabled={cruiseDisabled} size="large" label="Cruise Control" variant="outlined" onClick={handleCruiceControlClick} startIcon={<SpeedIcon />}>Cruise</Button>
+                            <Button className="width100 textLeft" disabled={cruiseDisabled} label="Cruise Control" variant="outlined" onClick={handleCruiceControlClick} startIcon={<SpeedIcon />}>Cruise</Button>
                               
-                              <Button className="width100 textLeft" size="large" onClick={handleParkClick} label="Park" variant="outlined" startIcon={<LocalParkingIcon />}>Park</Button>
+                              <Button className="width100 textLeft" onClick={handleParkClick} label="Park" variant="outlined" startIcon={<LocalParkingIcon />}>Park</Button>
                               
-                              <Button className="width100 textLeft" size="large" onClick={handleThrottlePrecisionClick} label="Precision"  variant="outlined" startIcon={<ThermostatAutoIcon />} >Precision</Button>
+                              {/* <Button className="width100 textLeft" onClick={handleThrottlePrecisionClick} label="Precision"  variant="outlined" startIcon={<ThermostatAutoIcon />} >Precision</Button>
                               
-                              <Button className="width100 textLeft" size="large" onClick={handleStickyThrottleClick} label="Auto Stop" variant="outlined" startIcon={autoStop  ? <CompressIcon /> : <ExpandIcon/>} >Auto Stop</Button>
+                              <Button className="width100 textLeft" onClick={handleStickyThrottleClick} label="Auto Stop" variant="outlined" startIcon={autoStop  ? <CompressIcon /> : <ExpandIcon/>} >Auto Stop</Button> */}
                             </ButtonGroup>
                           </Paper>
-                        {/* <Grid item>
-                          <Functions onFunctionClick={handleFunctionClick} />
-                        </Grid> */}
+                        <Grid item>
+                          <Functions 
+                            onFunctionClick={handleFunctionClick} 
+                            show={showFunctions} 
+                            onHide={() => setShowFunctions(false)} />
+                        </Grid>
                     </Grid>
                   </Grid>
 

@@ -16,15 +16,11 @@ import Tooltip from '@mui/material/Tooltip';
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 import { HostDialog } from './HostDialog';
+import { LayoutDialog } from './LayoutDialog';
 import { CmdExDialog } from './CmdExDialog';
 import { UsbDialog } from './UsbDialog';
 import log from '../Shared/utils/logger';
 
-
-export const layoutIds = [
-  'tam',
-  'betatrack'
-];
 
 export const StatusMonitor = ({ jmriReady,  apiReady }) => {
 
@@ -39,15 +35,13 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
   const [cmdExConfigOpen, setCmdExConfigOpen] = useState(false);
   const [usbConfigOpen, setUsbConfigOpen] = useState(false);
 
+  const [layoutApiConnection, setLayoutApiConnection] = useState(connections?.get('layoutApi') || null);
+  const [layoutIdConnection, setLayoutIdConnection] = useState(connections?.get('layoutApi') || null);
+
   const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
 
-  const handleLayoutUpdate = async () => {
-    await api.config.selectLayout(layoutId);
-    window.location.reload(false);
-  }
-
   const apiClassName = `status-monitor--${
-    connections?.get('layoutApi')?.connected
+    layoutApiConnection?.connected
       ? 'connected'
       : 'unknown'
     }`;
@@ -74,7 +68,14 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
     return  `status-monitor--${connected ? 'connected' : 'unknown'}`;
   }
 
+  useEffect(() => {
+    console.log('connections updates, layoutId updated', layoutId, connections);
+    setLayoutApiConnection(connections?.get('layoutApi') || null);
+  }, [layoutId, connections])
+
   // TODO: handle api error
+
+  console.log('connections', connections);
 
   return (
     <div className="status-monitor">
@@ -89,6 +90,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           onClick={() => setAPIConfigOpen(true)}
         />
       </Tooltip>
+
       <Tooltip title="Layout ID">
         <Chip
           className={`status-monitor__layout ${layoutIdClassName}`}
@@ -100,6 +102,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           onClick={() => setLayoutConfigOpen(true)}
         />
       </Tooltip>
+
       <Tooltip title="CMD-EX">
         <Chip
           className={`status-monitor__cmd-ex ${cmdExClassName}`}
@@ -111,6 +114,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
           onClick={() => setCmdExConfigOpen(true)}
         />
       </Tooltip>
+
       <Tooltip title="Action API">
         <Chip
           className={`status-monitor__usb ${getStatusClassName(connections.get('action-api')?.connected)}`}
@@ -135,7 +139,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
         />
       </Tooltip>
 
-    <CmdExDialog 
+      <CmdExDialog 
         onClose={() => setCmdExConfigOpen(false)} 
         open={cmdExConfigOpen}
       />
@@ -145,73 +149,16 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
         open={usbConfigOpen}
       />
 
-    {/* <CmdExDialog 
-      onClose={() => setCmdExConfigOpen(false)} 
-      open={cmdExConfigOpen}
-      currentPort={cmdExInterface?.serial}
-      cmdExInterface={cmdExInterface}
-    /> */}
-
-      <Dialog onClose={() => setLayoutConfigOpen(false)} open={layoutConfigOpen}>
-        <DialogTitle>Layout ID</DialogTitle>
-        <Autocomplete
-            sx={{ padding: '1rem', width: '360px' }}
-            id="layout-id"
-            freeSolo
-            options={layoutIds}
-            value={layoutId}
-            handleChange={(e) =>  setLayoutId(e.target.value) }
-            renderInput={(params) => <TextField {...params} label="Layout ID" />}
-          />
-          <IconButton 
-            size="large" 
-            onClick={handleLayoutUpdate}>
-              <SaveIcon />
-          </IconButton>
-      </Dialog>
-
       <HostDialog 
         onClose={() => setAPIConfigOpen(false)} 
         open={apiConfigOpen}
       />
 
-      {/* <Dialog onClose={() => setAPIConfigOpen(false)} open={apiConfigOpen}>
-        <DialogTitle>API Host</DialogTitle>
-          <Autocomplete
-              sx={{ padding: '1rem', width: '360px' }}
-              id="layout-id"
-              freeSolo
-              options={apiHosts}
-              value={apiHost}
-              handleChange={(e) =>  setLayoutId(e.target.value) }
-              renderInput={(params) => <TextField {...params} label="Layout ID" />}
-            />
-          <IconButton 
-            size="large" 
-            onClick={handleAPIUpdate}>
-              <SaveIcon />
-          </IconButton>
-      </Dialog> */}
+      <LayoutDialog
+        onClose={() => setLayoutConfigOpen(false)} 
+        open={layoutConfigOpen}
+      />
 
-      {/* <Dialog onClose={() => setJMRIConfigOpen(false)} open={jmriConfigOpen}>
-        <DialogTitle>JMRI Host</DialogTitle>
-        <Autocomplete
-            sx={{ padding: '1rem', width: '360px' }}
-            id="jmri-host"
-            freeSolo
-            onChange={(event, newValue) => {
-              setJMRIHost(newValue);
-            }}
-            options={jmriHosts}
-            value={jmriHost}
-            renderInput={(params) => <TextField {...params} label="JMRI Host" />}
-          />
-          <IconButton 
-            size="large" 
-            onClick={handleJMRIUpdate}>
-              <SaveIcon />
-          </IconButton>
-      </Dialog> */}
     </div>
   );
 }

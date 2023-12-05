@@ -1,5 +1,6 @@
 // import { useConnectionStore } from '../store/connectionStore.jsx';
 import dccApi from './dccApi';
+import axios from 'axios';
 import actionApi from './actionApi';
 import layoutApi from './layoutApi';
 // import favoritesApi from './favoritesApi';
@@ -78,12 +79,25 @@ async function handleTurnout(turnout) {
   }
 }
 
+async function handleIALed(effect) {
+  try {
+    const uri = 'http://192.168.86.47/led';
+    console.log('[IALED]', effect);
+    const resp = await axios.post(uri, JSON.stringify(effect.config));
+    return resp?.data;
+  } catch (err) {
+    console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
+  }
+}
+
 async function handleEffect(effect) {
   try {
     console.log('API.handleEffect', effect);
 
     if (effect?.config?.interface === 'dcc-js-api') {
       dccApi.setOutput(effect.config.pin, effect.state);
+    // } else if (effect?.type === 'ialed') {
+    //   await handleIALed(effect);
     } else {
       actionApi.effects.put(effect);
     }
