@@ -38,7 +38,7 @@ async function connectInterfaces(host, layoutId) {
     // await dccApi.connect(host);
     const layout = await layoutApi.layouts.get(layoutId);
     console.log('interfaces', layout, layout?.interfaces);
-    layout?.interfaces.map(async iface => {
+    layout?.interfaces?.map(async iface => {
     switch (iface.type) {
       case 'dcc-js-api':
         const dccSerial = await config.get(iface.id);
