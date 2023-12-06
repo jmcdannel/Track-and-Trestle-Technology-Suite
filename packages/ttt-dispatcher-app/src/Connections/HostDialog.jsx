@@ -10,6 +10,7 @@ import api from '../Shared/api/api';
 export const apiHosts = [
   'tamarackjunctionmbp.local',
   'joshs-mac-mini.local',
+  'tttpi.local',
   'localhost',
   '127.0.0.1'
 ];
