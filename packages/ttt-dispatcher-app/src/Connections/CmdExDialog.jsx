@@ -35,6 +35,7 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
   // }, [dccConnection]);
 
   useEffect(async () => {
+    console.log('listPorts', api.dcc);
     open && await api.dcc.send('listPorts', { });
   }, [open]);
   
