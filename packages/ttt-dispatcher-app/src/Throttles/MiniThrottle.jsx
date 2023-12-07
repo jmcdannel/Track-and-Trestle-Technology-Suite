@@ -11,7 +11,7 @@ import JmriThrottleController from './JmriThrottleController';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import { Context } from '../Store/Store';
-import useDebounce from '../Shared/hooks/useDebounce';
+import useDebounce from '../Shared/Hooks/useDebounce';
 
 import './MiniThrottle.scss';
 

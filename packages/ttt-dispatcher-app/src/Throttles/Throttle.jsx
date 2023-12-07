@@ -33,7 +33,7 @@ import JmriThrottleController from './JmriThrottleController';
 import DccExThrottleController from './DccExThrottleController';
 import Functions from './Functions';
 import { Context } from '../Store/Store';
-import useDebounce from '../Shared/hooks/useDebounce';
+import useDebounce from '../Shared/Hooks/useDebounce';
 import { roadClassName, formattedAddress } from './throttleUtils';
 // import api from '../Api';
 import './Throttle.scss';
