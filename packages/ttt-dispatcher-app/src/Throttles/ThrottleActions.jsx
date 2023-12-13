@@ -1,6 +1,5 @@
 import React, { useContext, useState}  from 'react';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TrainIcon from '@mui/icons-material/Train';
@@ -42,7 +41,6 @@ const ThrottleActions = (props) => {
   }
 
   return (
-    <Paper elevation={3} className="" display="flex" direction="column" square>
       <ButtonGroup
         orientation="vertical"
         size="small"
@@ -84,7 +82,6 @@ const ThrottleActions = (props) => {
           Park
         </Button>
       </ButtonGroup>
-    </Paper>
   );
 };
 

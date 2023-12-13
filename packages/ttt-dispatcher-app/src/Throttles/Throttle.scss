@@ -11,29 +11,29 @@
   background: linear-gradient($direction, $color-stops);
 }
 
-$sliderWidth: 8rem;
+$sliderWidth: 12rem;
 
-$green: #26ac14;
+$green: #1c201b;
 $blue: #146fac;
 $red: #f44336;
 $orange: #f89719;
 
 
-.throttle-container {
-  height: 100%;
-  overflow: auto;
-  flex-basis: 50%;
+// .throttle-container {
+//   height: 100%;
+//   overflow: auto;
+//   flex-basis: 50%;
 
-  &--size-2 {
-    flex-basis: 50%;
-  }
+//   &--size-2 {
+//     flex-basis: 50%;
+//   }
 
-  &--empty {
-    background-color: rgb(6, 8, 11);
-    filter: drop-shadow(1px 1px 2px rgba(0,0,0,.5));
-  }
+//   &--empty {
+//     background-color: rgb(6, 8, 11);
+//     filter: drop-shadow(1px 1px 2px rgba(0,0,0,.5));
+//   }
 
-}
+// }
 
 .available-throttle {
   margin: 1rem;
@@ -56,6 +56,7 @@ $orange: #f89719;
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex: 1;
 
   .MulutiCardHeader-root,
   .MuiCardActions-root {
@@ -68,26 +69,12 @@ $orange: #f89719;
     background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
   }
 
-  .MuiCardHeader-content {
-    .MuiCardHeader-title {
-      font-size: .8rem;
-      // border: 1px solid red;
-      padding: 0.25rem .5rem;
-      text-align: center;
-      border-radius: .25rem;
-      white-space: nowrap;
-      // background-color: rgba(255,0,0,.1);
-    }
-  }
-
-  .great-northern { 
-    background-color: #A75733;
-    color: #fff;
-  }
-
-    
   .throttle__slider__container {
-    margin: 1rem 0;
+    margin: 2rem 0 2rem 2rem;
+  }
+
+  &__slider, &__controls, &__actions {
+    justify-content: center;
   }
 
   .MuiSlider-root {
@@ -155,16 +142,58 @@ $orange: #f89719;
     width: 100%;
   }
 
+  &__actions {
+    align-items: center;
+  }
+
   &__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 1;
+
+    &__group {
+      flex: 1;
+      justify-content: center;
+      .MuiIconButton-root {
+        border: 1px solid red;
+      
+      }
+    }
+  }
+
+  .speed-ctrl {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    flex: 1;
+    justify-content: space-around;
+    width: 100%;
+    &-btn {
+      background: none;
+      border: 1px solid #333;
+      color: #FFF;
+      width: 100%;
+      flex: 1;
+      width: 100%;
+      display: block;
+      border-bottom: none;
+      &:first-child {
+        border-radius: 1rem 1rem 0 0;
+        border-bottom: none;
+      }
+      &:last-child {
+        border-radius: 0 0 1rem 1rem;
+        border-bottom: 1px;
+      }
+
+    }
   }
 
   &__speed {
-    padding: .5rem .5rem 0 .5rem;
-    margin: 0.25rem;
+    padding: 1rem;
+    margin: 1rem;
     width: 100%;
+    flex: 0 0 33%;
     border: 1px solid rgba(255,255,255,.15);
     background: #333;
     box-shadow: inset 0px 0px 4px 2px rgba(0,0,0,0.3);
@@ -172,9 +201,10 @@ $orange: #f89719;
     text-align: center;
     font-weight: bold;
     font-size: 2rem;
-    position: relative;    
-    max-width: 6rem;   
-    min-width: 3rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:before,
     &:after {
       position: absolute;
@@ -385,38 +415,38 @@ $orange: #f89719;
 
 }
 
-@media only screen and (max-width: 1000px) {
-  .throttle {
-    &__controls {
-      &__status {
-        flex-direction: column;
-        > .MuiGrid-item {
-          width: 100%;
-        }
-      }
+// @media only screen and (max-width: 1000px) {
+//   .throttle {
+//     &__controls {
+//       &__status {
+//         flex-direction: column;
+//         > .MuiGrid-item {
+//           width: 100%;
+//         }
+//       }
 
-    }
+//     }
 
-    &__functions {
-      &__btn.MuiButtonBase-root {
-        min-width: 5rem;
-        flex: 1 0 50%;
-        font-size: 10px;
+//     &__functions {
+//       &__btn.MuiButtonBase-root {
+//         min-width: 5rem;
+//         flex: 1 0 50%;
+//         font-size: 10px;
 
-      }
-    }
-  }
-}
+//       }
+//     }
+//   }
+// }
 
-@media only screen and (max-width: 768px) {
-  .throttle {
-    &__functions {
-      &__btn.MuiButtonBase-root {
-        min-width: 5rem;
-        flex: 1 0 100%;
-        font-size: 10px;
+// @media only screen and (max-width: 768px) {
+//   .throttle {
+//     &__functions {
+//       &__btn.MuiButtonBase-root {
+//         min-width: 5rem;
+//         flex: 1 0 100%;
+//         font-size: 10px;
 
-      }
-    }
-  }
-}
+//       }
+//     }
+//   }
+// }

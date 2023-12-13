@@ -24,6 +24,7 @@ export const Throttle = props => {
   // const EMERGENCY_STOP = '-1.0';
 	const STOP = '0.0';
   // const FULL_SPEED = '1.0';
+  const WAY_UP_STEP = 5;
 
   const { loco, cruiseDisabled, onLocoClick, loco: {
     speed,
@@ -59,6 +60,14 @@ export const Throttle = props => {
     setUiSpeed(uiSpeed - 1);
   }
 
+  const handleWayUpClick = () => {
+    setUiSpeed(uiSpeed + WAY_UP_STEP);
+  }
+
+  const handleWayDownClick = () => {
+    setUiSpeed(uiSpeed - WAY_UP_STEP);
+  }
+
   const handleLocoClick = () => {
     if (onLocoClick) {
       onLocoClick(loco);
@@ -80,8 +89,7 @@ export const Throttle = props => {
   }
 
   return (
-    <div style={{padding: '1rem'}} className="">
-
+    <>
       <DccExThrottleController
         speed={debouncedSpeed}
         address={address}
@@ -109,49 +117,39 @@ export const Throttle = props => {
           } 
         />
         <CardContent className="throttle__content grow flex">
-          {(true || loco.isAcquired) &&
-            <Grid container spacing={1} className="grow">
-              <Grid item xs={4} flexGrow={1} display="flex">
-                  <ThrottleSlider
-                    max={maxSpeed}
-                    className="throttle__slider__control"
-                    speed={uiSpeed}
-                    autoStop={autoStop}
-                    onChange={handleSliderSpeed}
-                  />
-              </Grid>
-              <Grid item xs={8} display="flex" className="throttle__controls">
-                <Grid 
-                  container 
-                  spacing={1} 
-                  alignContent="space-between" 
-                  justifyContent="center">
-                  <Grid item >
-                    <ThrottleActions
-                      cruiseDisabled={cruiseDisabled}
-                      loco={loco}
-                      onStop={handleStopClick}
-                      onShowSettings={() => setShowSettings(true)}
-                      onShowFunctions={() => setShowFunctions(true)}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <SpeedControl
-                      uiSpeed={uiSpeed}
-                      maxSpeed={maxSpeed}
-                      minSpeed={-maxSpeed}
-                      handleUpClick={handleUpClick}
-                      handleStopClick={handleStopClick}
-                      handleDownClick={handleDownClick}
-                    />
-                </Grid>
-              </Grid>
+          <Grid container spacing={1} className="grow">
+            <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={4} sm={4} md={4} flexGrow={1} display="flex" className="throttle__slider">
+                <ThrottleSlider
+                  max={maxSpeed}
+                  className="throttle__slider__control"
+                  speed={uiSpeed}
+                  autoStop={autoStop}
+                  onChange={handleSliderSpeed}
+                />
+            </Grid>
+            <Grid item xs={5} sm={4} md={4} display="flex" className="throttle__actions">
+              <ThrottleActions
+                cruiseDisabled={cruiseDisabled}
+                loco={loco}
+                onStop={handleStopClick}
+                onShowSettings={() => setShowSettings(true)}
+                onShowFunctions={() => setShowFunctions(true)}
+              />
+            </Grid>
+            <Grid item xs={7} sm={4} md={4} display="flex" className="throttle__controls">
+              <SpeedControl
+                uiSpeed={uiSpeed}
+                maxSpeed={maxSpeed}
+                minSpeed={-maxSpeed}
+                handleUpClick={handleUpClick}
+                handleStopClick={handleStopClick}
+                handleDownClick={handleDownClick}
+              />
             </Grid>
           </Grid>
-          }
         </CardContent>
       </Card>
-    </div>
+    </>
   )
 }
 

@@ -5,6 +5,8 @@ import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Paper from '@mui/material/Paper';
 
+import StatusMonitor from '../Connections/StatusMonitor';
+
 export const Settings = () => {
   
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -39,6 +41,7 @@ export const Settings = () => {
         >
           <Paper>
             Settings
+            <StatusMonitor apiReady={true} />
           </Paper>        
         </Box>
       </Drawer>

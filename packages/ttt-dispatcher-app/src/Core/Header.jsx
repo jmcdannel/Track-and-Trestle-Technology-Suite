@@ -41,8 +41,7 @@ export const Header = props => {
           <Typography variant="h6" className="title">
             {navItem ? navItem.label : '[unknown]'}
           </Typography>
-          <Paper sx={{ padding: '.6rem', marginRight: '2rem' }}>
-            {/* <StatusMonitor jmriReady={jmriReady} apiReady={apiReady} /> */}
+          <Paper sx={{ padding: '.5rem', display: { xs: 'none', sm: 'block' }}}>
             <StatusMonitor apiReady={apiReady} />
           </Paper>
           <Stop />

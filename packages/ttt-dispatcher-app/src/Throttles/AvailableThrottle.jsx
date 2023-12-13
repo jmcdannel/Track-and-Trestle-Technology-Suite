@@ -20,24 +20,17 @@ export const AvailableThrottle = props => {
   const { 
     onLocoClick, 
     loco, 
-    throttleIdx, 
     disabled, 
     loco: {  address, name } 
   } = props;
 
   const handleLocoClick = async () => {
-    loco.throttleIdx = throttleIdx;
     try {
       if (isLoading) {
         setIsLoading(false);
         return;
       }
-      // setIsLoading(true);
-      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx, isAcquired: true } });
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
-      // await dispatch({ type: 'UPDATE_LOCO', payload: { address, throttleIdx } });
-      // await jmriApi.requestLoco(address);
-      // setIsLoading(false);
       if (onLocoClick) {
         await onLocoClick(loco);
       }

@@ -53,8 +53,15 @@ export const Conductor = props => {
       <Grid container
         direction="row"
         justifyContent="space-between"
+        flexWrap="wrap"
         alignItems="stretch">
-        <Grid item xs={8} className="flex height100" flexWrap="wrap">
+        <Grid item 
+          xs={12} sm={12} md={8}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ display: { xs: 'inline', sm: 'none', md: 'none' } }}>XS</Box>
+            <Box sx={{ display: { xs: 'none', sm: 'inline', md: 'none' } }}>SM</Box>
+            <Box sx={{ display: { xs: 'none', sm: 'none', md: 'inline' } }}>MD</Box>
+          </Box>
 
           <Grid container
             direction="row"
@@ -66,7 +73,7 @@ export const Conductor = props => {
           </Grid>
           <Throttles />
         </Grid>
-        <Grid item xs={4} className="App-content__conductor">
+        <Grid item xs={12} sm={12} md={4} className="App-content__conductor">
           <Grid container direction="column">
             <Grid item mt={2}>
               <Paper elevation={3} style={{ padding: '0.5rem' }} square>

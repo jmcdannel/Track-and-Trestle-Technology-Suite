@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, ButtonGroup, IconButton } from '@mui/material';
+import { Box, ButtonGroup, IconButton } from '@mui/material';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -10,17 +10,44 @@ export const SpeedControl = ({
   maxSpeed, 
   minSpeed, 
   handleUpClick, 
+  handleWayUpClick, 
   handleStopClick, 
-  handleDownClick 
+  handleDownClick,
+  handleWayDownClick
 }) => {
   return (
-    <Paper elevation={3} className="" display="flex" direction="column" square>
+    <Box sx={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'stretch',
+      flexDirection: 'column',
+      flex: '1',
+      padding: '0 4rem 3rem 0'
+    }}>
       <ThrottleSpeed speed={uiSpeed} />
-      <ButtonGroup
+
+      <Box className="speed-ctrl" sx={{
+
+      }}>
+        <button className="speed-ctrl-btn" disabled={uiSpeed === maxSpeed} onClick={handleWayUpClick}><AddIcon /><AddIcon /></button>
+        <button className="speed-ctrl-btn" disabled={uiSpeed === maxSpeed} onClick={handleUpClick}><AddIcon /></button>
+        <button className="speed-ctrl-btn" onClick={handleStopClick}><PanToolIcon /></button>
+        <button className="speed-ctrl-btn" disabled={uiSpeed === minSpeed} onClick={handleDownClick}><RemoveIcon /></button>
+        <button className="speed-ctrl-btn" disabled={uiSpeed === minSpeed} onClick={handleWayDownClick}><RemoveIcon /><RemoveIcon /></button>
+
+      </Box>
+      {/* <ButtonGroup
         orientation="vertical"
         className="throttle__controls__group"
         aria-label="vertical outlined primary button group"
       >
+        <IconButton 
+          className="speedway-up-btn"
+          size="large"
+          disabled={uiSpeed === maxSpeed} 
+          onClick={handleUpClick}>
+            <AddIcon />
+        </IconButton>
         <IconButton 
           className="speed-up-btn"
           size="large" 
@@ -42,8 +69,15 @@ export const SpeedControl = ({
           onClick={handleDownClick}>
             <RemoveIcon />
         </IconButton>
-      </ButtonGroup>
-    </Paper>
+        <IconButton 
+          className="speed-waydown-btn"
+          size="large" 
+          disabled={uiSpeed === minSpeed} 
+          onClick={handleDownClick}>
+            <RemoveIcon />
+        </IconButton>
+      </ButtonGroup> */}
+    </Box>
   );
 };
 

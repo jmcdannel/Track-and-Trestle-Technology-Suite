@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Route, Routes } from "react-router-dom";
 import Conductor from '../Conductor/Conductor';
 import Pinout from '../Settings/Pinout';
+import Settings from '../Core/Settings';
 import Dispatcher from '../Dispatcher/Dispatcher';
 import Throttles from '../Throttles/Throttles';
 import Effects from '../Effects/Effects';
@@ -43,6 +44,7 @@ function Modules(props) {
     <Routes>
       <Route path="/" exact element={locos ? <Conductor /> : loading} />
       <Route path="/pinout" exact element={<Pinout />} />
+      <Route path="/settings" exact element={<Settings />} />
       {modules.map(getRoutedModule)}
     </Routes>) : <></>;
 }
