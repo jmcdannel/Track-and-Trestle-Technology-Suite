@@ -26,9 +26,6 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
 
   const [ state, dispatch ] = useContext(Context);
   const { layout, connections } = state;
-  console.log('[StatusMonitor]', layout, connections,  connections?.get('layoutApi')?.connected);
-  console.log('[StatusMonitor].getHost', api.config.getHost());
-  console.log('[StatusMonitor].getLayoutId', api.config.getLayoutId());
 
   const [apiConfigOpen, setAPIConfigOpen] = useState(false);
   const [layoutConfigOpen, setLayoutConfigOpen] = useState(false);
@@ -69,13 +66,9 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
   }
 
   useEffect(() => {
-    console.log('connections updates, layoutId updated', layoutId, connections);
+    console.log('connections updated, layoutId updated', layoutId, connections);
     setLayoutApiConnection(connections?.get('layoutApi') || null);
-  }, [layoutId, connections])
-
-  // TODO: handle api error
-
-  console.log('connections', connections);
+  }, [layoutId, connections]);
 
   return (
     <div className="status-monitor">

@@ -87,7 +87,7 @@ async function setSpeed(address, speed) {
   try {   
     send('throttle', { address, speed });
   } catch (err) {
-    console.error('[DCC API].setPower', err);
+    console.error('[DCC API].setSpeed', err);
     throw new Error('Unable to read', err);
   }
 }
@@ -136,6 +136,7 @@ async function send(action, payload) {
 
 async function sendRaw(data) {
   try { 
+    console.log('[DCC API].sendRaw', data);
     wsDCC.send(data);
   } catch (err) {
     console.error('[DCC API].sendRaw', err, data);

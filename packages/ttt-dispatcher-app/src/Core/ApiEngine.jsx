@@ -11,8 +11,6 @@ function ApiEngine(props) {
   const [ init, setInit ] = useState(false);
   const { layout } = state;
 
-  console.log('[ApiEngine] layout', layout);
-
   useEffect(() => {
     layout && onReady();
   }, [layout, onReady]);

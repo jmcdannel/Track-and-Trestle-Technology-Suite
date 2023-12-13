@@ -13,28 +13,30 @@ export const Footer = () => {
   const location = useLocation();
 
   return (
-    <BottomNavigation
-      value={location.pathname}
-      className="app-footer"
-    >
-      <BottomNavigationAction 
-        label="Conductor" 
-        value="/" 
-        to="" 
-        icon={<TrainIcon />} 
-        component={Link} 
-      />
-      {layout?.modules && layout?.modules.filter(module => !!navConfig[module]).map(module => (
+    <>
+      <BottomNavigation
+        value={location.pathname}
+        className="app-footer"
+      >
         <BottomNavigationAction 
-          key={module} 
-          label={navConfig[module].label} 
-          value={`${navConfig[module].link}`} 
-          to={`${navConfig[module].link}`} 
-          icon={navConfig[module].icon} 
+          label="Conductor" 
+          value="/" 
+          to="" 
+          icon={<TrainIcon />} 
           component={Link} 
         />
-      ))}
-    </BottomNavigation>
+        {layout?.modules && layout?.modules.filter(module => !!navConfig[module]).map(module => (
+          <BottomNavigationAction 
+            key={module} 
+            label={navConfig[module].label} 
+            value={`${navConfig[module].link}`} 
+            to={`${navConfig[module].link}`} 
+            icon={navConfig[module].icon} 
+            component={Link} 
+          />
+        ))}
+      </BottomNavigation>
+    </>
   );
 
 }

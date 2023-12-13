@@ -14,8 +14,6 @@ function Modules(props) {
   const { modules } = layout;
   const loading = (<div>Loading</div>);
 
-  console.log('Modules', state, modules);
-
   const getRoutedModule = module => {
     switch(module) {
       case 'locos' :
