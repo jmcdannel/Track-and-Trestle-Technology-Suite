@@ -15,24 +15,6 @@ export const Throttles = props => {
   const [ throttles, setThrottles ] = useState(defaultThrottles);
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
-  const cruiseLocos = locos?.filter(loco => loco.cruiseControl);
-
-
-  const handleCruiseClick = async loco => {
-    console.log('handleCruiseClick', loco, loco.throttleIdx);
-
-    const availableThrottleIdx = throttles.findIndex(t => !t.loco);
-    const currentLoco = throttles[loco.throttleIdx].loco;
-    let newThrottleIdx = loco.throttleIdx;
-    if (!!currentLoco) {
-      if (availableThrottleIdx > -1) {
-        newThrottleIdx = availableThrottleIdx;
-      } else {
-        await dispatch({ type: 'UPDATE_LOCO', payload: { address: currentLoco.address, cruiseControl: true } });        
-      }
-    }
-    await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, cruiseControl: false, throttleIdx: newThrottleIdx } });
-  }
 
   const computedThrottles = useCallback(() => {
     const findLocoForThrottle = (locos, throttleIdx) => locos
@@ -49,23 +31,8 @@ export const Throttles = props => {
     setThrottles(computedThrottles());
   }, [computedThrottles]);
 
-  const renderThrottle = ({ loco }, throttleIdx) => {
-    return !!(loco && !loco.cruiseControl) ? (
-          <Throttle 
-            jmriApi={jmriApi} 
-            loco={loco}
-          />
-        ) : renderAvailableThrorttles(throttleIdx);
-  }
-
-  const renderAvailableThrorttles = throttleIdx => locos?.filter(loco => !loco.isAcquired).map(loco => 
-    <Box key={loco.address} className="throttles--available">
-      <AvailableThrottle throttleIdx={throttleIdx} loco={loco} disabled={false}/>
-    </Box>
-  );
-
   const computedThrottleClassName = throttle => {
-    const stateClassName = `throttle-container--${!!throttle.loco && throttle.loco.isAcquired ? 'acquired' : 'empty'}`;
+    const stateClassName = `throttle-container--${throttle?.loco?.isAcquired ? 'acquired' : 'empty'}`;
     const classNames = [
       'throttle-container',
       `throttle-container--size-${max}`,
@@ -73,36 +40,36 @@ export const Throttles = props => {
     ];
     return classNames.join(' ');
   }
+
+  const renderAvailableThrottles = throttleIdx => locos
+    ?.filter(loco => !loco.isAcquired)
+    .map(loco => 
+      <Box key={loco.address} className="throttles--available">
+        <AvailableThrottle throttleIdx={throttleIdx} loco={loco} disabled={false}/>
+      </Box>
+    );
   
   return (
-    <Box display="flex" flexDirection="column" flexGrow={1}>
-      <Box 
-        flexGrow={1} 
+    <>
+      <Box
+        className=""
+        flexGrow={0} 
         display="flex" 
         flexDirection="row" 
-        >
-        {throttles.map((throttle, throttleIdx) => (
-          <Box className={computedThrottleClassName(throttle)} key={throttleIdx}>
-            {renderThrottle(throttle, throttleIdx)}
-          </Box>
-        ))}
-      </Box>
-      {cruiseLocos && (
-        <Box 
-          flexGrow={0} 
-          display="flex" 
-          flexDirection="row" 
-          flexWrap="wrap"
-          >
-            {cruiseLocos.map(loco => (
-              <Box key={loco.address} sx={{ padding: '5px 25px', flexBasis: '50%' }}>
-                <MiniThrottle loco={loco} jmriApi={jmriApi} disabled={false} onLocoClick={handleCruiseClick} />
+        flexWrap="wrap">
+        {throttles?.length 
+          ? throttles.map((throttle, throttleIdx) => (
+              <Box flexGrow={1} className={computedThrottleClassName(throttle)} key={throttleIdx}>
+                {throttle?.loco && !throttle.loco.cruiseControl
+                  ? <Throttle loco={throttle.loco} />
+                  : renderAvailableThrottles(throttleIdx)}
               </Box>
-            ))}
+            ))
+          : (<>Loading...</>)}
         </Box>
-      )}
-    </Box>
+      </>
   );
+    
 }
 
 Throttles.defaultProps = {

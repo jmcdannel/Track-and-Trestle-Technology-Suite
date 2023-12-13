@@ -6,6 +6,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import HighlightIcon from '@mui/icons-material/Highlight';
 import DeviceHubIcon from '@mui/icons-material/DeviceHub';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeDownIcon from '@mui/icons-material/VolumeDown';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 
 export const Functions = props => {
 
@@ -17,31 +21,57 @@ export const Functions = props => {
     }
   }
 
-  const functionButtons = new Array(8).fill({}).map((item, idx) => {
+  const functionButtons = new Array(24).fill({}).map((item, idx) => {
     switch(idx) {
       case 0:
-        return {
-          label: 'Horn',
-          icon: (<ShareIcon />)
-        }
-      case 1:
         return {
           label: 'Light',
           icon: (<HighlightIcon />)
         }
-      case 2:
-        return {
-          label: 'Whistle',
-          icon: (<ShareIcon />)
-        }
-      case 3:
+      case 1:
         return {
           label: 'Bell',
           icon: (<NotificationsIcon />)
         }
+      case 2:
+      case 3:
+        return {
+          label: 'Horn',
+          icon: (<VolumeUpIcon />)
+        }
+      case 4:
+        return {
+          label: 'Couplers',
+          icon: (<AudiotrackIcon />)
+        }      
+      case 5:
+        return {
+          label: 'Brake',
+          icon: (<AudiotrackIcon />)
+        }
+      case 6:
+        return {
+          label: 'Brake',
+          icon: (<AudiotrackIcon />)
+        }
+      case 8:
+        return {
+          label: 'Mute',
+          icon: (<VolumeOffIcon />)
+        }
+      case 9:
+        return {
+          label: 'Notch Up',
+          icon: (<VolumeDownIcon />)
+        }      
+      case 10:
+        return {
+          label: 'Notch Down',
+          icon: (<VolumeDownIcon />)
+        }
       default: 
         return {
-          label: `Func ${idx+1}`,
+          label: `Func ${idx}`,
           icon: (<NotificationsIcon />)
         }
     }
@@ -60,7 +90,7 @@ export const Functions = props => {
           {functionButtons.map((btn, idx) => (
             <Button
               variant="outlined"
-              key={btn.label}
+              key={`${btn.label}-${idx}`}
               size="small"
               color="primary"
               className="throttle__functions__btn"

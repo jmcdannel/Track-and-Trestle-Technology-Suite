@@ -5,7 +5,14 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ThrottleSpeed from './ThrottleSpeed';
 
-export const SpeedControl = ({ uiSpeed, maxSpeed, minSpeed, handleUpClick, handleStopClick, handleDownClick }) => {
+export const SpeedControl = ({ 
+  uiSpeed, 
+  maxSpeed, 
+  minSpeed, 
+  handleUpClick, 
+  handleStopClick, 
+  handleDownClick 
+}) => {
   return (
     <Paper elevation={3} className="" display="flex" direction="column" square>
       <ThrottleSpeed speed={uiSpeed} />

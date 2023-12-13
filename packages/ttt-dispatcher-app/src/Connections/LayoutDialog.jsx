@@ -7,7 +7,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import api from '../Shared/api/api';
 
-const layoutIds = ['tam', 'betatrack'];
+const layoutIds = ['tam', 'betatrack', 'shelf'];
 
 export const LayoutDialog = ({ onClose, open }) => {
 

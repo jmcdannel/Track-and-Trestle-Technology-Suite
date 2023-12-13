@@ -20,7 +20,9 @@ $orange: #f89719;
 
 
 .throttle-container {
-  margin: 1rem;
+  height: 100%;
+  overflow: auto;
+  flex-basis: 50%;
 
   &--size-2 {
     flex-basis: 50%;
@@ -51,7 +53,6 @@ $orange: #f89719;
 
 
 .throttle {
-  margin: 0 .5rem;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -148,7 +149,6 @@ $orange: #f89719;
   }
 
   &__content {
-    
   }
 
   &__locoimg {
@@ -218,23 +218,32 @@ $orange: #f89719;
 
   &__functions {
     // padding-bottom: 1rem;
-    flex: 1 1 auto;
+    // flex: 1 1 auto;
+    // max-width: 75%;
 
-    overflow-y: auto;
-    height: 0px;
+    &__drawer { 
+    }
+
+    // overflow-y: auto;
+    // height: 0px;
     &__viewport {
       // height: 100%;
       // overflow: scroll;
       // max-height: 480px;
       display: flex;
       flex-wrap: wrap;
+      padding: 1rem;
+      min-width: 25vw;
+      max-width: 75vw;
+      height: 100vh;  
+      justify-content: flex-end;
+      align-items: stretch;
+      flex-direction: column;
     }
     &__btn.MuiButtonBase-root {
-      margin: 0.25rem 0;
+      margin: 0.25rem;
       padding: 0.5rem 0; 
-      min-width: 8rem;
-      flex: 1 0 50%;
-
+      flex: 0 1;
     }
   }
 

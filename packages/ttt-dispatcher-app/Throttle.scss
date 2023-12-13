@@ -78,16 +78,10 @@ $orange: #f89719;
       // background-color: rgba(255,0,0,.1);
     }
   }
-
-  .great-northern { 
-    background-color: #A75733;
-    color: #fff;
-  }
-
     
-  .throttle__slider__container {
-    margin: 1rem 0;
-  }
+  // .throttle__slider__container {
+  //   margin: 1rem 0;
+  // }
 
   .MuiSlider-root {
     position: relative;
@@ -114,7 +108,6 @@ $orange: #f89719;
       }
 
       .MuiSlider-mark {
-        width: @ttt/);
         left: 2rem;
         transform: translate(-50%, 2px);
       }
@@ -170,7 +163,7 @@ $orange: #f89719;
     font-weight: bold;
     font-size: 2rem;
     position: relative;    
-    max-width: 6rem;   
+    // max-width: 6rem;   
     min-width: 3rem;
     &:before,
     &:after {
@@ -218,7 +211,7 @@ $orange: #f89719;
     flex: 1 1 auto;
 
     overflow-y: auto;
-    height: 0px;
+    // height: 0px;
     &__viewport {
       // height: 100%;
       // overflow: scroll;
@@ -288,7 +281,7 @@ $orange: #f89719;
       border: 1px solid rgba(255,255,255, 0.5);
       padding: 1rem 0.5rem; 
       width: 100%;
-      max-width: 6rem;   
+      // max-width: 6rem;   
       min-width: 3rem;
 
       &.speed-up-btn {

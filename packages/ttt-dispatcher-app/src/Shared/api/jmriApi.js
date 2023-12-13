@@ -36,11 +36,11 @@ var promises = {
 	}
 }
  
-window.onerror = function(errMsg, errUrl, errLineNumber) {
-	if ($jmri) $jmri.closeSocket();
-	console.error('\nError running javascript:\n' + errMsg + '\n\nURL:\n' + errUrl + '\n\nLine Number: ' + errLineNumber);
-	return true;
-};
+// window.onerror = function(errMsg, errUrl, errLineNumber) {
+// 	if ($jmri) $jmri.closeSocket();
+// 	console.error('\nError running javascript:\n' + errMsg + '\n\nURL:\n' + errUrl + '\n\nLine Number: ' + errLineNumber);
+// 	return true;
+// };
 
 window.onunload = function() {
 	if ($jmri) {

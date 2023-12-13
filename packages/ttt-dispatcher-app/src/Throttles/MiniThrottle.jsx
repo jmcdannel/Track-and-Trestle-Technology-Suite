@@ -7,11 +7,12 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import ThrottleSpeed from './ThrottleSpeed';
-import JmriThrottleController from './JmriThrottleController';
+// import JmriThrottleController from './JmriThrottleController';
+import DccExThrottleController from './DccExThrottleController';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import { Context } from '../Store/Store';
-import useDebounce from '../Shared/hooks/useDebounce';
+import useDebounce from '../Shared/Hooks/useDebounce';
 
 import './MiniThrottle.scss';
 
@@ -22,7 +23,7 @@ export const MiniThrottle = props => {
   const minSpeed = -maxSpeed;
 	const STOP = '0.0';
 
-  const { jmriApi, onLocoClick, loco, disabled, loco: { 
+  const { onLocoClick, loco, disabled, loco: { 
     address, 
     isAcquired, 
     speed, 
@@ -30,7 +31,7 @@ export const MiniThrottle = props => {
   } } = props;
 
 
-  const initialUiSpeed = speed * 100 * (forward === true ? 1 : -1);
+  const initialUiSpeed = speed * (forward === true ? 1 : -1);
 
   const [ uiSpeed, setUiSpeed ] = useState(initialUiSpeed);
   const debouncedSpeed = useDebounce(uiSpeed, 100);
@@ -47,27 +48,26 @@ export const MiniThrottle = props => {
     setUiSpeed(uiSpeed - 1);
   }
 
-  const handleLocoClick = () => {
+  const handleLocoClick = async () => {
+    await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, cruiseControl: false } }); 
     if (onLocoClick) {
       onLocoClick(loco);
     }
   }
-
   const handleParkClick = async () => {
     try {
+      setUiSpeed(parseInt(STOP));
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, cruiseControl: false } });
-      await jmriApi.throttle(address, STOP);
-      await jmriApi.releaseLoco(address);
     } catch (err) {
       console.error(err);
     }
   }
 
-  useEffect(() => {
-    jmriApi.on('acquire', 'Throttles', async address => {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
-    });
-  }, [jmriApi, dispatch]);
+  // useEffect(() => {
+  //   jmriApi.on('acquire', 'Throttles', async address => {
+  //     await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+  //   });
+  // }, [jmriApi, dispatch]);
 
   const computedClassName = () => {
     return ['mini-throttle', 
@@ -86,7 +86,11 @@ export const MiniThrottle = props => {
             disabled={disabled}
             onClick={handleLocoClick}
           />
-          <JmriThrottleController speed={debouncedSpeed} address={address} jmriApi={jmriApi} forward={forward} />
+          <DccExThrottleController 
+            speed={debouncedSpeed} 
+            address={address} 
+            forward={(debouncedSpeed >= 0)} 
+          />
           <ThrottleSpeed speed={debouncedSpeed} idleByDefault={loco.idleByDefault} />
           
           <ButtonGroup
