@@ -38,6 +38,7 @@ export const Throttle = props => {
     loco, 
     cruiseDisabled, 
     showAdvancedControls = false,
+    className = '',
     onLocoClick, loco: {
       speed,
       autoStop,
@@ -130,7 +131,7 @@ export const Throttle = props => {
         onHide={() => setShowSettings(false)} />
 
       <Card
-        className={`throttle throttle--${loco.name.replace(' ', '')}  throttle--${loco.road.replace(' ', '')}`} >
+        className={`${className} throttle throttle--${loco.name.replace(' ', '')}  throttle--${loco.road.replace(' ', '')}`} >
         <CardHeader
           title={loco.name}
           subtitle={consist && `${consist.join(', ')}`}

@@ -16,7 +16,7 @@ import { Context } from '../Store/Store';
 
 
 const fabStyle = {
-  position: 'absolute',
+  position: 'fixed',
   bottom: 16,
   right: 16,
 };
@@ -45,11 +45,11 @@ export const Throttles = props => {
   
     console.log('throttleCount', throttleCount, ((isLg || isXl ) && throttleCount === 1));
   return (
-    <Box sx={{ position: 'relative', height: '75vh', 'display': 'flex' }}>
+    <Box sx={{ position: 'relative', height: '75vh', 'display': 'flex', 'flexWrap': 'wrap' }}>
       {hasThrottles 
         ? locos
             .filter(loco => loco.isAcquired && !loco.cruiseControl)
-            .map(loco => <Throttle key={loco} loco={loco} showAdvancedControls={(isLg || isXl ) && throttleCount === 1} />)
+            .map(loco => <Throttle className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'} key={loco.address} loco={loco} showAdvancedControls={(isLg || isXl ) && throttleCount === 1} />)
         : <AvailableThrottles />
       }
 

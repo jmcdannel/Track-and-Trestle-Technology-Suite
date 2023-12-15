@@ -62,6 +62,11 @@ $neutral: #f89719;
   height: 100%;
   flex: 1;
 
+  &.halfthrottle {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+
   .MulutiCardHeader-root,
   .MuiCardActions-root {
     background-color: rgba(0,0,0,.2);
