@@ -1,6 +1,8 @@
 import React, { useContext, useState}  from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TrainIcon from '@mui/icons-material/Train';
 import SpeedIcon from '@mui/icons-material/Speed';
@@ -10,10 +12,22 @@ import { Context } from '../Store/Store';
 
 const ThrottleActions = (props) => {
 
-  const { onShowSettings, onShowFunctions, onStop, cruiseDisabled } = props;
+  const { 
+    onShowSettings, 
+    onShowFunctions, 
+    onStop, 
+    cruiseDisabled, 
+    size = 'large' ,
+    showFunctions = true,
+    showCruiseControl = true,
+    showPark = true,
+    showSettings = true
+  } = props;
   const address = Number(props.loco.address);
 
   const [ , dispatch ] = useContext(Context);
+
+  const iconStyle = size === 'large' ? { fontSize: '2rem' } : { fontSize: '1.4rem' };
 
   const handleShowFunctionClick = () => {
     onShowFunctions();
@@ -40,48 +54,51 @@ const ThrottleActions = (props) => {
     }    
   }
 
-  return (
-      <ButtonGroup
-        orientation="vertical"
-        size="small"
-        aria-label="vertical outlined primary button group"
-      >
-        <Button
-          className="width100 textLeft"
-          label="Settings"
-          variant="outlined"
-          onClick={handleShowSettingsClick}
-          startIcon={<SettingsIcon />}>
-          Settings
-        </Button>
-        <Button
-          className="width100 textLeft"
-          label="Functions"
-          variant="outlined"
-          onClick={handleShowFunctionClick}
-          startIcon={<TrainIcon />}>
-          Functions
-        </Button>
-
-        <Button
-          className="width100 textLeft"
-          disabled={cruiseDisabled}
-          label="Cruise Control"
-          variant="outlined"
-          onClick={handleCruiceControlClick}
-          startIcon={<SpeedIcon />}>
-          Cruise
-        </Button>
-
-        <Button
-          className="width100 textLeft"
+  return (    
+    <>
+      <slot></slot>
+      {showFunctions && ( 
+        <Tooltip title="Functions">
+          <IconButton 
+            className="functions"
+            onClick={handleShowFunctionClick} 
+            size={size}>
+            <TrainIcon sx={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      )}
+      {showCruiseControl && ( 
+      <Tooltip title="Cruise Control">
+        <IconButton 
+          className="cruise-control"
+          onClick={handleCruiceControlClick} 
+          disabled={cruiseDisabled} 
+          size={size}>
+          <SpeedIcon sx={iconStyle} />
+        </IconButton>
+      </Tooltip>
+      )}
+      {showPark && ( 
+      <Tooltip title="Park">
+        <IconButton 
+          className="park"
           onClick={handleParkClick}
-          label="Park"
-          variant="outlined"
-          startIcon={<LocalParkingIcon />}>
-          Park
-        </Button>
-      </ButtonGroup>
+          size={size}>
+          <LocalParkingIcon sx={iconStyle} />
+        </IconButton>
+      </Tooltip>
+      )}
+      {showSettings && ( 
+      <Tooltip title="Settings">
+        <IconButton 
+          className="settings"
+          onClick={handleShowSettingsClick}
+          size={size}>
+          <SettingsIcon sx={iconStyle} />
+        </IconButton>
+      </Tooltip>
+      )}
+    </>
   );
 };
 

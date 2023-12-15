@@ -1,4 +1,7 @@
 @use "sass:color";
+
+@import "../theme";
+
 @mixin linear-gradient($direction, $color-stops...) {
   // Direction has been omitted and happens to be a color-stop
   @if is-direction($direction) == false {
@@ -11,12 +14,13 @@
   background: linear-gradient($direction, $color-stops);
 }
 
-$sliderWidth: 12rem;
+$sliderWidth: 8rem;
 
 $green: #1c201b;
 $blue: #146fac;
 $red: #f44336;
 $orange: #f89719;
+$neutral: #f89719;
 
 
 // .throttle-container {
@@ -67,6 +71,46 @@ $orange: #f89719;
   .MuiAvatar-root {
     background: rgb(254,0,107);
     background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
+  }
+
+  .MuiCardHeader-action {
+    padding: .5rem;
+    .MuiIconButton-root {
+      margin: auto .5rem;
+      &.settings {
+        background: rgb(181, 181, 181);      
+        border: .25rem solid rgb(87, 87, 87);
+      }
+
+      &.functions {
+        border: .25rem solid rgb(195, 254, 0);
+        color: rgb(195, 254, 0);
+      }
+
+      &.cruise-control {
+        border: .25rem solid rgb(254,0,107);
+        color: rgb(254,0,107);
+      }
+      &.park {
+        border: .25rem solid rgb(0, 72, 254);
+        color: rgb(0, 72, 254);
+      }
+    }
+  }
+
+  .throttle__actions {
+    .MuiIconButton-root {
+      padding: 1rem;
+      margin: .5rem;
+      &.cruise-control {
+        border: .25rem solid rgb(254,0,107);
+        color: rgb(254,0,107);
+      }
+      &.park {
+        border: .25rem solid rgb(0, 72, 254);
+        color: rgb(0, 72, 254);
+      }
+    }
   }
 
   .throttle__slider__container {
@@ -260,21 +304,21 @@ $orange: #f89719;
       // height: 100%;
       // overflow: scroll;
       // max-height: 480px;
-      display: flex;
-      flex-wrap: wrap;
-      padding: 1rem;
-      min-width: 25vw;
-      max-width: 75vw;
-      height: 100vh;  
-      justify-content: flex-end;
-      align-items: stretch;
-      flex-direction: column;
+      // display: flex;
+      // flex-wrap: wrap;
+      // padding: 1rem;
+      // min-width: 25vw;
+      // max-width: 75vw;
+      // height: 100vh;  
+      // justify-content: flex-end;
+      // align-items: stretch;
+      // flex-direction: column;
     }
-    &__btn.MuiButtonBase-root {
-      margin: 0.25rem;
-      padding: 0.5rem 0; 
-      flex: 0 1;
-    }
+    // &__btn.MuiButtonBase-root {
+    //   margin: 0.25rem;
+    //   padding: 0.5rem 0; 
+    //   flex: 0 1;
+    // }
   }
 
   &__space {
@@ -291,12 +335,14 @@ $orange: #f89719;
 
 .throttle {
   .MuiCardHeader-root {
-    @include linear-gradient(darken($red, 10%), darken($red, 20%));
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
     padding: 0.25rem .5rem;
   }
   .MuiCardContent-root {
-    @include linear-gradient(darken($red, 50%), darken($red, 60%));
-    padding: 0;
+    // @include linear-gradient(darken($red, 50%), darken($red, 60%));
+    // @include linear-gradient($neutral, lighten($neutral, 20%));
+    // padding: 0;
     &:last-child {
       padding-bottom: 0;
     }
@@ -352,25 +398,25 @@ $orange: #f89719;
   }
 
 
-  &--BNSF,
-  &--GN-317 {
-    .MuiCardHeader-root {
-      @include linear-gradient(darken($green, 10%), darken($green, 20%));
-    }
-    .MuiCardContent-root {
-      @include linear-gradient(darken($green, 30%), darken($green, 40%));
-    }
-    .MuiButton-outlinedPrimary {
-      color: $green;
-      border-color: $green;
-    }
-    .MuiButton-containedPrimary {
-      background-color: $green;
-    }
-    .MuiSlider-root {
-      color: $green;
-    }
-  }
+  // &--BNSF,
+  // &--GN-317 {
+  //   .MuiCardHeader-root {
+  //     @include linear-gradient(darken($green, 10%), darken($green, 20%));
+  //   }
+  //   .MuiCardContent-root {
+  //     @include linear-gradient(darken($green, 30%), darken($green, 40%));
+  //   }
+  //   .MuiButton-outlinedPrimary {
+  //     color: $green;
+  //     border-color: $green;
+  //   }
+  //   .MuiButton-containedPrimary {
+  //     background-color: $green;
+  //   }
+  //   .MuiSlider-root {
+  //     color: $green;
+  //   }
+  // }
 
   &--BNSF-5931 {
     .MuiCardHeader-root {

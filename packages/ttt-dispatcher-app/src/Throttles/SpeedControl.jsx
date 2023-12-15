@@ -22,7 +22,7 @@ export const SpeedControl = ({
       justifyContent: 'stretch',
       flexDirection: 'column',
       flex: '1',
-      padding: '0 4rem 3rem 0'
+      padding: '1rem'
     }}>
       <ThrottleSpeed speed={uiSpeed} />
 

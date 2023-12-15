@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import AvailableThrottle from './AvailableThrottle';
 import { Context } from '../Store/Store';
 
-const AvailableThrottles = () => {
+const AvailableThrottles = ({ onLocoSelected }) => {
   const [state] = useContext(Context);
   const { locos } = state;
 
@@ -17,7 +17,7 @@ const AvailableThrottles = () => {
       ?.filter(loco => !loco.isAcquired)
       .map(loco => (
         <Box key={loco.address}>
-          <AvailableThrottle loco={loco} disabled={false} />
+          <AvailableThrottle loco={loco} disabled={false} onLocoClick={onLocoSelected} />
         </Box>
       ))
     }</Box>;

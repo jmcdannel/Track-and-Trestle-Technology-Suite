@@ -10,6 +10,8 @@ import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
 import AvailableThrottles from './AvailableThrottles';
 
+
+import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 import { Context } from '../Store/Store';
 
 
@@ -21,6 +23,7 @@ const fabStyle = {
 
 export const Throttles = props => {
 
+  const { isXs, isSm, isMd, isLg, isXl, getCurrentSize } = useBreakpoints();
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
@@ -37,13 +40,16 @@ export const Throttles = props => {
   };
 
   const hasThrottles = locos.some(loco => loco.isAcquired);
+  const throttleCount = locos
+    .filter(loco => loco.isAcquired && !loco.cruiseControl)?.length;
   
+    console.log('throttleCount', throttleCount, ((isLg || isXl ) && throttleCount === 1));
   return (
     <Box sx={{ position: 'relative', height: '75vh', 'display': 'flex' }}>
       {hasThrottles 
         ? locos
             .filter(loco => loco.isAcquired && !loco.cruiseControl)
-            .map(loco => <Throttle loco={currentLoco} />)
+            .map(loco => <Throttle key={loco} loco={loco} showAdvancedControls={(isLg || isXl ) && throttleCount === 1} />)
         : <AvailableThrottles />
       }
 
@@ -58,7 +64,7 @@ export const Throttles = props => {
       )}
 
       <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
-        <AvailableThrottles />
+        <AvailableThrottles onLocoSelected={() => setIsDrawerOpen(false)} />
       </Drawer>
     </Box>
   );

@@ -18,7 +18,7 @@ export const CruiseThrottles = () => {
         flexWrap="wrap"
         >
           {cruiseLocos.map(loco => (
-            <Box key={loco.address} flexBasis="33%">
+            <Box key={loco.address} flexBasis="100%">
               <MiniThrottle loco={loco} disabled={false} />
             </Box>
           ))}

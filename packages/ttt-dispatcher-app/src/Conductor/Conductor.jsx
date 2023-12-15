@@ -52,16 +52,17 @@ export const Conductor = props => {
     <>
       <Grid container
         direction="row"
+        spacing={2}
         justifyContent="space-between"
         flexWrap="wrap"
         alignItems="stretch">
         <Grid item 
           xs={12} sm={12} md={8}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Box sx={{ display: { xs: 'inline', sm: 'none', md: 'none' } }}>XS</Box>
             <Box sx={{ display: { xs: 'none', sm: 'inline', md: 'none' } }}>SM</Box>
             <Box sx={{ display: { xs: 'none', sm: 'none', md: 'inline' } }}>MD</Box>
-          </Box>
+          </Box> */}
 
           <Grid container
             direction="row"
@@ -74,32 +75,26 @@ export const Conductor = props => {
           <Throttles />
         </Grid>
         <Grid item xs={12} sm={12} md={4} className="App-content__conductor">
-          <Grid container direction="column">
-            <Grid item mt={2}>
-              <Paper elevation={3} style={{ padding: '0.5rem' }} square>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                  <Tabs 
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    value={tab} 
-                    onChange={handleTabChange}>
-                    <Tab label="Turnouts" />
-                    <Tab label="Routes" />
-                    <Tab label="Effects" />
-                  </Tabs>
-                </Box>
-                <TabPanel value={tab} index={0}>
-                  <Dispatcher overrideUserPrefs={true} enabled={['turnouts']} />
-                </TabPanel>
-                <TabPanel value={tab} index={1}>
-                  <Dispatcher overrideUserPrefs={true} enabled={['routes']} view="pill" />
-                </TabPanel>
-                <TabPanel value={tab} index={2} className="conductor-effects">
-                  <Effects />
-                </TabPanel>
-              </Paper>
-            </Grid>
-          </Grid>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs 
+                textColor="secondary"
+                indicatorColor="secondary"
+                value={tab} 
+                onChange={handleTabChange}>
+                <Tab label="Turnouts" />
+                <Tab label="Routes" />
+                <Tab label="Effects" />
+              </Tabs>
+            </Box>
+            <TabPanel value={tab} index={0}>
+              <Dispatcher overrideUserPrefs={true} enabled={['turnouts']} />
+            </TabPanel>
+            <TabPanel value={tab} index={1}>
+              <Dispatcher overrideUserPrefs={true} enabled={['routes']} view="pill" />
+            </TabPanel>
+            <TabPanel value={tab} index={2} className="conductor-effects">
+              <Effects />
+            </TabPanel>
         </Grid>
       </Grid>
     </>
