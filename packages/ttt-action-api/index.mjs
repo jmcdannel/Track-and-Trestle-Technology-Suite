@@ -6,7 +6,7 @@ import log from './src/core/logger.mjs';
 
 var opts = {
   resources: [
-    'http://127.0.0.1:5001/',
+    'http://127.0.0.1:5001/api/layouts',
   ],
   simultaneous: 1, // limit to 1 connection per resource at a time
   timeout: 30000, // timeout in ms, default Infinity

@@ -56,7 +56,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
     }`;
 
   const usbClassName = `status-monitor--${
-    connections?.get('betatrack-io')?.connected
+    connections?.get('serial')?.connected
       ? 'connected'
       :'unknown'
     }`;
@@ -124,7 +124,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
         <Chip
           className={`status-monitor__usb ${usbClassName}`}
           variant="outlined"
-          icon={connections.get('betatrack-io') ? (<UsbIcon />) : (<UsbOffIcon />)}
+          icon={connections.get('serial') ? (<UsbIcon />) : (<UsbOffIcon />)}
           label="USB"
           size="small"
           color="default"

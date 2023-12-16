@@ -3,7 +3,7 @@ import axios from 'axios';
 import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
 
-const layoutId = 'betatrack'; // TODO: move to config
+const layoutId = process.env.LAYOUT_ID; // TODO: move to config
 
 const baseUri = `http://127.0.0.1:5001/api/${layoutId}`;
 
@@ -172,7 +172,8 @@ const turnoutCommand = async (payload) => {
   const uri = `${baseUri}/turnouts/${payload.turnoutId}`;
   log.log('[COMMANDS] turnouts.uri', uri);
   const resp = await axios.get(uri);
-  const turnout = {...resp.data, state: payload.state};
+  log.log('[COMMANDS] turnouts.resp', resp.data, resp.data?.turnouts?.[0]);
+  const turnout = {...resp.data?.turnouts?.[0], state: payload.state};
   switch(turnout.config.type) {
     case 'kato':
       return {
@@ -185,7 +186,7 @@ const turnoutCommand = async (payload) => {
       };
     case 'servo':
       return {
-        iFaceId: turnout.config.interface,
+        iFaceId: 'serial', //iFaceId: turnout.config.interface,
         action: 'servo', 
         payload: { 
           servo: turnout.config.servo, 
@@ -229,9 +230,9 @@ export const send = (commands) => {
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     try {
-      log.debug('[COMMANDS] interface', iFaceId, commands.map(cmdFormatter));
-      const { send, connection } = interfaces.interfaces[iFaceId];
-      send(connection, commands.map(cmdFormatter));
+      log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces, interfaces.interfaces[iFaceId], commands.map(cmdFormatter));
+      const { send: sendCmd, connection } = interfaces.interfaces[iFaceId];
+      sendCmd(connection, commands.map(cmdFormatter));
     } catch (err) {
       log.error('[COMMANDS] send error', iFaceId, err);
     }

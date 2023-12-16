@@ -60,7 +60,8 @@ export const handleMessage = async (msg, ws) => {
           // com.connection = await serial.connect(com);
           // com.send = serial.send;
           // com.status = 'connected';
-          interfaces[msg.payload.connectionId] = com;
+          // interfaces[msg.payload.connectionId] = com;
+          interfaces['serial'] = com; // TODO: refactor
           ws.send(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
         } catch (err) {
           log.error('[INTERFACES] connect', err);
@@ -76,9 +77,10 @@ export const handleMessage = async (msg, ws) => {
 
 const intialize = async (com) => {
   log.info('[INTERFACES] intializing', com?.type, com?.id);
+  let interfaceId = com.id;
   switch(com.type) {
     case 'emulate':
-      com.connection = emulator.connect();
+      com.connection = await emulator.connect();
       com.send = emulator.send;
       break;
     case 'serial':
@@ -86,6 +88,8 @@ const intialize = async (com) => {
         com.serial && (com.connection = await serial.connect(com));
         com.send = serial.send;
         com.status = 'connected';
+        com.id = 'serial'; // TODO: refactor
+        interfaceId = 'serial';
       } catch (err) {
         com.status = 'fail';
         log.error(err);
@@ -126,7 +130,7 @@ const intialize = async (com) => {
       log.warn('[INTERFACES] Interface type not found', com.type);
       break;
   }
-  interfaces[com.id] = com;
+  interfaces[interfaceId] = com;
 }
 
 export const connect = async () => {

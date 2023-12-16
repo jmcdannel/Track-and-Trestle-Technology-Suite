@@ -49,9 +49,10 @@ async function connectInterfaces(host, layoutId) {
         await actionApi.connect(dispatch, host, iface, usbSerial);
         break;
       case 'serial':
-        const serial = await config.get(iface.id);
+        // const serial = await config.get(iface.id); // TODO: refactor
+        const serial = await config.get(iface.type);
         console.log('connect serial', serial, iface);
-        await actionApi.put('serialConnect', { connectionId: iface.id, serial });
+        await actionApi.put('serialConnect', { connectionId: iface.id, serial, type: iface.type });
         break;
       default:
         console.warn('Unknown interface type', iface.type, iface);
@@ -70,6 +71,8 @@ async function handleTurnout(turnout) {
       dccApi.setTurnout(turnout.config.dccExId, turnout.state);
       break;
     case 'betatrack-io':
+    case 'tamarack-junction-station-south-io':
+    case 'serial':
     case 'action-api':
       actionApi.turnouts.put(turnout);
       break;

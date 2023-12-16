@@ -10,10 +10,10 @@ import api from '../Shared/api/api';
 
 export const UsbDialog = ({ onClose, open, currentPort }) => {
 
-
   const [ state, ] = useContext(Context);
   const { connections } = state;
-  const actionApiConn = connections.get('action-api');
+
+  const serialConn = connections.get('serial'); // TODO: refactor
 
 
   const [usbConnection, setUsbconnection] = useState(null);
@@ -21,17 +21,17 @@ export const UsbDialog = ({ onClose, open, currentPort }) => {
   const [usbPort, setUsbPort] = useState(currentPort ? currentPort : '');
 
   useEffect(async () => {
-    console.log('[UsbDialog] ports', ports, connections, actionApiConn);
+    console.log('[UsbDialog] ports', ports, connections, serialConn);
 
-    console.log('[UsbDialog] actionApiConn', actionApiConn);
-    actionApiConn?.ports && setPorts(actionApiConn.ports);
-  }, [connections, actionApiConn, ports]);
+    console.log('[UsbDialog] serialConn', serialConn);
+    serialConn?.ports && setPorts(serialConn.ports);
+  }, [connections, serialConn, ports]);
 
   useEffect(async () => {
     console.log('[UsbDialog] usbConnection', usbConnection, connections);
     if (usbConnection) { return; }
 
-    const usbConn = connections.get('betatrack-io');
+    const usbConn = connections.get('serial');
     console.log('[UsbDialog] usbConn', usbConn);
     usbConn && setUsbconnection(usbConn);
 
@@ -43,9 +43,9 @@ export const UsbDialog = ({ onClose, open, currentPort }) => {
   
 
   const handleUpdate = async () => {
-    console.log('[UsbDialog] handleUpdate', usbPort);
-    await api.config.set('betatrack-io', usbPort);
-    await api.actionApi.put('serialConnect', { connectionId: 'betatrack-io', serial: usbPort });
+    // console.log('[UsbDialog] handleUpdate', usbPort);
+    await api.config.set('serial', usbPort);
+    await api.actionApi.put('serialConnect', { connectionId: 'serial', serial: usbPort });
     // window.location.reload(false);
     onClose();
   }

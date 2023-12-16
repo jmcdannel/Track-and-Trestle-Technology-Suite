@@ -31,7 +31,6 @@ $off: rgba(0,0,0,.4);
     &__container {
       padding: 0.5rem;
       .MuiPaper-root {
-        background-color: rgba(23, 29 ,38, 1);
         border-radius: 0;
       }
       .turnout__header {
@@ -70,7 +69,6 @@ $off: rgba(0,0,0,.4);
 
     &__link {
       padding: 0.5rem 1.5rem;
-      background-color: rgba(0,0,0,.5);
       margin-top: 0.5rem;
       display: flex;
       align-items: center;

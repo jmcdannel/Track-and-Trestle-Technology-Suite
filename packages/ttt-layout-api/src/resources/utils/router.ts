@@ -42,7 +42,7 @@ router.get("/:layoutId/locos/:id", async (req, res) => {
 });
 
 router.get("/:layoutId/effects", async (req, res) => {
-	const data = await Effect.find()
+	const data = await Effect.find({ layoutId: req.params.layoutId })
   res.type('application/json')
 	res.send(data)
 })
@@ -59,7 +59,8 @@ router.get("/:layoutId/effects/:id", async (req, res) => {
 })
 
 router.get("/:layoutId/turnouts", async (req, res) => {
-	const data = await Turnout.find()
+	const data = await Turnout.find({ layoutId: req.params.layoutId })
+  console.log("/:layoutId/turnouts", data, req.params.layoutId )
   res.type('application/json')
 	res.send(data)
 })
@@ -76,7 +77,7 @@ router.get("/:layoutId/turnouts/:id", async (req, res) => {
 })
 
 router.get("/:layoutId/routes", async (req, res) => {
-	const data = await Route.find()
+	const data = await Route.find({ layoutId: req.params.layoutId })
   res.type('application/json')
 	res.send(data)
 })

@@ -2,8 +2,9 @@ import { SerialPort } from 'serialport';
 import log from '../core/logger.mjs';
 
 let isConnected = false;
+let port;
 
-const connect = (com) => {
+const connect = async (com) => {
   if (isConnected) {
     return Promise.resolve(com.connection);
   } else {
@@ -32,7 +33,7 @@ const connect = (com) => {
       }
       
       // Create a port
-      const port = new SerialPort({ path, baudRate, autoOpen: false });
+      port = new SerialPort({ path, baudRate, autoOpen: false });
       port.open(handleOpen);
       port.on('open', handleOpened);
 
@@ -42,13 +43,13 @@ const connect = (com) => {
   }
 }
 
-const send = (port, data) => {
+const send = (_port, data) => {
   log.await('[SERIAL] writing to port', JSON.stringify(data));
   port.write(`${JSON.stringify(data)}\n`, err => {
     if (err) {
       return log.error('[SERIAL] Error on write: ', err.message);
     }
-    // log.log('data written', data);
+    log.log('data written', data);
   });
 };
 
