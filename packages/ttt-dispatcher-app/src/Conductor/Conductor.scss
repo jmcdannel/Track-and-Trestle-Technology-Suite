@@ -40,3 +40,49 @@ h2{
 .conductor-effects .effects__grid-item {
   flex-basis: 100%;
 }
+
+.turnout {
+  display: flex;
+  margin-bottom: .25rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &.MuiCardContent-root {
+      padding: 0.25rem 1rem;
+    }
+  }
+
+  &__state {
+    &.MuiCardActionArea-root {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+
+      padding: 0.25rem 1rem;
+    }
+  }
+
+  &__id {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    &.MuiCardContent-root {
+      padding: 0.25rem;
+    }
+  }
+
+  &__indicator {
+    background-color: blueviolet;
+    padding: 0.25rem 1rem;
+    // border: 1px solid red;
+    border-radius: 100% 0 100% 0;
+  }
+
+
+  &__header .MuiTypography-root,
+  &__actions.MuiCardActions-root {
+    display: none;
+  }
+}

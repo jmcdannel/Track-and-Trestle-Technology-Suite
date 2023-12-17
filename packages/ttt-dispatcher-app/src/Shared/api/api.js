@@ -7,12 +7,13 @@ import layoutApi from './layoutApi';
 import config from './config'; // TODO: replace with configStore
 
 let dispatch;
+const layoutId = await config.layoutId.get();
 
 async function connect(_dispatch) {
   try {
     dispatch = _dispatch;
     const host = await config.host.get();
-    const layoutId = await config.layoutId.get();
+    // const layoutId = await config.layoutId.get();
     // const connStore = useConnectionStore();
     console.log('[api] connect', host, layoutId);
     if (!host) throw new Error('No host specified');
@@ -145,7 +146,7 @@ async function handleAction(effect, action) {
 }
 
 async function disconnect() {
-  const layoutId = await config.layoutId.get();
+  // const layoutId = await config.layoutId.get();
   console.log('API.disconnect', layoutId);
   if (layoutId) {
     config.loco.clear();

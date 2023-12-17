@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Grid';
@@ -10,7 +10,11 @@ import Paper from '@mui/material/Paper';
 import CruiseThrottles from '../Throttles/CruiseThrottles';
 import Throttles from '../Throttles/Throttles';
 import Effects from '../Effects/Effects';
-import Dispatcher from '../Dispatcher/Dispatcher';
+import Routes from '../Routes/Routes';
+import Turnout from '../Turnouts/Turnout';
+
+import api from '../Shared/api/api';
+import { Context } from '../Store/Store';
 
 import './Conductor.scss';
 
@@ -42,7 +46,27 @@ TabPanel.propTypes = {
 
 export const Conductor = props => {
 
-  const [tab, setTab] = React.useState(0);
+  const [tab, setTab] = useState(0);
+  const [ state, dispatch ] = useContext(Context);
+  const { turnouts } = state;
+
+  const setTurnouts = async deltas => {
+    deltas.map(async (delta, idx) => {
+      await sleep(idx * TURNOUT_DELAY);
+      await handleTurnoutChange(delta);
+    });
+  }
+
+  const handleTurnoutChange = async delta => {
+    try {
+      console.log('handleTurnoutChange', delta);
+      await api.turnouts.put(delta);
+      await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
+    } catch (err) {
+      console.error(err);
+      // throw err;
+    }   
+  }
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -58,12 +82,6 @@ export const Conductor = props => {
         alignItems="stretch">
         <Grid item 
           xs={12} sm={12} md={8}>
-          {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Box sx={{ display: { xs: 'inline', sm: 'none', md: 'none' } }}>XS</Box>
-            <Box sx={{ display: { xs: 'none', sm: 'inline', md: 'none' } }}>SM</Box>
-            <Box sx={{ display: { xs: 'none', sm: 'none', md: 'inline' } }}>MD</Box>
-          </Box> */}
-
           <Grid container
             direction="row"
             justifyContent="space-between"
@@ -87,10 +105,14 @@ export const Conductor = props => {
               </Tabs>
             </Box>
             <TabPanel value={tab} index={0}>
-              <Dispatcher overrideUserPrefs={true} enabled={['turnouts']} />
+              {/* <Dispatcher overrideUserPrefs={true} enabled={['turnouts']} /> */}
+              {turnouts?.map(turnout => (
+                <Turnout key={turnout.turnoutId} turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
+              ))}
             </TabPanel>
             <TabPanel value={tab} index={1}>
-              <Dispatcher overrideUserPrefs={true} enabled={['routes']} view="pill" />
+              {/* <Dispatcher overrideUserPrefs={true} enabled={['routes']} view="pill" /> */}
+              <Routes setTurnouts={setTurnouts} view={'tiny'}  />
             </TabPanel>
             <TabPanel value={tab} index={2} className="conductor-effects">
               <Effects />
