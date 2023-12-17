@@ -42,7 +42,7 @@ function App() {
                 apiReady={apiReady} 
               />
             </Box>
-            <Box flexGrow={1} display="flex" width="100%" height="100%" alignContent="center" className="App-content" mt={2}>
+            <Box flexGrow={1} component="main" display="flex" alignContent="center" mt={2}>
               {apiReady && ( <Modules /> )}
             </Box>
             <Box mt={1}>

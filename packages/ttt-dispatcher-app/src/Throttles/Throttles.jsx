@@ -45,7 +45,7 @@ export const Throttles = props => {
   
     console.log('throttleCount', throttleCount, ((isLg || isXl ) && throttleCount === 1));
   return (
-    <Box sx={{ position: 'relative', height: '75vh', 'display': 'flex', 'flexWrap': 'wrap' }}>
+    <Box sx={{ position: 'relative', 'display': 'flex', 'flexWrap': 'wrap' }}>
       {hasThrottles 
         ? locos
             .filter(loco => loco.isAcquired && !loco.cruiseControl)

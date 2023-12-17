@@ -14,6 +14,7 @@ import Routes from '../Routes/Routes';
 import Turnout from '../Turnouts/Turnout';
 
 import api from '../Shared/api/api';
+import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 import { Context } from '../Store/Store';
 
 import './Conductor.scss';
@@ -21,6 +22,7 @@ import './Conductor.scss';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
+  const { isXs, isSm, isMd, isLg, isXl, getCurrentSize } = useBreakpoints();
   return (
     <div
       role="tabpanel"
@@ -79,9 +81,29 @@ export const Conductor = props => {
         spacing={2}
         justifyContent="space-between"
         flexWrap="wrap"
-        alignItems="stretch">
+        alignItems="stretch"
+        sx={{ 
+          height: {
+            xs: '100%',
+            sm: '100%',
+            md: 'auto',
+            lg: 'auto',
+            xl: 'auto',
+            },
+           overflow: 'auto'
+        }}>
         <Grid item 
-          xs={12} sm={12} md={8}>
+          xs={12} sm={12} md={8} 
+          sx={{ 
+            height: {
+              xs: 'auto',
+              sm: 'auto',
+              md: '100%',
+              lg: '100%',
+              xl: '100%',
+              },
+             overflow: 'auto'
+          }}>
           <Grid container
             direction="row"
             justifyContent="space-between"
@@ -92,7 +114,17 @@ export const Conductor = props => {
           </Grid>
           <Throttles />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} className="App-content__conductor">
+        <Grid item xs={12} sm={12} md={4} 
+        sx={{ 
+          height: {
+            xs: 'auto',
+            sm: 'auto',
+            md: '100%',
+            lg: '100%',
+            xl: '100%',
+            },
+           overflow: 'auto'
+        }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs 
                 textColor="secondary"

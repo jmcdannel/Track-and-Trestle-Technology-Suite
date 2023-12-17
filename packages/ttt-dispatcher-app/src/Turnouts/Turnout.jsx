@@ -103,15 +103,6 @@ export const Turnout = props => {
       <CardHeader className="turnout__header">
         <CallSplit />
         <Typography variant="h6" >{turnout.name}</Typography>
-        {/* <Chip
-            label={`${turnout.name}`}
-            icon={<CallSplit />}
-            variant="outlined"
-            className="chip"
-            size="small"
-            clickable
-            onClick={handleToggle}
-          /> */}
           <Box className="turnout__header__status">
             {isLoading || isPristine 
               ? <PortableWifiOffIcon style={{color: 'gray'}} /> 
@@ -123,9 +114,9 @@ export const Turnout = props => {
 
         <CardActionArea className={`turnout__state ${isLoading ? 'loading' : ''}`} onClick={handleToggle}>
             <div className="turnout__indicator">{isDivergent ? 'divergent' : 'straight'}</div>
-            <SvgIcon>
+            {/* <SvgIcon>
               <TurnoutIndSvg />
-            </SvgIcon>
+            </SvgIcon> */}
             
             <Typography component="h6" variant="h6" noWrap >
               {turnout.name}

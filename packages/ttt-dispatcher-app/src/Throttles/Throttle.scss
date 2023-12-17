@@ -65,6 +65,7 @@ $neutral: #f89719;
   &.halfthrottle {
     flex-basis: 50%;
     max-width: 50%;
+    min-height: 640px;
   }
 
   .MulutiCardHeader-root,

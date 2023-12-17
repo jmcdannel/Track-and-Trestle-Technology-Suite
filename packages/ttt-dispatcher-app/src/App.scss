@@ -24,8 +24,9 @@ body,
   flex-grow: 1;
 }
 
-.App-content {
-  overflow: auto;
+main {
+  // overflow: auto;
+  min-height: 0;
 
   .MuiPaper-root {
     background-image: none;
@@ -34,8 +35,8 @@ body,
 }
 
 .App-content-column {
-  height: 100%;
-  overflow: auto;
+  // height: 100%;
+  // overflow: auto;
 }
 
 // Utility Classes
