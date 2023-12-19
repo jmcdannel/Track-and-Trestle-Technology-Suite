@@ -71,7 +71,7 @@ export const MiniThrottle = props => {
 
   const computedClassName = () => {
     return ['mini-throttle', 
-      `mini-throttle--${loco.name.replace(' ', '')}  mini-throttle--${loco.road.replace(' ', '')}`,
+      `mini-throttle--${loco.name.replace(' ', '')}  mini-throttle--${loco.meta?.roadname?.replace(' ', '')}`,
       isAcquired ? 'mini-throttle__acquired' : 'mini-throttle__notacquired'].join(' ');
   }
 

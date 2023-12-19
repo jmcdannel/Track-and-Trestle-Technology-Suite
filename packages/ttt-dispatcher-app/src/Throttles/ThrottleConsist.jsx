@@ -51,9 +51,7 @@ export const ThrottleConsist = ({ consist = [], locos = [], onChange }) => {
   }
 
   return (
-    <>
-    <h2>Consist</h2>
-    <List dense={false}>
+    <List dense={false} sx={{ minWidth: '24rem' }}>
       {consist && consist.length > 0 && (consist.map((loco, idx) => (
         <ListItem key={loco}              
           secondaryAction={
@@ -88,7 +86,7 @@ export const ThrottleConsist = ({ consist = [], locos = [], onChange }) => {
         </ListItemAvatar>
 
         <ListItemText secondary={(consist ? consist.length+1 : 1)} />
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mr: '2rem', ml: '2rem' }}>
           <InputLabel id="consist-loco-label">DPU</InputLabel>
           <Select
             labelId="consist-loco-label"
@@ -115,7 +113,6 @@ export const ThrottleConsist = ({ consist = [], locos = [], onChange }) => {
         } label="FWD" />
       </ListItem>
     </List>
-    </>
   );
 }
 export default ThrottleConsist;

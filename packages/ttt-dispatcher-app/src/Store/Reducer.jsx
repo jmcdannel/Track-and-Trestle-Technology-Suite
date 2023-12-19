@@ -1,5 +1,16 @@
 // import api from '../Api';
 
+const locoDefaults = {
+  isAcquired: false,
+  cruiseControl: false,
+  autoStop: true,
+  maxSpeed: 100,
+  speed: 0,
+  forward: true,
+  lastAcquired: null,
+  lastUpdated: null
+};
+
 const Reducer = (state, action) => {
   switch(action.type) {
 
@@ -26,14 +37,14 @@ const Reducer = (state, action) => {
     case 'UPDATE_LOCOS':
       return {
         ...state,
-        locos: action.payload
+        locos: action.payload.map(loco => ({ ...locoDefaults, ...loco }))
       };
 
     case 'UPDATE_LOCO':
       const locos = state.locos.map(loco => 
         loco.address === action.payload.address
-          ? { ...loco, ...action.payload }
-          : loco
+          ? {  ...locoDefaults, ...loco, ...action.payload }
+          : {  ...locoDefaults, ...loco }
       );
       return {
         ...state,

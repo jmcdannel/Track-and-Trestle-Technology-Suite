@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import ShareIcon from '@mui/icons-material/Share';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -48,25 +49,26 @@ export const Functions = props => {
   console.log('functionButtons', functionButtons)
 
   return (
-    <div className="throttle__functions">
-      <div className="throttle__functions__viewport">
+    <ButtonGroup
+      variant="text"
+      size="large"
+      className="throttle__advanced-controls throttle__functions">
 
-        {functionButtons.map((btn, idx) => (
-          <Button
-            variant="outlined"
-            key={`${btn.label}-${idx}`}
-            size="small"
-            color="primary"
-            className="throttle__functions__btn"
-            startIcon={btn.icon}
-            onClick={() => handleFunctionClick(idx)}
-          >
-            {btn.label}
-          </Button>
-        ))}
+      {functionButtons.map((btn, idx) => idx < 12 && (
+        <Button
+          variant="outlined"
+          key={`${btn.label}-${idx}`}
+          size="small"
+          color="primary"
+          className="throttle__functions__btn"
+          startIcon={btn.icon}
+          onClick={() => handleFunctionClick(idx)}
+        >
+          {btn.label}
+        </Button>
+      ))}
 
-      </div>
-    </div>
+    </ButtonGroup>
   );
 
 }

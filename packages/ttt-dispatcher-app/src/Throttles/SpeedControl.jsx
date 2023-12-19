@@ -19,14 +19,14 @@ export const SpeedControl = ({
     <Box sx={{
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'stretch',
+      justifyContent: 'space-between',
       flexDirection: 'column',
       flex: '1',
-      padding: '1rem'
+      padding: ' 0 0 2rem 0'
     }}>
       <ThrottleSpeed speed={uiSpeed} />
 
-      <Box className="speed-ctrl" sx={{
+      {/* <Box className="speed-ctrl" sx={{
 
       }}>
         <button className="speed-ctrl-btn" disabled={uiSpeed === maxSpeed} onClick={handleWayUpClick}><AddIcon /><AddIcon /></button>
@@ -35,48 +35,46 @@ export const SpeedControl = ({
         <button className="speed-ctrl-btn" disabled={uiSpeed === minSpeed} onClick={handleDownClick}><RemoveIcon /></button>
         <button className="speed-ctrl-btn" disabled={uiSpeed === minSpeed} onClick={handleWayDownClick}><RemoveIcon /><RemoveIcon /></button>
 
-      </Box>
-      {/* <ButtonGroup
+      </Box> */}
+      <ButtonGroup
         orientation="vertical"
-        className="throttle__controls__group"
+        size="large"
         aria-label="vertical outlined primary button group"
+        className="throttle__controls__group throttle__advanced-controls"
       >
         <IconButton 
-          className="speedway-up-btn"
-          size="large"
+          className="speed-up-btn"
           disabled={uiSpeed === maxSpeed} 
-          onClick={handleUpClick}>
+          onClick={handleWayUpClick}>
+            <AddIcon />
             <AddIcon />
         </IconButton>
         <IconButton 
           className="speed-up-btn"
-          size="large" 
           disabled={uiSpeed === maxSpeed} 
           onClick={handleUpClick}>
             <AddIcon />
         </IconButton>
         <IconButton 
           className="speed-stop-btn"
-          size="large" 
           color="primary" 
           onClick={handleStopClick} >
             <PanToolIcon />
         </IconButton>
         <IconButton 
           className="speed-down-btn"
-          size="large" 
           disabled={uiSpeed === minSpeed} 
           onClick={handleDownClick}>
             <RemoveIcon />
         </IconButton>
         <IconButton 
-          className="speed-waydown-btn"
-          size="large" 
+          className="speed-down-btn"
           disabled={uiSpeed === minSpeed} 
-          onClick={handleDownClick}>
+          onClick={handleWayDownClick}>
+            <RemoveIcon />
             <RemoveIcon />
         </IconButton>
-      </ButtonGroup> */}
+      </ButtonGroup>
     </Box>
   );
 };

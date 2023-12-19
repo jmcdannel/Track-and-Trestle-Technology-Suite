@@ -11,7 +11,7 @@ import CruiseThrottles from '../Throttles/CruiseThrottles';
 import Throttles from '../Throttles/Throttles';
 import Effects from '../Effects/Effects';
 import Routes from '../Routes/Routes';
-import Turnout from '../Turnouts/Turnout';
+import Turnouts from '../Turnouts/Turnouts';
 
 import api from '../Shared/api/api';
 import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
@@ -50,7 +50,7 @@ export const Conductor = props => {
 
   const [tab, setTab] = useState(0);
   const [ state, dispatch ] = useContext(Context);
-  const { turnouts } = state;
+  const { turnouts, layout } = state;
 
   const setTurnouts = async deltas => {
     deltas.map(async (delta, idx) => {
@@ -74,6 +74,17 @@ export const Conductor = props => {
     setTab(newValue);
   };
 
+  const renderTurnouts = list => list
+    .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by the abbr property
+    .map(renderTurnout)   
+
+    const renderTurnout = turnout => {
+    console.log('renderTurnout', turnout);
+    return (
+      <Turnout key={turnout.turnoutId} turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
+    )
+  }
+
   return (
     <>
       <Grid container
@@ -92,7 +103,7 @@ export const Conductor = props => {
             },
            overflow: 'auto'
         }}>
-        <Grid item 
+        <Grid item
           xs={12} sm={12} md={8} 
           sx={{ 
             height: {
@@ -101,8 +112,10 @@ export const Conductor = props => {
               md: '100%',
               lg: '100%',
               xl: '100%',
-              },
-             overflow: 'auto'
+            },
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto'
           }}>
           <Grid container
             direction="row"
@@ -138,9 +151,7 @@ export const Conductor = props => {
             </Box>
             <TabPanel value={tab} index={0}>
               {/* <Dispatcher overrideUserPrefs={true} enabled={['turnouts']} /> */}
-              {turnouts?.map(turnout => (
-                <Turnout key={turnout.turnoutId} turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
-              ))}
+              <Turnouts />
             </TabPanel>
             <TabPanel value={tab} index={1}>
               {/* <Dispatcher overrideUserPrefs={true} enabled={['routes']} view="pill" /> */}

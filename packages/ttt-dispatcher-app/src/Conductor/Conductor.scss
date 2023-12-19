@@ -1,3 +1,5 @@
+@import "../theme";
+
 .conductor {
   flex: 1;
   height: 100%;
@@ -43,12 +45,16 @@ h2{
 
 .turnout {
   display: flex;
-  margin-bottom: .25rem;
+  margin-bottom: .25rem;    
+  align-items: center;
+  justify-content: space-between;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1;   
     &.MuiCardContent-root {
       padding: 0.25rem 1rem;
     }
@@ -57,32 +63,97 @@ h2{
   &__state {
     &.MuiCardActionArea-root {
       display: flex;
-      flex-direction: row-reverse;
       justify-content: space-between;
-
       padding: 0.25rem 1rem;
+      padding: 0;
     }
   }
 
-  &__id {
+  &__content {
     display: flex;
     align-items: center;
-    width: 100%;
+    height: 100%;
+    flex: 1;
     &.MuiCardContent-root {
       padding: 0.25rem;
+      padding: 0;
     }
+  }
+  &__id {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    text-align: center;
+    &.MuiCardContent-root {
+      padding: 0.25rem;
+      padding: 0;
+    }
+  }
+  &__line {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+    min-width: 3rem;
+    display: block;
+    padding: 0.25rem 1rem;
+  }
+  &__dir {
+    background: $bg-purple-violet-1;
+    background: $bg-grad-purple-violet-1;
+    min-width: 3rem;
+    display: block;
+    padding: 0.25rem 1rem;
+  }
+  &__name {
+    text-align: left;
+    padding: 0.25rem 1rem;
   }
 
   &__indicator {
-    background-color: blueviolet;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1;   
     padding: 0.25rem 1rem;
-    // border: 1px solid red;
-    border-radius: 100% 0 100% 0;
+    padding: 0;
+    &.MuiCardContent-root {
+      padding: 0.25rem 1rem;
+      padding: 0.25rem 1rem;
+      padding: 0;
+    }
   }
 
 
   &__header .MuiTypography-root,
   &__actions.MuiCardActions-root {
     display: none;
+  }
+}
+
+
+.turnout__line {
+  &__eng .turnout__line {
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1; 
+  }
+  &__ss .turnout__line  {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+  }
+  &__sn .turnout__line  {
+    background: $bg-purple-violet-1;
+    background: $bg-grad-purple-violet-1;
+  }
+  &__vl .turnout__line  {
+    background: $bg-yellow-orange-1;
+    background: $bg-grad-yellow-orange-1;
+  }
+  &__sl .turnout__line  {
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1; 
+  }
+  &__hx .turnout__line  {
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1; 
   }
 }

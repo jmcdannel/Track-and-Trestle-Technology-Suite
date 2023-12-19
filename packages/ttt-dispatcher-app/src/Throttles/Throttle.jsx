@@ -38,6 +38,7 @@ export const Throttle = props => {
     loco, 
     cruiseDisabled, 
     showAdvancedControls = false,
+    showFunctions = false,
     className = '',
     onLocoClick, loco: {
       speed,
@@ -51,7 +52,7 @@ export const Throttle = props => {
 
   const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
-  const [ showFunctions, setShowFunctions ] = useState(false);
+  const [ showFunctionsDrawer, setShowFunctionsDrawer ] = useState(false);
   const [ showSettings, setShowSettings ] = useState(false);
   const [ functionState, setFunctionState ] = useState([]);
   const [ uiSpeed, setUiSpeed ] = useState(calcSpeed(speed));
@@ -112,13 +113,11 @@ export const Throttle = props => {
         forward={(debouncedSpeed >= 0)}
         consist={consist}
       />
-
-
       {( isXs || isSm || isMd ) && (
         <Drawer
           anchor={'right'}
-          open={showFunctions}
-          onClose={() => setShowFunctions(false)}
+          open={showFunctionsDrawer}
+          onClose={() => setShowFunctionsDrawer(false)}
           >
           <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
         </Drawer>
@@ -131,7 +130,7 @@ export const Throttle = props => {
         onHide={() => setShowSettings(false)} />
 
       <Card
-        className={`${className} throttle throttle--${loco.name.replace(' ', '')}  throttle--${loco.road.replace(' ', '')}`} >
+        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')}`} >
         <CardHeader
           title={loco.name}
           subtitle={consist && `${consist.join(', ')}`}
@@ -145,7 +144,7 @@ export const Throttle = props => {
               onStop={handleStopClick}
               size="small"
               onShowSettings={() => setShowSettings(true)}
-              onShowFunctions={() => setShowFunctions(true)}
+              onShowFunctionsDrawer={() => setShowFunctionsDrawer(true)}
               showFunctions={( isXs || isSm || isMd ) || !showAdvancedControls}
               showCruiseControl={( isXs || isSm || isMd ) || !showAdvancedControls}
               showPark={( isXs || isSm || isMd ) || !showAdvancedControls}
@@ -155,17 +154,19 @@ export const Throttle = props => {
         />
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
-            <Grid sx={{display: { xs: 'none', sm: 'flex' }}} item xs={4} sm={4} md={4} flexGrow={1} display="flex" className="throttle__slider">
-                <ThrottleSlider
-                  max={maxSpeed}
-                  className="throttle__slider__control"
-                  speed={uiSpeed}
-                  autoStop={autoStop}
-                  onChange={handleSliderSpeed}
-                />
-            </Grid>
             {showAdvancedControls && (
-              <Grid item xs={5} sm={4} md={4} display="flex" className="throttle__actions">
+              <Grid item 
+                xs={5} sm={2} md={3} lg={3} 
+                display="flex" 
+                className="throttle__actions">
+                <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
+              </Grid>
+            )}
+            {showAdvancedControls && (
+              <Grid item 
+                xs={5} sm={2} md={2} 
+                display="flex" 
+                className="throttle__actions">
                 <AdvancedControls
                   cruiseDisabled={cruiseDisabled}
                   loco={loco}
@@ -176,14 +177,32 @@ export const Throttle = props => {
                 />
               </Grid>
             )}
-            <Grid item xs display="flex" sx={{ flex: 1 }} className="throttle__controls">
+            <Grid item
+              xs={4} sm={4} md={3} 
+              sx={{display: { xs: 'none', sm: 'flex' }}} 
+              flexGrow={1} 
+              className="throttle__slider">
+                <ThrottleSlider
+                  max={maxSpeed}
+                  className="throttle__slider__control"
+                  speed={uiSpeed}
+                  autoStop={autoStop}
+                  onChange={handleSliderSpeed}
+                />
+            </Grid>
+            <Grid item 
+              xs 
+              sx={{ flex: 1 }} 
+              className="throttle__controls">
               <SpeedControl
                 uiSpeed={uiSpeed}
                 maxSpeed={maxSpeed}
                 minSpeed={-maxSpeed}
+                handleWayUpClick={handleWayUpClick}
                 handleUpClick={handleUpClick}
                 handleStopClick={handleStopClick}
                 handleDownClick={handleDownClick}
+                handleWayDownClick={handleWayDownClick}
               />
             </Grid>
           </Grid>

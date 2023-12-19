@@ -26,6 +26,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 
 import TurnoutIndSvg from './TurnoutInd.svg?react';
+import useLayoutLines from '../Shared/hooks/useLayoutLines';
 
 import './Turnout.scss';
 
@@ -42,6 +43,8 @@ export const Turnout = props => {
   const [error, setError] = useState(false);
   const [isPristine, setIsPristine] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
+
+  const [ line ] = useLayoutLines(turnout?.meta?.line);
 
   useEffect(() => {
     setIsDivergent(!turnout.state);
@@ -99,7 +102,7 @@ export const Turnout = props => {
 
 
 	return (
-    <Card className={`turnout`}>
+    <Card className={`turnout turnout__line__${line?.id}`}>
       <CardHeader className="turnout__header">
         <CallSplit />
         <Typography variant="h6" >{turnout.name}</Typography>
@@ -109,23 +112,37 @@ export const Turnout = props => {
               :  <WifiTetheringIcon style={{color: 'green'}} />}            
           </Box>
       </CardHeader>
-      <CardContent className="turnout__id">
-        
-
+      <CardContent className="turnout__content">
         <CardActionArea className={`turnout__state ${isLoading ? 'loading' : ''}`} onClick={handleToggle}>
-            <div className="turnout__indicator">{isDivergent ? 'divergent' : 'straight'}</div>
+            <Box className={`turnout__id`}>
+              <Box className={`turnout__line`}>
+                <Typography component="h6" variant="h6" noWrap >
+                    {line?.abbr.substring(0, 2) || '??'}
+                  </Typography>
+              </Box>
+              {/* <Box className={`turnout__dir`}>
+                <Typography component="h6" variant="h6" noWrap >
+                   N
+                  </Typography>
+              </Box> */}
+              <Box className={`turnout__name`}>
+                <Typography component="h6" variant="h6" noWrap >
+                  {turnout.name}
+                </Typography>
+              </Box>
+            </Box>
+            
+            {isLoading && (<CircularProgress color="primary" className="spinner" />)}
+            <Box className={`turnout__indicator turnout__indicator__${isDivergent ? 'divergent' : 'straight'}`}>
+              <Box sx={{ 'visibility': 'hidden' }}>IND</Box>
+              <Box>IND</Box>
+            </Box>
+        </CardActionArea>
+      </CardContent>
+      <CardActions className="turnout__actions">
             {/* <SvgIcon>
               <TurnoutIndSvg />
             </SvgIcon> */}
-            
-            <Typography component="h6" variant="h6" noWrap >
-              {turnout.name}
-            </Typography>
-            {isLoading && (<CircularProgress color="primary" className="spinner" />)}
-        </CardActionArea>          
-
-      </CardContent>
-      <CardActions className="turnout__actions">
         <Button 
           className="compact-hidden"
           variant="contained" 

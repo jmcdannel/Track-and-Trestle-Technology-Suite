@@ -16,7 +16,7 @@ const AvailableThrottles = ({ onLocoSelected }) => {
     locos
       ?.filter(loco => !loco.isAcquired)
       .map(loco => (
-        <Box key={loco.address}>
+        <Box key={loco.address} sx={{ p: '.25rem', flex: '1 0 25%', display: 'flex' }}>
           <AvailableThrottle loco={loco} disabled={false} onLocoClick={onLocoSelected} />
         </Box>
       ))

@@ -45,11 +45,23 @@ export const Throttles = props => {
   
     console.log('throttleCount', throttleCount, ((isLg || isXl ) && throttleCount === 1));
   return (
-    <Box sx={{ position: 'relative', 'display': 'flex', 'flexWrap': 'wrap' }}>
+    <Box sx={{ 
+      position: 'relative', 
+      'display': 'flex', 
+      'flexWrap': 'wrap',
+      'flex': '1'
+    }}>
       {hasThrottles 
         ? locos
             .filter(loco => loco.isAcquired && !loco.cruiseControl)
-            .map(loco => <Throttle className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'} key={loco.address} loco={loco} showAdvancedControls={(isLg || isXl ) && throttleCount === 1} />)
+            .map(loco => (
+              <Throttle 
+                className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'} 
+                key={loco.address} 
+                loco={loco} 
+                showAdvancedControls={throttleCount === 1 && (!isXs && !isSm)}
+                showFunctions={throttleCount === 1 &&  (!isXs && !isSm && !isMd)}
+              />))
         : <AvailableThrottles />
       }
 

@@ -2,27 +2,31 @@ import React, { useContext } from 'react';
 import IconButton from '@mui/material/IconButton';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import { Context } from '../Store/Store';
+import dccApi from '../Shared/api/dccApi';
 
-const STOP = '0.0';
+const STOP = '!';
 
 export const Stop = props => {
 
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
-  const handleStopClick = () => {
+  const handleStopClick = async () => {
     console.log('handleStopClick');
-    locos && locos.filter(loco => loco.isAcquired).map(async loco => {
-      console.log('Stopping', { address: loco.address, speed: STOP }, STOP);
-      try {
-        // await jmriApi.throttle(loco.address, STOP);
-        // TODO implement DCC-EX-JS-API
-      } catch (err) { console.error(err); }
-      try {
-        await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, speed: STOP } });
-      } catch (err) { console.error(err); }
-      console.log('Stopped', loco, STOP);
-    });
+
+    try {
+      await dccApi.send('dcc', '!');
+      // await dccApi.setSpeed(loco.address), 0);
+    } catch (err) { console.error(err); }
+    // locos && locos.filter(loco => loco.isAcquired).map(async loco => {
+    //   try {
+    //     await dccApi.setSpeed(loco.address), 0);
+    //   } catch (err) { console.error(err); }
+    //   try {
+    //     await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, speed: 0 } });
+    //   } catch (err) { console.error(err); }
+    //   console.log('Stopped', loco, STOP);
+    // });
   }
 
   return (
