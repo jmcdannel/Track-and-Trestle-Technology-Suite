@@ -1,4 +1,6 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import ShareIcon from '@mui/icons-material/Share';
@@ -10,6 +12,8 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+
+import './Functions.scss';
 
 const defaultIcon = <NotificationsIcon />;
 
@@ -49,26 +53,43 @@ export const Functions = props => {
   console.log('functionButtons', functionButtons)
 
   return (
-    <ButtonGroup
-      variant="text"
-      size="large"
-      className="throttle__advanced-controls throttle__functions">
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 0 0',
+      overflow: 'hidden',
+      borderRadius: '1.5rem',
+      height: 'fit-content',
+      alignSelf: 'flex-end',
+      alignItems: 'center',
+      marginBottom: '2rem',
+      background: 'linear-gradient(140deg, rgb(197, 51, 158) 0%, rgb(147, 38, 131) 100%)',
+      padding: '0.5rem 1rem 0 1rem',
+    }}>
+      <Typography variant="h6" 
+        component="div" 
+        className="throttle__functions__title" >Functions </Typography>
+      <ButtonGroup
+        variant="text"
+        size="large"
+        className="rounded-button-group throttle__functions">
 
-      {functionButtons.map((btn, idx) => idx < 12 && (
-        <Button
-          variant="outlined"
-          key={`${btn.label}-${idx}`}
-          size="small"
-          color="primary"
-          className="throttle__functions__btn"
-          startIcon={btn.icon}
-          onClick={() => handleFunctionClick(idx)}
-        >
-          {btn.label}
-        </Button>
-      ))}
+        {functionButtons.map((btn, idx) => idx < 12 && (
+          <Button
+            variant="outlined"
+            key={`${btn.label}-${idx}`}
+            size="small"
+            color="primary"
+            className="throttle__functions__btn"
+            startIcon={btn.icon}
+            onClick={() => handleFunctionClick(idx)}
+          >
+            {btn.label}
+          </Button>
+        ))}
 
-    </ButtonGroup>
+      </ButtonGroup>
+    </Box>
   );
 
 }

@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardContent';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import CardActionArea from '@mui/material/CardActionArea';
 import Chip from '@mui/material/Chip';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 
+import useLayoutLines from '../Shared/hooks/useLayoutLines';
+
 import './Route.scss';
-
-const lineColors = {
-  'Valley': 'rgb(13, 242, 40)',
-  'Tamarack Station': 'rgb(0, 255, 253)',
-  'Valley City': 'rgb(206, 217, 38)'
-}
-
 export const Route = props => {
 
   const { route, handleRouteToggle } = props;  
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [ line ] = useLayoutLines(route?.line);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -47,38 +45,31 @@ export const Route = props => {
     }    
   }
 
-  return (
-    <Card className={route.className}>
+  return route ? (
+    <Card className={`${route.className}  route__line__${line?.id}`}
+      sx={{
+      }}>
+      <CardActionArea
+        disabled={route.disabled}
+        className={`route__state`} 
+        onClick={handleToggle}>
       <CardHeader className="route__header">
-          <Chip
-            label={`${route.name}`}
-            variant={route.variant}
-            icon={<AltRouteIcon />}
-            size="small"
-             sx={{ borderColor: lineColors[route.line] }}
-            clickable
-            disabled={route.disabled}
-            onClick={e => handleRouteToggle(route, true)}
-          />
-      </CardHeader>
-      <CardContent className="route__id">
-        <Typography variant="body2" gutterBottom>
-          {route.line}
-        </Typography> 
-      </CardContent>
-      <CardActions className="route__actions">
-        <Button 
-          className="compact-hidden"
-          variant="outlined" 
-          color="secondary" 
-          onClick={handleToggle}
-          >
-            Toggle
-        </Button>
-      </CardActions>
+          <AltRouteIcon />
+        </CardHeader>
+        <CardContent className="route__content">
+          <Typography component="h6" variant="h6" noWrap >
+            {route.name}
+          </Typography>
+          <Box className={`route__line`}>
+            <Typography component="h6" variant="h6" noWrap >
+                {line?.abbr.substring(0, 2) || '??'}
+              </Typography>
+          </Box>
+        </CardContent>
+      </CardActionArea>
       <Snackbar open={!!error} autoHideDuration={6000} onClose={handleClose} message={error} />
     </Card>
-  );
+  ) : null;
 }
 
 export default Route;

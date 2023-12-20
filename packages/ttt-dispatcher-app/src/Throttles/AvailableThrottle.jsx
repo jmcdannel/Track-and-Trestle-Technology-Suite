@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import TrainIcon from '@mui/icons-material/Train';
 import Button from '@mui/material/Button';
+import LocoName from './LocoName';
 import { Context } from '../Store/Store';
 
 export const AvailableThrottle = props => {
@@ -42,7 +43,7 @@ export const AvailableThrottle = props => {
           startIcon={<Avatar variant="square">{address}</Avatar>}
           endIcon={<TrainIcon />}
           onClick={handleLocoClick}>
-            {name}
+            <LocoName loco={loco} />
         </Button>
   )
 

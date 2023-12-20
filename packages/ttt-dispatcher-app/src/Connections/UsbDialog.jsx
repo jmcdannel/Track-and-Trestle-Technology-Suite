@@ -21,18 +21,18 @@ export const UsbDialog = ({ onClose, open, currentPort }) => {
   const [usbPort, setUsbPort] = useState(currentPort ? currentPort : '');
 
   useEffect(async () => {
-    console.log('[UsbDialog] ports', ports, connections, serialConn);
+    // console.log('[UsbDialog] ports', ports, connections, serialConn);
 
-    console.log('[UsbDialog] serialConn', serialConn);
+    // console.log('[UsbDialog] serialConn', serialConn);
     serialConn?.ports && setPorts(serialConn.ports);
   }, [connections, serialConn, ports]);
 
   useEffect(async () => {
-    console.log('[UsbDialog] usbConnection', usbConnection, connections);
+    // console.log('[UsbDialog] usbConnection', usbConnection, connections);
     if (usbConnection) { return; }
 
     const usbConn = connections.get('serial');
-    console.log('[UsbDialog] usbConn', usbConn);
+    // console.log('[UsbDialog] usbConn', usbConn);
     usbConn && setUsbconnection(usbConn);
 
   }, [connections, usbConnection]);

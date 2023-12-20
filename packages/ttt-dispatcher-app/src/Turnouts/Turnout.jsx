@@ -30,10 +30,6 @@ import useLayoutLines from '../Shared/hooks/useLayoutLines';
 
 import './Turnout.scss';
 
-export const linesConfig = [
-  { lineId: 'Demo Track', label: 'Mainline SB', color: Colors.red[500] }
-];
-
 export const Turnout = props => {
 
   const { turnout, handleTurnoutChange } = props;  
@@ -114,29 +110,28 @@ export const Turnout = props => {
       </CardHeader>
       <CardContent className="turnout__content">
         <CardActionArea className={`turnout__state ${isLoading ? 'loading' : ''}`} onClick={handleToggle}>
-            <Box className={`turnout__id`}>
-              <Box className={`turnout__line`}>
-                <Typography component="h6" variant="h6" noWrap >
-                    {line?.abbr.substring(0, 2) || '??'}
-                  </Typography>
-              </Box>
-              {/* <Box className={`turnout__dir`}>
-                <Typography component="h6" variant="h6" noWrap >
-                   N
-                  </Typography>
-              </Box> */}
-              <Box className={`turnout__name`}>
-                <Typography component="h6" variant="h6" noWrap >
-                  {turnout.name}
+          <Box className={`turnout__id`}>
+            <Box className={`turnout__line`}>
+              <Typography component="h6" variant="h6" noWrap >
+                  {line?.abbr.substring(0, 2) || '??'}
                 </Typography>
-              </Box>
             </Box>
-            
-            {isLoading && (<CircularProgress color="primary" className="spinner" />)}
-            <Box className={`turnout__indicator turnout__indicator__${isDivergent ? 'divergent' : 'straight'}`}>
-              <Box sx={{ 'visibility': 'hidden' }}>IND</Box>
-              <Box>IND</Box>
+            {/* <Box className={`turnout__dir`}>
+              <Typography component="h6" variant="h6" noWrap >
+                  N
+                </Typography>
+            </Box> */}
+            <Box className={`turnout__name`}>
+              <Typography component="h6" variant="h6" noWrap >
+                {turnout.name}
+              </Typography>
             </Box>
+          </Box>
+          
+          {isLoading && (<CircularProgress color="primary" className="spinner" />)}
+          <Box className={`turnout__indicator turnout__indicator__${isDivergent ? 'divergent' : 'straight'}`}>
+            <Box sx={{ 'visibility': 'hidden' }}>IND</Box>
+          </Box>
         </CardActionArea>
       </CardContent>
       <CardActions className="turnout__actions">

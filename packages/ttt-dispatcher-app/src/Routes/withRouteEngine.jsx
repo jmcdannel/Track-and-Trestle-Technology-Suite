@@ -53,6 +53,7 @@ export const withRouteEngine = WrappedComponent => props => {
   }
 
   const computedRoutes = () => {
+    console.log('computedRoutes', routes, routeOrigin, routeDestination);
     const computedRouteProps = rte => {
       const classNames = ['route'];
       let disabled = false;

@@ -19,80 +19,78 @@ $orange: #f89719;
 .mini-throttle {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  padding: 0.25rem;
-  margin: 0.25rem;
+  margin: 0.25rem 0;
   width: auto;
 
-  &__stop {
-    width: auto;
-    height: 100%;
+  &.MuiPaper-root {
+    // @include linear-gradient(darken($red, 30%), darken($red, 40%));
+    padding: 0 1rem 0 0;
+    align-items: stretch;
+  }
+
+  .MuiAvatar-root {
+    // TODO: roadname color
+    background: rgb(254,0,107);
+    background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
+  }
+  
+  
+  .speed-control {
+    display: flex;
+    flex-direction: row;  
+    padding: 0; 
   }
 
   .throttle__speed {
-    width: 4rem;
-    // flex: 1;
-    height: 100%;
+    width: auto;
+    height: auto;
     padding: 0;
+    font-size: 1.5rem;
     margin: 0 .5rem;
     &:after, &:before {
       display: none;
     }
   }
+
   .throttle__controls__group {
-    padding: 0 .5rem;
+    flex: 1;
     justify-content: center;
-    display: flex;
     flex-direction: row;
-  }
-  &__acquired {
-    .throttle__controls__group {
-      .MuiIconButton-root {
-        border: 1px solid rgba(255,255,255, 0.5);
-        padding: 0.7rem .7rem; 
 
-        &.speed-up-btn {
-          border-radius: 0 1rem 1rem 0;
-          border-left: none;
-          color: $green;
-        }
-        &.speed-stop-btn {
-          border-radius: 0;
-        }
-        &.speed-down-btn {
-          border-radius: 1rem 0 0 1rem;
-          border-right: none;
-          color: #f44336;
-        }
+    .MuiButtonBase-root.MuiIconButton-root {
+      background: linear-gradient(140deg, rgb(36, 191, 191) 0%, rgb(20, 133, 143) 100%);
+      background: linear-gradient(140deg, rgb(115 27 196) 0%, rgb(131 23 160) 100%);
+      border-radius: 0;
+      margin: .5rem auto;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
 
+      &:first-child {
+        border-radius: 1rem 0 0 1rem;
       }
+
+      &:last-child {
+        border-radius: 0 1rem 1rem 0;
+      }
+
+      &.speed-up-btn {
+        color: #4caf50;
+      }
+      &.speed-stop-btn {
+        padding: 1rem 0;
+        margin: 0 -2px;
+        width: 100%;
+        border-radius: 1rem;
+      }
+      &.speed-down-btn {
+        color: #f44336;
+      }
+
+    }
+
+    .MuiIconButton-root {
+
     }
   }
-
-
-  &.MuiPaper-root {
-    @include linear-gradient(darken($red, 30%), darken($red, 40%));
-  }
-  &--BNSF,
-  &--GN-317 {
-    &.MuiPaper-root {
-      @include linear-gradient(darken($green, 20%), darken($green, 30%));
-    }
-  }
-
-  &--BNSF-5931 {
-    &.MuiPaper-root {
-      @include linear-gradient(darken($orange, 20%), darken($orange, 30%));
-    }
-  }
-
-  &--BNSF-5917, 
-  &--BNSF-5918,
-  &--BNSF-5919,
-  &--Amtrack-150 {
-    &.MuiPaper-root {
-      @include linear-gradient(darken($blue, 20%), darken($blue, 30%));
-    }
-  }
-
 }

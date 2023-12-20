@@ -13,8 +13,6 @@ async function connect(_dispatch) {
   try {
     dispatch = _dispatch;
     const host = await config.host.get();
-    // const layoutId = await config.layoutId.get();
-    // const connStore = useConnectionStore();
     console.log('[api] connect', host, layoutId);
     if (!host) throw new Error('No host specified');
     const connected = host
@@ -22,7 +20,6 @@ async function connect(_dispatch) {
       : false;
     console.log('[api] connected', connected);
     if (connected) {
-      // await connStore.setConnection('layoutApi', { connected, host });
       await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId: 'layoutApi', connected, host } });
     }
     (connected && layoutId) 
@@ -36,7 +33,6 @@ async function connectInterfaces(host, layoutId) {
 
   try {
     console.log('[api] connectInterfaces', layoutId);
-    // await dccApi.connect(host);
     const layout = await layoutApi.layouts.get(layoutId);
     console.log('interfaces', layout, layout?.interfaces);
     layout?.interfaces?.map(async iface => {
@@ -162,6 +158,9 @@ export const api = {
     get: layoutApi.layouts.get
   },
   locos: {
+    get: layoutApi.locos.get
+  },
+  routes: {
     get: layoutApi.locos.get
   },
   effects: {

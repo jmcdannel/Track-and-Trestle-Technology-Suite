@@ -1,0 +1,56 @@
+.throttle__speed {
+  padding: 1rem;
+  margin: 1rem 3rem;
+  min-width: 6rem;
+  // flex: 0 0 33%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: #333;
+  box-shadow: inset 0px 0px 4px 2px rgba(0,0,0,0.3);
+  border-radius: 1rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 3rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:before,
+  &:after {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 8px;
+    text-transform: uppercase;
+    font-family: "Andale Mono", monospace;
+    left: 0;
+    right: 0;
+    white-space: nowrap;
+    padding-top: 5px;
+  }
+  &:before {
+    content: '↑↑ FWD ↑↑';
+    top: 0;
+    color: rgba(118, 255, 3, .7);
+  }
+  &:after {
+    content: '↓↓ REV ↓↓';
+    bottom: 0;
+    color: rgba(244, 67, 54, .7);
+  }
+  &.throttle__speed--reverse {
+    color: rgba(244, 67, 54, .7);
+    &:before {
+      display: none;
+    }
+  }
+
+  &.throttle__speed--forward {
+    color: rgba(118, 255, 3, .7);
+    &:after {
+      display: none;
+    }
+  }
+  &.throttle__speed--disabled {
+    color: #999;
+  }
+}

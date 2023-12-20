@@ -9,6 +9,7 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 
 import { Context } from '../Store/Store';
+import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 
 const ThrottleActions = (props) => {
 
@@ -26,6 +27,7 @@ const ThrottleActions = (props) => {
   const address = Number(props.loco.address);
 
   const [ , dispatch ] = useContext(Context);
+  const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
 
   const iconStyle = size === 'large' ? { fontSize: '2rem' } : { fontSize: '1.4rem' };
 
@@ -57,7 +59,6 @@ const ThrottleActions = (props) => {
   return (    
     <>
       <slot></slot>
-      {showFunctions && ( 
         <Tooltip title="Functions">
           <IconButton 
             className="functions"
@@ -66,8 +67,6 @@ const ThrottleActions = (props) => {
             <TrainIcon sx={iconStyle} />
           </IconButton>
         </Tooltip>
-      )}
-      {showCruiseControl && ( 
       <Tooltip title="Cruise Control">
         <IconButton 
           className="cruise-control"
@@ -77,8 +76,6 @@ const ThrottleActions = (props) => {
           <SpeedIcon sx={iconStyle} />
         </IconButton>
       </Tooltip>
-      )}
-      {showPark && ( 
       <Tooltip title="Park">
         <IconButton 
           className="park"
@@ -87,8 +84,6 @@ const ThrottleActions = (props) => {
           <LocalParkingIcon sx={iconStyle} />
         </IconButton>
       </Tooltip>
-      )}
-      {showSettings && ( 
       <Tooltip title="Settings">
         <IconButton 
           className="settings"
@@ -97,7 +92,6 @@ const ThrottleActions = (props) => {
           <SettingsIcon sx={iconStyle} />
         </IconButton>
       </Tooltip>
-      )}
     </>
   );
 };

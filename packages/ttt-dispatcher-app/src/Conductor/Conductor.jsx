@@ -22,7 +22,7 @@ import './Conductor.scss';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  const { isXs, isSm, isMd, isLg, isXl, getCurrentSize } = useBreakpoints();
+  const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
   return (
     <div
       role="tabpanel"
@@ -95,11 +95,11 @@ export const Conductor = props => {
         alignItems="stretch"
         sx={{ 
           height: {
-            xs: '100%',
-            sm: '100%',
-            md: 'auto',
-            lg: 'auto',
-            xl: 'auto',
+            md: '100%',
+            md: '100%',
+            md: '100%',
+            lg: '100%',
+            xl: '100%',
             },
            overflow: 'auto'
         }}>
@@ -107,8 +107,8 @@ export const Conductor = props => {
           xs={12} sm={12} md={8} 
           sx={{ 
             height: {
-              xs: 'auto',
-              sm: 'auto',
+              md: '100%',
+              md: '100%',
               md: '100%',
               lg: '100%',
               xl: '100%',

@@ -22,8 +22,8 @@ const RouteMap = props => {
   const  { handleMapClick } = props;
 
   return (
-    <TransformWrapper>
-      <TransformComponent>
+    // <TransformWrapper>
+    //   <TransformComponent>
         <svg
           width="100%"
           height="100%"
@@ -2765,8 +2765,8 @@ const RouteMap = props => {
             </g>
           </g>
         </svg>
-      </TransformComponent>
-    </TransformWrapper>
+    //   </TransformComponent>
+    // </TransformWrapper>
   )
 }
 

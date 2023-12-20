@@ -19,8 +19,15 @@ $greenline: rgb(0, 171, 0);
   }
 }
 
-.turnout {
-  // max-width: 10rem;
+.routes, .turnouts {
+  display: flex;
+  flex-wrap: wrap;
+  // margin: 01rem 0;
+}
+
+.turnout, .route {
+  min-width: 20rem;
+  // margin: 0.25rem 1rem;
 }
 
 g.turnout {

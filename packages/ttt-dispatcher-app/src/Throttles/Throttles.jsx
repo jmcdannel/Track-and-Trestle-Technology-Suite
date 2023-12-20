@@ -23,7 +23,7 @@ const fabStyle = {
 
 export const Throttles = props => {
 
-  const { isXs, isSm, isMd, isLg, isXl, getCurrentSize } = useBreakpoints();
+  const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 

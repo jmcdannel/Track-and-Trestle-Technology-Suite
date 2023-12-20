@@ -1,4 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 
@@ -6,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
 
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -16,14 +18,17 @@ import DccExThrottleController from './DccExThrottleController';
 import ThrottleSlider from './ThrottleSlider';
 import SpeedControl from './SpeedControl';
 import Functions from './Functions';
+import LocoName from './LocoName';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import AdvancedControls from './AdvancedControls';
 
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
-import { roadClassName, formattedAddress } from './throttleUtils';
+import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 import dccApi from '../Shared/api/dccApi';
+
+import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
 
 import './Throttle.scss';
 
@@ -59,7 +64,7 @@ export const Throttle = props => {
 
   const debouncedSpeed = useDebounce(uiSpeed, 100);
 
-  const { isXs, isSm, isMd, isLg, isXl, getCurrentSize } = useBreakpoints();
+  const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
 
   const handleSliderSpeed = value => {
     setUiSpeed(value);
@@ -132,7 +137,7 @@ export const Throttle = props => {
       <Card
         className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')}`} >
         <CardHeader
-          title={loco.name}
+          title={<LocoName loco={loco} />}
           subtitle={consist && `${consist.join(', ')}`}
           avatar={
             <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
@@ -145,16 +150,12 @@ export const Throttle = props => {
               size="small"
               onShowSettings={() => setShowSettings(true)}
               onShowFunctionsDrawer={() => setShowFunctionsDrawer(true)}
-              showFunctions={( isXs || isSm || isMd ) || !showAdvancedControls}
-              showCruiseControl={( isXs || isSm || isMd ) || !showAdvancedControls}
-              showPark={( isXs || isSm || isMd ) || !showAdvancedControls}
-              showSettings={( isXs || isSm || isMd || isLg || isXl )}
             />
           }
         />
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
-            {showAdvancedControls && (
+            {up.lg  && (
               <Grid item 
                 xs={5} sm={2} md={3} lg={3} 
                 display="flex" 

@@ -10,45 +10,19 @@ import api from '../Shared/api/api';
 
 export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
 
-
   const [ state, ] = useContext(Context);
   const { connections } = state;
-
-
-  const [dccConnection, setDccconnection] = useState(null);
-  const [ports, setPorts] = useState([]);
   const [usbPort, setUsbPort] = useState(currentPort ? currentPort : '');
 
-  // useEffect(async () => {
-  //   const dccConn = connections.get('dcc-js-api');
-  //   console.log('dccConn', dccConn);
-  //   setDccconnection(dccConn);
-  //   dccConn?.ports && setPorts(dccConn.ports);
-  //   // if (!dccConnection) {
-  //   //   setDccconnection(connections.get('dcc-js-api'));
-  //   //   console.log('[CmdExDialog]', connections.get('dcc-js-api'));
-  //   // }
-  // }, [connections, dccConnection, ports]);
-
-  // useEffect(async () => {
-  //   dccConnection?.ports && dccConnection.ports.length && setPortList(portList => [...dccConnection.ports, ...portList])
-  // }, [dccConnection]);
-
   useEffect(async () => {
-    console.log('listPorts', api.dcc);
     open && await api.dcc.send('listPorts', { });
   }, [open]);
   
 
   const handleUpdate = async () => {
     const serial = usbPort;
-    console.log('handleUpdate', usbPort);
     await api.config.set('dcc-js-api', serial);
     await api.dcc.send('connect', { serial });
-    // await api.interfaces.put({
-    //   id: cmdExInterface.id,
-    //   serial: usbPort
-    // });
     window.location.reload(false);
   }
 

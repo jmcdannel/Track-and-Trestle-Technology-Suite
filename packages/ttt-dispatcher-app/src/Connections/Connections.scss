@@ -1,0 +1,24 @@
+@import "../theme";
+
+.conenctions {
+  display: flex;
+}
+
+.connection {
+  display: flex;
+  margin: 5rem 0;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  margin: 1rem;
+  border-radius: 1rem;
+  background: linear-gradient(140deg, rgb(71, 91, 235) 0%, rgba(46, 62, 187, 0.8) 100%);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+
+  &__status {
+    span {
+      visibility: hidden;
+    }
+  }
+}

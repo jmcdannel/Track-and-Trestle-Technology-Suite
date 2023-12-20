@@ -36,13 +36,22 @@ function App() {
           {/* <ApiEngine onReady={() => setApiReady(true)} />
           {apiReady && (<JmriEngine onReady={() => setJmriReady(true)} />)} */}
           {/* {jmriReady && (<SensorEngine jmriApi={jmriApi} />)} */}
-          <Box display="flex" flexDirection="column" height="100%">
+          <Box 
+            display="flex" 
+            flexDirection="column" 
+            height="100%" >
             <Box>
               <Header 
                 apiReady={apiReady} 
               />
             </Box>
-            <Box flexGrow={1} component="main" display="flex" alignContent="center" mt={2}>
+            <Box 
+              flexGrow={1} 
+              component="main" 
+              display="flex" 
+              alignContent="center" 
+              mt={2
+            }>
               {apiReady && ( <Modules /> )}
             </Box>
             <Box mt={1}>

@@ -32,306 +32,60 @@ $neutral: #f89719;
     flex-basis: 50%;
     max-width: 50%;
     min-height: 540px;
-    max-height: 72vh;
   }
 
+  .MuiCardHeader-root {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+    padding: 0;
+  }
+  .MuiCardContent-root {
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
   .MuiAvatar-root {
     // TODO: roadname color
     background: rgb(254,0,107);
     background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
   }
 
-  .MuiCardHeader-action {
-    padding: .5rem;
-    .MuiIconButton-root {
-      margin: auto .5rem;
-      &.settings {
-        background: rgb(181, 181, 181);      
-        border: .25rem solid rgb(87, 87, 87);
-      }
+  // .MuiCardHeader-action {
+  //   padding: .5rem;
+  //   .MuiIconButton-root {
+  //     margin: auto .5rem;
+  //     &.settings {
+  //       background: rgb(181, 181, 181);      
+  //       border: .25rem solid rgb(87, 87, 87);
+  //     }
 
-      &.functions {
-        border: .25rem solid rgb(195, 254, 0);
-        color: rgb(195, 254, 0);
-      }
+  //     &.functions {
+  //       border: .25rem solid rgb(195, 254, 0);
+  //       color: rgb(195, 254, 0);
+  //     }
 
-      &.cruise-control {
-        border: .25rem solid rgb(254,0,107);
-        color: rgb(254,0,107);
-      }
-      &.park {
-        border: .25rem solid rgb(0, 72, 254);
-        color: rgb(0, 72, 254);
-      }
-    }
-  }
+  //     &.cruise-control {
+  //       border: .25rem solid rgb(254,0,107);
+  //       color: rgb(254,0,107);
+  //     }
+  //     &.park {
+  //       border: .25rem solid rgb(0, 72, 254);
+  //       color: rgb(0, 72, 254);
+  //     }
+  //   }
+  // }
 
   &__slider, &__controls, &__actions {
     justify-content: center;
   }
 
-  &__advanced-controls {
-    display: flex;
-    flex-direction: column;
-    // flex-wrap: wrap;
-    color: #fff;
-    
-    &.MuiButtonGroup-root {
-      border-radius: 1.5rem;
-    }
-
-    .MuiButton-startIcon {
-      color: #fff;
-      margin: 0;
-      svg {
-        font-size: 3rem;
-      }
-    }
-
-    .MuiButtonBase-root {
-      background: linear-gradient(140deg, rgb(71, 91, 235) 0%, rgba(46, 62, 187, 0.8) 100%);
-      flex: 1 1 0px;
-      width: 0;
-      padding: 1rem 3rem;
-      color: #fff;
-      font-size: .75rem;
-      display: flex;
-      flex-direction: column;
-      border-radius: 0;
-      border: 0px solid rgba(255,255,255, 0.5);
-      // border-radius: 1.5rem 1.5rem 0 0;
-
-      &.MuiButtonGroup-middleButton,
-      &.MuiButtonGroup-firstButton {
-        border: 0;
-      }
-
-      &:first-child {
-        border-radius: 1.5rem 1.5rem 0 0;
-      }
-
-      &:last-child {
-        border-radius: 0 0 1.5rem 1.5rem;
-      }
-
-    }
-
-  }
-  &__controls {
-    display: flex;
-    &__group {
-      flex: 1;
-      justify-content: center;
-
-
-      .MuiIconButton-root {
-        background: linear-gradient(140deg, rgb(115 27 196) 0%, rgb(131 23 160) 100%);
-        border-radius: 0;
-        margin: auto 2rem;
-
-        &:first-child {
-          border-radius: 1.5rem 1.5rem 0 0;
-        }
   
-        &:last-child {
-          border-radius: 0 0 1.5rem 1.5rem;
-        }
 
-        &.speed-up-btn {
-          color: $green;
-        }
-        &.speed-stop-btn {
-          padding: 2rem 0;
-          margin: auto 0;
-          width: 100%;
-          border-radius: 1.5rem;
-        }
-        &.speed-down-btn {
-          color: #f44336;
-        }
-
-      }
-    }
-  }
-
-  &__functions {
-    flex: 1;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-bottom: 2rem;
-
-    .MuiButton-startIcon {
-      color: #fff;
-      margin: 0;
-      svg {
-        font-size: 1.5rem;
-      }
-    }
-
-    .MuiButtonBase-root {
-      background: linear-gradient(140deg, rgb(197, 51, 158) 0%, rgb(147, 38, 131) 100%);
-      border-radius: 0;
-      font-size: .675rem;
-      padding: .5rem 2rem;
-      margin: 0;
-      flex: 1 0 50%;
-
-      &:first-child {
-        border-radius: 1.5rem 0 0 0;
-      }
-
-      &:nth-child(2) {
-        border-radius: 0 1.5rem 0 0;
-      }
-
-      &:nth-last-child(2) {
-        border-radius: 0 0 0 1.5rem;
-      }
-
-      &:last-child {
-        border-radius: 0 0 1.5rem 0;
-      }
-
-      &.speed-up-btn {
-        color: $green;
-      }
-      &.speed-stop-btn {
-        padding: 2rem 0;
-        margin: auto 0;
-        width: 100%;
-        border-radius: 1.5rem;
-      }
-      &.speed-down-btn {
-        color: #f44336;
-      }
-
-    }
-  }
 
   .throttle__slider__container {
     margin: 2rem 0 2rem 2rem;
   }
-
-  .MuiSlider-root {
-    position: relative;
-    flex: 1;
-    text-align: center;
-
-    &.MuiSlider-vertical {
-      width: $sliderWidth;
-      padding: 0;
-    }
-
-    &.MuiSlider-vertical {
-
-      .MuiSlider-rail {
-        width: $sliderWidth;
-        box-shadow: inset 2px 2px 0px 0px #000000;
-        border-radius: 0;
-        border-top-right-radius: 0;
-        border-top-left-radius: 0;
-
-        top: -1rem;
-        bottom: -1rem;
-        height: calc(100% + 2rem);
-      }
-
-      .MuiSlider-mark {
-        // width: ($sliderWidth / 3);
-        width: $sliderWidth;
-        transform: translate(-50%, 2px);
-      }
-      .MuiSlider-markLabel {
-        left: 3.5rem;
-        text-align: center;
-        color: #fff;
-        font-weight: bold;
-        font-size: 1rem;
-        transform: translateY(.75rem);
-        z-index: 2;
-        &:before {
-          position: absolute;
-          // content: calc(attr(data-index) + 5) + 'px';
-          left: -$sliderWidth;
-        }
-
-      }
-
-      .MuiSlider-thumb {
-        bottom: 0%;
-        width: $sliderWidth;
-        border-radius: 4px;
-        border: 1px solid #333;
-        background-color: red;
-        transform: translate(-50%, 6px);
-        margin-left: 0;
-        height: 12px
-      }
-    }
-  }
-
   
-
-  
-
-  &__speed {
-    padding: 1rem;
-    margin: 1rem;
-    width: 100%;
-    flex: 0 0 33%;
-    border: 1px solid rgba(255,255,255,.15);
-    background: #333;
-    box-shadow: inset 0px 0px 4px 2px rgba(0,0,0,0.3);
-    border-radius: 1rem;
-    text-align: center;
-    font-weight: bold;
-    font-size: 2rem;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:before,
-    &:after {
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      font-size: 8px;
-      text-transform: uppercase;
-      font-family: "Andale Mono", monospace;
-      left: 0;
-      right: 0;
-      white-space: nowrap;
-      padding-top: 5px;
-    }
-    &:before {
-      content: '↑↑ FWD ↑↑';
-      top: 0;
-      color: rgba(118, 255, 3, .7);
-    }
-    &:after {
-      content: '↓↓ REV ↓↓';
-      bottom: 0;
-      color: rgba(244, 67, 54, .7);
-    }
-    &.throttle__speed--reverse {
-      color: rgba(244, 67, 54, .7);
-      &:before {
-        display: none;
-      }
-    }
-
-    &.throttle__speed--forward {
-      color: rgba(118, 255, 3, .7);
-      &:after {
-        display: none;
-      }
-    }
-    &.throttle__speed--disabled {
-      color: #999;
-    }
-  }
-
 
   &__actions {
     &__primary.MuiButtonBase-root {
@@ -340,128 +94,3 @@ $neutral: #f89719;
   }
 
 }
-
-.throttle {
-  .MuiCardHeader-root {
-    background: $bg-blue-green-1;
-    background: $bg-grad-blue-green-1;
-    padding: 0.25rem .5rem;
-  }
-  .MuiCardContent-root {
-    // @include linear-gradient(darken($red, 50%), darken($red, 60%));
-    // @include linear-gradient($neutral, lighten($neutral, 20%));
-    // padding: 0;
-    &:last-child {
-      padding-bottom: 0;
-    }
-  }
-  // .MuiButton-outlinedPrimary {
-  //   color: $red;
-  //   border-color: $red;
-  // }
-  // .MuiButton-containedPrimary {
-  //   background-color: $red;
-  // }
-  // .MuiSlider-root {
-  //   color: $red;
-  // }
-
-
-  // &--BNSF,
-  // &--GN-317 {
-  //   .MuiCardHeader-root {
-  //     @include linear-gradient(darken($green, 10%), darken($green, 20%));
-  //   }
-  //   .MuiCardContent-root {
-  //     @include linear-gradient(darken($green, 30%), darken($green, 40%));
-  //   }
-  //   .MuiButton-outlinedPrimary {
-  //     color: $green;
-  //     border-color: $green;
-  //   }
-  //   .MuiButton-containedPrimary {
-  //     background-color: $green;
-  //   }
-  //   .MuiSlider-root {
-  //     color: $green;
-  //   }
-  // }
-
-  &--BNSF-5931 {
-    .MuiCardHeader-root {
-      @include linear-gradient(darken($orange, 10%), darken($orange, 20%));
-    }
-    .MuiCardContent-root {
-      @include linear-gradient(darken($orange, 30%), darken($orange, 40%));
-    }
-    .MuiButton-outlinedPrimary {
-      color: $orange;
-      border-color: $orange;
-    }
-    .MuiButton-containedPrimary {
-      background-color: $orange;
-    }
-    .MuiSlider-root {
-      color: $orange;
-    }
-  }
-
-  &--BNSF-5917, 
-  &--BNSF-5918,
-  &--BNSF-5919,
-  &--Amtrack-150 {
-    .MuiCardHeader-root {
-      @include linear-gradient(darken($blue, 10%), darken($blue, 20%));
-    }
-    .MuiCardContent-root {
-      @include linear-gradient(darken($blue, 30%), darken($blue, 40%));
-    }
-    .MuiButton-outlinedPrimary {
-      color: $blue;
-      border-color: $blue;
-    }
-    .MuiButton-containedPrimary {
-      background-color: $blue;
-    }
-    .MuiSlider-root {
-      color: $blue;
-    }
-  }
-
-}
-
-// @media only screen and (max-width: 1000px) {
-//   .throttle {
-//     &__controls {
-//       &__status {
-//         flex-direction: column;
-//         > .MuiGrid-item {
-//           width: 100%;
-//         }
-//       }
-
-//     }
-
-//     &__functions {
-//       &__btn.MuiButtonBase-root {
-//         min-width: 5rem;
-//         flex: 1 0 50%;
-//         font-size: 10px;
-
-//       }
-//     }
-//   }
-// }
-
-// @media only screen and (max-width: 768px) {
-//   .throttle {
-//     &__functions {
-//       &__btn.MuiButtonBase-root {
-//         min-width: 5rem;
-//         flex: 1 0 100%;
-//         font-size: 10px;
-
-//       }
-//     }
-//   }
-// }

@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 import DispatcherMenu from './DispatcherMenu';
-import Routes from '../Routes/Routes';
+import Route from '../Routes/Route';
 import RouteMap from '../Routes/RouteMap';
 import Turnout from '../Turnouts/Turnout';
+import withRouteEngine from '../Routes/withRouteEngine';
 
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
@@ -18,7 +20,13 @@ const TURNOUT_DELAY = 10; // ms
 
 export const Dispatcher = props => {
 
-  const { filter, enabled, overrideUserPrefs, view } = props;
+  const { 
+    filter, 
+    enabled, 
+    overrideUserPrefs, 
+    computedRoutes, 
+    handleRouteToggle 
+  } = props;
   const [ state, dispatch ] = useContext(Context);
   const { turnouts } = state;
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
@@ -46,39 +54,79 @@ export const Dispatcher = props => {
     : enabled.includes(item) || !!dispatcherLayout[item];
   
   return turnouts ? (
-    <Grid container sx={{ alignContent: 'flex-start' }}>
+    <Box sx={{ 
+      alignContent: 'flex-start',
+      overflow:'auto',
+      flex: '1'
+      }}>
       {isVisible('menu') && (
-        <Grid item sm={12}>
-          <DispatcherMenu setTurnouts={setTurnouts}  />
-        </Grid>
+        <DispatcherMenu setTurnouts={setTurnouts}  />
       )}
 
       {isVisible('map') && (
-        <Grid item sm={12} className="dispatcher__routemap" >
-          <RouteMap setTurnouts={setTurnouts} handleTurnoutChange={handleTurnoutChange} />
-        </Grid>
+        <RouteMap setTurnouts={setTurnouts} handleTurnoutChange={handleTurnoutChange} />
       )}
 
       {isVisible('routes') && (
-        <Grid item sm={12} p={2}>
-          <Routes setTurnouts={setTurnouts} view={view}  />
-      </Grid>
+        <Box className="routes">
+          {computedRoutes.map(rte => (
+            <Box 
+              key={rte.routeId} 
+              sx={{
+                padding: '.25rem',
+                flex: {
+                  xs: '1 1 100%',
+                  sm: '1 1 50%',
+                  md: '1 1 33%',
+                  lg: '1 1 25%',
+                  xl: '1 1 20%',
+                },
+                maxWidth: {
+                  xs: '100%',
+                  sm: '50%',
+                  md: '33%',
+                  lg: '25%',
+                  xl: '20%',
+              }
+            }}>
+              <Route 
+                className={rte.className} 
+                route={rte} 
+                handleRouteToggle={handleRouteToggle} 
+              />
+            </Box>
+          ))}
+        </Box>
       )}
       
       {isVisible('turnouts') && (
-        <Grid item sm={12} p={2}>
-          <Grid container className={`turnouts turnouts--${view}`} spacing={2}>
-            <Grid item sm={12} className="turnout__grid-item">
-              {turnouts?.filter(filter).map(turnout => (
-                <div key={`turnout$${turnout.turnoutId}`} className="turnout__container">
-                    <Turnout turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
-                </div>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
+        <Box className="turnouts">        
+        {turnouts?.filter(filter).map(turnout => (
+            <Box 
+              key={`turnout$${turnout.turnoutId}`} 
+              sx={{
+                padding: '.25rem',
+                flex: {
+                  xs: '1 1 100%',
+                  sm: '1 1 50%',
+                  md: '1 1 33%',
+                  lg: '1 1 25%',
+                  xl: '1 1 20%',
+                },
+                maxWidth: {
+                  xs: '100%',
+                  sm: '50%',
+                  md: '33%',
+                  lg: '25%',
+                  xl: '20%',
+                }
+              }}>
+              <Turnout turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
+            </Box>
+          ))}            
+        </Box>
       )}
-    </Grid>
+    </Box>
   ) : null;
 
 }
@@ -86,8 +134,7 @@ export const Dispatcher = props => {
 Dispatcher.defaultProps = {
   filter: turnouts => turnouts,
   enabled: ['menu'],
-  overrideUserPrefs: false,
-  view: 'tiny'
+  overrideUserPrefs: false
 };
 
-export default Dispatcher;
+export default withRouteEngine(Dispatcher);

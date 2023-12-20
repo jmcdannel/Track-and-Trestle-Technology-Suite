@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ThrottleSpeed.scss';
+
 export const ThrottleSpeed = props => {
 
   const { speed, isDisabled = false } = props;

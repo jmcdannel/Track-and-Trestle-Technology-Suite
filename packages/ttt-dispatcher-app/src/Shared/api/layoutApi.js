@@ -12,10 +12,13 @@ async function get(type, Id = null) {
     const uri = Id !== null
         ? `/${layoutId}/${type}/${Id}`
         : `/${layoutId}/${type}`;
-    console.log('[layoutApi] get', uri);
+    // console.log('[layoutApi] get', uri);
     const response = uri ? await instance.get(uri) : null;
-    console.log('r[layoutApi] esponse', response);
-    return Id ? response.data : response.data?.[0]?.[type];
+    return Id 
+      ? response.data 
+      : response.data?.[0]?.[type]
+        ? response.data?.[0]?.[type]
+        : response.data?.[0];
   } catch (err) {
     console.error(err);
     throw new Error(`Unable to read ${type}, Id=${Id}`);
@@ -37,35 +40,28 @@ async function getLayouts(Id = null) {
 
 async function setLayout(_layoutId) {
   layoutId = _layoutId;
-  console.log('[layoutApi] setLayout', layoutId);
 }
 
 async function initialize() {
   const payload = await getLayouts(layoutId);
-  log.debug('[layoutApi] payload', payload);
   const getModules = payload.modules.reduce((reqs, module) => api[module] && api[module].get ? [...reqs, module] : [...reqs], []);
-  log.debug('[layoutApi] getModules', getModules);
   const results = await Promise.all( getModules.map(req => api[req].get()) );
-  log.debug('[layoutApi] results', results);
   const initialState = getModules.reduce((state, module, index) => ({ 
     ...state, 
     [module]: results[index] 
   }), { layout: payload });
-  log.debug('[layoutApi] initialState', initialState);
   await dispatch({ type: 'INIT_STATE', payload: initialState });
 }
 
 async function connect(_dispatch, uri, _layoutId) {
   try {
     dispatch = _dispatch;
-    console.log('[layoutApi] Layout api connect', uri, _layoutId );  
     layoutId = _layoutId ? _layoutId : layoutId;
     instance.defaults.baseURL = `http://${uri}:5200/api`;
     if (layoutId) {
       await initialize();
     } else {
       const payload = await getLayouts();
-      console.log('getLayouts apiResponse',  payload);
     }
     // const apiResponse = await getLayouts(layoutId);
     // console.log('apiResponse',  apiResponse);
@@ -88,6 +84,10 @@ export const api = {
   effects: {
     get: args => get('effects', args),
     put: (...args) => putWS('effects', ...args)
+  },
+  routes: {
+    get: args => get('routes', args),
+    put: (...args) => putWS('routes', ...args)
   },
   locos: {
     get: async (Id = null) => await get('locos', Id),

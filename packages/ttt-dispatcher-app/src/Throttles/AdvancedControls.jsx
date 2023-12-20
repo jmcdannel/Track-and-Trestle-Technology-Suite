@@ -132,7 +132,7 @@ const AdvancedControls = (props) => {
       <ButtonGroup
         variant="text"
         size="large"
-        className="throttle__advanced-controls">
+        className="rounded-button-group throttle__advanced-controls">
         <Tooltip title="Cruise Control">
           <Button 
             className="cruise-control"

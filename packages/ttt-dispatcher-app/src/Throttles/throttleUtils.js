@@ -1,3 +1,5 @@
+export const WAY_UP_STEP = 5;
+
 export const roadClassName = (loco) => {
   return loco.road.toLowerCase().replace(/ /g, '-');
 }

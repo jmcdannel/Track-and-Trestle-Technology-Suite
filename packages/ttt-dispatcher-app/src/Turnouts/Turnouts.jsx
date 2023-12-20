@@ -19,7 +19,7 @@ const Turnouts = () => {
   }
 
   const renderTurnouts = list => list
-    .sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by the abbr property
+    ?.sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by the abbr property
     .map(renderTurnout);
 
   const renderTurnout = turnout => {
@@ -30,11 +30,11 @@ const Turnouts = () => {
 
   return (
     <>
-      {layout.meta.lines
+      {layout?.meta?.lines
         .sort((a, b) => a.abbr.localeCompare(b.abbr)) // Sort alphabetically by the abbr property
         .map(line => renderTurnouts(turnouts.filter(turnout => turnout?.meta?.line === line.id)))
       }
-      {renderTurnouts(turnouts.filter(turnout => !turnout?.meta?.line))}
+      {renderTurnouts(turnouts?.filter(turnout => !turnout?.meta?.line))}
     </>
   );
 };
