@@ -9,10 +9,10 @@ const MRLLogoPng = '/images/logos/mrl.png';
 export function useLayoutRoadnames(_id) {
 
   const [ state ] = useContext(Context)
-  const { meta: { roadnames: layoutRoadnames } } = state.layout
+  const { layout } = state
 
   function getRoadnameById(id) {
-    return layoutRoadnames.find(rd => rd.id === id)
+    return layout?.meta?.roadnames.find(rd => rd.id === id)
   }
   function getLogo(roadname, defaultLogo = null) {
     switch (roadname) {
