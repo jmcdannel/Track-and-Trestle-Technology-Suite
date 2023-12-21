@@ -9,24 +9,25 @@ import config from './config'; // TODO: replace with configStore
 // import useConnectionStore from '../../Store/useConnectionStore';
 
 let dispatch;
-const layoutId = await config.layoutId.get();
+// const layoutId = await config.layoutId.get();
 
-async function connect(_dispatch) {
+async function connect(_dispatch, host, layoutId) {
   try {
     dispatch = _dispatch;
-    const host = await config.host.get();
+    // const host = await config.host.get();
     // const host = useConnectionStore(state => state.host);
     console.log('[api] connect', host, layoutId);
     if (!host) throw new Error('No host specified');
     const connected = host
-      ? await layoutApi.connect(dispatch, host, layoutId)
+      ? await layoutApi.connect(_dispatch, host, layoutId)
       : false;
     console.log('[api] connected', connected);
-    if (connected) {
-      await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId: 'layoutApi', connected, host } });
-    }
-    (connected && layoutId) 
-      && await connectInterfaces(host, layoutId);
+    return connected;
+    // if (connected) {
+    //   await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId: 'layoutApi', connected, host } });
+    // }
+    // (connected && layoutId) 
+    //   && await connectInterfaces(host, layoutId);
   } catch (e) {
     throw e;
   }

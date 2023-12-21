@@ -11,7 +11,6 @@ function Modules(props) {
 
   const [ state ] = useContext(Context);
   const { locos, turnouts, effects, layout } = state;
-  const { modules } = layout;
   const loading = (<div>Loading</div>);
 
   const getRoutedModule = module => {
@@ -33,13 +32,13 @@ function Modules(props) {
     }
   }
 
-  return modules ? (
+  return (
     <Routes>
       <Route path="/" exact element={locos ? <Conductor /> : loading} />
       <Route path="/pinout" exact element={<Pinout />} />
       <Route path="/settings" exact element={<Settings />} />
-      {modules.map(getRoutedModule)}
-    </Routes>) : <></>;
+      {layout?.modules && layout.modules.map(getRoutedModule)}
+    </Routes>)
 }
 
 export default Modules;

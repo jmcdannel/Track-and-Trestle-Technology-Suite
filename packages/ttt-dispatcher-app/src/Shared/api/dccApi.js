@@ -1,4 +1,5 @@
-// import { useConnectionStore } from '../store/connectionStore.jsx';
+
+// import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 let wsDCC;
 let connectionId;
 let serial;
@@ -6,6 +7,7 @@ let isConnected = false;
 let queue = [];
 let dispatch;
 let host;
+let connectionStore;
 
 const defaultProtocol = 'ws';
 const defaultPort = 8082;
@@ -20,13 +22,26 @@ async function processQueeue() {
 async function onOpen() {
   isConnected = true;
   console.log('[DCC API] Websocket open', { connectionId, connected: isConnected, host });
-  await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, api: isConnected, host } });
-  processQueeue();
+  // await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, api: isConnected, host } });
+  // processQueeue();
 }
 
 async function connectSerial() {
   if (serial) {
     await send('connect', { serial });
+  }
+}
+
+async function connectDevice(port) {
+  try {
+    console.log('[DCC API] connectDevice', port);
+    if (port) {
+      await send('connect', { serial: port });
+      return true;
+    }
+  } catch (err) {
+    console.error('[DCC API] connectDevice', err);
+    throw new Error('Unable to connect', err);
   }
 }
 
@@ -41,14 +56,14 @@ async function onMessage(event) {
     console.log('[DCC API] onMessage', action, payload, event.data);
     switch (action) {
       case 'listPorts':
-        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, ports: payload } });
+        // await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, ports: payload } });
         break;
       case 'socketConnected':
-        connectSerial();
+        // connectSerial();
         break;
       case 'connected':
-        console.log('[DCC API] onMessage.connected', serial);
-        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true, host } });
+        // console.log('[DCC API] onMessage.connected', serial);
+        // await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true, host } });
         break;
       case 'broadcast':
         await dispatch({ type: 'DCC_LOG', payload });
@@ -59,7 +74,7 @@ async function onMessage(event) {
   }
 }
 
-async function connect(_dispatch, _host, iface, _serial) {
+async function connect2(_dispatch, _host, iface, _serial) {
   try {
     dispatch = _dispatch;
     host = _host;
@@ -70,6 +85,23 @@ async function connect(_dispatch, _host, iface, _serial) {
     wsDCC.onerror = onError;
     wsDCC.addEventListener('open', onOpen);   
     wsDCC.addEventListener('message',  onMessage);
+  } catch (err) {
+    console.error('[DCC API] connect', err);
+    throw new Error('Unable to connect', err);
+  }
+}
+
+async function connect(_dispatch, _host, handleMessage) {
+  try {
+    dispatch = _dispatch;
+    host = _host;
+    console.log('[DCC API] connect', host);
+    wsDCC = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
+    wsDCC.onerror = onError;
+    wsDCC.addEventListener('open', onOpen);   
+    wsDCC.addEventListener('message',  handleMessage);
+    wsDCC.addEventListener('message',  onMessage);
+    return true;
   } catch (err) {
     console.error('[DCC API] connect', err);
     throw new Error('Unable to connect', err);
@@ -153,6 +185,7 @@ function getConnectionId() {
 export const dccApi = {
   connect,
   send,
+  connectDevice,
   setOutput,
   setPower,
   setSpeed,

@@ -17,34 +17,38 @@ export const apiHosts = [
   '127.0.0.1'
 ];
 
-export const HostDialog = ({ onClose, open }) => {
+export const DccApiDialog = ({ onClose, open }) => {
 
-  const [apiHost, setAPIHost] = useState(null);
-  const setHost = useConnectionStore(state => state.setHost);
+  const dccHost = useConnectionStore(state => state.dccHost);
+  const setDccHost = useConnectionStore(state => state.setDccHost);
+  const [newDccHost, setNewDccHost] = useState(dccHost);
+  const ports = [];
 
+  // useEffect(async () => {
+  //   open && await api.dcc.send('listPorts', { });
+  // }, [open]);
 
   const handleUpdate = async () => {
-    console.log('handleAPIUpdate', apiHost);
-    setHost(apiHost);
-    onClose();
+    await setDccHost(newDccHost);
+    onClose()
   }
 
   return (
     <Dialog onClose={onClose} open={open}>
-      <DialogTitle>TTT Layout API Host</DialogTitle>
+      <DialogTitle>DCC-EX Serial Connection</DialogTitle>
       <Autocomplete
           sx={{ padding: '1rem', width: '360px' }}
-          id="cmd-ex-port"
+          id="dcc-host"
           freeSolo
+          options={apiHosts}
+          value={dccHost}
           onInputChange={(event, newValue) => {
-            setAPIHost(newValue);
+            setNewDccHost(newValue);
           }}
           onChange={(event, newValue) => {
-            setAPIHost(newValue);
+            setNewDccHost(newValue);
           }}
-          options={apiHosts}
-          value={apiHost}
-          renderInput={(params) => <TextField {...params} label="HOST" />}
+          renderInput={(params) => <TextField {...params} label="DCC API Host" />}
         />
         <Button 
           size="large" 
@@ -56,4 +60,4 @@ export const HostDialog = ({ onClose, open }) => {
   )
 }
 
-export default HostDialog;
+export default DccApiDialog;

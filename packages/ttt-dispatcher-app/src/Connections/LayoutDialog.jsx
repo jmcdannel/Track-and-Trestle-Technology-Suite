@@ -5,18 +5,20 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
-import api from '../Shared/api/api';
 
+import useConnectionStore from '../Store/useConnectionStore';
 const layoutIds = ['tam', 'betatrack', 'shelf'];
 
 export const LayoutDialog = ({ onClose, open }) => {
 
-  const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
+  const layoutId = useConnectionStore(state => state.layoutId);
+  const setLayoutId = useConnectionStore(state => state.setLayoutId);
+  const [newLayoutId, setNewLayoutId] = useState(layoutId);
 
   const handleUpdate = async () => {
-    console.log('handleLayoutIdUpdate', layoutId);
-    await api.config.selectLayout(layoutId);
-    window.location.reload(false);
+    console.log('handleLayoutUpdate', newLayoutId);
+    await setLayoutId(newLayoutId);
+    onClose()
   }
 
   return (
@@ -29,10 +31,10 @@ export const LayoutDialog = ({ onClose, open }) => {
           options={layoutIds}
           value={layoutId}
           onInputChange={(event, newValue) => {
-            setLayoutId(newValue);
+            setNewLayoutId(newValue);
           }}
           onChange={(event, newValue) => {
-            setLayoutId(newValue);
+            setNewLayoutId(newValue);
           }}
           renderInput={(params) => <TextField {...params} label="Layout ID" />}
         />

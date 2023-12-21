@@ -1,4 +1,3 @@
-
 import React, { useContext, useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -8,25 +7,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import api from '../Shared/api/api';
 
-export const layoutIds = [
-  'tam',
-  'betatrack'
-];
+const layoutIds = ['tam', 'betatrack', 'shelf'];
 
 export const LayoutIdDialog = ({ onClose, open }) => {
 
-  const [layoutId, setLayoutId] = useState(null);
-
-  useEffect(() => {
-    async function loadLayoutId() {
-      const _layoutId = await api.config.getLayoutId();
-      setLayoutId(_layoutId);
-    }
-    loadLayoutId();
-  }, []);
+  const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
 
   const handleUpdate = async () => {
-    console.log('handleUpdate', layoutId);
+    console.log('handleLayoutIdUpdate', layoutId);
     await api.config.selectLayout(layoutId);
     window.location.reload(false);
   }
@@ -35,27 +23,27 @@ export const LayoutIdDialog = ({ onClose, open }) => {
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Layout ID</DialogTitle>
       <Autocomplete
-        sx={{ padding: '1rem', width: '360px' }}
-        id="layout-id"
-        freeSolo
-        onInputChange={(event, newValue) => {
-          setLayoutId(newValue);
-        }}
-        onChange={(event, newValue) => {
-          setLayoutId(newValue);
-        }}
-        options={layoutIds}
-        value={layoutId}
-        renderInput={(params) => <TextField {...params} label="Layout ID" />}
-      />
-      <Button 
-        size="large" 
-        startIcon={<SaveIcon />}
-        onClick={handleUpdate}>
-          Save              
-      </Button>
-    </Dialog>
-  );
+          sx={{ padding: '1rem', width: '360px' }}
+          id="layout-id"
+          freeSolo
+          options={layoutIds}
+          value={layoutId}
+          onInputChange={(event, newValue) => {
+            setLayoutId(newValue);
+          }}
+          onChange={(event, newValue) => {
+            setLayoutId(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} label="Layout ID" />}
+        />
+        <Button 
+          size="large" 
+          startIcon={<SaveIcon />}
+          onClick={handleUpdate}>
+            Save              
+        </Button>
+      </Dialog>
+  )
 }
 
 export default LayoutIdDialog;

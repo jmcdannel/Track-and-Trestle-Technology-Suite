@@ -52,7 +52,7 @@ function App() {
               alignContent="center" 
               mt={2
             }>
-              {apiReady && ( <Modules /> )}
+              <Modules />
             </Box>
             <Box mt={1}>
               <Footer />

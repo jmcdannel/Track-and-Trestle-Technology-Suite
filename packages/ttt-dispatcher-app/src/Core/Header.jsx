@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import Stop from './Stop';
 import Power from './Power';
 import Settings from './Settings';
-import StatusMonitor from '../Connections/StatusMonitor';
+import Status from '../Connections/Status';
 import { getByLink } from '../Shared/components/Config/Navigation';
 
 import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
@@ -50,11 +50,9 @@ export const Header = props => {
 
 
           </Typography>
-          <Paper sx={{ padding: '.5rem', display: { xs: 'none', sm: 'block' }}}>
-            <StatusMonitor apiReady={apiReady} />
-          </Paper>
           <Stop />
           <Power />
+          <Status />
           <Link to="/settings" className="header-button">
           <IconButton
               className="header-button"

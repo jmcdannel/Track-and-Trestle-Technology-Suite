@@ -53,11 +53,12 @@ async function initialize() {
   await dispatch({ type: 'INIT_STATE', payload: initialState });
 }
 
-async function connect(_dispatch, uri, _layoutId) {
+async function connect(_dispatch, host, _layoutId) {
   try {
+    console.log('[layoutApi] connect', host, _layoutId);
     dispatch = _dispatch;
     layoutId = _layoutId ? _layoutId : layoutId;
-    instance.defaults.baseURL = `http://${uri}:5200/api`;
+    instance.defaults.baseURL = `http://${host}:5200/api`;
     if (layoutId) {
       await initialize();
     } else {
@@ -68,7 +69,7 @@ async function connect(_dispatch, uri, _layoutId) {
     return true;
   }catch (err) {
     console.error(err);
-    throw new Error(`Unable to connect to ${uri}`);
+    throw new Error(`Unable to connect to ${host}`);
   }
 }
 

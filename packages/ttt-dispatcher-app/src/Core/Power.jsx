@@ -3,10 +3,13 @@ import IconButton from '@mui/material/IconButton';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import dccApi from '../Shared/api/dccApi';
 
+import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+
 export const Power = props => {
 
   const [ powerStatus, setPowerStatus ] = useState(false);
-  const { isConnected } = dccApi;
+  const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
+  const connected = dccDeviceStatus === CONNECTION_STATUS.CONNECTED;
 
 
   useEffect(async () => {
@@ -27,6 +30,7 @@ export const Power = props => {
       className={getClassName()}
       color="inherit"
       variant="outlined"
+      disabled={!connected}
     >
       <PowerSettingsNewIcon />
     </IconButton>)

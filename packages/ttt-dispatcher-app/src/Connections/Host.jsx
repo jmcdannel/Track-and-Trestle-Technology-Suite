@@ -16,14 +16,43 @@ import Stack from '@mui/material/Stack';
 import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 
+import { Context } from '../Store/Store';
 import { HostDialog } from './HostDialog';
-import useConnectionStore from '../Store/useConnectionStore';
+import { LayoutDialog } from './LayoutDialog';
+import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
 export const Host = props => {
 
   const { connection } = props;
   const [configOpen, setConfigOpen] = useState(false);
+  const [layoutOpen, setLayoutOpen] = useState(false);
+  const [ state, dispatch ] = useContext(Context);
+  const { layout } = state;
   const host = useConnectionStore(state => state.host);
+  const layoutId = useConnectionStore(state => state.layoutId);
+  const status = useConnectionStore(state => state.status);
+  const setLayoutId = useConnectionStore(state => state.setLayoutId);
+  const setHost = useConnectionStore(state => state.setHost);
+
+  const connected = status === CONNECTION_STATUS.CONNECTED;
+
+  const handleReset = () => {
+    setHost(null);
+    setLayoutId(null);
+  }
+
+  const connectionStateColor = () => {
+    if (connected && layoutId) {
+      return '#21ff15';
+    } else if (connected && !layoutId) {
+      return 'yellow';
+    } else if (!connected && layoutId) {
+      return 'orange';
+    } else if (!connected && !layoutId) {
+      return 'red';
+    }
+  }
+
   
   return (
     <>
@@ -31,9 +60,9 @@ export const Host = props => {
         <CardHeader 
           title="Host" 
           avatar={
-            connection?.connected 
-              ? <SignalWifiStatusbar4BarIcon sx={{ fill: '#21ff15' }} />
-              : <SignalWifiStatusbarNullIcon sx={{ fill: 'red' }} />
+            connected 
+              ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor() }} />
+              : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor() }} />
           } >
         </CardHeader>
         <CardContent sx={{
@@ -42,22 +71,26 @@ export const Host = props => {
           display: 'flex',
         }}>
           <Box sx={{ padding: '1rem' }}>
-            {connection?.connected 
-                ? <SignalWifiStatusbar4BarIcon sx={{ fill: '#21ff15', fontSize: '8rem' }} />
-                : <SignalWifiStatusbarNullIcon sx={{ fill: 'red', fontSize: '8rem' }} />}
+            {connected 
+                ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
+                : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
 
-          <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>
-            {/* For variant="text", adjust the height via font-size */}
-            {host 
-              ? <Typography>Host: {host}</Typography>
-              : <Skeleton variant="text" sx={{ fontSize: '1rem' }} />}
+          <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>            
 
-            {/* For other variants, adjust the size with `width` and `height` */}
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" height={20} />
-            <Skeleton variant="rectangular" height={20} />
-            <Skeleton variant="rectangular" height={20} />
+            <Typography>Host:</Typography>
+            <Chip 
+              label={host ? host : <Skeleton width={50} />}
+              onDelete={() => setHost(null)} />
+            
+            <Typography>Status: </Typography>
+            <Chip label={status || 'unknown'} /> 
+            
+            <Typography>Layout: </Typography>
+            <Chip 
+              label={layoutId ? layoutId : <Skeleton width={50} />}
+              onDelete={() => setLayoutId(null)} />
+            
           </Stack>
           {/* <pre>
             {JSON.stringify(connection)}*
@@ -79,9 +112,12 @@ export const Host = props => {
             }}>
             <span>{connection?.connected ? 'yes' : 'no'}</span>
           </Box> */}
+          <p>(connected || layoutId): {(connected || layoutId)?.toString()} {connected?.toString()}</p>
         </CardContent>
         <CardActions>
-          <Button onClick={() => setConfigOpen(true)} variant="outlined">Connect</Button>
+          {!connected && (<Button onClick={() => setConfigOpen(true)} variant="outlined">Connect</Button>)}
+          {!layoutId && (<Button onClick={() => setLayoutOpen(true)} disabled={!connected} variant="outlined">Select</Button>)}
+          {(connected || layoutId) && (<Button onClick={handleReset} variant="outlined">Reset</Button>)}
         </CardActions>
         
       </Card>
@@ -89,6 +125,10 @@ export const Host = props => {
       <HostDialog
         onClose={() => setConfigOpen(false)} 
         open={configOpen}
+      />
+      <LayoutDialog
+        onClose={() => setLayoutOpen(false)} 
+        open={layoutOpen}
       />
     </>
   );

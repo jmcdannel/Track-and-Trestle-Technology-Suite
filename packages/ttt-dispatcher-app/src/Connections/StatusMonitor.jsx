@@ -16,7 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 import { HostDialog } from './HostDialog';
-import { LayoutDialog } from './LayoutDialog';
+import { LayoutIdDialog } from './LayoutIdDialog';
 import { CmdExDialog } from './CmdExDialog';
 import { UsbDialog } from './UsbDialog';
 import log from '../Shared/utils/logger';
@@ -66,7 +66,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
   }
 
   useEffect(() => {
-    console.log('connections updated, layoutId updated', layoutId, connections);
+    // console.log('connections updated, layoutId updated', layoutId, connections);
     setLayoutApiConnection(connections?.get('layoutApi') || null);
   }, [layoutId, connections]);
 
@@ -147,7 +147,7 @@ export const StatusMonitor = ({ jmriReady,  apiReady }) => {
         open={apiConfigOpen}
       />
 
-      <LayoutDialog
+      <LayoutIdDialog
         onClose={() => setLayoutConfigOpen(false)} 
         open={layoutConfigOpen}
       />
