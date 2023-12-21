@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Hidden from '@mui/material/Hidden';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
@@ -73,19 +74,27 @@ export const Header = props => {
             </Badge>
           </IconButton>
         </Toolbar>
-        <pre>
-          {up.xs && (<>XSUP</>)}
-          {up.sm && (<>SMUP</>)}
-          {up.md && (<>MDUP</>)}
-          {up.lg && (<>LGUP</>)}
-          {up.xl && (<>XLUP</>)}
-
-          {down.xs && (<>XSdown</>)}
-          {down.sm && (<>SMdown</>)}
-          {down.md && (<>MDdown</>)}
-          {down.lg && (<>LGdown</>)}
-          {down.xl && (<>XLdown</>)}
-        </pre>
+        <Box sx={{
+          position: 'fixed',
+          bottom: '0',
+          left: '0',
+          fontSize: '.75rem'
+        }}>
+          <pre>
+            {up.xs && (<>XSup-</>)}
+            {up.sm && (<>SMup-</>)}
+            {up.md && (<>MDup-</>)}
+            {up.lg && (<>LGup-</>)}
+            {up.xl && (<>XLup-</>)}
+          </pre>
+          <pre>
+            {down.xs && (<>XSdown-</>)}
+            {down.sm && (<>SMdown-</>)}
+            {down.md && (<>MDdown-</>)}
+            {down.lg && (<>LGdown-</>)}
+            {down.xl && (<>XLdown-</>)}
+          </pre>
+        </Box>
       </AppBar>
     </>
   );

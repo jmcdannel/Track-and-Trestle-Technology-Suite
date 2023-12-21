@@ -118,15 +118,6 @@ export const Throttle = props => {
         forward={(debouncedSpeed >= 0)}
         consist={consist}
       />
-      {( isXs || isSm || isMd ) && (
-        <Drawer
-          anchor={'right'}
-          open={showFunctionsDrawer}
-          onClose={() => setShowFunctionsDrawer(false)}
-          >
-          <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
-        </Drawer>
-      )}
 
       <ThrottleSettings
         loco={loco}
@@ -134,11 +125,18 @@ export const Throttle = props => {
         show={showSettings}
         onHide={() => setShowSettings(false)} />
 
+      <Drawer
+        anchor={'right'}
+        open={showFunctionsDrawer}
+        onClose={() => setShowFunctionsDrawer(false)}
+        >
+        <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
+      </Drawer>
+
       <Card
         className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')}`} >
         <CardHeader
           title={<LocoName loco={loco} />}
-          subtitle={consist && `${consist.join(', ')}`}
           avatar={
             <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
           } 
@@ -155,7 +153,7 @@ export const Throttle = props => {
         />
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
-            {up.lg  && (
+            {up.lg && showFunctions && (
               <Grid item 
                 xs={5} sm={2} md={3} lg={3} 
                 display="flex" 
@@ -163,7 +161,7 @@ export const Throttle = props => {
                 <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
               </Grid>
             )}
-            {showAdvancedControls && (
+            {up.md && showAdvancedControls && (
               <Grid item 
                 xs={5} sm={2} md={2} 
                 display="flex" 

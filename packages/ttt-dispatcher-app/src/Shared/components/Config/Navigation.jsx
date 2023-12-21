@@ -10,6 +10,7 @@ export const navConfig = {
   turnouts: { link: '/dispatcher', label: 'Dispatcher', icon: (<CallSplit />) },
   throttles: { link: '/throttles', label: 'Throttle', icon: (<UnfoldMoreIcon />) },
   signals: { link: '/signals', label: 'Signals', icon: (<TrafficIcon />) },
+  settings: { link: '/settings', label: 'Settings' },
   effects: { link: '/effects', label: 'Effects', icon: (<MovieFilterIcon />) }
 }
 

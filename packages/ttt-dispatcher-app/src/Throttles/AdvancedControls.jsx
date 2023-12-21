@@ -87,19 +87,19 @@ const AdvancedControls = (props) => {
     }    
   }
 
-  const setPrecision = async (val) => {
+  const setPrecision = async (maxSpeed) => {
     try {
       setShowPrecision(false)
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed: val } });
+      await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed } });
     } catch (err) {
       console.error(err);
     }
   }
 
-  const setConsist = async (val) => {
+  const setConsist = async (consist) => {
     try {
       setShowConsist(false)
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed: val } });
+      await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
     } catch (err) {
       console.error(err);
     }

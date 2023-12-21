@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import StatusMonitor from '../Connections/StatusMonitor';
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
-import { LayoutApi } from './LayoutApi';
+import { Host } from './Host';
 import { HostDialog } from './HostDialog';
 import { CmdExDialog } from './CmdExDialog';
 import { UsbDialog } from './UsbDialog';
@@ -25,10 +25,11 @@ export const Settings = () => {
   }, [layoutId, connections]);
 
   return (
-    <Box className="connections">
+    <>
+      <Box className="connections">
+        <Host />
+      </Box>
       <StatusMonitor apiReady={true} />
-
-      {hostType === 'EX-JS-API' && (<LayoutApi connection={connections.get('layoutApi')} />)}
 
       {Array.from(connections.entries()).map(([key, value]) => {
         return (
@@ -40,7 +41,7 @@ export const Settings = () => {
       })}
       <h3>LAYOUT</h3>
       <pre>{JSON.stringify(layout, null, 2)}</pre>
-    </Box>
+    </>
   );
 }
 

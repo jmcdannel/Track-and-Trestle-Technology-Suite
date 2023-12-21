@@ -6,6 +6,8 @@ import layoutApi from './layoutApi';
 // import favoritesApi from './favoritesApi';
 import config from './config'; // TODO: replace with configStore
 
+// import useConnectionStore from '../../Store/useConnectionStore';
+
 let dispatch;
 const layoutId = await config.layoutId.get();
 
@@ -13,6 +15,7 @@ async function connect(_dispatch) {
   try {
     dispatch = _dispatch;
     const host = await config.host.get();
+    // const host = useConnectionStore(state => state.host);
     console.log('[api] connect', host, layoutId);
     if (!host) throw new Error('No host specified');
     const connected = host

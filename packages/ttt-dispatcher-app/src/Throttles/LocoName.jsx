@@ -26,9 +26,12 @@ export const LocoName = ({ loco }) => {
     }
   }
     
+  console.log('LocoName', loco, roadname, roadlogo);
     return (
       <Box className="loco-name">
         <Typography>{loco.name}</Typography>
+        {loco.consist && loco.consist.length > 0 && loco.consist
+          .map(cLoco => <Typography key={cLoco}>{cLoco}</Typography>)}
         {roadlogo && <Box className="roadlogo">{roadlogo}</Box>}
       </Box>
     );

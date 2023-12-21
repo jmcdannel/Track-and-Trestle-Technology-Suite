@@ -32,8 +32,6 @@ import './MiniThrottle.scss';
 export const MiniThrottle = props => {
 
   const [ , dispatch ] = useContext(Context);
-  const maxSpeed = 100;
-  const minSpeed = -maxSpeed;
 	const STOP = '0.0';
 
   const { onLocoClick, loco, disabled, loco: { 
@@ -41,6 +39,8 @@ export const MiniThrottle = props => {
     cruiseDisabled, 
     isAcquired, 
     speed, 
+    consist,
+    maxSpeed = 100,
     forward
   } } = props;
 
@@ -104,11 +104,11 @@ export const MiniThrottle = props => {
         speed={debouncedSpeed} 
         address={address} 
         forward={(debouncedSpeed >= 0)} 
+        consist={consist}
       />
       <Paper className="mini-throttle">
         <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
         <LocoName loco={loco} />
-
         <SpeedControl
           orientation="horizontal"
           uiSpeed={uiSpeed}

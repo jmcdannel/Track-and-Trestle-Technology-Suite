@@ -14,13 +14,6 @@ import AvailableThrottles from './AvailableThrottles';
 import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 import { Context } from '../Store/Store';
 
-
-const fabStyle = {
-  position: 'fixed',
-  bottom: 16,
-  right: 16,
-};
-
 export const Throttles = props => {
 
   const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
@@ -56,11 +49,11 @@ export const Throttles = props => {
             .filter(loco => loco.isAcquired && !loco.cruiseControl)
             .map(loco => (
               <Throttle 
-                className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'} 
-                key={loco.address} 
-                loco={loco} 
-                showAdvancedControls={throttleCount === 1 && (!isXs && !isSm)}
-                showFunctions={throttleCount === 1 &&  (!isXs && !isSm && !isMd)}
+                className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'}
+                key={loco.address}
+                loco={loco}
+                showAdvancedControls={throttleCount === 1}
+                showFunctions={throttleCount === 1}
               />))
         : <AvailableThrottles />
       }
@@ -70,7 +63,11 @@ export const Throttles = props => {
           color="primary" 
           aria-label="add" 
           onClick={handleAddButtonClick}
-          sx={fabStyle}>
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+          }}>
           <AddIcon />
         </Fab>
       )}

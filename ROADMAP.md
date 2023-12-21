@@ -24,16 +24,16 @@
 [x] DCC functions
 --
 [ ] clean up connections / env / config
-[ ] tam junc config - servos 
+[x] tam junc config - servos 
 [ ] update readme with sccreenshots
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
 [ ] transition exploration (vue throttle app)
 [ ] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
 
-[ ] stop all
-[ ] verrical UI (or respnsive horiztonal?)
-[ ] keep alive
-[ ] disconnect bug
+[x] stop all
+[x] verrical UI (or respnsive horiztonal?)
+[x] keep alive
+[x] disconnect bug
 [ ] GrpahQL / better state management
 [ ] convert to typescript
 [ ] write unit tests

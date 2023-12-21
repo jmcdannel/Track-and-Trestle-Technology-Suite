@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import SvgIcon from "@mui/material/SvgIcon";
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import CardActionArea from '@mui/material/CardActionArea';

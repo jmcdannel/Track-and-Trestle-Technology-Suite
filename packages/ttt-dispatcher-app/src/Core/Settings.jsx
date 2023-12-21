@@ -16,13 +16,13 @@ export const Settings = () => {
       overflow:'auto',
       flex: '1'
     }}>
+      <Connections />
         <Paper>
           <h2>dccApi</h2>
           <pre>{dccApi.isConnected.toString()}</pre>
           <pre>{dccApi.getConnectionId()}</pre>
           <pre>{dccLog}</pre>
           Settings
-          <Connections />
 
 
         </Paper>        

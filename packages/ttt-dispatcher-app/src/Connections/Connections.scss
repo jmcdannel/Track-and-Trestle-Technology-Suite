@@ -1,13 +1,17 @@
 @import "../theme";
 
-.conenctions {
+.connections {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .connection {
   display: flex;
+  flex: 0 0 30%;
+  max-width: 50rem;
   margin: 5rem 0;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
   margin: 1rem;
