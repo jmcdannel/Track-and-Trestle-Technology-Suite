@@ -38,7 +38,7 @@ async function onMessage(event) {
   try {
     const { action, payload } = JSON.parse(event.data);
     // const connStore = useConnectionStore();
-    console.log('[DCC API] onMessage', action, payload);
+    console.log('[DCC API] onMessage', action, payload, event.data);
     switch (action) {
       case 'listPorts':
         await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, ports: payload } });
@@ -49,6 +49,9 @@ async function onMessage(event) {
       case 'connected':
         console.log('[DCC API] onMessage.connected', serial);
         await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true, host } });
+        break;
+      case 'broadcast':
+        await dispatch({ type: 'DCC_LOG', payload });
         break;
     }
   } catch (err) { 

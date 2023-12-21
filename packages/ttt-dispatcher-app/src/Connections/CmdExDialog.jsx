@@ -23,7 +23,7 @@ export const CmdExDialog = ({ onClose, open, currentPort, cmdExInterface }) => {
     const serial = usbPort;
     await api.config.set('dcc-js-api', serial);
     await api.dcc.send('connect', { serial });
-    window.location.reload(false);
+    // window.location.reload(false);
   }
 
   const getPortList = () => {
