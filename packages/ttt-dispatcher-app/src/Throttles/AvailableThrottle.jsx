@@ -35,12 +35,15 @@ export const AvailableThrottle = props => {
 
   return (
         <Button
+          sx={{
+            justifyContent: 'space-between'
+          }}
           variant="contained" 
           size="medium"
           color="secondary"
           disabled={disabled}
           fullWidth
-          startIcon={<Avatar variant="square">{address}</Avatar>}
+          startIcon={<Avatar>{address}</Avatar>}
           endIcon={<TrainIcon />}
           onClick={handleLocoClick}>
             <LocoName loco={loco} />

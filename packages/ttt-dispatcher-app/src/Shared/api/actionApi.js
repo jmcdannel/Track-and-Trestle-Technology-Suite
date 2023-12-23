@@ -2,98 +2,49 @@
 // import actions from '../store/actions.tsx';
 
 let ws;
-let connectionId;
-let serial;
 let isConnected = false;
-let queue = [];
-let dispatch;
 
 const defaultProtocol = 'ws';
 const defaultPort = 8080;
 
-async function processQueeue() {
-  console.log('[ACTION API] processQueeue', queue);
-  queue.map(async ({ action, payload }) => {
-    await send(action, payload);
-  });
-  queue = [];
-}
-
 async function onOpen() {
   isConnected = true;
-  console.log('[ACTION API] onOpen');
-  await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: true } });
-  processQueeue();
+  console.log('[ACTION API] Websocket, onOpen');
 }
 
 function onError(event) {
   console.log('[ACTION API] Websocket error', event);
 }
 
-async function connectSerial() {
-  if (serial) {
-    await send('serialConnect', { serial });
-  }
-}
-
-async function onMessage(event) {
+async function connectDevice(port) {
   try {
-    const { data, success } = JSON.parse(event.data);
-    const { action, payload } = data;
-    console.log('[ACTION API] onMessage', data, success, action, payload);
-    switch (action) {
-      case 'turnouts':
-        console.log('turnouts', payload);
-        // actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
-        break;
-      case 'effects':
-        console.log('effects', payload);
-        break;
-      case 'connected':
-        console.log('[ACTION API] setConnection', payload.connectionId, action, payload);
-        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId: payload.connectionId, connected: true } });
-        break;
-      case 'socketConnected':
-        console.log('[ACTION API] socketConnected', action, payload);
-        connectSerial();
-        break;
-      case 'ports':
-        console.log('[ACTION API] ports', connectionId, action, payload);
-        await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, ports: payload } });
-        break;
-      default:
-        console.log('Unknown action', action, payload);
+    console.log('[ACTION API] connectDevice', port);
+    if (port) {
+      await send('serialConnect', { serial: port });
+      return true;
     }
-  } catch (err) { 
-    console.error(err); 
+  } catch (err) {
+    console.error('[ACTION API] connectDevice', err);
+    throw new Error('Unable to connect', err);
   }
 }
 
-async function connect(_dispatch, host, iface, _serial) {
-  console.log('[ACTION API] connect', host, iface?.id);
-  dispatch = _dispatch;
-  connectionId = iface?.id;
-  serial = _serial;
-  await dispatch({ type: 'UPDATE_CONNECTION', payload: { connectionId, connected: false } });
-  ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
-  ws.onerror = onError;
-  ws.addEventListener('open', onOpen);   
-  ws.addEventListener('message',  onMessage);
+async function connect(host, handleMessage) {
+  try {
+    console.log('[ACTION API] connect', host);
+    ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
+    ws.onerror = onError;
+    ws.addEventListener('open', onOpen);   
+    ws.addEventListener('message',  handleMessage);
+    return true;
+  } catch (err) {
+    console.error('[ACTION API] connect', err);
+    throw new Error('Unable to connect', err);
+  }
 }
 
 async function disconnect() {
   ws.close();
-}
-
-async function getWS(type ) {
-  try {    
-    ws.send(JSON.stringify({
-      action: type
-    }));
-  } catch (err) {
-    console.error('[ACTION API] api.get', err);
-    throw new Error('Unable to read', err, type);
-  }
 }
 
 async function send(action, payload) {
@@ -101,8 +52,7 @@ async function send(action, payload) {
     if (ws && isConnected) {  
       sendRaw(JSON.stringify({ action, payload  }));
     } else {
-      queue.push({ action, payload });
-      // throw new Error('Not connected', connectionId);
+      throw new Error('Not connected');
     }
   } catch (err) {
     console.error('[ACTION API].send', err, action, payload);
@@ -119,19 +69,15 @@ async function sendRaw(data) {
 
 export const api = {
   connect,
+  connectDevice,
   disconnect,
-  get: getWS,
-  put: send,
   turnouts: {
     put: (...args)  => send('turnouts', ...args)
   },
   effects: {
     put: (...args) => send('effects', ...args)
   },
-  ports: {
-    get: (...args) => getWS('ports', ...args)
-  },
-  isConnected
+  fetchPorts: (...args) => send('ports', ...args)
 }
 
 export default api;

@@ -12,12 +12,12 @@ export function useLayoutRoadnames(_id) {
   const { layout } = state
 
   function getRoadnameById(id) {
-    return layout?.meta?.roadnames.find(rd => rd.id === id)
+    return layout?.meta?.roadnames.find(rd => rd.id === id)?.abbr || 'NA'
   }
   function getLogo(roadname, defaultLogo = null) {
     switch (roadname) {
       case 'bnsf':
-        return <BnsfLogoSvg  />
+        return <BnsfLogoSvg />
       case 'up':
         return <UpLogoSvg  />
       case 'sf':

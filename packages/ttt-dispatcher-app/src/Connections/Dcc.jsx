@@ -16,23 +16,16 @@ import Stack from '@mui/material/Stack';
 import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 
-import { Context } from '../Store/Store';
-import { DccApiDialog } from './DccApiDialog';
 import { DccDeviceDialog } from './DccDeviceDialog';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
 export const Dcc = props => {
 
-  const { connection } = props;
-  const [configOpen, setConfigOpen] = useState(false);
   const [deviceOpen, setDeviceOpen] = useState(false);
-  const [ state, dispatch ] = useContext(Context);
-  const { layout } = state;
-  const dccHost = useConnectionStore(state => state.dccHost);
+  const host = useConnectionStore(state => state.host);
   const dccDevice = useConnectionStore(state => state.dccDevice);
   const dccApiStatus = useConnectionStore(state => state.dccApiStatus);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
-  const setDccHost = useConnectionStore(state => state.setDccHost);
   const setDccDevice = useConnectionStore(state => state.setDccDevice);
 
   const apiConnected = dccApiStatus === CONNECTION_STATUS.CONNECTED;
@@ -72,13 +65,8 @@ export const Dcc = props => {
                 : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>
-            <Typography>Host:</Typography>
-            <Chip 
-              label={dccHost ? dccHost : <Skeleton width={120} />} 
-              onDelete={() => setDccHost(null)}
-            />
             
-            <Typography>Status: </Typography>
+            <Typography>Status: {host} </Typography>
             <Chip label={dccApiStatus || 'unknown'} />    
 
             <Typography>Device: </Typography>
@@ -93,14 +81,12 @@ export const Dcc = props => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button onClick={() => setConfigOpen(true)} variant="outlined">Connect</Button>
-          <Button onClick={() => setDeviceOpen(true)} disabled={!apiConnected} variant="outlined">Select</Button>
+          {dccDevice 
+            ? <Button onClick={() => setDccDevice(null)} variant="outlined">Reset</Button>
+            : <Button onClick={() => setDeviceOpen(true)} disabled={!apiConnected} variant="outlined">Select</Button>
+          }
         </CardActions>        
       </Card>
-      <DccApiDialog
-        onClose={() => setConfigOpen(false)} 
-        open={configOpen}
-      />
       <DccDeviceDialog
         onClose={() => setDeviceOpen(false)} 
         open={deviceOpen}

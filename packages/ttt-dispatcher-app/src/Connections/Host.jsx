@@ -52,7 +52,6 @@ export const Host = props => {
       return 'red';
     }
   }
-
   
   return (
     <>
@@ -92,27 +91,6 @@ export const Host = props => {
               onDelete={() => setLayoutId(null)} />
             
           </Stack>
-          {/* <pre>
-            {JSON.stringify(connection)}*
-          </pre> */}
-          {/* <Chip
-            variant="outlined"
-            icon={<CallSplit sx={{
-              fill: connection?.connected ? '#21ff15' : 'red',
-            }} />}
-            label={connection?.host}
-            size="large"
-            color="default"
-            onClick={() => setConfigOpen(true)}
-          ></Chip> */}
-          
-          {/* <Box className="connection__status"
-            sx={{
-              backgroundColor: connection?.connected ? '#21ff15' : 'red',
-            }}>
-            <span>{connection?.connected ? 'yes' : 'no'}</span>
-          </Box> */}
-          <p>(connected || layoutId): {(connected || layoutId)?.toString()} {connected?.toString()}</p>
         </CardContent>
         <CardActions>
           {!connected && (<Button onClick={() => setConfigOpen(true)} variant="outlined">Connect</Button>)}

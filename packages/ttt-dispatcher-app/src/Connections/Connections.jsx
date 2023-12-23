@@ -8,6 +8,7 @@ import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 import { Host } from './Host';
 import { Dcc } from './Dcc';
+import { Actions } from './Actions';
 
 import './Connections.scss';
 
@@ -29,10 +30,12 @@ export const Settings = () => {
     switch (connection.type) {
       case 'dcc-js-api' :
         return <Dcc key={connection.id} />;
-      case 'dcc-ex' :     
-      case 'action-api' :       
+      case 'action-api' : 
+        return <Actions key={connection.id} />
+        break;
+      case 'dcc-ex' :      
       case 'serial' :
-        return <Typography key={`conn${idx}`} variant="h6">{connection.id} - {connection.type}</Typography>
+        // no-op
         break;
       default:
         return <Typography key={`conn${idx}`} variant="h6">{connection.id} - {connection.type}</Typography>
