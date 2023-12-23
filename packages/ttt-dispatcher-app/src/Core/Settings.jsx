@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import mqtt from "mqtt";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import DccLog from '../Monitor/DccLog';
 import dccApi from '../Shared/api/dccApi';
 
 import { Context }  from '../Store/Store';
@@ -38,9 +38,8 @@ export const Settings = () => {
       overflow:'auto',
       flex: '1'
     }}>
-      
+      <Link to="/dcc">DCC Log</Link>
       <Connections />
-      <DccLog />
         <Paper>
           <h2>dccApi</h2>
           <pre>{dccApi.isConnected.toString()}</pre>
