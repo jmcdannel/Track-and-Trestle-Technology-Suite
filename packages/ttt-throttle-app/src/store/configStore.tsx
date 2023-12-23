@@ -6,23 +6,37 @@ import api from '../api/api.js';
 export const useConfigStore = defineStore('config', {
   state: () => ({
     connections: [],
-    layoutApi: {},
-    dccApi: {},
+    layoutApi: {
+      connected: false,
+    },
+    dccApi: {
+      api: null,
+      connected: false,
+    },
     layoutId: api.config.layoutId.get(),
     locoId: api.config.loco.get(),
     favorites: []
   }),
+  getters: {
+    getConnection: (state) => {
+      console.log('getConnection', state.connections);
+      return (connectionId:string) => state.connections.find(c => { 
+        console.log('find connection', state.connections.length, c.connectionId, connectionId);
+        return c.connectionId === connectionId 
+      });
+    },
+  },
   actions: {
-    getConnection(connectionId) {
-      console.log('getConnection', this.connections, connectionId);
-      return this.connections.length && this.connections.find
-        ? this.connections.find({ connectionId })
-        : null;
-    },
-    setConnection(connectionId, connection) {
-      this.connections.push({ connectionId, ...connection });
-      console.log('setConnection', this.connections)
-    },
+    // setConnection(connectionId, connection) {
+    //   let conn = this.connections.find(c => { c.connectionId === connectionId });
+    //   console.log('setConnection', conn, connectionId, connection);
+    //   if (conn) {
+    //     conn = {...conn, ...connection };
+    //   } else {  
+    //     this.connections.push({ connectionId, ...connection });
+    //   }
+    //   console.log('setConnection', this.connections);
+    // },
     setLayoutApi(connection) {
       this.layoutApi = {...this.layoutApi, ...connection };
       console.log('setLayoutApi', this.layoutApi)

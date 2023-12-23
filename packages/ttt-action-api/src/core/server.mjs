@@ -7,8 +7,11 @@ const port = 8080; // TODO: move to config
 const serverId = 'TamarackJunctionWebsocketServer'; // TODO: move to config
 
 const MSG_CONNECTED = JSON.stringify({
-  action: 'message',
-  payload: `${serverId} is connected`
+  success: true,
+  data: {
+    action: 'socketConnected',
+    payload: { serverId }
+  }
 });
 
 const handleClose = () => {
@@ -34,7 +37,7 @@ const handleConnection = (ws, resolve) => {
 
   // sending message to client
   server.send(MSG_CONNECTED);
-  server.send(JSON.stringify({ "action": "interfaceStatus", "payload": interfaces.interfaces }));
+  server.send(JSON.stringify({ success: true, data: { "action": "interfaceStatus", "payload": interfaces.interfaces }}));
 
   resolve(ws);
 }

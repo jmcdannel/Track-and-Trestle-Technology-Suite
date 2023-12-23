@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../Store/Store';
 import { usePrevious } from '../Shared/Hooks/usePrevious';
-import jmriApi from '../Shared/jmri/jmriApi';
+import jmriApi from '../Shared/api/jmriApi';
 
 export const JmriThrottleController = props => {
 

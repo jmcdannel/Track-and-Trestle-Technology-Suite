@@ -1,0 +1,33 @@
+
+@mixin linear-gradient($direction, $color-stops...) {
+  // Direction has been omitted and happens to be a color-stop
+  @if is-direction($direction) == false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+
+.loco-name {
+  // background: linear-gradient(140deg, rgb(36, 191, 191) 0%, rgb(20, 133, 143) 100%);
+  padding: 1rem;
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+  flex: 0 0 6rem;
+
+  p { 
+    margin: auto 1rem; 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  svg {
+    max-height: 1.5rem;
+    width: 5rem;
+    // border: 1px solid red;
+  }
+}

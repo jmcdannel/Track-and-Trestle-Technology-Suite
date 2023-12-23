@@ -1,0 +1,77 @@
+@import "../theme";
+
+.route {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0;
+  align-items: center;
+
+
+  .MuiCardContent-root,
+  .MuiCardActions-root {
+    padding: 0;
+  }
+  
+  .MuiButtonBase-root.MuiCardActionArea-root {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+  }
+
+  &__header {
+    display: block;
+    background: $bg-pink-orange-1;
+    background: $bg-grad-pink-orange-1;
+    &.MuiCardContent-root {
+      padding: 0.25rem 1rem;
+    }
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    margin-left: 1rem;
+    &.MuiCardContent-root {
+      padding: 0;
+    }
+  }
+
+  &__line {
+    background: $bg-blue-green-1;
+    background: $bg-grad-blue-green-1;
+    display: block;
+    padding: 0.25rem 1rem;
+    &__eng .route__line {
+      background: $bg-pink-orange-1;
+      background: $bg-grad-pink-orange-1;
+    }
+    &__ss .route__line  {
+      background: $bg-blue-green-1;
+      background: $bg-grad-blue-green-1;
+    }
+    &__sn .route__line  {
+      background: $bg-purple-violet-1;
+      background: $bg-grad-purple-violet-1;
+    }
+    &__vl .route__line  {
+      background: $bg-yellow-orange-1;
+      background: $bg-grad-yellow-orange-1;
+    }
+    &__sl .route__line  {
+      background: $bg-pink-orange-1;
+      background: $bg-grad-pink-orange-1;
+    }
+    &__hx .route__line  {
+      background: $bg-pink-orange-1;
+      background: $bg-grad-pink-orange-1;
+    }
+  }
+
+  &__actions {
+    // order: 2;
+    margin-left: auto;
+  }
+}

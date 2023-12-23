@@ -1,5 +1,16 @@
 // import api from '../Api';
 
+const locoDefaults = {
+  isAcquired: false,
+  cruiseControl: false,
+  autoStop: true,
+  maxSpeed: 100,
+  speed: 0,
+  forward: true,
+  lastAcquired: null,
+  lastUpdated: null
+};
+
 const Reducer = (state, action) => {
   switch(action.type) {
 
@@ -7,17 +18,33 @@ const Reducer = (state, action) => {
       console.log('Reducer INIT_STATE', action.payload);
       return {...state, ...action.payload };
 
+    case 'UPDATE_CONNECTIONS':
+      return {
+        ...state,
+        connections: action.payload
+      };
+
+    case 'UPDATE_CONNECTION':
+      const orig = state.connections.get(action.payload.connectionId);
+      const newConn = new Map(state.connections);
+      newConn.set(action.payload.connectionId, {...orig, ...action.payload });
+      // state.connections = new Map(state.connections)
+      // state.connections.set(action.payload.connectionId, {...orig, ...action.payload });
+      console.log('REDUCER', state, action);
+      // return state;
+      return {...state, connections: newConn };
+
     case 'UPDATE_LOCOS':
       return {
         ...state,
-        locos: action.payload
+        locos: action.payload.map(loco => ({ ...locoDefaults, ...loco }))
       };
 
     case 'UPDATE_LOCO':
       const locos = state.locos.map(loco => 
         loco.address === action.payload.address
-          ? { ...loco, ...action.payload }
-          : loco
+          ? {  ...locoDefaults, ...loco, ...action.payload }
+          : {  ...locoDefaults, ...loco }
       );
       return {
         ...state,
@@ -94,6 +121,13 @@ const Reducer = (state, action) => {
       return {
         ...state,
         userPreferences: { ...state.userPreferences, ...action.payload }
+      };
+
+    case 'DCC_LOG':
+      console.log('DCC_LOG', action);
+      return {
+        ...state,
+        dccLog: state.dccLog + action.payload
       };
 
     default:

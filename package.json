@@ -12,9 +12,9 @@
   "main": "index.mts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package:layout-api": "lerna run --scope @ttt/layout-api --stream dev",
+    "package:layout-api": "lerna run start --scope @ttt/layout-api --stream",
     "package:dispatcher-app": "lerna run start --scope @ttt/dispatcher-app --verbose --stream",
-    "start": "lerna run start --stream"
+    "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/throttle-app --stream"
   },
   "author": "Josh McDannel",
   "license": "MIT",

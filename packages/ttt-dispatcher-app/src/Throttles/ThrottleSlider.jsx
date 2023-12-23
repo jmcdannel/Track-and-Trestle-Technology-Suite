@@ -2,6 +2,8 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
+import './ThrottleSlider.scss';
+
 export const ThrottleSlider = props => {
 
   const { speed, autoStop, onChange, max } = props;

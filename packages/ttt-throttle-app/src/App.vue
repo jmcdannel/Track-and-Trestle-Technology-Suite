@@ -3,7 +3,6 @@
   import { RouterView } from 'vue-router'
   import HeaderView from './views/HeaderView.vue'
   import FooterView from './views/FooterView.vue'
-  import { useConfigStore } from './store/configStore.tsx'
   import api from './api/api.ts'
 
   onMounted(async () => {
@@ -26,4 +25,3 @@
     <FooterView />
   </main>
 </template>
-./api/dccApi.js./store/configStore

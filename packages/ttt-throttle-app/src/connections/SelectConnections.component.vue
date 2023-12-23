@@ -3,12 +3,18 @@
   import { storeToRefs } from 'pinia';
   import LayoutApiStatus from './layout-api/LayoutApiStatus.component.vue';
   import DccExStatus from './dcc-ex/DccExStatus.component.vue';
+  import SerialStatus from './serial/SerialStatus.component.vue';
   import EmulatorStatus from './emulator/EmulatorStatus.component.vue';
+  import ActionApiStatus from './action-api/ActionApiStatus.component.vue';
   import api from '../api/api.ts';
   import { useConfigStore } from '../store/configStore.tsx';
+  import { useConnectionStore } from '../store/connectionStore.jsx';
 
+  const CONNECTION_ID = 'layoutApi';
   const configStore = useConfigStore();
-  const { layoutId, layoutApi, dccApi } = storeToRefs(configStore);
+  const connStore = useConnectionStore();
+  const { layoutId } = storeToRefs(configStore);
+  const { connections } = storeToRefs(connStore);
   const interfaces:any = ref(null);
 
 
@@ -19,50 +25,55 @@
   }
 
   onMounted(async () => {
-    console.log('layoutId.value', layoutId.value);
     if (layoutId.value) {
       loadLayout(layoutId.value);
     }
   });
 
-  // watch(layoutId, loadLayout);
 
-  // const connection = await configStore.getConnection('layoutApi');
-  // console.log('connection', connection, layoutApi);
+  // watch(connStore.connections, (o, n) => {
+  //   // this.connections.value = n;
+  //   console.log('CONNECTIONS.WATCH', o, n);
+  // });
 
-  // async function handleSelectLayout (e:any) {
-  //   console.log('handleSelectLayout', e.target.value);
-  //   await emit('update:layoutId', e.target.value);
-  // }
-
-  // const getConnection = async (connectionId) => {
-  //   return await configStore.getConnection(connectionId);
-  // }
 
 </script>
 
 <template>
-  <main class="py-3 px-4 forest-background">
+  <main class="py-3 px-4 pb-48 forest-background">
     <h2 class="mb-12 fancy-title leading-tight text-transparent text-2xl bg-clip-text bg-gradient-to-r from-cyan-300 to-violet-600">
       Connect
       Your
       <strong class="text-8xl font-extralight uppercase">Layout</strong>
     </h2>
     
-    <LayoutApiStatus :connection="layoutApi" :statusLabel="layoutId" />
+    <LayoutApiStatus
+      :connection="connections.get(CONNECTION_ID)"  />
     <div class="divider"></div>
+    <template v-for="conn in connections" :key="conn.connectionId">
+      <pre>conn: {{ conn }}</pre>
+    </template>
     <template v-for="iface in interfaces" :key="iface.id">
       <template v-if="iface.type === 'dcc-js-api'">
-        <DccExStatus :connection="dccApi" :iface="iface" />
+        <DccExStatus 
+          :iface="iface" 
+          :connection="connections.get(iface.id)" 
+        />
       </template>
       <template v-if="iface.type === 'action-api'">
         <div class="divider"></div>
-        <EmulatorStatus /> 
+        <ActionApiStatus 
+          :iface="iface" 
+          :connection="connections.get(iface.id)" 
+        /> 
       </template>
-      <!-- <template v-if="iface.type === 'serial'">
+      <template v-if="iface.type === 'serial'">
         <div class="divider"></div>
-        <EmulatorStatus /> 
-      </template> -->
+        <SerialStatus 
+          :iface="iface" 
+          :connection="connections.get(iface.id)" 
+        /> 
+      </template>
     </template>
 
   </main>

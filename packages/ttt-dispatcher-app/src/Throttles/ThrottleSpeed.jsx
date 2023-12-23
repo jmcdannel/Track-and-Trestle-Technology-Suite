@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ThrottleSpeed.scss';
+
 export const ThrottleSpeed = props => {
 
   const { speed, isDisabled = false } = props;
@@ -10,7 +12,7 @@ export const ThrottleSpeed = props => {
       ${speed < 0 
         ? 'throttle__speed--reverse' 
         : 'throttle__speed--forward'}`}>
-      {Math.abs(parseInt(speed))}
+      <span>{Math.abs(parseInt(speed))}</span>
     </div>
   );
 

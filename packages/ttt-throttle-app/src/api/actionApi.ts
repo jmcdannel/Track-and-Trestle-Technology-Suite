@@ -1,44 +1,76 @@
+import { useConnectionStore } from '../store/connectionStore.jsx';
 import actions from '../store/actions.tsx';
 
-let ws;
+let ws:WebSocket;
+let connectionId:string;
+let queue = [];
 
-function onOpen() {
-  console.log('[API] onOpen');
+const defaultProtocol = 'ws';
+const defaultPort = 8080;
+
+async function processQueeue() {
+  console.log('[ACTION API] processQueeue', queue);
+  queue.map(async ({ action, payload }) => {
+    await putWS(action, payload);
+  });
+  queue = [];
 }
 
-function onError(event) {
-  console.log('[API] Websocket error', event);
+async function onOpen() {
+  console.log('[ACTION API] onOpen');
+  const connStore = useConnectionStore();
+  await connStore.setConnection(connectionId, { connected: true });
+  processQueeue();
 }
 
-function onMessage(event) {
+function onError(event:any) {
+  console.log('[ACTION API] Websocket error', event);
+}
+
+async function connectSerial(serial) {
+  if (serial) {
+    await putWS('serialConnect', { serial });
+  }
+}
+
+async function onMessage(event:any) {
   try {
-    const { success, data } = JSON.parse(event.data);
-    console.log('[API] onMessage', success, data, JSON.parse(event.data));
-    if (success) {
-      const { action, payload } = data;
-      switch (action) {
-        case 'turnouts':
-          console.log('turnouts', payload);
-          actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
-          break;
-        case 'effects':
-          console.log('effects', payload);
-          break;
-        case 'ports':
-          console.log('ports', payload);
-          apiPromises.ports.resolve(payload);
-          break;
-        default:
-          console.log('Unknown action', action);
-      }
+    const { action, payload } = JSON.parse(event.data);
+    const connStore = useConnectionStore();
+    console.log('[ACTION API] onMessage', action, payload);
+    switch (action) {
+      case 'turnouts':
+        console.log('turnouts', payload);
+        actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
+        break;
+      case 'effects':
+        console.log('effects', payload);
+        break;
+      case 'connected':
+        console.log('[ACTION API] setConnection', payload.connectionId, action, payload);
+        await connStore.setConnection(payload.connectionId, { connected: true });
+        break;
+      case 'socketConnected':
+        console.log('[ACTION API] socketConnected', action, payload);
+        // connectSerial(payload.serial);
+        break;
+      case 'ports':
+        await connStore.setConnection(connectionId, { ports: payload });
+        break;
+      default:
+        console.log('Unknown action', action, payload);
     }
   } catch (err) { 
     console.error(err); 
   }
 }
 
-async function connect(uri) {
-  ws = new WebSocket(uri);
+async function connect(host, iface) {
+  console.log('[ACTION API] connect', host, iface?.id);
+  connectionId = iface?.id;
+  const connStore = useConnectionStore();
+  await connStore.setConnection(connectionId, { connected: false });
+  ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
   ws.onerror = onError;
   ws.addEventListener('open', onOpen);   
   ws.addEventListener('message',  onMessage);
@@ -50,34 +82,24 @@ async function disconnect() {
 
 async function getWS(type ) {
   try {    
-    if (Object.keys(apiPromises).includes(type)) {
-      const promise = new Promise((resolve, reject) => {
-        apiPromises[type] = { resolve, reject };
-      })
-    }
     ws.send(JSON.stringify({
       action: type
     }));
   } catch (err) {
-    console.error('api.get', err);
+    console.error('[ACTION API] api.get', err);
     throw new Error('Unable to read', err, type);
   }
 }
 
 async function putWS(action, payload) {
   try {
-    console.log('putWS', { action, payload });
+    console.log('[ACTION API] putWS', { action, payload }, ws);
     ws.send(JSON.stringify({ action, payload }));
   } catch (err) {
-    console.error('api.put', err)
-    throw new Error('Unable to update', err, type, data);
+    queue.push({ action, payload });
+    console.error('[ACTION API] api.put', err)
+    throw new Error('Unable to update', err, action, payload);
   }
-}
-
-const apiPromises = {
-  turnouts: null,
-  effects: null,
-  ports: null
 }
 
 export const api = {

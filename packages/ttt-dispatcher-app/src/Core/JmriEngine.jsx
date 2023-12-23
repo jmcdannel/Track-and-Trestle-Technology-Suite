@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { getAppConfig } from '../config/config';
-import jmriApi from '../Shared/jmri/jmriApi';
+import jmriApi from '../Shared/api/jmriApi';
 import log from 'loglevel';
 
 // const appConfig = {

@@ -9,7 +9,7 @@ export const Signal = props => {
   const { effect, effect: { effectId }, onChange, getMetaData } = props;
 
   const handleChange = (event, newValue) => {
-    onChange({ effectId, state: newValue });
+    onChange({ ...effect, state: newValue });
   };
 
   const isSmallView = true;
@@ -26,15 +26,13 @@ export const Signal = props => {
           value={effect.state} 
           exclusive 
           onChange={handleChange}>
-          <ToggleButton value="red">
-            <FiberManualRecordIcon style={{color: 'red', opacity: effect.state === 'red' ? 1 : .1 }} />
-          </ToggleButton>
-          <ToggleButton value="yellow">
-            <FiberManualRecordIcon style={{color: 'yellow', opacity: effect.state === 'yellow' ? 1 : .1 }} />
-          </ToggleButton>
-          <ToggleButton value="green" >
-            <FiberManualRecordIcon style={{color: 'green', opacity: effect.state === 'green' ? 1 : .1 }} />
-          </ToggleButton>
+            {['red', 'yellow', 'green'].map(color => 
+              effect.config[color] ? (
+                <ToggleButton key={color} value={color}>
+                  <FiberManualRecordIcon style={{color, opacity: effect.state === color ? 1 : .1 }} />
+                </ToggleButton> 
+              ) : null
+            )}
         </ToggleButtonGroup>
       </Grid>
     </Grid>  

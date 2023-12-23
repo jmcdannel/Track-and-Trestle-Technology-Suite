@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const playSound = async (cmd) => {
   const player = new Player();
   log.debug('[AUDIOPLAYER] playSound', cmd, cmd.payload.file, player, Player);
-  const sound = path.resolve(`${__dirname}/../sounds/${cmd.payload.file}`);
+  const sound = path.resolve(`${__dirname}/../../sounds/${cmd.payload.file}`);
   try {
     await player.play(sound);
   } catch (err) {

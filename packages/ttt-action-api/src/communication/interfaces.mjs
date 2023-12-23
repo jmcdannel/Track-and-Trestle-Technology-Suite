@@ -12,6 +12,7 @@ import { getPorts } from '../scripts/listPorts.mjs';
 import log from '../core/logger.mjs';
 
 const interfaces = {};
+const baudRate = 115200;
 
 const getLayout = async layoutId => {
   const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
@@ -30,20 +31,41 @@ const identifySerialConnections = async () => {
 
 export const handleMessage = async (msg, ws) => {
   const commandActions = ['effects', 'turnouts'];
-  const reponseActions = ['ports'];
+  const reponseActions = ['ports', 'serialConnect'];
 
   log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
   if (commandActions.includes(msg?.action)) { // command actions
     const commandList = await commands.build(msg);
     log.info('[INTERFACES] commandList', commandList);
-    await commands.send(commandList);
-    ws.send(JSON.stringify({ success: true, data: msg }));
+    if (commandList && commandList.length > 0) {
+      await commands.send(commandList);
+      ws.send(JSON.stringify({ success: true, data: msg }));
+    } else {
+      ws.send(JSON.stringify({ success: false, data: msg }));
+    }
   } else if (reponseActions.includes(msg.action)) { // response actions
     switch(msg.action) { 
       case 'ports':
         const response = await getPorts();
         log.info('[INTERFACES] response', response);
-        ws.send(JSON.stringify({ action: msg.action, payload: response }));
+        ws.send(JSON.stringify({ success: true, data: { action: msg.action, payload: response }}));
+        break;
+      case 'serialConnect':
+        try {
+          const com = { ...interfaces[msg.payload.connectionId], ...msg.payload, baudRate };
+          log.info('[INTERFACES] serialConnect', msg, com?.serial, baudRate);
+          com.connection = await serial.connect(com);
+          com.send = serial.send;
+          com.status = 'connected';
+          // com.connection = await serial.connect(com);
+          // com.send = serial.send;
+          // com.status = 'connected';
+          // interfaces[msg.payload.connectionId] = com;
+          interfaces['serial'] = com; // TODO: refactor
+          ws.send(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
+        } catch (err) {
+          log.error('[INTERFACES] connect', err);
+        }
         break;
       default:
         // no op
@@ -55,16 +77,19 @@ export const handleMessage = async (msg, ws) => {
 
 const intialize = async (com) => {
   log.info('[INTERFACES] intializing', com?.type, com?.id);
+  let interfaceId = com.id;
   switch(com.type) {
     case 'emulate':
-      com.connection = emulator.connect();
+      com.connection = await emulator.connect();
       com.send = emulator.send;
       break;
     case 'serial':
       try {
-        com.connection = await serial.connect(com);
+        com.serial && (com.connection = await serial.connect(com));
         com.send = serial.send;
         com.status = 'connected';
+        com.id = 'serial'; // TODO: refactor
+        interfaceId = 'serial';
       } catch (err) {
         com.status = 'fail';
         log.error(err);
@@ -84,11 +109,28 @@ const intialize = async (com) => {
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
       break;
+    case 'ialed':
+      const uri =
+      com.connection = `${com.config.address}/led`;
+      com.send = async (uri, data) => {
+        try {
+          console.log('[IALED]', uri, JSON.stringify(data?.[0].payload));
+          delete process.env['http_proxy'];
+          delete process.env['HTTP_PROXY'];
+          delete process.env['https_proxy'];
+          delete process.env['HTTPS_PROXY'];
+          const resp = await axios.post(uri, JSON.stringify(data?.[0].payload));
+          return resp?. data;
+        } catch (err) {
+          console.error('[IALED ERROR]', uri, err?.message, JSON.stringify(data?.[0].payload));
+        }
+      };
+      break;
     case 'default':
       log.warn('[INTERFACES] Interface type not found', com.type);
       break;
   }
-  interfaces[com.id] = com;
+  interfaces[interfaceId] = com;
 }
 
 export const connect = async () => {

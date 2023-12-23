@@ -9,27 +9,58 @@
 [x] ~quick links to locos~
 [x] fix turnout bug/delay
 [x] ui beatification
-[-] environemnt config
-[ ] tam junc config - servos
-[ ] transition exploration
-[ ] pico led w/json
-[ ] stop all
-[ ] convert dispatcher to dcc api (remove jmri dep)
+[x] environemnt config
+[x] connect to serial devices, action api
+[x] pico led w/json
+[x] convert dispatcher to dcc api (remove jmri dep, use DCC-JS)
+[x] dispatcher interface connection refactor
+[x] dcc-ex turnouts
+[x] action api servos
+[x] dispatcher effects
+[ ] led strips
+[x] fix sounds
+[x] signals
+[ ] dispatcher macros
+[x] DCC functions
+--
+[ ] clean up connections / env / config
+[x] tam junc config - servos 
+[ ] update readme with sccreenshots
+[ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
+[ ] transition exploration (vue throttle app)
+[ ] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
+
+[x] stop all
+[x] verrical UI (or respnsive horiztonal?)
+[x] keep alive
+[x] disconnect bug
+[ ] GrpahQL / better state management
 [ ] convert to typescript
 [ ] write unit tests
+[ ] handheld throttle (bluetooth?)
+[ ] status display (mounted screen/tv?)
+[ ] ad hoc loco (enter loco address:___ [Acquire])
+[ ] icons to svg files
 
 ### DCC-JS
 
-[ ] Fork DCC-JS
+[x] Fork DCC-JS
+  [ ] release v0.1.0? DCC-EX-JS-API [DEJA.js - the DCC-EX JavaScript API by Track & Trestle Technology (Josh McDannel)]
+
+
   - DCC-JS EX-API Server
-  - DCC-JS Throttle (hosted, self hosted)
-  - DCC-JS Dispatcher (hosted, self hosted)
+  - DCC-JS DEJA Throttle (hosted, self hosted)
+  - DCC-JS DEJA Dispatcher (hosted, self hosted)
   - Future:
     - DCC-JS Programmer (hosted, self hosted)
-    - DCC-JS (hosted, self hosted)
+    - DCC-JS (hosted, self hosted-wifi)
     - Plugins (custom serial connections, servers, automation)
+
+
+#### Bugs:
+[ ] WS Disconnect
+[ ] Double audio file play
 
 
 ### TODO
 
-[ ] determine storage options for locos, effetcts, turnouts, sensors, config

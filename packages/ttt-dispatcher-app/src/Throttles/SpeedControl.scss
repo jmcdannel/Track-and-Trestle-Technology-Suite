@@ -1,0 +1,39 @@
+.throttle__controls {
+  display: flex;
+  &__group {
+    flex: 1;
+    justify-content: center;
+
+    .MuiButtonBase-root.MuiIconButton-root {
+      background: linear-gradient(140deg, rgb(115 27 196) 0%, rgb(131 23 160) 100%);
+      border-radius: 0;
+      margin: auto 2rem;
+
+      &:first-child {
+        border-radius: 1.5rem 1.5rem 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 1.5rem 1.5rem;
+      }
+
+      &.speed-up-btn {
+        color: #4caf50;
+      }
+      &.speed-stop-btn {
+        padding: 2rem 0;
+        margin: auto 0;
+        width: 100%;
+        border-radius: 1.5rem;
+      }
+      &.speed-down-btn {
+        color: #f44336;
+      }
+
+    }
+
+    .MuiIconButton-root {
+
+    }
+  }
+}

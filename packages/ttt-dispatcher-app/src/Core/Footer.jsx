@@ -3,7 +3,7 @@ import { Link , useLocation} from 'react-router-dom';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import TrainIcon from '@mui/icons-material/Train';
-import navConfig from '../Shared/Config/Navigation';
+import navConfig from '../Shared/components/Config/Navigation';
 import { Context } from '../Store/Store';
 
 export const Footer = () => {
@@ -13,28 +13,30 @@ export const Footer = () => {
   const location = useLocation();
 
   return (
-    <BottomNavigation
-      value={location.pathname}
-      className="app-footer"
-    >
-      <BottomNavigationAction 
-        label="Conductor" 
-        value="/" 
-        to="" 
-        icon={<TrainIcon />} 
-        component={Link} 
-      />
-      {layout?.modules && layout?.modules.filter(module => !!navConfig[module]).map(module => (
+    <>
+      <BottomNavigation
+        value={location.pathname}
+        className="app-footer"
+      >
         <BottomNavigationAction 
-          key={module} 
-          label={navConfig[module].label} 
-          value={`${navConfig[module].link}`} 
-          to={`${navConfig[module].link}`} 
-          icon={navConfig[module].icon} 
+          label="Conductor" 
+          value="/" 
+          to="" 
+          icon={<TrainIcon />} 
           component={Link} 
         />
-      ))}
-    </BottomNavigation>
+        {layout?.modules && layout?.modules.filter(module => !!navConfig[module]).map(module => (
+          <BottomNavigationAction 
+            key={module} 
+            label={navConfig[module].label} 
+            value={`${navConfig[module].link}`} 
+            to={`${navConfig[module].link}`} 
+            icon={navConfig[module].icon} 
+            component={Link} 
+          />
+        ))}
+      </BottomNavigation>
+    </>
   );
 
 }

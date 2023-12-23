@@ -1,0 +1,5 @@
+<svg viewBox="0 0 250 250" style="width: 100%; overflow: visible;"><line x1="236.171875" y1="47.369791666666664" x2="214.50520833333334" y2="90.703125" stroke="rgb(200, 200, 200)" stroke-dasharray="5,5" stroke-width="2"></line><line x1="214.50520833333334" y1="90.703125" x2="-6.328125" y2="89.03645833333333" stroke="rgb(200, 200, 200)" stroke-dasharray="5,5" stroke-width="2"></line><path d="
+      M 236.171875,47.369791666666664
+      Q 214.50520833333334,90.703125
+        -6.328125,89.03645833333333
+    " fill="none" stroke="rgb(213, 0, 249)" stroke-width="5"></path><ellipse cx="236.171875" cy="47.369791666666664" rx="15" ry="15" fill="rgb(244, 0, 137)" style="cursor: -webkit-grab;"></ellipse><ellipse cx="-6.328125" cy="89.03645833333333" rx="15" ry="15" fill="rgb(244, 0, 137)" style="cursor: -webkit-grab;"></ellipse><ellipse cx="214.50520833333334" cy="90.703125" rx="8" ry="8" fill="rgb(255, 255, 255)" stroke="rgb(244, 0, 137)" stroke-width="2" style="cursor: -webkit-grab;"></ellipse></svg>

@@ -1,48 +1,56 @@
-import React, { useState } from 'react';
-import Drawer from '@mui/material/Drawer';
+import React, { useContext } from 'react';
+import mqtt from "mqtt";
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import SettingsIcon from '@mui/icons-material/Settings';
+import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import dccApi from '../Shared/api/dccApi';
+
+import { Context }  from '../Store/Store';
+
+import Connections from '../Connections/Connections';
 
 export const Settings = () => {
-  
-  const [settingsOpen, setSettingsOpen] = useState(false);
-
-
-  const handleSettingsClick = () => {
-    setSettingsOpen(true);
-  }
-  const handleSettingsClose = () => {
-    setSettingsOpen(false);
+  const [ state, dispatch ] = useContext(Context);
+  const { dccLog } = state;
+  let client = mqtt.connect('mqtt://joshs-mac-mini.local', 
+    { port: 5005 }); // create a client
+  client.on('connect', function () {
+    console.log('mqtt onnected')
+    // Subscribe to a topic
+    client.subscribe('test', function (err) {
+      if (!err) {
+        // Publish a message to a topic
+        client.publish('test', 'Hello mqtt')
+      }
+    })
+  })
+  const handleServoClick = async (angle) => {
+    const action = {
+      servo: 0,
+      angle
+    }
+    client.publish('ttt', JSON.stringify(action));
   }
 
   return (
-    <>
-      <IconButton
-        className="header-button"
-        color="inherit"
-        aria-label="menu"
-        onClick={handleSettingsClick}
-      >
-        <SettingsIcon />
-      </IconButton>
-      <Drawer
-        anchor={'top'}
-        open={settingsOpen}
-        onClose={handleSettingsClose}>
-        <Box
-          sx={{ width: 'auto', height: 250, padding: '10rem' }}
-          role="presentation"
-          onClick={handleSettingsClose}
-          onKeyDown={handleSettingsClose}
-        >
-          <Paper>
-            Settings
-          </Paper>        
-        </Box>
-      </Drawer>
-    </>
+     <Box sx={{
+      alignContent: 'flex-start',
+      overflow:'auto',
+      flex: '1'
+    }}>
+      
+      <Connections />
+        <Paper>
+          <h2>dccApi</h2>
+          <pre>{dccApi.isConnected.toString()}</pre>
+          <pre>{dccApi.getConnectionId()}</pre>
+          <pre>{dccLog}</pre>
+          Settings
+          <Button onClick={() => handleServoClick(50)}>50</Button>
+          <Button onClick={() => handleServoClick(150)}>150</Button>
+
+        </Paper>        
+      </Box>
   );
 }
 

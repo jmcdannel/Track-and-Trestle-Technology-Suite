@@ -3,14 +3,13 @@
   import { RouterLink } from 'vue-router';
   import router from '../../router/index.ts';
   import api from '../../api/api.ts';
-  import { store } from '../../store/store.tsx';
 
 
   const defaultProtocol = 'http://';
   const defaultPort = '5001';
   const defaultHosts = [
     'tamarackjunctionmbp.local',
-    'joshs-mac-mini.local',
+    'tttpi.local',
     'localhost',
     '127.0.0.1'
   ];
@@ -18,7 +17,6 @@
   const availableHosts = ref(defaultHosts);
   const connStatus = ref(false);
   const host = ref(null);
-  const connections = ref(store.connections);
 
   const clearHost = async (e) => {
   }
@@ -29,15 +27,7 @@
       host.value = await api.config.setHost(e.target.value);
       const layouts = await api.connect();
       connStatus.value = (layouts?.length > 0);
-      // console.log('handleHostClick', host.value, connStatus.value);
-      // if (connections.value?.layoutApi) {
-      //   store.connections = {...connections.value, ... {
-      //     layoutApi: {
-      //       connected: true,
-      //       url: host.value
-      //     }
-      //   }}
-      // }
+      
 
       router.push({ name: 'layoutId' });
     } catch (err) {

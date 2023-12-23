@@ -24,8 +24,9 @@ body,
   flex-grow: 1;
 }
 
-.App-content {
-  overflow: auto;
+main {
+  // overflow: auto;
+  min-height: 0;
 
   .MuiPaper-root {
     background-image: none;
@@ -34,8 +35,8 @@ body,
 }
 
 .App-content-column {
-  height: 100%;
-  overflow: auto;
+  // height: 100%;
+  // overflow: auto;
 }
 
 // Utility Classes
@@ -53,6 +54,55 @@ body,
 }
 .textLeft {
   text-align: left;
+}
+
+
+.rounded-button-group {
+  display: flex;
+  flex-direction: column;
+  // flex-wrap: wrap;
+  color: #fff;
+  
+  &.MuiButtonGroup-root {
+    border-radius: 1.5rem;
+  }
+
+  .MuiButton-startIcon {
+    color: #fff;
+    margin: 0;
+    svg {
+      font-size: 3rem;
+    }
+  }
+
+  .MuiButtonBase-root {
+    background: linear-gradient(140deg, rgb(71, 91, 235) 0%, rgba(46, 62, 187, 0.8) 100%);
+    flex: 1 1 0px;
+    width: 0;
+    padding: 1rem 3rem;
+    color: #fff;
+    font-size: .75rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    border: 0px solid rgba(255,255,255, 0.5);
+    // border-radius: 1.5rem 1.5rem 0 0;
+
+    &.MuiButtonGroup-middleButton,
+    &.MuiButtonGroup-firstButton {
+      border: 0;
+    }
+
+    &:first-child {
+      border-radius: 1.5rem 1.5rem 0 0;
+    }
+
+    &:last-child {
+      border-radius: 0 0 1.5rem 1.5rem;
+    }
+
+  }
+
 }
 
 // Status Monitor

@@ -10,13 +10,24 @@ $greenline: rgb(0, 171, 0);
 }
 .App-content__conductor .turnouts {
   align-content: flex-start;
+  width: 100%;
   .turnout__container {
-    flex-basis: 33%;
+    // flex-basis: 33%;
+    flex-basis: 100%;
+    width: 100%;
+    flex-grow: 1;
   }
 }
 
-.turnout {
-  max-width: 10rem;
+.routes, .turnouts {
+  display: flex;
+  flex-wrap: wrap;
+  // margin: 01rem 0;
+}
+
+.turnout, .route {
+  min-width: 20rem;
+  // margin: 0.25rem 1rem;
 }
 
 g.turnout {
