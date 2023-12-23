@@ -4,11 +4,14 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import dccApi from '../Shared/api/dccApi';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+import { useDccStore } from '../Store/useDccStore';
 
 export const Power = props => {
 
-  const [ powerStatus, setPowerStatus ] = useState(false);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
+  const powerStatus = useDccStore(state => state.powerStatus);
+  const setPowerStatus = useDccStore(state => state.setPowerStatus);
+  // const [ powerStatus, setPowerStatus ] = useState(undefined);
   const connected = dccDeviceStatus === CONNECTION_STATUS.CONNECTED;
 
 
@@ -20,7 +23,17 @@ export const Power = props => {
     setPowerStatus(!powerStatus);
   }
 
-  const getCurrentStateKey = () => powerStatus ? 'on' : 'off';
+  const getCurrentStateKey = () => {
+    if (typeof powerStatus === 'undefined') {
+      return 'unknown';
+    } else if (powerStatus === true) {
+      return 'on';
+    } else if (powerStatus === false) {
+      return 'off';
+    } else {
+      return 'unknown';
+    }
+  }
 
   const getClassName = () => `header-button power-${getCurrentStateKey()}`;
 

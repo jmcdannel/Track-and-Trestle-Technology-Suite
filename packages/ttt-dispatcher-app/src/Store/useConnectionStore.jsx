@@ -5,7 +5,7 @@ import { immer } from 'zustand/middleware/immer'
 export const CONNECTION_STATUS = {
   CONNECTED: 'connected',
   DISCONNECTED: 'disconnected',
-  CONNECTING: 'connecting',
+  PENDING: 'pending',
   UNKNOWN: 'unknown',
 }
 
@@ -65,6 +65,13 @@ const store = immer(
     setDccApiStatus: (dccApiStatus) => set({ dccApiStatus }),
     setDccDeviceStatus: (dccDeviceStatus) => set({ dccDeviceStatus }),
     setActionApiStatus: (actionApiStatus) => set({ actionApiStatus }),
+    resetConnectionStatus: () => {
+      set({ 
+        dccApiStatus: CONNECTION_STATUS.DISCONNECTED,
+        dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
+        actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
+      })
+    }
   }), {
     name: '@ttt/connection-store',
     storage: createJSONStorage(() => localStorage)

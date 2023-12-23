@@ -3,12 +3,16 @@ import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
 import log from '../Shared/utils/logger';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+import { useDccStore } from '../Store/useDccStore';
+import { useThrottleStore } from '../Store/useThrottleStore';
 function ApiEngine(props) {
 
   const { onReady } = props;
   const [ state, dispatch ] = useContext(Context);
   const { layout } = state;
 
+  const appendtoDccLog = useDccStore(state => state.appendtoLog);
+  const setPowerStatus = useDccStore(state => state.setPowerStatus);
   const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const setStatus = useConnectionStore(state => state.setStatus);
@@ -23,13 +27,38 @@ function ApiEngine(props) {
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
   const updateActionDeviceStatusByPort = useConnectionStore(state => state.updateActionDeviceStatusByPort);
   
-
   const setActionApiStatus = useConnectionStore(state => state.setActionApiStatus);
   const setDccApiStatus = useConnectionStore(state => state.setDccApiStatus);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
+  const resetConnectionStatus = useConnectionStore(state => state.resetConnectionStatus);
 
   const setDccPorts = useConnectionStore(state => state.setDccPorts);
   const setActionPorts = useConnectionStore(state => state.setActionPorts);
+
+  const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
+
+  const parseDccResponse = (payload) => {
+    console.log('[ApiEngine] parseDccResponse', payload);
+    if (payload.startsWith('<p')) {
+      if (payload === '<p1>') {
+        setPowerStatus(true);
+      } else if (payload === '<p0>') {
+        setPowerStatus(false);
+      }
+    } else if (payload.startsWith('<l')) {
+      const locoResponse = payload
+        .replace( /(^.*\<|\>.*$)/g, '' )
+        .split(' ');
+      const address = parseInt(locoResponse[1]);
+      const speed = parseInt(locoResponse[3]);
+      const calculatedSpeed = speed < 127
+        ? -speed + 1
+        : speed - 129;
+      const direction= parseInt(locoResponse[4]);
+      upsertThrottle({ address, speed: calculatedSpeed });
+      console.log('[ApiEngine] parseDccResponse locoResponse', locoResponse, address, speed, calculatedSpeed, direction);
+    }
+  }
 
   const handleDccMessage = (message) => {
     try {
@@ -47,7 +76,9 @@ function ApiEngine(props) {
           setDccDevice(payload.path);
           break;
         case 'broadcast':
-          // no-op
+          console.log('[ApiEngineDCCLOG] broadcast', payload);
+          parseDccResponse(payload);
+          appendtoDccLog(payload);
           break;
       }
     } catch (err) { 
@@ -89,7 +120,8 @@ function ApiEngine(props) {
   useEffect(() => {
     const initialize = async function() {
       try {
-        setStatus(CONNECTION_STATUS.CONNECTING);
+        setStatus(CONNECTION_STATUS.PENDING);
+        resetConnectionStatus();
         const result = await api.connect(dispatch, host, layoutId);
         setStatus(result 
           ? CONNECTION_STATUS.CONNECTED
@@ -112,12 +144,12 @@ function ApiEngine(props) {
     console.log('[ApiEngine] layout', layout);
 
     if (layout?.interfaces?.find(i => i.type === 'dcc-js-api')) {
-      setDccApiStatus(CONNECTION_STATUS.CONNECTING);
+      setDccApiStatus(CONNECTION_STATUS.PENDING);
       api.dcc.connect(host, handleDccMessage);
     }
 
     if (layout?.interfaces?.find(i => i.type === 'action-api')) {
-      setActionApiStatus(CONNECTION_STATUS.CONNECTING);
+      setActionApiStatus(CONNECTION_STATUS.PENDING);
       api.actionApi.connect(host, handleActionMessage);
     }
 
@@ -128,15 +160,16 @@ function ApiEngine(props) {
   useEffect(() => {
     const initialize = async function() {
       try {
-        setDccDeviceStatus(CONNECTION_STATUS.CONNECTING);
+        setDccDeviceStatus(CONNECTION_STATUS.PENDING);
         const result = await api.dcc.connectDevice(dccDevice);
         log.log('[ApiEngine] dccApi connectDevice result', dccDevice, result);
       } catch (err) {
         log.error('dcc device initialization error', err);
       }
     };
+    console.log('[ApiEngine] Connect DCC Device', dccApiStatus, dccDeviceStatus, dccDevice);
     dccApiStatus === CONNECTION_STATUS.CONNECTED 
-      && dccDeviceStatus === CONNECTION_STATUS.DISCONNECTED
+      && dccDeviceStatus !== CONNECTION_STATUS.CONNECTED
       && dccDevice 
       && initialize();
     !dccDevice && setDccDeviceStatus(CONNECTION_STATUS.DISCONNECTED);

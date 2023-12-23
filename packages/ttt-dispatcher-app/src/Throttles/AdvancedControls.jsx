@@ -3,27 +3,26 @@ import axios from  'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import SettingsIcon from '@mui/icons-material/Settings';
 import TrainIcon from '@mui/icons-material/Train';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import ThermostatAutoIcon from '@mui/icons-material/ThermostatAuto';
-import MenuItem from '@mui/material/MenuItem';
 import ExpandIcon from '@mui/icons-material/Expand';
 import CompressIcon from '@mui/icons-material/Compress';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 
+import { PrecisionDialog } from './PrecisionDialog';
 import { ThrottleConsist } from './ThrottleConsist';
 import { Context } from '../Store/Store';
+
+import './AdvancedControls.scss';
 
 const AdvancedControls = (props) => {
 
@@ -44,7 +43,7 @@ const AdvancedControls = (props) => {
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
-  const iconStyle = { fontSize: '3rem' };
+  // const iconStyle = { fontSize: '3rem' };
 
   const handleShowFunctionClick = () => {
     onShowFunctions();
@@ -123,6 +122,35 @@ const AdvancedControls = (props) => {
 
   }
 
+  const buttonStyle = {
+    display: {
+      xs: 'none',
+      sm: 'block',
+      md: 'block',
+      lg: 'block',
+      xl: 'block'
+    }
+  }
+  const iconStyle = {
+    fontSize: {
+      xs: '.5rem',
+      sm: '.75rem',
+      md: '.8rem',
+      lg: '1rem',
+      xl: '1.2rem'
+    }
+  }
+
+  const buttonLabelStyle = {
+    display: {
+      xs: 'none',
+      sm: 'none',
+      md: 'block',
+      lg: 'block',
+      xl: 'block'
+    }
+  }
+
   return (    
     <Box className="height100" sx={{ pb: '2rem' }} flex="1" alignItems="center" display="flex" justifyContent="flex-end" flexDirection="column" >
       <slot></slot>
@@ -135,71 +163,65 @@ const AdvancedControls = (props) => {
         className="rounded-button-group throttle__advanced-controls">
         <Tooltip title="Cruise Control">
           <Button 
-            className="cruise-control"
             onClick={handleCruiceControlClick} 
             disabled={cruiseDisabled}
-            startIcon={<SpeedIcon />}>
-            Cruise Control
+            sx={buttonStyle}
+            startIcon={<SpeedIcon sx={iconStyle} />} 
+          >
+            <Box sx={buttonLabelStyle}>
+              Cruise Control
+            </Box>
           </Button>
         </Tooltip>
         <Tooltip title="Auto Stop">
           <Button 
             onClick={handleAutoStopClick} 
-            startIcon={loco.autoStop  ? <CompressIcon /> : <ExpandIcon/>}>
-            Auto Stop
+            sx={buttonStyle}
+            startIcon={loco.autoStop  ? <CompressIcon sx={iconStyle} /> : <ExpandIcon  sx={iconStyle} />}>
+            <Box sx={buttonLabelStyle}>
+              Auto Stop
+            </Box>
           </Button>
         </Tooltip>
         <Tooltip title="Precision">
           <Button 
-            className="cruise-control"
+            sx={buttonStyle}
             onClick={handlePrecisionClick} 
-            startIcon={<ThermostatAutoIcon />}>
-            Precision
+            startIcon={<ThermostatAutoIcon sx={iconStyle} />}>
+            <Box sx={buttonLabelStyle}>
+              Precision
+            </Box>
           </Button>
         </Tooltip>
         <Tooltip title="Cruise Control">
           <Button 
-            className="cruise-control"
+            sx={buttonStyle}
             onClick={handleConsistClick} 
             startIcon={
               <Box sx={{ position: 'relative' }}>
-                <TrainIcon sx={{ position: 'relative', left: '-5px', top: '-5px'}} />
-                <TrainIcon sx={{ position: 'absolute', left: '5px', top: '5px', color: '#00FF00' }} />
-                </Box>
-              }>
-            Consist
+                <TrainIcon sx={{...iconStyle, ...{ position: 'relative', left: '-5px', top: '-5px'}}} />
+                <TrainIcon sx={{...iconStyle, ...{ position: 'absolute', left: '5px', top: '5px', color: '#00FF00' }}} />
+              </Box>
+            }>
+            <Box sx={buttonLabelStyle}>
+              Consist
+            </Box>
           </Button>
         </Tooltip>
         <Tooltip title="Park">
           <Button 
+            sx={buttonStyle}
             className="park"
             onClick={handleParkClick}
             startIcon={<LocalParkingIcon sx={iconStyle} size="large" />}>
-            Park
+            <Box sx={buttonLabelStyle}>
+              Park
+            </Box>
           </Button>
         </Tooltip>
       </ButtonGroup>
-      <Dialog onClose={setPrecision} open={showPrecision}>
-        <DialogTitle>Thorttle Precision</DialogTitle>
-        <List sx={{ pt: 0 }}>
-          <ListItem disableGutters>
-            <ListItemButton onClick={() => setPrecision(20)}>
-              <ListItemText primary={20} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disableGutters>
-            <ListItemButton onClick={() => setPrecision(50)}>
-              <ListItemText primary={50} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disableGutters>
-            <ListItemButton onClick={() => setPrecision(100)}>
-              <ListItemText primary={100} />
-            </ListItemButton>
-          </ListItem>
-        </List>
 
-      </Dialog>
+      <PrecisionDialog open={showPrecision} onClose={() => setShowPrecision(false)} setPrecision={setPrecision} loco={loco} />
 
       <Dialog onClose={setConsist} open={showConsist}>
         <DialogTitle>Consist</DialogTitle>
