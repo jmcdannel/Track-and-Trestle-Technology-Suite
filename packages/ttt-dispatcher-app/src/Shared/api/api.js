@@ -12,7 +12,7 @@ import config from './config'; // TODO: replace with configStore
 let client
 // const layoutId = await config.layoutId.get();
 
-async function mqttConnect(host = 'mqtt://joshs-mac-mini.local', port = 5005) {
+async function mqttConnect(host = 'mqtt://tamarackjunctionmbp.local', port = 5005) {
   console.log('mqttConnect', host, port)
   client = mqtt.connect(host, { port }); // create a client
   client.on('connect', function () {
