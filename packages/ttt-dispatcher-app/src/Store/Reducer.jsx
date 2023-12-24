@@ -123,13 +123,6 @@ const Reducer = (state, action) => {
         userPreferences: { ...state.userPreferences, ...action.payload }
       };
 
-    case 'DCC_LOG':
-      console.log('DCC_LOG', action);
-      return {
-        ...state,
-        dccLog: state.dccLog + action.payload
-      };
-
     default:
       console.warn('REDUCER NOT FOUND: ', action);
       return state;    

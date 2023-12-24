@@ -24,12 +24,23 @@ export const SpeedControl = ({
 
   const btnStlye = {
     padding: {
-      xs: '0.5rem 2rem',
+      xs: '0.25rem 1rem',
       sm: '0.5rem 2rem',
       md: '1rem 2rem',
       lg: '1rem 2rem',
       xl: '1rem 2rem'
-    }
+    },
+    flexDirection: 'row'
+  }
+  const btnStopStlye = {
+    padding: {
+      xs: '.75rem 0',
+      sm: '.8rem 0',
+      md: '1rem 0',
+      lg: '1.5rem 0',
+      xl: '2rem 0'
+    },
+    flexDirection: 'row'
   }
   return (
     <Box 
@@ -51,6 +62,7 @@ export const SpeedControl = ({
         className="rounded-button-group throttle__controls__group"
       >
         <IconButton 
+          sx={{ display: 'flex', flexDirection: 'row' }}
           className="speed-up-btn"
           disabled={uiSpeed === maxSpeed} 
           style={btnStlye}
@@ -80,6 +92,7 @@ export const SpeedControl = ({
             <RemoveIcon />
         </IconButton>
         <IconButton 
+          sx={{ display: 'flex', flexDirection: 'row' }}
           className="speed-down-btn"
           disabled={uiSpeed === minSpeed} 
           style={btnStlye}

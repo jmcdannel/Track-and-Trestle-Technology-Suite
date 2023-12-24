@@ -153,17 +153,17 @@ export const Throttle = props => {
         />
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
-            {up.lg && showFunctions && (
+            {/* {up.lg && showFunctions && (
               <Grid item 
                 xs={5} sm={2} md={3} lg={3} 
                 display="flex" 
                 className="throttle__actions">
                 <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
               </Grid>
-            )}
+            )} */}
             {up.md && showAdvancedControls && (
               <Grid item 
-                xs={5} sm={2} md={2} 
+                xs={5} sm={4} md={4} 
                 display="flex" 
                 className="throttle__actions">
                 <AdvancedControls

@@ -11,6 +11,8 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CallSplit from '@mui/icons-material/CallSplit';
+import RouterIcon from '@mui/icons-material/Router';
+import LinkIcon from '@mui/icons-material/Link';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
@@ -34,23 +36,25 @@ export const Host = props => {
   const setLayoutId = useConnectionStore(state => state.setLayoutId);
   const setHost = useConnectionStore(state => state.setHost);
 
+  const computeOverallStatus = () => {
+    if (connected && layoutId) {
+      return CONNECTION_STATUS.CONNECTED;
+    } else if (connected && !layoutId) {
+      return CONNECTION_STATUS.PENDING;
+    } else if (!connected && layoutId) {
+      return CONNECTION_STATUS.DISCONNECTED; // partially connected here
+    } else if (!connected && !layoutId) {
+      return CONNECTION_STATUS.DISCONNECTED;
+    }
+  }
+
   const connected = status === CONNECTION_STATUS.CONNECTED;
+  const layoutStatus = layoutId ? 'connected' : 'disconnected';
+  const overallStatus = computeOverallStatus();
 
   const handleReset = () => {
     setHost(null);
     setLayoutId(null);
-  }
-
-  const connectionStateColor = () => {
-    if (connected && layoutId) {
-      return '#21ff15';
-    } else if (connected && !layoutId) {
-      return 'yellow';
-    } else if (!connected && layoutId) {
-      return 'orange';
-    } else if (!connected && !layoutId) {
-      return 'red';
-    }
   }
   
   return (
@@ -60,8 +64,8 @@ export const Host = props => {
           title="Host" 
           avatar={
             connected 
-              ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor() }} />
-              : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor() }} />
+              ? <SignalWifiStatusbar4BarIcon className={`status--${overallStatus}`} />
+              : <SignalWifiStatusbarNullIcon className={`status--${overallStatus}`} />
           } >
         </CardHeader>
         <CardContent sx={{
@@ -71,31 +75,61 @@ export const Host = props => {
         }}>
           <Box sx={{ padding: '1rem' }}>
             {connected 
-                ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
-                : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
+                ? <SignalWifiStatusbar4BarIcon className={`status--${overallStatus}`} sx={{ fontSize: '8rem' }} />
+                : <SignalWifiStatusbarNullIcon className={`status--${overallStatus}`} sx={{ fontSize: '8rem' }} />}
           </Box>
 
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>            
 
             <Typography>Host:</Typography>
             <Chip 
-              label={host ? host : <Skeleton width={50} />}
+              sx={{ justifyContent: 'space-between' }}
+              onClick={() => setConfigOpen(true)}
+              icon={
+                <RouterIcon 
+                  className={`status--${status}`} 
+                  sx={{ paddingLeft: '.5rem' }} 
+                />
+              }
+              label={host ? host : <Skeleton width={150} />}
               onDelete={() => setHost(null)} />
-            
-            <Typography>Status: </Typography>
-            <Chip label={status || 'unknown'} /> 
-            
+                        
             <Typography>Layout: </Typography>
             <Chip 
-              label={layoutId ? layoutId : <Skeleton width={50} />}
+              sx={{ justifyContent: 'space-between' }}
+              icon={
+                <LinkIcon 
+                  className={`status--${layoutStatus}`}
+                  sx={{ paddingLeft: '.5rem' }} 
+                />
+              }
+              onClick={() => setLayoutOpen(true)}
+              label={layoutId ? layoutId : <Skeleton width={150} />}
               onDelete={() => setLayoutId(null)} />
             
           </Stack>
         </CardContent>
-        <CardActions>
-          {!connected && (<Button onClick={() => setConfigOpen(true)} variant="outlined">Connect</Button>)}
-          {!layoutId && (<Button onClick={() => setLayoutOpen(true)} disabled={!connected} variant="outlined">Select</Button>)}
-          {(connected || layoutId) && (<Button onClick={handleReset} variant="outlined">Reset</Button>)}
+        <CardActions sx={{ justifyContent: 'space-between' }}>
+          <Button 
+            onClick={handleReset} 
+            color="secondary"
+            variant="outlined">
+              Reset
+          </Button>
+          <Box>
+            <Button 
+              onClick={() => 
+              setLayoutOpen(true)} 
+              disabled={!connected} 
+              variant="contained">
+                Select Layout
+            </Button>
+            <Button 
+              onClick={() => setConfigOpen(true)} 
+              variant="contained">
+                Connect
+            </Button>
+          </Box>
         </CardActions>
         
       </Card>

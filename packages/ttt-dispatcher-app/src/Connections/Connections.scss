@@ -1,5 +1,17 @@
 @import "../theme";
 
+@mixin linear-gradient($direction, $color-stops...) {
+  // Direction has been omitted and happens to be a color-stop
+  @if is-direction($direction) == false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
 .connections {
   display: flex;
   align-items: center;
@@ -25,6 +37,50 @@
   &__status {
     span {
       visibility: hidden;
+    }
+  }
+}
+
+$connected: #00ff00;
+$disconnected: #ff0000;
+$pending: #ffff00;
+$unknown: #cccccc;
+
+.status {
+  &--connected {
+    color: $connected;
+  }
+  &--disconnected {
+    color: $disconnected;
+  }
+  &--pending {
+    color: $pending;
+  }
+  &--unknown {
+    color: $unknown;
+  }
+}
+.MuiButtonBase-root {
+  .status {
+    &--connected {
+      &.MuiChip-icon {
+        color: $connected;
+      }
+    }
+    &--disconnected {
+      &.MuiChip-icon {
+        color: $disconnected;
+      }
+    }
+    &--pending {
+      &.MuiChip-icon {
+        color: $pending;
+      }
+    }
+    &--unknown {
+      &.MuiChip-icon {
+        color: $unknown;
+      }
     }
   }
 }
