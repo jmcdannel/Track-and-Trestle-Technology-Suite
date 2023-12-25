@@ -11,15 +11,7 @@ import ThermostatAutoIcon from '@mui/icons-material/ThermostatAuto';
 import ExpandIcon from '@mui/icons-material/Expand';
 import CompressIcon from '@mui/icons-material/Compress';
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-
 import { PrecisionDialog } from './PrecisionDialog';
-import { ThrottleConsist } from './ThrottleConsist';
 import { Context } from '../Store/Store';
 
 import './AdvancedControls.scss';
@@ -29,6 +21,7 @@ const AdvancedControls = (props) => {
   const { 
     onShowSettings, 
     onShowFunctions, 
+    onShowConsist, 
     onStop, 
     onFunctionClick,
     cruiseDisabled, 
@@ -38,20 +31,10 @@ const AdvancedControls = (props) => {
   const address = Number(props.loco.address);
 
   const [showPrecision, setShowPrecision] = useState(false);
-  const [showConsist, setShowConsist] = useState(false);
 
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
-  // const iconStyle = { fontSize: '3rem' };
-
-  const handleShowFunctionClick = () => {
-    onShowFunctions();
-  }
-
-  const handleShowSettingsClick = () => {
-    onShowSettings();
-  }
 
   const handleCruiceControlClick = async () => {
     try {
@@ -74,7 +57,7 @@ const AdvancedControls = (props) => {
   }
 
   const handleConsistClick = async () => {
-    setShowConsist(true)
+    onShowConsist()
   }
 
   const handleParkClick = async () => {
@@ -90,15 +73,6 @@ const AdvancedControls = (props) => {
     try {
       setShowPrecision(false)
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed } });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  const setConsist = async (consist) => {
-    try {
-      setShowConsist(false)
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
     } catch (err) {
       console.error(err);
     }
@@ -223,10 +197,6 @@ const AdvancedControls = (props) => {
 
       <PrecisionDialog open={showPrecision} onClose={() => setShowPrecision(false)} setPrecision={setPrecision} loco={loco} />
 
-      <Dialog onClose={setConsist} open={showConsist}>
-        <DialogTitle>Consist</DialogTitle>
-        <ThrottleConsist consist={loco.consist} locos={locos} onChange={setConsist} />
-      </Dialog>
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState}  from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -18,29 +18,35 @@ import Switch from '@mui/material/Switch';
 import TrainIcon from '@mui/icons-material/Train';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddIcon from '@mui/icons-material/Add';
+import { Context } from '../Store/Store';
 
 const defaultLoco = '';
 
-export const ThrottleConsist = ({ consist = [], locos = [], onChange }) => {
+export const ThrottleConsist = ({ consist = [], onChange }) => {
 
-  const [newLoco, setNewLoco] = React.useState(defaultLoco);
-  const [fwd, setFwd] = React.useState(true);
+  const [ state, dispatch ] = useContext(Context);
+  const { locos } = state;
+
+  const [newLoco, setNewLoco] = useState(defaultLoco);
+  const [fwd, setFwd] = useState(true);
 
   const handleChange = (event) => {
     setNewLoco(event.target.value);
   };
 
-  const handleAddLoco = () => {
+  const handleAddLoco = async () => {
     console.log('Add loco: ', newLoco, consist);
     const newConsist = [...consist, fwd ? newLoco : -newLoco];
+    await setConsist(newConsist);
     onChange(newConsist);
     reset();
   }
 
-  const handleRemoveLoco = (idx) => {
+  const handleRemoveLoco = async (idx) => {
     console.log('Remove loco: ', idx);
     const newConsist = [...consist];
     newConsist.splice(idx, 1);
+    await setConsist(newConsist);
     onChange(newConsist);
     reset();
   }
@@ -49,6 +55,16 @@ export const ThrottleConsist = ({ consist = [], locos = [], onChange }) => {
     setNewLoco(defaultLoco);
     setFwd(true);
   }
+
+  const setConsist = async (consist) => {
+    try {
+      setShowConsist(false)
+      await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   return (
     <List dense={false} sx={{ minWidth: '24rem' }}>

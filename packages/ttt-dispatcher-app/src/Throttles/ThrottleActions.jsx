@@ -1,4 +1,5 @@
 import React, { useContext, useState}  from 'react';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
@@ -16,6 +17,7 @@ const ThrottleActions = (props) => {
   const { 
     onShowSettings, 
     onShowFunctions, 
+    onShowConsist,
     onStop, 
     cruiseDisabled, 
     size = 'large' ,
@@ -45,6 +47,10 @@ const ThrottleActions = (props) => {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  const handleConsistClick = () => {
+    onShowConsist();
   }
 
   const handleParkClick = async () => {
@@ -82,6 +88,17 @@ const ThrottleActions = (props) => {
           onClick={handleParkClick}
           size={size}>
           <LocalParkingIcon sx={iconStyle} />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Consist">
+        <IconButton 
+          onClick={handleConsistClick}
+          size={size}>
+          <Box sx={{ position: 'relative' }}>
+            <TrainIcon sx={{...iconStyle, ...{ fontSize: '1rem', position: 'relative', left: '-5px', top: '-5px'}}} />
+            <TrainIcon sx={{...iconStyle, ...{ fontSize: '1rem', position: 'absolute', left: '5px', top: '5px', color: '#00FF00' }}} />
+            </Box>
         </IconButton>
       </Tooltip>
       <Tooltip title="Settings">

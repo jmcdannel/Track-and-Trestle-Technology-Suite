@@ -53,43 +53,27 @@ export const Functions = props => {
   console.log('functionButtons', functionButtons)
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      flex: '1 0 0',
-      overflow: 'hidden',
-      borderRadius: '1.5rem',
-      height: 'fit-content',
-      alignSelf: 'flex-end',
-      alignItems: 'center',
-      marginBottom: '2rem',
-      background: 'linear-gradient(140deg, rgb(197, 51, 158) 0%, rgb(147, 38, 131) 100%)',
-      padding: '0.5rem 1rem 0 1rem',
-    }}>
-      <Typography variant="h6" 
-        component="div" 
-        className="throttle__functions__title" >Functions </Typography>
-      <ButtonGroup
-        variant="text"
-        size="large"
-        className="rounded-button-group throttle__functions">
+    <ButtonGroup
+      variant="text"
+      size="large"
+      orientation="vertical"
+      className="rounded-button-group throttle__functions">
 
-        {functionButtons.map((btn, idx) => idx < 12 && (
-          <Button
-            variant="outlined"
-            key={`${btn.label}-${idx}`}
-            size="small"
-            color="primary"
-            className="throttle__functions__btn"
-            startIcon={btn.icon}
-            onClick={() => handleFunctionClick(idx)}
-          >
-            {btn.label}
-          </Button>
-        ))}
+      {functionButtons.map((btn, idx) => idx < 12 && (
+        <Button
+          variant="outlined"
+          key={`${btn.label}-${idx}`}
+          size="small"
+          color="primary"
+          className="throttle__functions__btn"
+          startIcon={btn.icon}
+          onClick={() => handleFunctionClick(idx)}
+        >
+          {btn.label}
+        </Button>
+      ))}
 
       </ButtonGroup>
-    </Box>
   );
 
 }

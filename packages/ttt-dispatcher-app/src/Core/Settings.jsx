@@ -12,7 +12,7 @@ import Connections from '../Connections/Connections';
 
 export const Settings = () => {
   const [ state, dispatch ] = useContext(Context);
-  let client = mqtt.connect('mqtt://joshs-mac-mini.local', 
+  let client = mqtt.connect('mqtt://tamarackjunctionmbp.local', 
     { port: 5005 }); // create a client
   client.on('connect', function () {
     console.log('mqtt onnected')
