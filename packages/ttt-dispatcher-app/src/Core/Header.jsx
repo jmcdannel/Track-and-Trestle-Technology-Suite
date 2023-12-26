@@ -21,8 +21,6 @@ import { getByLink } from '../Shared/components/Config/Navigation';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
-import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
-
 export const Header = props => {
 
   const status = useConnectionStore(state => state.status);
