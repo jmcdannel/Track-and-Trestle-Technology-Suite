@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import BnsfLogoSvg from '../images/logos/bnsf.svg?react';
-import UpLogoSvg from '../images/logos/up.svg?react';
-import SfLogoSvg from '../images/logos/sf.svg?react';
+import BnsfLogoSvg from '../Images/logos/bnsf.svg?react';
+import UpLogoSvg from '../Images/logos/up.svg?react';
+import SfLogoSvg from '../Images/logos/sf.svg?react';
 import { Context } from '../../Store/Store'
 
 const MRLLogoPng = '/images/logos/mrl.png';

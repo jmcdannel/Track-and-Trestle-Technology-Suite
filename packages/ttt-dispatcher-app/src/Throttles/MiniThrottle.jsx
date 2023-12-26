@@ -22,7 +22,7 @@ import AdvancedControls from './AdvancedControls';
 import DccExThrottleController from './DccExThrottleController';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
+import BnsfLogoSvg from '../Shared/Images/logos/bnsf.svg?react';
 import { Context } from '../Store/Store';
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';

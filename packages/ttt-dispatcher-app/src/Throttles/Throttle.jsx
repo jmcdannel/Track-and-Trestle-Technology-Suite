@@ -30,7 +30,7 @@ import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 import dccApi from '../Shared/api/dccApi';
 
-import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
+import BnsfLogoSvg from '../Shared/Images/logos/bnsf.svg?react';
 
 import './Throttle.scss';
 
