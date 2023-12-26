@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../Store/Store';
-import { usePrevious } from '../Shared/hooks/usePrevious';
+import { usePrevious } from '../Shared/Hooks/usePrevious';
 import dccApi from '../Shared/api/dccApi';
 
 const SWITCH_DIR_DELAY = 250;
