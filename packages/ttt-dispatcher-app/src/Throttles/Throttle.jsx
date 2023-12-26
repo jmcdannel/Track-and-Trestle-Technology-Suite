@@ -143,9 +143,9 @@ export const Throttle = props => {
       </Dialog>
 
       <Card
-        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')}`} >
+        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={<LocoName loco={loco} />}
+          title={up.lg ? <LocoName loco={loco} /> : null}
           avatar={
             <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
           } 
@@ -161,6 +161,9 @@ export const Throttle = props => {
             />
           }
         />
+        {down.lg && (
+          <CardHeader title={<LocoName loco={loco} />}></CardHeader>
+        )}
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
             {/* {up.lg && showFunctions && (
