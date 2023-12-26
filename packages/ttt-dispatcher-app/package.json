@@ -37,7 +37,7 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "deploy": "gh-pages -d build"
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
