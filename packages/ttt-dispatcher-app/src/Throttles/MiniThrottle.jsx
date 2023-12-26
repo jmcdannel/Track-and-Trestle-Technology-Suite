@@ -24,7 +24,7 @@ import PanToolIcon from '@mui/icons-material/PanTool';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
 import { Context } from '../Store/Store';
-import useDebounce from '../Shared/Hooks/useDebounce';
+import useDebounce from '../Shared/hooks/useDebounce';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 
 import './MiniThrottle.scss';
