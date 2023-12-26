@@ -31,12 +31,9 @@ export const Stop = props => {
 
   return (
     <IconButton
-      className="header-button"
       onClick={handleStopClick} 
-      color="inherit"
-      variant="outlined"
     >
-      <PanToolIcon />
+      <PanToolIcon sx={{ fill: 'red' }} />
     </IconButton>)
 }
 

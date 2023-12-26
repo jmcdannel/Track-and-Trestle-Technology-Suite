@@ -13,9 +13,8 @@ export const Status = props => {
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
 
   return (
-    <Link to="/settings" className="header-button">
+    <Link to="/settings">
       <IconButton
-        className="header-button"
       >
         {status === CONNECTION_STATUS.CONNECTED 
           && dccApiStatus === CONNECTION_STATUS.CONNECTED 

@@ -6,7 +6,8 @@ import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import Drawer from '@mui/material/Drawer';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
 import IconButton from '@mui/material/IconButton';
@@ -22,6 +23,7 @@ import LocoName from './LocoName';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import AdvancedControls from './AdvancedControls';
+import { ThrottleConsist } from './ThrottleConsist';
 
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
@@ -59,6 +61,7 @@ export const Throttle = props => {
 
   const [ showFunctionsDrawer, setShowFunctionsDrawer ] = useState(false);
   const [ showSettings, setShowSettings ] = useState(false);
+  const [ showConsist, setShowConsist] = useState(false);
   const [ functionState, setFunctionState ] = useState([]);
   const [ uiSpeed, setUiSpeed ] = useState(calcSpeed(speed));
 
@@ -125,18 +128,24 @@ export const Throttle = props => {
         show={showSettings}
         onHide={() => setShowSettings(false)} />
 
-      <Drawer
+      <Dialog
         anchor={'right'}
         open={showFunctionsDrawer}
         onClose={() => setShowFunctionsDrawer(false)}
         >
+        <DialogTitle>Functions</DialogTitle>
         <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
-      </Drawer>
+      </Dialog>
+
+      <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
+        <DialogTitle>Consist</DialogTitle>
+        <ThrottleConsist consist={loco.consist} onChange={() => { /* no op */ }} />
+      </Dialog>
 
       <Card
-        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')}`} >
+        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={<LocoName loco={loco} />}
+          title={up.lg ? <LocoName loco={loco} /> : null}
           avatar={
             <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
           } 
@@ -147,10 +156,14 @@ export const Throttle = props => {
               onStop={handleStopClick}
               size="small"
               onShowSettings={() => setShowSettings(true)}
-              onShowFunctionsDrawer={() => setShowFunctionsDrawer(true)}
+              onShowConsist={() => setShowConsist(true)}
+              onShowFunctions={() => setShowFunctionsDrawer(true)}
             />
           }
         />
+        {down.lg && (
+          <CardHeader title={<LocoName loco={loco} />}></CardHeader>
+        )}
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
             {/* {up.lg && showFunctions && (

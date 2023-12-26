@@ -39,6 +39,14 @@ $neutral: #f89719;
     background: $bg-grad-blue-green-1;
     padding: 0;
   }
+
+  .MuiCardHeader-action {
+    margin: 0;
+    align-self: auto;
+    // svg {
+    //   font-size: 1.8rem;
+    // }
+  }
   .MuiCardContent-root {
     &:last-child {
       padding-bottom: 0;

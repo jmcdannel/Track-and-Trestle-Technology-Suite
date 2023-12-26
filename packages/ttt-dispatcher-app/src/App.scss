@@ -7,17 +7,13 @@ body,
   background-color: $background;
 }
 
-.App {
+:root {
   text-align: center;
-}
 
-.app-header-menu.MuiAppBar-root {
-  background: $bg-pink-orange-1;
-  background: $bg-grad-pink-orange-1;
-}
-
-.app-footer.MuiBottomNavigation-root {
-  background-color: $background-light-1;  
+  .MuiAppBar-root, 
+  .MuiBottomNavigation-root {
+    background-color: $background-light-1;  
+  }
 }
 
 .title {
@@ -55,7 +51,9 @@ main {
 .textLeft {
   text-align: left;
 }
-
+.disable-dbl-tap-zoom {
+  touch-action: manipulation;
+}
 
 .rounded-button-group {
   display: flex;
