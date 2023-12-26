@@ -1,6 +1,6 @@
 // import { useConnectionStore } from '../store/connectionStore.jsx';
 import dccApi from './dccApi';
-import axios from 'axios';
+// import axios from 'axios';
 import mqtt from "mqtt";
 import actionApi from './actionApi';
 import layoutApi from './layoutApi';
@@ -105,14 +105,14 @@ async function handleTurnout(turnout) {
 }
 
 async function handleIALed(effect) {
-  try {
-    const uri = 'http://192.168.86.47/led';
-    console.log('[IALED]', effect);
-    const resp = await axios.post(uri, JSON.stringify(effect.config));
-    return resp?.data;
-  } catch (err) {
-    console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
-  }
+  // try {
+  //   const uri = 'http://192.168.86.47/led';
+  //   console.log('[IALED]', effect);
+  //   const resp = await axios.post(uri, JSON.stringify(effect.config));
+  //   return resp?.data;
+  // } catch (err) {
+  //   console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
+  // }
 }
 
 async function handleEffect(effect) {
