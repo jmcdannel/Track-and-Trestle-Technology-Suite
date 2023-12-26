@@ -11,12 +11,10 @@ import AvailableThrottle from './AvailableThrottle';
 import AvailableThrottles from './AvailableThrottles';
 
 
-import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 import { Context } from '../Store/Store';
 
 export const Throttles = props => {
 
-  const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
 
@@ -36,7 +34,6 @@ export const Throttles = props => {
   const throttleCount = locos
     .filter(loco => loco.isAcquired && !loco.cruiseControl)?.length;
   
-    console.log('throttleCount', throttleCount, ((isLg || isXl ) && throttleCount === 1));
   return (
     <Box sx={{ 
       position: 'relative', 

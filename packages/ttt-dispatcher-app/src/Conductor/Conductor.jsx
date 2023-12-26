@@ -14,7 +14,6 @@ import Routes from '../Routes/Routes';
 import Turnouts from '../Turnouts/Turnouts';
 
 import api from '../Shared/api/api';
-import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
 import { Context } from '../Store/Store';
 
 import './Conductor.scss';
@@ -22,7 +21,6 @@ import './Conductor.scss';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
-  const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
   return (
     <div
       role="tabpanel"

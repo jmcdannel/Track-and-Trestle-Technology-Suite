@@ -1,9 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
+import BnsfLogoSvg from '../Shared/Images/logos/bnsf.svg?react';
 
-import useLayoutRoadnames from '../Shared/hooks/useLayoutRoadnames';
+import useLayoutRoadnames from '../Shared/Hooks/useLayoutRoadnames';
 
 import './LocoName.scss';
 
