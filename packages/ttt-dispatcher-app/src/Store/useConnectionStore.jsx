@@ -50,6 +50,15 @@ const store = immer(
       }))
     },
 
+    resetActionDevices: () => {
+      set(state => ({
+        actionDevices: [...state.actionDevices].map(d => ({
+          ...d,
+          status: CONNECTION_STATUS.DISCONNECTED
+        }))
+      }))
+    },
+
     updateActionDeviceStatusByPort: (port, status) => {
       set(state => ({
         actionDevices: [...state.actionDevices.map(d => {
@@ -71,6 +80,7 @@ const store = immer(
         dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
         actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
       })
+      get().resetActionDevices()
     }
   }), {
     name: '@ttt/connection-store',
