@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import BnsfLogoSvg from '../Images/logos/bnsf.svg?react';
 import UpLogoSvg from '../Images/logos/up.svg?react';
 import SfLogoSvg from '../Images/logos/sf.svg?react';
+import MrlLogoSvg from '../Images/logos/mrl.svg?react';
 import { Context } from '../../Store/Store'
 
 const MRLLogoPng = '/images/logos/mrl.png';
@@ -22,8 +23,10 @@ export function useLayoutRoadnames(_id) {
         return <UpLogoSvg  />
       case 'sf':
         return <SfLogoSvg  />
-      case 'mr':
-        return <img src={MRLLogoPng} />
+      case 'mrl':
+        return <MrlLogoSvg />
+      case 'gn':
+        return <img src="/images/logos/Great_Northern_Herald.png" alt="Great Northern" />
       default:
         return defaultLogo
     }

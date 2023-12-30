@@ -13,6 +13,7 @@ const Routes = props => {
     computedRoutes
   } = props;
 
+
   return (
     <Box className="routes">
      {computedRoutes.map(rte => (

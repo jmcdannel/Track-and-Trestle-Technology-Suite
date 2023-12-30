@@ -15,8 +15,8 @@ import UsbOffIcon from '@mui/icons-material/UsbOff';
 import RouterIcon from '@mui/icons-material/Router';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
-import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
-import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
+import UsbOutlinedIcon from '@mui/icons-material/UsbOutlined';
+import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
 
 import { DccDeviceDialog } from './DccDeviceDialog';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
@@ -63,8 +63,8 @@ export const Dcc = props => {
           title="DCC" 
           avatar={
             apiConnected && deviceConnected 
-              ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor() }} />
-              : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor() }} />
+              ? <UsbOutlinedIcon sx={{ fill: connectionStateColor() }} />
+              : <UsbOffOutlinedIcon sx={{ fill: connectionStateColor() }} />
           } >
         </CardHeader>
         <CardContent sx={{
@@ -74,8 +74,8 @@ export const Dcc = props => {
         }}>
           <Box sx={{ padding: '1rem' }}>
             {apiConnected && deviceConnected 
-                ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
-                : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
+                ? <UsbOutlinedIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
+                : <UsbOffOutlinedIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>
             

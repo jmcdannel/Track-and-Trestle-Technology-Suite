@@ -80,7 +80,7 @@ export const SpeedControl = ({
         <IconButton 
           className="speed-stop-btn disable-dbl-tap-zoom"
           color="primary" 
-          style={btnStlye}
+          style={btnStopStlye}
           onClick={handleStopClick} >
             <PanToolIcon />
         </IconButton>

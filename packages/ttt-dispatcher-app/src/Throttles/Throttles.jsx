@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Fab from '@mui/material/Fab';
 import Drawer from '@mui/material/Drawer';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,17 +9,13 @@ import AddIcon from '@mui/icons-material/Add';
 import Throttle from './Throttle';
 import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
-import AvailableThrottles from './AvailableThrottles';
-
 
 import { Context } from '../Store/Store';
 
-export const Throttles = props => {
+export const Throttles = () => {
 
-  const [ state, dispatch ] = useContext(Context);
+  const [ state ] = useContext(Context);
   const { locos } = state;
-
-  const currentLoco = locos.find(loco => loco.isAcquired && !loco.cruiseControl);
 
   const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 
@@ -31,48 +28,73 @@ export const Throttles = props => {
   };
 
   const hasThrottles = locos.some(loco => loco.isAcquired);
-  const throttleCount = locos
-    .filter(loco => loco.isAcquired && !loco.cruiseControl)?.length;
+  const throttles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl);
+  const cruiseThrottles = locos?.filter(loco => loco.isAcquired && loco.cruiseControl);
+  const availableThrottles = locos?.filter(loco => !loco.isAcquired);
   
   return (
-    <Box sx={{ 
-      position: 'relative', 
-      'display': 'flex', 
-      'flexWrap': 'wrap',
-      'flex': '1'
-    }}>
-      {hasThrottles 
-        ? locos
-            .filter(loco => loco.isAcquired && !loco.cruiseControl)
-            .map(loco => (
-              <Throttle 
-                className={throttleCount === 1 ? 'fullthrottle' : 'halfthrottle'}
-                key={loco.address}
-                loco={loco}
-                showAdvancedControls={throttleCount === 1}
-                showFunctions={throttleCount === 1}
-              />))
-        : <AvailableThrottles />
-      }
+    <>    
+      <Grid container
+        direction="row"
+        justifyContent="space-between"
+        alignItems="stretch">
+        <Grid item xs={12}>
+          <Box 
+          flexGrow={0} 
+          display="flex" 
+          flexDirection="row" 
+          flexWrap="wrap"
+          >
+            {cruiseThrottles.map(loco => (
+              <Box key={loco.address} flexBasis="100%">
+                <MiniThrottle loco={loco} />
+              </Box>
+            ))}
+          </Box> 
+        </Grid>
+      </Grid>
+      <Box sx={{ 
+        position: 'relative', 
+        'display': 'flex', 
+        'flexWrap': 'wrap',
+        'flex': '1',
+        backgroundColor: 'rgb(55, 61, 72)',
+      }}>
+        {throttles && throttles.length 
+          ? throttles.filter(loco => loco.isAcquired && !loco.cruiseControl)
+              .map(loco => (
+                <Throttle 
+                  className={throttles.length === 1 ? 'fullthrottle' : 'halfthrottle'}
+                  key={loco.address}
+                  loco={loco}
+                  variant={throttles.length === 1 ? 'full' : 'half'}
+                />))
+          : availableThrottles.map(loco => (
+            <AvailableThrottle key={loco.address} loco={loco} />
+          ))
+        }
 
-      {hasThrottles && (
-        <Fab  
-          color="primary" 
-          aria-label="add" 
-          onClick={handleAddButtonClick}
-          sx={{
-            position: 'fixed',
-            bottom: 16,
-            right: 16,
-          }}>
-          <AddIcon />
-        </Fab>
-      )}
+        {hasThrottles && (
+          <Fab  
+            color="primary" 
+            aria-label="add" 
+            onClick={handleAddButtonClick}
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+            }}>
+            <AddIcon />
+          </Fab>
+        )}
 
-      <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
-        <AvailableThrottles onLocoSelected={() => setIsDrawerOpen(false)} />
-      </Drawer>
-    </Box>
+        <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
+          {availableThrottles.map(loco => (
+            <AvailableThrottle key={loco.address} loco={loco} onLocoClick={() => setIsDrawerOpen(false)} />
+          ))}
+        </Drawer>
+      </Box>
+    </>
   );
 }
 

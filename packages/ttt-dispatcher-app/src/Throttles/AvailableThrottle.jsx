@@ -1,9 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react';
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
 import TrainIcon from '@mui/icons-material/Train';
 import Button from '@mui/material/Button';
 import LocoName from './LocoName';
 import { Context } from '../Store/Store';
+import { useLayoutRoadnames } from '../Shared/Hooks/useLayoutRoadnames';
+import { useThrottleStore } from '../Store/useThrottleStore';
+
+import './AvailableThrottle.scss';
 
 export const AvailableThrottle = props => {
 
@@ -17,6 +23,9 @@ export const AvailableThrottle = props => {
     loco: {  address, name }
   } = props;
 
+  const throttle = useThrottleStore(state => state.getThrottle)(address);
+  const [roadname, roadlogo] = useLayoutRoadnames(loco?.meta?.roadname);
+
   const handleLocoClick = async () => {
     try {
       if (isLoading) {
@@ -29,12 +38,37 @@ export const AvailableThrottle = props => {
       }
     } catch (err) {
       console.error(err);
-    }
-    
+    }    
   }
 
   return (
-        <Button
+    <Box 
+      className={`available-throttle ${roadname?.toLowerCase()}`} 
+      onClick={handleLocoClick}>
+      <header>
+        <Chip label={name} size="small" variant="outlined"></Chip>
+        <Chip label={name} size="small" variant="outlined"></Chip>
+      </header>
+      <Box className="throttle-body">
+        <Box className="throttle-body-window">
+        {/* <Avatar sx={{ mr: 2 }}>{address}</Avatar> */}
+        {address}
+        </Box>
+        <Box className="throttle-body-window">
+        {/* <LocoName loco={loco} /> */}
+        {roadname}
+        </Box>
+      </Box>
+      <Box className="throttle-hood">
+        <hr />
+      </Box>
+      <Box className="throttle-logo">
+        {roadlogo ? roadlogo : <TrainIcon />}
+      </Box>
+    </Box>
+  )
+
+        /* <Button
           sx={{
             justifyContent: 'space-between'
           }}
@@ -47,8 +81,8 @@ export const AvailableThrottle = props => {
           endIcon={<TrainIcon />}
           onClick={handleLocoClick}>
             <LocoName loco={loco} />
-        </Button>
-  )
+            {throttle && <Chip label={throttle.speed}></Chip>}
+        </Button> */
 
 }
 

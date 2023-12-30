@@ -41,6 +41,7 @@ export const Power = props => {
     <IconButton
       onClick={handlePowerClick} 
       disabled={!connected}
+      className={getClassName()}
     >
       <PowerSettingsNewIcon />
     </IconButton>)

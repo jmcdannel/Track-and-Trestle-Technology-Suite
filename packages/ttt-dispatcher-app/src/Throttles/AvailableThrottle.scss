@@ -1,0 +1,227 @@
+@use "sass:color";
+@import "../theme";
+
+$sf: rgb(235, 0, 0);
+$up: rgb(249, 213, 7);
+$gn: rgb(0, 101, 25);
+$amtk: rgb(38,75,115);
+$mrl: rgb(10, 24, 99);
+$bnsf: rgb(231, 109, 38);
+
+.available-throttle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex: 0 0 33%;
+  flex-direction: column;
+  margin-bottom: 4rem;
+
+  header {
+    margin: .5rem .5rem 0 .5rem;
+    position: relative;
+    border-bottom: 20px solid orange;
+    border-right: 50px solid transparent;
+    border-left: 50px solid transparent;
+
+    .MuiChip-root:first-child {
+      left: -1rem;
+    }
+    .MuiChip-root:last-child {
+      right: -1rem;
+    }
+    .MuiChip-root {
+      background: #000;
+      position: absolute;
+      top: -10px;
+      font-weight: 500;
+      margin: 0;
+      border-radius: .5rem;
+    }
+  }
+
+  .throttle-body {
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(255, 162, 0);
+    margin: 0 .5rem;
+    padding: .5rem;
+    justify-content: space-around;
+  }
+
+  .throttle-body-window {
+    background-color: rgba(0, 0, 0, .5);    
+    flex: 0 0 45%;
+    padding: .5rem;
+    border-radius: .25rem;
+  }
+
+  .throttle-hood {
+    background: #000;
+    margin: 0 .5rem;
+    position: relative;
+    border-bottom: 20px solid orange;
+    border-right: 50px solid transparent;
+    border-left: 50px solid transparent;
+
+    hr {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -.75rem;
+      border: none;
+      background-color: rgb(11, 11, 11);
+      padding: .25rem;
+      &:after {
+        content: '';
+        display: block;
+        background-color: beige;
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem
+      }
+      &:before {
+        content: '';
+        display: block;
+        background-color: beige;
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem;
+        top: 2rem;
+      }
+    }
+  }
+
+  .throttle-logo {
+    margin: 0 .5rem;
+    border-bottom: 2px solid orange;
+    border-top: 2px solid orange;
+    background-color: rgb(255, 162, 0);
+    padding-top: 1rem;
+    svg, img {
+      height: 2rem;
+      max-width: 5rem;
+    }
+  }
+
+  &.bnsf {
+    header {
+      border-bottom-color: $bnsf;
+    }
+    .throttle-body {
+      background-color: $bnsf;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $bnsf;
+    }
+    .throttle-logo {
+      border-bottom-color: $bnsf;
+      border-top-color: $bnsf;
+      background-color: $bnsf;
+    }
+  }
+
+  &.sf {
+    header {
+      border-bottom-color: $sf;
+    }
+    .throttle-body {
+      background-color: $sf;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $sf;
+    }
+    .throttle-logo {
+      border-bottom-color: $sf;
+      border-top-color: $sf;
+      background-color: $sf;
+    }
+  }
+
+  &.gn {
+    header {
+      border-bottom-color: $gn;
+    }
+    .throttle-body {
+      background-color: $gn;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $gn;
+    }
+    .throttle-logo {
+      border-bottom-color: $gn;
+      border-top-color: $gn;
+      background-color: $gn;
+    }
+  }
+
+  &.up {
+    header {
+      border-bottom-color: $up;
+    }
+    .throttle-body {
+      background-color: $up;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $up;
+    }
+    .throttle-logo {
+      border-bottom-color: $up;
+      border-top-color: $up;
+      background-color: $up;
+    }
+  }
+  
+
+
+  &.amtk {
+    header {
+      border-bottom-color: $amtk;
+    }
+    .throttle-body {
+      background-color: $amtk;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $amtk;
+    }
+    .throttle-logo {
+      border-bottom-color: $amtk;
+      border-top-color: $amtk;
+      background-color: $amtk;
+    }
+  }
+  
+  &.mrl {
+    header {
+      border-bottom-color: $mrl;
+    }
+    .throttle-body {
+      background-color: $mrl;
+    }
+    .throttle-body-window {
+      background-color: rgba(0, 0, 0, .5);    
+    }
+    .throttle-hood {
+      border-bottom-color: $mrl;
+    }
+    .throttle-logo {
+      border-bottom-color: $mrl;
+      border-top-color: $mrl;
+      background-color: $mrl;
+    }
+  }
+}

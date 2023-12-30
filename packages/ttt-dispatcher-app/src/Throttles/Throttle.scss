@@ -58,6 +58,14 @@ $neutral: #f89719;
     background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
   }
 
+  &__consist-badge {
+    &.MuiBadge-root {
+      .MuiBadge-badge {
+        bottom: 50%;
+      }
+    }
+  }
+
   // .MuiCardHeader-action {
   //   padding: .5rem;
   //   .MuiIconButton-root {

@@ -36,45 +36,20 @@ export const Header = props => {
     <>
       <AppBar position="sticky" className="">
         <Toolbar>
-          <IconButton
+          {/* <IconButton
               edge="start"
               color="inherit"
               aria-label="menu"
               disabled
             >
               <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className="title">
+          </IconButton> */}
+          <Typography variant="h6" className="title" align="left">
             {navItem ? navItem.label : ''}
           </Typography>
-          <Link to="/dcc">
-            <Chip 
-              label="DCC" 
-              color="primary" 
-              size="small"
-              variant='outlined'
-              sx={{ mr: 2 }}
-            />
-          </Link>
-          <Link to="/settings">
-            <Chip 
-              label={`${host} * ${layoutId}`} 
-              color="primary" 
-              size="small"
-              variant='outlined'
-              sx={{ mr: 2 }}
-            />
-          </Link>
+          <Status />
           <Stop />
           <Power />
-          <Status />
-          <Link to="/settings">
-            <IconButton
-                aria-label="settings"
-              >
-              <SettingsIcon />
-            </IconButton>
-          </Link>
           {/* <IconButton
               color="inherit"
               aria-label="menu"
