@@ -18,10 +18,10 @@ async function mqttConnect(host = 'mqtt://tamarackjunctionmbp.local', port = 500
   client.on('connect', function () {
     console.log('mqtt connected')
     // Subscribe to a topic
-    client.subscribe('test', function (err) {
+    client.subscribe('ttt-dispatcher', function (err) {
       if (!err) {
         // Publish a message to a topic
-        client.publish('test', 'Hello mqtt')
+        client.publish('ttt-dispatcher', 'Hello from dispatcher app')
       }
     })
   })
