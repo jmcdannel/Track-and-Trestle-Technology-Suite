@@ -4,7 +4,7 @@ import PanToolIcon from '@mui/icons-material/PanTool';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ThrottleSpeed from './ThrottleSpeed';
-import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
+import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 
 import './SpeedControl.scss';
 
@@ -59,11 +59,11 @@ export const SpeedControl = ({
         orientation={orientation}
         size="large"
         aria-label="outlined primary button group"
-        className="rounded-button-group throttle__controls__group"
+        className="rounded-button-group throttle__controls__group disable-dbl-tap-zoom"
       >
         <IconButton 
           sx={{ display: 'flex', flexDirection: 'row' }}
-          className="speed-up-btn"
+          className="speed-up-btn disable-dbl-tap-zoom"
           disabled={uiSpeed === maxSpeed} 
           style={btnStlye}
           onClick={handleWayUpClick}>
@@ -71,21 +71,21 @@ export const SpeedControl = ({
             <AddIcon />
         </IconButton>
         <IconButton 
-          className="speed-up-btn"
+          className="speed-up-btn disable-dbl-tap-zoom"
           disabled={uiSpeed === maxSpeed} 
           style={btnStlye}
           onClick={handleUpClick}>
             <AddIcon />
         </IconButton>
         <IconButton 
-          className="speed-stop-btn"
+          className="speed-stop-btn disable-dbl-tap-zoom"
           color="primary" 
-          style={btnStlye}
+          style={btnStopStlye}
           onClick={handleStopClick} >
             <PanToolIcon />
         </IconButton>
         <IconButton 
-          className="speed-down-btn"
+          className="speed-down-btn disable-dbl-tap-zoom"
           disabled={uiSpeed === minSpeed} 
           style={btnStlye}
           onClick={handleDownClick}>
@@ -93,7 +93,7 @@ export const SpeedControl = ({
         </IconButton>
         <IconButton 
           sx={{ display: 'flex', flexDirection: 'row' }}
-          className="speed-down-btn"
+          className="speed-down-btn disable-dbl-tap-zoom"
           disabled={uiSpeed === minSpeed} 
           style={btnStlye}
           onClick={handleWayDownClick}>

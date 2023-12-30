@@ -37,12 +37,15 @@ function ApiEngine(props) {
 
   const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
 
+  const powerOnStates = ['<p1>', '<p1 MAIN>']
+  const powerOffStates = ['<p0>', '<p0 MAIN>']
+
   const parseDccResponse = (payload) => {
     console.log('[ApiEngine] parseDccResponse', payload);
     if (payload.startsWith('<p')) {
-      if (payload === '<p1>') {
+      if (powerOnStates.includes(payload)) {
         setPowerStatus(true);
-      } else if (payload === '<p0>') {
+      } else if (powerOffStates.includes(payload)) {
         setPowerStatus(false);
       }
     } else if (payload.startsWith('<l')) {
@@ -60,7 +63,7 @@ function ApiEngine(props) {
     }
   }
 
-  const handleDccMessage = (message) => {
+  const handleDccMessage = async (message) => {
     try {
       const { action, payload } = JSON.parse(message.data);
       console.log('[ApiEngine] handleDccMessage', action, payload, message);
@@ -74,6 +77,7 @@ function ApiEngine(props) {
         case 'connected':
           setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           setDccDevice(payload.path);
+          await api.dcc.send('dcc', 's')
           break;
         case 'broadcast':
           console.log('[ApiEngineDCCLOG] broadcast', payload);

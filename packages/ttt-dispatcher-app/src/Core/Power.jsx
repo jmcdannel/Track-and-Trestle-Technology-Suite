@@ -40,10 +40,8 @@ export const Power = props => {
   return (
     <IconButton
       onClick={handlePowerClick} 
-      className={getClassName()}
-      color="inherit"
-      variant="outlined"
       disabled={!connected}
+      className={getClassName()}
     >
       <PowerSettingsNewIcon />
     </IconButton>)

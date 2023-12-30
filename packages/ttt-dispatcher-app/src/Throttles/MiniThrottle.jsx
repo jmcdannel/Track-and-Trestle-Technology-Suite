@@ -1,54 +1,55 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 
-import Typography from '@mui/material/Typography';
-import TrainIcon from '@mui/icons-material/Train';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import IconButton from '@mui/material/IconButton';
-import ThrottleSpeed from './ThrottleSpeed';
-import ThrottleSlider from './ThrottleSlider';
 import SpeedControl from './SpeedControl';
 import Functions from './Functions';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import LocoName from './LocoName';
+import LocoAvatar from './LocoAvatar';
 import AdvancedControls from './AdvancedControls';
+import { ThrottleConsist } from './ThrottleConsist';
 // import JmriThrottleController from './JmriThrottleController';
 import DccExThrottleController from './DccExThrottleController';
-import PanToolIcon from '@mui/icons-material/PanTool';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import BnsfLogoSvg from '../Shared/images/logos/bnsf.svg?react';
-import { Context } from '../Store/Store';
 import useDebounce from '../Shared/Hooks/useDebounce';
+import { useThrottleStore } from '../Store/useThrottleStore';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 
 import './MiniThrottle.scss';
 
 export const MiniThrottle = props => {
 
-  const [ , dispatch ] = useContext(Context);
 	const STOP = '0.0';
 
-  const { onLocoClick, loco, disabled, loco: { 
-    address, 
-    cruiseDisabled, 
-    isAcquired, 
-    speed, 
-    consist,
-    maxSpeed = 100,
-    forward
-  } } = props;
+  const { 
+    loco, 
+    disabled, 
+    onLocoClick, 
+    loco: { 
+      cruiseDisabled, 
+      isAcquired, 
+      consist,
+      maxSpeed = 100,
+      forward
+    } 
+  } = props;
 
+  const address = Number(props.loco.address);
+  const throttle = useThrottleStore(state => state.getThrottle)(address);
+  const speed = throttle?.speed || 0;
 
-  const initialUiSpeed = speed * (forward === true ? 1 : -1);
+  const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
-  const [ uiSpeed, setUiSpeed ] = useState(initialUiSpeed);
+  const [ showFunctionsDrawer, setShowFunctionsDrawer ] = useState(false);
   const [ showSettings, setShowSettings ] = useState(false);
+  const [ showConsist, setShowConsist] = useState(false);
+  const [ functionState, setFunctionState ] = useState([]);
+  const [ uiSpeed, setUiSpeed ] = useState(calcSpeed(speed));
   const debouncedSpeed = useDebounce(uiSpeed, 100);
 
   const handleStopClick = () => {
@@ -71,19 +72,18 @@ export const MiniThrottle = props => {
     setUiSpeed(uiSpeed - WAY_UP_STEP);
   }
 
-  const handleLocoClick = async () => {
-    await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, cruiseControl: false } }); 
-    if (onLocoClick) {
-      onLocoClick(loco);
-    }
-  }
-  const handleParkClick = async () => {
-    try {
-      setUiSpeed(parseInt(STOP));
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, cruiseControl: false } });
-    } catch (err) {
-      console.error(err);
-    }
+  const handleFunctionClick = async clickedIndex => {
+    let newFunctionState = [...functionState];
+    const newState = newFunctionState[clickedIndex]
+      ? { on: !newFunctionState[clickedIndex].on }
+      : { on: true };
+    newFunctionState[clickedIndex] = newState;
+    setFunctionState(newFunctionState)
+    dccApi.send('function', {
+        address,
+        state: newState.on,
+        func: clickedIndex
+      });
   }
 
   // useEffect(() => {
@@ -92,11 +92,11 @@ export const MiniThrottle = props => {
   //   });
   // }, [jmriApi, dispatch]);
 
-  const computedClassName = () => {
-    return ['mini-throttle', 
-      `mini-throttle--${loco.name.replace(' ', '')}  mini-throttle--${loco.meta?.roadname?.replace(' ', '')}`,
-      isAcquired ? 'mini-throttle__acquired' : 'mini-throttle__notacquired'].join(' ');
-  }
+  // const computedClassName = () => {
+  //   return ['mini-throttle', 
+  //     `mini-throttle--${loco.name.replace(' ', '')}  mini-throttle--${loco.meta?.roadname?.replace(' ', '')}`,
+  //     isAcquired ? 'mini-throttle__acquired' : 'mini-throttle__notacquired'].join(' ');
+  // }
 
   return (
     <>
@@ -106,9 +106,30 @@ export const MiniThrottle = props => {
         forward={(debouncedSpeed >= 0)} 
         consist={consist}
       />
+
+      <ThrottleSettings
+        loco={loco}
+        maxSpeed={maxSpeed}
+        show={showSettings}
+        onHide={() => setShowSettings(false)} />
+
+      <Dialog
+        anchor={'right'}
+        open={showFunctionsDrawer}
+        onClose={() => setShowFunctionsDrawer(false)}
+        >
+        <DialogTitle>Functions</DialogTitle>
+        <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
+      </Dialog>
+
+      <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
+        <DialogTitle>Consist</DialogTitle>
+        <ThrottleConsist address={address} consist={loco.consist} onChange={() => { /* no op */ }} />
+      </Dialog>
+
       <Paper className="mini-throttle">
-        <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
-        <LocoName loco={loco} />
+        <LocoAvatar loco={loco} />
+        {/* <LocoName loco={loco} /> */}
         <SpeedControl
           orientation="horizontal"
           uiSpeed={uiSpeed}
@@ -127,16 +148,11 @@ export const MiniThrottle = props => {
             onStop={handleStopClick}
             size="small"
             onShowSettings={() => setShowSettings(true)}
+            onShowConsist={() => setShowConsist(true)}
             onShowFunctionsDrawer={() => setShowFunctionsDrawer(true)}
           />
         </Box>
       </Paper>
-      <ThrottleSettings
-        loco={loco}
-        maxSpeed={maxSpeed}
-        show={showSettings}
-        onHide={() => setShowSettings(false)} />
-      
       </>
   )
 

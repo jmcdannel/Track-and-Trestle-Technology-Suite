@@ -43,10 +43,14 @@ function connect(host, handleMessage) {
   }
 }
 
-async function setPower(payload) {
-  try {   
+async function setPower(payload, track = 'MAIN') {
+  try {
+    if (typeof payload === 'undefined') {
+      console.log('[DCC API].setPower', 'payload undefined');
+      return;
+    }
     console.log('[DCC API].setPower', payload);
-    send('power', payload ? 1 : 0);
+    send('power', `${payload ? 1 : 0} ${track}`);
   } catch (err) {
     console.error('[DCC API].setPower', err);
     throw new Error('Unable to read', err);

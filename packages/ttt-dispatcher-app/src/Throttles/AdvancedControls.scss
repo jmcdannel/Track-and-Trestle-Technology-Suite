@@ -8,8 +8,8 @@
     //   display: flex;
     //   flex-direction: row;
     // }
-    // .MuiButtonBase-root {
-    //   background: linear-gradient(140deg, rgb(197, 51, 158) 0%, rgb(147, 38, 131) 100%);
+    .MuiButtonBase-root {
+      background: linear-gradient(140deg, rgb(197, 51, 158) 0%, rgb(147, 38, 131) 100%);
     //   border-radius: 0;
     //   font-size: .5rem;
     //   padding: 1rem 2.5rem;
@@ -28,7 +28,7 @@
       // &:last-child {
       //   border-radius: 0;
       // }
-    // }
+    }
 
   }
 }

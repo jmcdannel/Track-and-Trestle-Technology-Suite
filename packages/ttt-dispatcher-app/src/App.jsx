@@ -46,6 +46,7 @@ function App() {
               />
             </Box>
             <Box 
+              className="disable-dbl-tap-zoom"
               flexGrow={1} 
               component="main" 
               display="flex" 

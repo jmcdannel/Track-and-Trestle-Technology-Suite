@@ -10,7 +10,7 @@ import SpeedIcon from '@mui/icons-material/Speed';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 
 import { Context } from '../Store/Store';
-import { useBreakpoints } from '../Shared/hooks/useBreakpoints';
+import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 
 const ThrottleActions = (props) => {
 
