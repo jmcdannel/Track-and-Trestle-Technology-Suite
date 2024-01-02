@@ -11,7 +11,6 @@ export const LocoName = ({ loco }) => {
 
   const [roadname, roadlogo] = useLayoutRoadnames(loco?.meta?.roadname);
 
-  console.log('loco.consist', loco.consist);
   return (
     <Box sx={{
       display: 'flex',

@@ -33,55 +33,16 @@ export const Header = props => {
   const navItem = getByLink(location.pathname);
 
   return (
-    <>
-      <AppBar position="sticky" className="">
-        <Toolbar>
-          {/* <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              disabled
-            >
-              <MenuIcon />
-          </IconButton> */}
-          <Typography variant="h6" className="title" align="left">
-            {navItem ? navItem.label : ''}
-          </Typography>
-          <Status />
-          <Stop />
-          <Power />
-          {/* <IconButton
-              color="inherit"
-              aria-label="menu"
-            >
-            <Badge badgeContent={100} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton> */}
-        </Toolbar>
-        {/* <Box sx={{
-          position: 'fixed',
-          bottom: '0',
-          left: '0',
-          fontSize: '.75rem'
-        }}>
-          <pre>
-            {up.xs && (<>XSup-</>)}
-            {up.sm && (<>SMup-</>)}
-            {up.md && (<>MDup-</>)}
-            {up.lg && (<>LGup-</>)}
-            {up.xl && (<>XLup-</>)}
-          </pre>
-          <pre>
-            {down.xs && (<>XSdown-</>)}
-            {down.sm && (<>SMdown-</>)}
-            {down.md && (<>MDdown-</>)}
-            {down.lg && (<>LGdown-</>)}
-            {down.xl && (<>XLdown-</>)}
-          </pre>
-        </Box> */}
-      </AppBar>
-    </>
+    <AppBar position="sticky" className="">
+      <Toolbar>
+        <Typography variant="h6" className="title" align="left">
+          {navItem ? navItem.label : ''}
+        </Typography>
+        <Status />
+        <Stop />
+        <Power />
+      </Toolbar>
+    </AppBar>
   );
 
 }

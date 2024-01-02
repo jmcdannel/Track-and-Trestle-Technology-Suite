@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
@@ -9,7 +10,7 @@ import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
-export const Status = props => {
+export const Status = () => {
 
   const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
@@ -43,8 +44,17 @@ export const Status = props => {
           size="small"
           icon={renderDccIcon()}
           variant='outlined'
-          sx={{ mr: 2 }}
+          sx={{ 
+            display: {
+              xs: 'none',
+              sm: 'flex'
+            },
+            mr: 2 
+          }}
         />
+        <Box sx={{ mr: 2, display: { sx: 'flex', sm: 'none' } }}>
+          {renderDccIcon()}
+        </Box>
       </Link>
       <Link to="/settings">
         <Chip
@@ -53,8 +63,17 @@ export const Status = props => {
           size="small"
           icon={renderIcon()}
           variant='outlined'
-          sx={{ mr: 2 }}
+          sx={{ 
+            display: {
+              xs: 'none',
+              sm: 'flex'
+            },
+            mr: 2 
+          }}
         />
+        <Box sx={{ mr: 2, display: { xs: 'flex', sm: 'none' } }}>
+          {renderIcon()}
+        </Box>
       </Link>
     </>
   )

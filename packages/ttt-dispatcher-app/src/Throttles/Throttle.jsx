@@ -35,7 +35,6 @@ export const Throttle = props => {
     loco, 
     cruiseDisabled,
     variant = 'full',
-    className = '',
     onLocoClick, 
     loco: {
       autoStop,
@@ -44,7 +43,7 @@ export const Throttle = props => {
       maxSpeed = 100
     } 
   } = props;
-  
+
   const address = Number(props.loco.address);
   const throttle = useThrottleStore(state => state.getThrottle)(address);
   const speed = throttle?.speed || 0;
@@ -138,9 +137,9 @@ export const Throttle = props => {
       </Dialog>
 
       <Card
-        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
+        className={`throttle ${variant}throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={up.md && isVariantFull ? <LocoName loco={loco} /> : null}
+          title={up.md && variant === 'full' ? <LocoName loco={loco} /> : null}
           avatar={
             <Badge 
               badgeContent={1 + (loco.consist?.length || 0)} 

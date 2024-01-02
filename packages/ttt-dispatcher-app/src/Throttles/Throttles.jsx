@@ -10,12 +10,17 @@ import Throttle from './Throttle';
 import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
 
+import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
+
 import { Context } from '../Store/Store';
 
 export const Throttles = () => {
 
+  const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
   const [ state ] = useContext(Context);
   const { locos } = state;
+  console.log('up.md', up.md);
+  console.log('down.lg', down.lg);
 
   const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 
@@ -64,10 +69,9 @@ export const Throttles = () => {
           ? throttles.filter(loco => loco.isAcquired && !loco.cruiseControl)
               .map(loco => (
                 <Throttle 
-                  className={throttles.length === 1 ? 'fullthrottle' : 'halfthrottle'}
                   key={loco.address}
                   loco={loco}
-                  variant={throttles.length === 1 ? 'full' : 'half'}
+                  variant={down.lg || throttles.length === 1 ? 'full' : 'half'}
                 />))
           : availableThrottles.map(loco => (
             <AvailableThrottle key={loco.address} loco={loco} />

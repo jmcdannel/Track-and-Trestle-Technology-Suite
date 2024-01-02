@@ -1,10 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import TrainIcon from '@mui/icons-material/Train';
-import Button from '@mui/material/Button';
-import LocoName from './LocoName';
 import { Context } from '../Store/Store';
 import { useLayoutRoadnames } from '../Shared/Hooks/useLayoutRoadnames';
 import { useThrottleStore } from '../Store/useThrottleStore';
@@ -51,11 +48,9 @@ export const AvailableThrottle = props => {
       </header>
       <Box className="throttle-body">
         <Box className="throttle-body-window">
-        {/* <Avatar sx={{ mr: 2 }}>{address}</Avatar> */}
         {address}
         </Box>
         <Box className="throttle-body-window">
-        {/* <LocoName loco={loco} /> */}
         {roadname}
         </Box>
       </Box>

@@ -28,6 +28,12 @@ $neutral: #f89719;
   height: 100%;
   flex: 1;
 
+  &.fullthrottle {
+    flex-basis: 100%;
+    max-width: 100%;
+    max-height: 75vh;
+    min-height: 540px;
+  }
   &.halfthrottle {
     flex-basis: 50%;
     max-width: 50%;

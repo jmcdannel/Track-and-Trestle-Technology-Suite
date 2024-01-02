@@ -4,7 +4,6 @@ import PanToolIcon from '@mui/icons-material/PanTool';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ThrottleSpeed from './ThrottleSpeed';
-import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 
 import './SpeedControl.scss';
 
@@ -19,8 +18,6 @@ export const SpeedControl = ({
   handleDownClick,
   handleWayDownClick
 }) => {
-  
-  const [ isXs, isSm, isMd, isLg, isXl, getCurrentSize ] = useBreakpoints();
 
   const btnStlye = {
     padding: {

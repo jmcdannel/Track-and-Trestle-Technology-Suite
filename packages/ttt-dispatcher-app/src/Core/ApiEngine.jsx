@@ -5,6 +5,8 @@ import log from '../Shared/utils/logger';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useDccStore } from '../Store/useDccStore';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { DccListener } from '../Dcc/DccListener';
+
 function ApiEngine(props) {
 
   const { onReady } = props;
@@ -41,7 +43,7 @@ function ApiEngine(props) {
   const powerOffStates = ['<p0>', '<p0 MAIN>']
 
   const parseDccResponse = (payload) => {
-    console.log('[ApiEngine] parseDccResponse', payload);
+    // console.log('[ApiEngine] parseDccResponse', payload);
     if (payload.startsWith('<p')) {
       if (powerOnStates.includes(payload)) {
         setPowerStatus(true);
@@ -66,7 +68,7 @@ function ApiEngine(props) {
   const handleDccMessage = async (message) => {
     try {
       const { action, payload } = JSON.parse(message.data);
-      console.log('[ApiEngine] handleDccMessage', action, payload, message);
+      // console.log('[ApiEngine] handleDccMessage', action, payload, message);
       switch (action) {
         case 'listPorts':
           setDccPorts(payload);
@@ -80,7 +82,7 @@ function ApiEngine(props) {
           await api.dcc.send('dcc', 's')
           break;
         case 'broadcast':
-          console.log('[ApiEngineDCCLOG] broadcast', payload);
+          // console.log('[ApiEngineDCCLOG] broadcast', payload);
           parseDccResponse(payload);
           appendtoDccLog(payload);
           break;
@@ -147,10 +149,6 @@ function ApiEngine(props) {
   useEffect(() => {
     console.log('[ApiEngine] layout', layout);
 
-    if (layout?.interfaces?.find(i => i.type === 'dcc-js-api')) {
-      setDccApiStatus(CONNECTION_STATUS.PENDING);
-      api.dcc.connect(host, handleDccMessage);
-    }
 
     if (layout?.interfaces?.find(i => i.type === 'action-api')) {
       setActionApiStatus(CONNECTION_STATUS.PENDING);
@@ -213,7 +211,7 @@ function ApiEngine(props) {
     }
   }, [actionApiStatus, actionDevices]);
 
-  return (<></>);
+  return (<><DccListener /></>);
 }
 
 ApiEngine.defaultProps = {
