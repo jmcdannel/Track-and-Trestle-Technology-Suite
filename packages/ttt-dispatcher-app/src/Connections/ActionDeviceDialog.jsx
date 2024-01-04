@@ -17,7 +17,6 @@ export const ActionDeviceDialog = ({ onClose, open, device }) => {
   const [newPort, setNewPort] = useState(null);
 
   useEffect(async () => {
-    console.log('[ActionDeviceDialog] actionApiStatus (listPorts)', open, actionApiStatus);
     open && actionApiStatus === CONNECTION_STATUS.CONNECTED && await api.actionApi.fetchPorts();
   }, [open, actionApiStatus]);
 

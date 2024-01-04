@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import dccApi from '../Shared/api/dccApi';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useDccStore } from '../Store/useDccStore';
 
 export const Power = props => {
 
+  const track = 'MAIN';
+  const { dcc } = useMqtt();
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
   const powerStatus = useDccStore(state => state.powerStatus);
   const setPowerStatus = useDccStore(state => state.setPowerStatus);
@@ -16,7 +18,15 @@ export const Power = props => {
 
 
   useEffect(async () => {
-      await dccApi.setPower(powerStatus);
+    function sendPower() {
+      dcc({
+        action: 'power',
+        payload: `${powerStatus ? 1 : 0} ${track}`
+      })
+    }
+    if (typeof powerStatus !== 'undefined') {
+      sendPower();
+    }
   }, [ powerStatus ]);
 
   const handlePowerClick = async () => {

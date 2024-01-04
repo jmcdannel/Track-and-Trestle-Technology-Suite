@@ -1,28 +1,28 @@
 import dccApi from './dccApi';
-import mqtt from "mqtt";
+// import mqtt from "mqtt";
 import actionApi from './actionApi';
 import layoutApi from './layoutApi';
 import config from './config'; // TODO: replace with configStore
 
-let client // mqtt client
-// let broker = 'mqtt://tamarackjunctionmbp.local';
-let broker = 'mqtt://joshs-mac-mini.local';
-const mqttPort = 5005;
+// let client // mqtt client
+// // let broker = 'mqtt://tamarackjunctionmbp.local';
+// let broker = 'mqtt://joshs-mac-mini.local';
+// const mqttPort = 5005;
 
-async function mqttConnect(host = broker, port = mqttPort) {
-  console.log('mqttConnect', host, port)
-  client = mqtt.connect(host, { port }); // create a client
-  client.on('connect', function () {
-    console.log('mqtt connected')
-    // Subscribe to a topic
-    client.subscribe('ttt-dispatcher', function (err) {
-      if (!err) {
-        // Publish a message to a topic
-        client.publish('ttt-dispatcher', 'Hello from dispatcher app')
-      }
-    })
-  })
-}
+// async function mqttConnect(host = broker, port = mqttPort) {
+//   console.log('mqttConnect', host, port)
+//   client = mqtt.connect(host, { port }); // create a client
+//   client.on('connect', function () {
+//     console.log('mqtt connected')
+//     // Subscribe to a topic
+//     client.subscribe('ttt-dispatcher', function (err) {
+//       if (!err) {
+//         // Publish a message to a topic
+//         client.publish('ttt-dispatcher', 'Hello from dispatcher app')
+//       }
+//     })
+//   })
+// }
 
 async function connect(_dispatch, host, layoutId) {
   try {
@@ -32,7 +32,7 @@ async function connect(_dispatch, host, layoutId) {
       ? await layoutApi.connect(_dispatch, host, layoutId)
       : false;
     console.log('[api] connected', connected);
-    await mqttConnect();
+    // await mqttConnect();
     return connected;
   } catch (e) {
     throw e;
@@ -43,14 +43,14 @@ async function handleTurnout(turnout) {
   console.log('API.handleTurnout', turnout);
   switch(turnout?.config?.interface) {
     case 'dcc-js-api':
-      dccApi.setTurnout(turnout.config.dccExId, turnout.state);
+      // dccApi.setTurnout(turnout.config.dccExId, turnout.state);
       break;
     case 'mqtt':
       const action = {
         servo: turnout.config.servo,
         angle: turnout.state ? turnout.config.divergent : turnout.config.straight
       }
-      client.publish('ttt', JSON.stringify(action));
+      // client.publish('ttt', JSON.stringify(action));
       break;
     case 'betatrack-io':
     case 'tamarack-junction-station-south-io':
@@ -70,7 +70,7 @@ async function handleIALed(effect) {
       ...effect.config, 
       command: effect.state ? effect.config.command : 'off'
     }
-    client.publish('ttt-ialed', JSON.stringify(action)); 
+    // client.publish('ttt-ialed', JSON.stringify(action));
   } catch (err) {
     console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
   }
@@ -81,7 +81,7 @@ async function handleEffect(effect) {
     console.log('API.handleEffect', effect);
 
     if (effect?.config?.interface === 'dcc-js-api') {
-      dccApi.setOutput(effect.config.pin, effect.state);
+      // dccApi.setOutput(effect.config.pin, effect.state);
     } else if (effect?.type === 'ialed') {
       await handleIALed(effect);
     } else {

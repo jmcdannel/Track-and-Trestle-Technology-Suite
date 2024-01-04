@@ -18,6 +18,7 @@ import { ThrottleConsist } from './ThrottleConsist';
 import DccExThrottleController from './DccExThrottleController';
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useMqtt } from '../Core/Com/MqttProvider'
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 
 import './MiniThrottle.scss';
@@ -40,6 +41,7 @@ export const MiniThrottle = props => {
   } = props;
 
   const address = Number(props.loco.address);
+  const { dcc } = useMqtt();
   const throttle = useThrottleStore(state => state.getThrottle)(address);
   const speed = throttle?.speed || 0;
 
@@ -79,7 +81,7 @@ export const MiniThrottle = props => {
       : { on: true };
     newFunctionState[clickedIndex] = newState;
     setFunctionState(newFunctionState)
-    dccApi.send('function', {
+    dcc('function', {
         address,
         state: newState.on,
         func: clickedIndex

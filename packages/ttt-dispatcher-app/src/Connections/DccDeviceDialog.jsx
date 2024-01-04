@@ -6,20 +6,26 @@ import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import api from '../Shared/api/api';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
 export const DccDeviceDialog = ({ onClose, open }) => {
 
-  const dccApiStatus = useConnectionStore(state => state.dccApiStatus);
   const setDccDevice = useConnectionStore(state => state.setDccDevice);
-  const dccPorts = useConnectionStore(state => state.dccPorts);
+  const ports = useConnectionStore(state => state.ports);
+  const { publish, isConnected } = useMqtt();
   const [newDccDevice, setNewDccDevice] = useState(null);
 
-  useEffect(async () => {
-    console.log('[DccDeviceDialog] dccApiStatus (listPorts)', open, dccApiStatus);
-    open && dccApiStatus === CONNECTION_STATUS.CONNECTED && await api.dcc.send('listPorts', { });
-  }, [open, dccApiStatus]);
+  useEffect(() => {
+    // open && dccApiStatus === CONNECTION_STATUS.CONNECTED && await api.dcc.send('listPorts', { });
+    function requestPorts() {
+      console.log('[DccDeviceDialog] requestPorts', isConnected, open);
+      publish('ttt-dispatcher', JSON.stringify({ action: 'listPorts', payload: {} }));
+    }
+    open && isConnected && requestPorts()
+
+  }, [open, isConnected]);
 
   const handleUpdate = async () => {
     console.log('[DccDeviceDialog] handleUpdate', newDccDevice);
@@ -30,12 +36,12 @@ export const DccDeviceDialog = ({ onClose, open }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle> DCC-EX Serial Connection </DialogTitle>
-      <pre>dccApiStatus: {dccApiStatus}</pre>
+      <pre>mqtt Status: {isConnected.toString()}</pre>
       <Autocomplete
           sx={{ padding: '1rem', width: '360px' }}
           id="dcc-deviced"
           freeSolo
-          options={dccPorts}
+          options={ports}
           value={newDccDevice}
           onInputChange={(event, newValue) => {
             setNewDccDevice(newValue);

@@ -9,19 +9,20 @@ import UsbOutlinedIcon from '@mui/icons-material/UsbOutlined';
 import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 export const Status = () => {
 
+  const { isConnected: mqttConnected } = useMqtt();
   const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const status = useConnectionStore(state => state.status);
-  const dccApiStatus = useConnectionStore(state => state.dccApiStatus);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
 
-  const dccConnected = dccApiStatus === CONNECTION_STATUS.CONNECTED && dccDeviceStatus === CONNECTION_STATUS.CONNECTED;
+  const dccConnected = mqttConnected && dccDeviceStatus === CONNECTION_STATUS.CONNECTED;
 
   const allConnected = status === CONNECTION_STATUS.CONNECTED
-    && dccApiStatus === CONNECTION_STATUS.CONNECTED
+    && mqttConnected
     && dccDeviceStatus === CONNECTION_STATUS.CONNECTED
 
   function renderIcon() {

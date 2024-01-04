@@ -19,8 +19,6 @@ export const Throttles = () => {
   const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
   const [ state ] = useContext(Context);
   const { locos } = state;
-  console.log('up.md', up.md);
-  console.log('down.lg', down.lg);
 
   const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 

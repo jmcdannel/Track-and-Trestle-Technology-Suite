@@ -19,42 +19,30 @@ import UsbOutlinedIcon from '@mui/icons-material/UsbOutlined';
 import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
 
 import { DccDeviceDialog } from './DccDeviceDialog';
+import { useMqtt } from '../Core/Com/MqttProvider'
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
 export const Dcc = props => {
 
+  const { isConnected: mqttConnected } = useMqtt();
   const [deviceOpen, setDeviceOpen] = useState(false);
-  const host = useConnectionStore(state => state.host);
   const dccDevice = useConnectionStore(state => state.dccDevice);
-  const dccApiStatus = useConnectionStore(state => state.dccApiStatus);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
   const setDccDevice = useConnectionStore(state => state.setDccDevice);
 
   const connectionStateColor = () => {
-    if (apiConnected && deviceConnected) {
+    if (mqttConnected && deviceConnected) {
       return '#21ff15';
-    } else if (apiConnected && !deviceConnected) {
+    } else if (mqttConnected && !deviceConnected) {
       return 'yellow';
-    } else if (!apiConnected && deviceConnected) {
+    } else if (!mqttConnected && deviceConnected) {
       return 'orange';
-    } else if (!apiConnected && !deviceConnected) {
+    } else if (!mqttConnected && !deviceConnected) {
       return 'red';
     }
   }
-  const computeOverallStatus = () => {
-    if (apiConnected && deviceConnected) {
-      return CONNECTION_STATUS.CONNECTED;
-    } else if (apiConnected && !deviceConnected) {
-      return CONNECTION_STATUS.PENDING;
-    } else if (!apiConnected && deviceConnected) {
-      return CONNECTION_STATUS.DISCONNECTED; // partially connected here
-    } else if (!apiConnected && !deviceConnected) {
-      return CONNECTION_STATUS.DISCONNECTED;
-    }
-  }
-  const apiConnected = dccApiStatus === CONNECTION_STATUS.CONNECTED;
+  
   const deviceConnected = dccDeviceStatus === CONNECTION_STATUS.CONNECTED;
-  const overallStatus = computeOverallStatus();
   
   return (
     <>
@@ -62,7 +50,7 @@ export const Dcc = props => {
         <CardHeader 
           title="DCC" 
           avatar={
-            apiConnected && deviceConnected 
+            mqttConnected && deviceConnected 
               ? <UsbOutlinedIcon sx={{ fill: connectionStateColor() }} />
               : <UsbOffOutlinedIcon sx={{ fill: connectionStateColor() }} />
           } >
@@ -73,22 +61,22 @@ export const Dcc = props => {
           display: 'flex',
         }}>
           <Box sx={{ padding: '1rem' }}>
-            {apiConnected && deviceConnected 
+            {mqttConnected && deviceConnected 
                 ? <UsbOutlinedIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
                 : <UsbOffOutlinedIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>
             
-            <Typography>EX-JS_API:</Typography>
+            <Typography>MQTT:</Typography>
             <Chip 
               sx={{ justifyContent: 'space-between' }}              
               icon={
                 <RouterIcon 
-                  className={`status--${dccApiStatus}`} 
+                  className={`status--${mqttConnected ? 'connected' : 'disconnected'}`} 
                   sx={{ paddingLeft: '.5rem' }} 
                 />
               }
-              label={host ? host : <Skeleton width={150} />}
+              label={<Skeleton width={150} />}
               onDelete={() => {}} />             
 
             <Typography>DCC-EC Command Station: </Typography>
@@ -115,7 +103,7 @@ export const Dcc = props => {
             variant="outlined">
               Reset
           </Button>
-          <Button onClick={() => setDeviceOpen(true)} disabled={!apiConnected} variant="outlined">Select</Button>          
+          <Button onClick={() => setDeviceOpen(true)} disabled={!mqttConnected} variant="outlined">Select</Button>          
         </CardActions>        
       </Card>
       <DccDeviceDialog
