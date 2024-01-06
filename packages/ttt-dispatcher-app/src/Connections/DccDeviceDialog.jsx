@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
-import api from '../Shared/api/api';
 import { useMqtt } from '../Core/Com/MqttProvider'
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
@@ -18,7 +17,6 @@ export const DccDeviceDialog = ({ onClose, open }) => {
   const [newDccDevice, setNewDccDevice] = useState(null);
 
   useEffect(() => {
-    // open && dccApiStatus === CONNECTION_STATUS.CONNECTED && await api.dcc.send('listPorts', { });
     function requestPorts() {
       console.log('[DccDeviceDialog] requestPorts', isConnected, open);
       publish('ttt-dispatcher', JSON.stringify({ action: 'listPorts', payload: {} }));

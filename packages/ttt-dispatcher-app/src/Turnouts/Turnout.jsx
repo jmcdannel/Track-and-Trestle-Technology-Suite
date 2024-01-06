@@ -60,7 +60,7 @@ export const Turnout = props => {
         ...turnout,
         state: !turnout.state 
       }
-      publish('ttt-turnout', JSON.stringify(delta));
+      publish('ttt-dcc', JSON.stringify({ action: 'turnout', payload: delta }));
       handleTurnoutChange(delta);
     } catch (err) {
       console.error(err);

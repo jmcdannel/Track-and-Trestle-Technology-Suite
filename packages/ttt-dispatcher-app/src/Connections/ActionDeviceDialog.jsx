@@ -5,20 +5,25 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
-import api from '../Shared/api/api';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 
 export const ActionDeviceDialog = ({ onClose, open, device }) => {
 
-  const actionApiStatus = useConnectionStore(state => state.actionApiStatus);
   const updateActionDevice = useConnectionStore(state => state.updateActionDevice);
-  const actionPorts = useConnectionStore(state => state.actionPorts);
+  const ports = useConnectionStore(state => state.ports);
+  const { publish, isConnected } = useMqtt();
   const [newPort, setNewPort] = useState(null);
 
-  useEffect(async () => {
-    open && actionApiStatus === CONNECTION_STATUS.CONNECTED && await api.actionApi.fetchPorts();
-  }, [open, actionApiStatus]);
+  useEffect(() => {
+    function requestPorts() {
+      console.log('[DccDeviceDialog] requestPorts', isConnected, open);
+      publish('ttt-dispatcher', JSON.stringify({ action: 'listPorts', payload: {} }));
+    }
+    open && isConnected && requestPorts()
+
+  }, [open, isConnected]);
 
   const handleUpdate = async () => {
     console.log('[ActionDeviceDialog] handleUpdate', device, newPort);
@@ -29,12 +34,12 @@ export const ActionDeviceDialog = ({ onClose, open, device }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle> Action Serial Connection </DialogTitle>
-      <pre>actionApiStatus: {actionApiStatus}</pre>
+      <pre>mqqt: {isConnected.toString()}</pre>
       <Autocomplete
           sx={{ padding: '1rem', width: '360px' }}
           id="device-port"
           freeSolo
-          options={actionPorts}
+          options={ports}
           value={newPort}
           onInputChange={(event, newValue) => {
             setNewPort(newValue);

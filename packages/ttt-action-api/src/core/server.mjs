@@ -33,7 +33,7 @@ const handleConnection = (ws, resolve) => {
 
   // handling what to do when messageis recieved
   server.on('message', async (msg) => 
-    await interfaces.handleMessage(JSON.parse(msg), server));
+    await interfaces.handleMessage(JSON.parse(msg), server.send));
 
   // sending message to client
   server.send(MSG_CONNECTED);

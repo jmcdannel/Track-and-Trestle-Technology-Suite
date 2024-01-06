@@ -1,5 +1,3 @@
-import dccApi from './dccApi';
-// import mqtt from "mqtt";
 import actionApi from './actionApi';
 import layoutApi from './layoutApi';
 import config from './config'; // TODO: replace with configStore
@@ -118,7 +116,6 @@ async function disconnect() {
 }
 
 export const api = {
-  dcc: dccApi,
   actionApi,
   layouts: {
     get: layoutApi.layouts.get

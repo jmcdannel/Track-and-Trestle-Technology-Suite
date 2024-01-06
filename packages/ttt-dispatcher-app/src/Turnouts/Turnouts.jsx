@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Turnout from '../Turnouts/Turnout';
 import { Context } from '../Store/Store';
+import api from '../Shared/api/api';
 
 const Turnouts = () => {
   
@@ -9,6 +10,7 @@ const Turnouts = () => {
 
   const handleTurnoutChange = async delta => {
     try {
+      await api.turnouts.put(delta);
       await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
     } catch (err) {
       console.error(err);

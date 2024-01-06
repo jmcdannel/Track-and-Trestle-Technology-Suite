@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import waitOn from 'wait-on';
 import server from './src/core/server.mjs';
+import mqtt from './src/core/mqtt.mjs';
 import interfaces from './src/communication/interfaces.mjs';
 import log from './src/core/logger.mjs';
 
@@ -19,6 +20,7 @@ var opts = {
 async function main() {
   console.log('@ttt/action-api', '[MAIN]');
   try {
+    mqtt.connect();
     await waitOn(opts);
     await interfaces.connect();
     await server.connect();

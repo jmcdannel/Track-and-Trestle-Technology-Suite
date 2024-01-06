@@ -1,21 +1,19 @@
 import { SerialPort } from 'serialport';
+import { ReadlineParser } from '@serialport/parser-readline'
 import log from '../core/logger.mjs';
 
 let isConnected = false;
 let port;
 
-const connect = async (com) => {
+const connect = ({ path, baudRate, handleMessage }) => {
   if (isConnected) {
-    return Promise.resolve(com.connection);
+    return Promise.resolve(port);
   } else {
     return new Promise(function(resolve, reject) {
 
-      const path = com.serial;
-      const baudRate = com.baudRate;
+      if (!path) reject({ message: '[SERIAL] No serial port specified' });
 
-      if (!path) reject('[SERIAL] No serial port specified');
-
-      log.await('[SERIAL] attempting to connect to:', path);
+      log.await('[SERIAL] Attempting to connect to:', path);
 
       const handleOpen = err => {
         if (err) {
@@ -34,8 +32,14 @@ const connect = async (com) => {
       
       // Create a port
       port = new SerialPort({ path, baudRate, autoOpen: false });
-      port.open(handleOpen);
+      
+      port.setEncoding('utf8');
       port.on('open', handleOpened);
+
+      const parser = port.pipe(new ReadlineParser())
+      parser.on('data', handleMessage);
+      
+      port.open(handleOpen);
 
       log.info('[SERIAL] port', port.isOpen, port.settings);
 

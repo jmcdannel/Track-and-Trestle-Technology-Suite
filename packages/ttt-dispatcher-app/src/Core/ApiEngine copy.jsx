@@ -6,6 +6,7 @@ import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionSto
 import { useDccStore } from '../Store/useDccStore';
 import { useThrottleStore } from '../Store/useThrottleStore';
 import { DccListener } from '../Dcc/DccListener';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 function ApiEngine() {
 
@@ -17,6 +18,7 @@ function ApiEngine() {
   const [ state, dispatch ] = useContext(Context);
   const { layout } = state;
 
+  const { isConnected: mqttConnected } = useMqtt();
   const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const setStatus = useConnectionStore(state => state.setStatus);
@@ -93,15 +95,15 @@ function ApiEngine() {
       }
     };
 
-    actionApiStatus === CONNECTION_STATUS.CONNECTED 
+    mqttConnected
       && actionDevices.length === 0
       && initialize();
-  }, [actionApiStatus, actionDevices, layout]);
+  }, [mqttConnected, actionDevices, layout]);
 
   // Connect Action Device(s)
   useEffect(() => {
-    console.log('[ApiEngine] Connect Action Device(s)', actionApiStatus, actionDevices, layout);
-    if (actionApiStatus === CONNECTION_STATUS.CONNECTED) {
+    console.log('[ApiEngine] Connect Action Device(s)', mqttConnected, actionDevices, layout);
+    if (mqttConnected) {
       actionDevices
         .filter(d => d.status === CONNECTION_STATUS.DISCONNECTED || d.status === CONNECTION_STATUS.UNKNOWN)
         .map(async device => {
@@ -113,7 +115,7 @@ function ApiEngine() {
           }
         });
     }
-  }, [actionApiStatus, actionDevices]);
+  }, [mqttConnected, actionDevices]);
 
   return (<><DccListener /></>);
 }

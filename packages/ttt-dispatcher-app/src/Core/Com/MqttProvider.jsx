@@ -42,11 +42,11 @@ export default function MqttProvider({ children }) {
     payload,
     isConnected,
     publish,
-    dcc: (action, payload) => publish('ttt-dcc', JSON.stringify({ action, payload })),
     subscribe,
+    dcc: (action, payload) => publish('ttt-dcc', JSON.stringify({ action, payload })),
     reset,
-    connectToBroker,
-    disconnectFromBroker,
+    connect: connectToBroker,
+    disconnected: disconnectFromBroker,
   };
 
   // Initiate MQTT CLient
@@ -73,8 +73,8 @@ export default function MqttProvider({ children }) {
       // https://github.com/mqttjs/MQTT.js#event-message
       mqttClient.on('message', (topic, message) => {
         const payload = { topic, message: message.toString() }
-        setPayload(payload)
-        // console.log(`mqttClient received message: ${message} from topic: ${topic}`)
+        setPayload({...payload, topic })
+        console.log(`mqttClient received message: ${message} from topic: ${topic}`, {...payload, topic })
       })
     }
   }, [mqttClient])

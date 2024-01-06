@@ -50,9 +50,9 @@ export const DccListener = () => {
 
   const handleDccMessage = async (message) => {
     try {
-      // console.log('[DccListener] handleDccMessage', message);
-      const { action, payload } = JSON.parse(message.data);
-      console.log('[DccListener] handleDccMessage', action, payload);
+      console.log('[DccListener] handleDccMessage', message);
+      const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
+      // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
         case 'listPorts':
           setPorts(payload);
@@ -60,7 +60,7 @@ export const DccListener = () => {
         case 'connected':
           setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           setDccDevice(payload.path);
-          publish('ttt-dispatcher', {
+          publish('ttt-dcc', {
             action: 'dcc',
             payload: 's'
           });
@@ -79,19 +79,22 @@ export const DccListener = () => {
   useEffect(() => {
     const parse = function() {
       try {
+        const message = JSON.parse(mqttMessage.message);
+        // message && message.data && handleDccMessage(message);
+        // handleDccMessage({ data: mqttMessage?.message &&  mqttMessage?.topic === 'DCCEX.js' ?  mqttMessage.message : null });
         handleDccMessage({ data: mqttMessage?.message ?  mqttMessage.message : null });
       } catch (err) {
         log.error('api initialization error', err);
       }
     };    
     mqttMessage && parse();
-  }, [mqttMessage ]);
+  }, [mqttMessage]);
   
   // Connect MQTT Client
   useEffect(() => {
     const initialize = async function() {
       try {        
-        publish('ttt-dispatcher', JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
+        publish('ttt-dcc', JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
         subscribe('DCCEX.js');
         console.log('[DccListener] subscribed', 'DCCEX.js', isConnected);
       } catch (err) {
@@ -107,7 +110,6 @@ export const DccListener = () => {
       console.log('[DccListener] Connect DCC Device', mqttConnected, dccDeviceStatus, dccDevice);
       try {
         setDccDeviceStatus(CONNECTION_STATUS.PENDING);
-        // const result = await api.dcc.connectDevice(dccDevice);
         publish('ttt-dispatcher', {
           action: 'connect',
           payload: { serial: dccDevice }
