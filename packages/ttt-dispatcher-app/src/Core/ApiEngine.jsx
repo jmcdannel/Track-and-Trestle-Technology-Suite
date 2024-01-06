@@ -20,9 +20,9 @@ function ApiEngine() {
   const dccDevice = useConnectionStore(state => state.dccDevice);
 
   const actionDevices = useConnectionStore(state => state.actionDevices);
+  const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
   const setPorts = useConnectionStore(state => state.setPorts);
-  const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
   const updateActionDeviceStatusByPort = useConnectionStore(state => state.updateActionDeviceStatusByPort);
   
 
