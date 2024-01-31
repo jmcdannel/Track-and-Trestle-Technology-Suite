@@ -22,6 +22,7 @@ const connect = () => {
     log.log('mqttClient connection successful')
     mqttClient.publish('ttt-dispatcher', JSON.stringify({ action: 'status', paylod: 'Hello mqtt' }))
     mqttClient.subscribe('ttt-dispatcher', handleSubscribeError)
+    mqttClient.subscribe('ttt-turnout', handleSubscribeError)
   })
 
   // https://github.com/mqttjs/MQTT.js#event-error

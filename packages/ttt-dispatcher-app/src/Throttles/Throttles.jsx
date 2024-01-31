@@ -91,9 +91,16 @@ export const Throttles = () => {
         )}
 
         <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
-          {availableThrottles.map(loco => (
-            <AvailableThrottle key={loco.address} loco={loco} onLocoClick={() => setIsDrawerOpen(false)} />
-          ))}
+          <Box sx={{ 
+            width: '75vw', 
+            padding: 2, 
+            display: 'flex', 
+            flexWrap: 'wrap' 
+            }}>
+            {availableThrottles.map(loco => (
+              <AvailableThrottle key={loco.address} loco={loco} onLocoClick={() => setIsDrawerOpen(false)} />
+            ))}
+          </Box>
         </Drawer>
       </Box>
     </>

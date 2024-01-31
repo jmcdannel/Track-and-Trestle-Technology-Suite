@@ -19,10 +19,7 @@ export const Power = props => {
 
   useEffect(async () => {
     function sendPower() {
-      dcc({
-        action: 'power',
-        payload: `${powerStatus ? 1 : 0} ${track}`
-      })
+      dcc('power', `${powerStatus ? 1 : 0} ${track}`)
     }
     if (typeof powerStatus !== 'undefined') {
       sendPower();

@@ -24,6 +24,7 @@ import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 import dccApi from '../Shared/api/dccApi';
+import { useDcc } from '../Dcc/useDcc';
 import { useThrottleStore } from '../Store/useThrottleStore';
 
 import './Throttle.scss';
@@ -57,6 +58,8 @@ export const Throttle = props => {
   const [ uiSpeed, setUiSpeed ] = useState(calcSpeed(speed));
 
   const debouncedSpeed = useDebounce(uiSpeed, 100);
+
+  const { setFunction } = useDcc();
 
   const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
 
@@ -100,11 +103,7 @@ export const Throttle = props => {
       : { on: true };
     newFunctionState[clickedIndex] = newState;
     setFunctionState(newFunctionState)
-    dccApi.send('function', {
-        address,
-        state: newState.on,
-        func: clickedIndex
-      });
+    setFunction(address, clickedIndex, newState.on);
   }
 
   return (

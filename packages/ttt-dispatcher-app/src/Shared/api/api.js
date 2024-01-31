@@ -1,6 +1,7 @@
 import actionApi from './actionApi';
 import layoutApi from './layoutApi';
 import config from './config'; // TODO: replace with configStore
+import { useMqtt } from '../../Core/Com/MqttProvider'
 
 // let client // mqtt client
 // // let broker = 'mqtt://tamarackjunctionmbp.local';
@@ -38,37 +39,38 @@ async function connect(_dispatch, host, layoutId) {
 }
 
 async function handleTurnout(turnout) {
-  console.log('API.handleTurnout', turnout);
-  switch(turnout?.config?.interface) {
-    case 'dcc-js-api':
-      // dccApi.setTurnout(turnout.config.dccExId, turnout.state);
-      break;
-    case 'mqtt':
-      const action = {
-        servo: turnout.config.servo,
-        angle: turnout.state ? turnout.config.divergent : turnout.config.straight
-      }
-      // client.publish('ttt', JSON.stringify(action));
-      break;
-    case 'betatrack-io':
-    case 'tamarack-junction-station-south-io':
-    case 'serial':
-    case 'action-api':
-      actionApi.turnouts.put(turnout);
-      break;
-    default:
-      console.warn('Unknown interface type', turnout?.config?.interface, turnout);
-      break;
-  }
+  console.log('API.handleTurnout DEPRACTED', turnout);
+  // switch(turnout?.config?.interface) {
+  //   case 'dcc-js-api':
+  //     // dccApi.setTurnout(turnout.config.dccExId, turnout.state);
+  //     break;
+  //   case 'mqtt':
+  //     const action = {
+  //       servo: turnout.config.servo,
+  //       angle: turnout.state ? turnout.config.divergent : turnout.config.straight
+  //     }
+  //     // client.publish('ttt', JSON.stringify(action));
+  //     break;
+  //   case 'betatrack-io':
+  //   case 'tamarack-junction-station-south-io':
+  //   case 'serial':
+  //   case 'action-api':
+  //     actionApi.turnouts.put(turnout);
+  //     break;
+  //   default:
+  //     console.warn('Unknown interface type', turnout?.config?.interface, turnout);
+  //     break;
+  // }
 }
 
 async function handleIALed(effect) {
+  // const { publish } = useMqtt();
   try {
     const action = {
       ...effect.config, 
       command: effect.state ? effect.config.command : 'off'
     }
-    // client.publish('ttt-ialed', JSON.stringify(action));
+    // publish('ttt-ialed', JSON.stringify(action));
   } catch (err) {
     console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
   }

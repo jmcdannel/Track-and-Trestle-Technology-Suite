@@ -15,7 +15,7 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-// int outPins [] = { 2, 3, 4, 5 };
+int outPins [] = { 2, 3, 4, 5 };
 
 /*
 [{"action":"pin","payload":{"pin":43,"value":0}}]
@@ -23,10 +23,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
  */
 
 
-// TurnoutPulser turnouts[] = {
-//   TurnoutPulser(8, 9),
-//   TurnoutPulser(6, 7) 
-// };
+TurnoutPulser turnouts[] = {
+  TurnoutPulser(8, 9),
+  TurnoutPulser(6, 7) 
+};
 
 const size_t capacity = 20*JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
 DynamicJsonDocument doc(capacity);
@@ -36,13 +36,13 @@ void setup() {
   while (!Serial) continue;
   Serial.println("Setup");
 
-  // for (int idx=0; idx<(sizeof(outPins) / sizeof(outPins[0])); idx++) {
-  //   pinMode(outPins[idx], OUTPUT);
-  // }
+  for (int idx=0; idx<(sizeof(outPins) / sizeof(outPins[0])); idx++) {
+    pinMode(outPins[idx], OUTPUT);
+  }
 
-  // for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
-  //   turnouts[idx].begin();
-  // }
+  for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
+    turnouts[idx].begin();
+  }
 
   pwm.begin();
   pwm.setOscillatorFrequency(27000000);
@@ -52,9 +52,9 @@ void setup() {
 
 void loop() {
   
-  // for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
-  //   turnouts[idx].loop();
-  // }
+  for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
+    turnouts[idx].loop();
+  }
   if (Serial.available() > 0) {
     Serial.println("handleInput");
     handleInput();
@@ -100,7 +100,7 @@ void handleAction(JsonVariant v) {
 void handleTurnout(JsonObject payload) {
   int turnoutIdx = payload["turnout"];
   bool state = payload["state"];
-  // turnouts[turnoutIdx].set(state);
+  turnouts[turnoutIdx].set(state);
   Serial.print("turnoutIdx: ");
   Serial.println(turnoutIdx);
   Serial.print("state: ");

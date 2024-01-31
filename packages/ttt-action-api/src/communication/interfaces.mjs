@@ -52,7 +52,7 @@ export const handleMessage = async (msg, onSuccess) => {
         break;
       case 'connect':
         try {
-          const com = { ...interfaces[msg.payload.connectionId], ...msg.payload, baudRate };
+          const com = { ...interfaces[msg.payload.device.id], ...msg.payload, baudRate };
           log.info('[INTERFACES] serialConnect', msg, com?.serial, baudRate);
           if (!com?.serial) throw new Error('No serial port specified');
 
@@ -64,7 +64,7 @@ export const handleMessage = async (msg, onSuccess) => {
           // com.send = serial.send;
           // com.status = 'connected';
           // interfaces[msg.payload.connectionId] = com;
-          interfaces['serial'] = com; // TODO: refactor
+          interfaces[com.id] = com; // TODO: refactor
           log.info('[INTERFACES] serialConnected', msg, com);
           onSuccess(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
         } catch (err) {
@@ -89,11 +89,11 @@ const intialize = async (com) => {
       break;
     case 'serial':
       try {
-        com.serial && (com.connection = await serial.connect(com));
-        com.send = serial.send;
-        com.status = 'connected';
-        com.id = 'serial'; // TODO: refactor
-        interfaceId = 'serial';
+        // com.serial && (com.connection = await serial.connect(com));
+        // com.send = serial.send;
+        // com.status = 'connected';
+        // com.id = 'serial'; // TODO: refactor
+        interfaceId = com?.id;
       } catch (err) {
         com.status = 'fail';
         log.error(err);

@@ -121,7 +121,7 @@ const effectCommand = async (payload) => {
   log.log('[COMMANDS] effect.uri', uri);
   const resp = await axios.get(uri);
   log.log('[COMMANDS] effect.resp', resp?.data);
-  const effect = {...resp?.data, state: payload.state};  
+  const effect = {...resp?.data?.effects?.[0], state: payload.state};  
   log.debug('[COMMANDS] effect', resp.data, payload?.state);
   
   switch(effect.type) {
@@ -230,7 +230,8 @@ export const send = (commands) => {
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     try {
-      log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces, interfaces.interfaces[iFaceId], commands.map(cmdFormatter));
+      // log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces, interfaces.interfaces[iFaceId], commands.map(cmdFormatter));
+      log.debug('[COMMANDS] interface', iFaceId, commands.map(cmdFormatter));
       const { send: sendCmd, connection } = interfaces.interfaces[iFaceId];
       sendCmd(connection, commands.map(cmdFormatter));
     } catch (err) {

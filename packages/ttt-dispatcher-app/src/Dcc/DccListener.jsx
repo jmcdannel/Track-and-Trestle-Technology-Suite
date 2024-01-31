@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import log from '../Shared/utils/logger';
-import api from '../Shared/api/api';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useThrottleStore } from '../Store/useThrottleStore';
 import { useDccStore } from '../Store/useDccStore';
@@ -27,13 +26,13 @@ export const DccListener = () => {
 
   const parseDccResponse = (payload) => {
     // console.log('[DccListener] parseDccResponse', payload);
-    if (payload.startsWith('<p')) {
+    if (payload.startsWith('<p')) { // power status response
       if (powerOnStates.includes(payload)) {
         setPowerStatus(true);
       } else if (powerOffStates.includes(payload)) {
         setPowerStatus(false);
       }
-    } else if (payload.startsWith('<l')) {
+    } else if (payload.startsWith('<l')) { // loco status response
       const locoResponse = payload
         .replace( /(^.*\<|\>.*$)/g, '' )
         .split(' ');
@@ -50,7 +49,7 @@ export const DccListener = () => {
 
   const handleDccMessage = async (message) => {
     try {
-      console.log('[DccListener] handleDccMessage', message);
+      // console.log('[DccListener] handleDccMessage', message);
       const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
       // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
@@ -110,9 +109,9 @@ export const DccListener = () => {
       console.log('[DccListener] Connect DCC Device', mqttConnected, dccDeviceStatus, dccDevice);
       try {
         setDccDeviceStatus(CONNECTION_STATUS.PENDING);
-        publish('ttt-dispatcher', {
+        publish('ttt-dcc', {
           action: 'connect',
-          payload: { serial: dccDevice }
+          payload: { serial: dccDevice, dcc: true }
         });
       } catch (err) {
         log.error('dcc device initialization error', err);

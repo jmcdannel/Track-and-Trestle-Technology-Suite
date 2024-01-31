@@ -3,30 +3,39 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
-import api from '../Shared/api/api';
+import { useDcc } from './useDcc'
+import { useDccStore } from '../Store/useDccStore';
 
 const RESET_COMMAND = 'D RESET';
+const CURRENT_COMMAND = 'JI';
 const REQUEST_STATUS_COMMAND = 's';
 
 export const DccCommand = () => {
 
+  const appendtoDccLog = useDccStore(state => state.appendtoLog);
+  const { send } = useDcc()
   const [cmd, setCmd ] = useState('');
   const [resetClicked, setResetClicked ] = useState(false);
   const [requestStatusClicked, setRequestStatusClicked ] = useState(false);
 
   async function sendDccCommand() {
-    await api.dcc.send('dcc', cmd )
+    await send('dcc', cmd )
+    appendtoDccLog(cmd)
     setCmd('')
   }
 
   async function handleResetClick() {
     setResetClicked(true);
-    await api.dcc.send('dcc', RESET_COMMAND);
+    await send('dcc', RESET_COMMAND);
+  }
+
+  async function handleCurrentClick() {
+    await send('dcc', CURRENT_COMMAND);
   }
 
   async function handleRequestStatusClick() {
     setRequestStatusClicked(true);
-    await api.dcc.send('dcc', REQUEST_STATUS_COMMAND);
+    await send('dcc', REQUEST_STATUS_COMMAND);
   }
 
   return (
@@ -66,7 +75,15 @@ export const DccCommand = () => {
         className={requestStatusClicked ? "jello-vertical" : ""}
         sx={{ whiteSpace: 'nowrap' }}
         >
-          GET STATUS
+          Status
+      </Button>
+      <Button 
+        variant="outlined" 
+        color="info" 
+        onClick={handleCurrentClick} 
+        sx={{ whiteSpace: 'nowrap' }}
+        >
+          Current
       </Button>
     </Box>
   );

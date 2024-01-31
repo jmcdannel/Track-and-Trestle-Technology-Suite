@@ -1,7 +1,6 @@
-
 let client; // mqtt client
-let serial;
 let topic = 'ttt-dcc';
+let isConnected = false;
 
 async function connectDevice(port) {
   try {
@@ -21,10 +20,12 @@ function connect(_client, handleMessage = () => {}) {
     console.log('[DCC API MQTT] connect', client);
     client = _client;
     client.subscribe(topic, handleMessage);
-    return true;
+    isConnected = true;
   } catch (err) {
     console.error('[DCC API] connect', err);
     throw new Error('Unable to connect', err);
+  } finally {
+    return isConnected;
   }
 }
 
@@ -82,10 +83,10 @@ async function setFunction(address, func) {
 
 async function send(action, payload) {
   try { 
-    if (wsDCC && isConnected) {  
+    if (client && isConnected) {  
       sendRaw(JSON.stringify({ action, payload  }));
     } else {
-      throw new Error('Not connected', connectionId);
+      throw new Error('Not connected');
     }
   } catch (err) {
     console.error('[DCC API].send', err, action, payload);
@@ -95,7 +96,7 @@ async function send(action, payload) {
 async function sendRaw(data) {
   try { 
     console.log('[DCC API].sendRaw', data);
-    wsDCC.send(data);
+    client.publish(topic, data);
   } catch (err) {
     console.error('[DCC API].sendRaw', err, data);
   }

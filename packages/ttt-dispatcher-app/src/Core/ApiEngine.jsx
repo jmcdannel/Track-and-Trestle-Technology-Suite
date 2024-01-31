@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import api from '../Shared/api/api';
+import useLayoutApi from '../Shared/api/useLayoutApi';
 import { Context } from '../Store/Store';
 import log from '../Shared/utils/logger';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useDccStore } from '../Store/useDccStore';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 import { useMqtt } from './Com/MqttProvider'
 import { DccListener } from '../Dcc/DccListener';
 
@@ -19,16 +21,17 @@ function ApiEngine() {
   const setStatus = useConnectionStore(state => state.setStatus);
   const dccDevice = useConnectionStore(state => state.dccDevice);
 
+  const { getByType } = useLayoutApi();
+  const initTurnouts = useTurnoutStore(state => state.initTurnouts);
+
   const actionDevices = useConnectionStore(state => state.actionDevices);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
   const setPorts = useConnectionStore(state => state.setPorts);
   const updateActionDeviceStatusByPort = useConnectionStore(state => state.updateActionDeviceStatusByPort);
   
-
   const resetConnectionStatus = useConnectionStore(state => state.resetConnectionStatus);
   
-
   const handleMessage = async (message) => {
     try {
       console.log('[ApiEngine] handleMessage', message);
@@ -45,14 +48,6 @@ function ApiEngine() {
           } else {
             updateActionDeviceStatusByPort(payload.serial, CONNECTION_STATUS.CONNECTED);
           }
-
-          // updateActionDeviceStatusByPort
-          // setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
-          // setDccDevice(payload.path);
-          // publish('ttt-dcc', {
-          //   action: 'dcc',
-          //   payload: 's'
-          // });
           break;
       }
     } catch (err) { 
@@ -62,7 +57,7 @@ function ApiEngine() {
   }
 
   // Connect Host
-  useEffect(() => {
+  useEffect(async () => {
     const initialize = async function() {
       try {
         setStatus(CONNECTION_STATUS.PENDING);
@@ -76,8 +71,17 @@ function ApiEngine() {
       } catch (err) {
         log.error('[ApiEngine] api initialization error', err);
       }
-    };    
-    host && initialize();
+    };
+    const initializeStores = async function() {
+      try {
+        console.log('initializeStores');
+        initTurnouts(await getByType('turnouts'));
+      } catch (err) {
+        log.error('[ApiEngine] api initialization error', err);
+      }
+    }
+    host && await initialize();
+    host && layoutId && await initializeStores();
     !host && setStatus(CONNECTION_STATUS.DISCONNECTED);
     !layoutId && setStatus(CONNECTION_STATUS.DISCONNECTED);
   }, [host, layoutId]);
@@ -101,8 +105,7 @@ function ApiEngine() {
   useEffect(() => {
     const initialize = async function() {
       try {
-        console.log('[ApiEngine] Action Device(s) initialize', actionDevices);
-    
+        console.log('[ApiEngine] Action Device(s) initialize', actionDevices);    
         layout?.interfaces?.filter(i => i.type === 'serial').map(addActionDevice);
       } catch (err) {
         log.error('dcc device initialization error', err);
@@ -125,7 +128,7 @@ function ApiEngine() {
             // const result = await api.actionApi.connectDevice(device.port);
             mqtt.publish('ttt-dispatcher', {
               action: 'connect',
-              payload: { serial: device.port }
+              payload: { serial: device.port, device }
             });
             console.log('[ApiEngine] actionApi connectDevice result', device);
           } catch (err) {
@@ -135,7 +138,7 @@ function ApiEngine() {
     }
   }, [mqtt.isConnected, actionDevices]);
   
-
+  // handle mqtt messages
   useEffect(() => {
     const parse = function() {
       try {
