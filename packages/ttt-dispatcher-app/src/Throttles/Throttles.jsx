@@ -34,7 +34,7 @@ export const Throttles = () => {
   const throttles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl);
   const cruiseThrottles = locos?.filter(loco => loco.isAcquired && loco.cruiseControl);
   const availableThrottles = locos?.filter(loco => !loco.isAcquired);
-  
+
   return (
     <>    
       <Grid container
@@ -69,7 +69,7 @@ export const Throttles = () => {
                 <Throttle 
                   key={loco.address}
                   loco={loco}
-                  variant={down.lg || throttles.length === 1 ? 'full' : 'half'}
+                  variant={down.md || throttles.length === 1 ? 'full' : 'half'}
                 />))
           : availableThrottles.map(loco => (
             <AvailableThrottle key={loco.address} loco={loco} />
