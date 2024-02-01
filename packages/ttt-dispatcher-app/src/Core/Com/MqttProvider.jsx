@@ -41,6 +41,7 @@ export default function MqttProvider({ children }) {
     mqttClient,
     payload,
     isConnected,
+    broker: mqttBroker,
     publish,
     subscribe,
     dcc: (action, payload) => publish('ttt-dcc', JSON.stringify({ action, payload })),
@@ -74,7 +75,7 @@ export default function MqttProvider({ children }) {
       mqttClient.on('message', (topic, message) => {
         const payload = { topic, message: message.toString() }
         setPayload({...payload, topic })
-        console.log(`mqttClient received message: ${message} from topic: ${topic}`, {...payload, topic })
+        // console.log(`mqttClient received message: ${message} from topic: ${topic}`, {...payload, topic })
       })
     }
   }, [mqttClient])

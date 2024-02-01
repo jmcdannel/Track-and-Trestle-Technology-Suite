@@ -15,6 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import SignalWifiStatusbarNullIcon from '@mui/icons-material/SignalWifiStatusbarNull';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
+import UsbIcon from '@mui/icons-material/Usb';
 
 import { ActionDeviceDialog } from './ActionDeviceDialog';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
@@ -34,22 +35,25 @@ export const ActionDevice = props => {
     }
   }
   
+  
   return (
     <>
       <Box>
-        {/* <pre>{JSON.stringify(device, null, 2)}</pre> */}
-        <Typography>Device: {device?.id}</Typography>
+        {/* <pre>{ JSON.stringify(device, null, 2) }</pre> */}
         <Chip 
           sx={{
             borderColor: connectionStateColor()
           }}
-          label={device.id ? device.id : <Skeleton width={120} />} 
+          label={device.id ? `${device.id}:${device.port}` : <Skeleton width={120} />} 
           onDelete={() => setDccDevice(null)}
-        /> 
-                
-        <Typography>Status: </Typography>
-        <Chip label={device?.status || 'unknown'} />   
-        <Button onClick={() => setDeviceOpen(true)} variant="outlined">Select</Button>
+          onClick={() => setDeviceOpen(true)}
+          icon={
+            <UsbIcon 
+              className={`status--${deviceConnected ? 'connected' : 'disconnected'}`} 
+              sx={{ paddingLeft: '.5rem' }} 
+            />
+          }
+        />
       </Box>
       <ActionDeviceDialog
         device={device}

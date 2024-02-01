@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 import { Context } from '../Store/Store';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 import './DispatcherMenu.scss';
 
@@ -20,7 +21,7 @@ export const DispatcherMenu = props => {
 
   const { setTurnouts } = props;
   const [ state, dispatch ] = useContext(Context);
-  const { turnouts } = state;
+  const turnouts = useTurnoutStore(state => state.turnouts);
   
   const views = [
     { label: 'Pill', value: 'pill' },

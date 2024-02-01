@@ -39,7 +39,7 @@ export const DccDeviceDialog = ({ onClose, open }) => {
           sx={{ padding: '1rem', width: '360px' }}
           id="dcc-deviced"
           freeSolo
-          options={ports}
+          options={ports || []}
           value={newDccDevice}
           onInputChange={(event, newValue) => {
             setNewDccDevice(newValue);

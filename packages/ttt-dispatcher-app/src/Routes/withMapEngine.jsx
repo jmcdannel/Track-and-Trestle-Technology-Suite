@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 
 import { Context } from '../Store/Store';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 export const withMapEngine = WrappedComponent => props => {
 
@@ -10,7 +11,8 @@ export const withMapEngine = WrappedComponent => props => {
 
   const [ state ] = useContext(Context);
   const [ error, setError] = useState(false);
-  const { turnouts, routes } = state;
+  const { routes } = state;
+  const turnouts = useTurnoutStore(state => state.turnouts);
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
 
   const handleMapClick = async (e) => {

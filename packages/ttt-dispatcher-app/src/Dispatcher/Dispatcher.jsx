@@ -8,6 +8,8 @@ import Route from '../Routes/Route';
 import RouteMap from '../Routes/RouteMap';
 import Turnout from '../Turnouts/Turnout';
 import withRouteEngine from '../Routes/withRouteEngine';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
+import { useTurnout } from '../Turnouts/useTurnout';
 
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
@@ -27,8 +29,9 @@ export const Dispatcher = props => {
     computedRoutes, 
     handleRouteToggle 
   } = props;
+  const { updateTurnout } = useTurnout();
   const [ state, dispatch ] = useContext(Context);
-  const { turnouts } = state;
+  const turnouts = useTurnoutStore(state => state.turnouts);
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
 
   const setTurnouts = async deltas => {
@@ -41,8 +44,9 @@ export const Dispatcher = props => {
   const handleTurnoutChange = async delta => {
     try {
       console.log('handleTurnoutChange', delta);
-      await api.turnouts.put(delta);
-      await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
+      // await api.turnouts.put(delta);
+      // await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
+      updateTurnout(delta)
     } catch (err) {
       console.error(err);
       // throw err;

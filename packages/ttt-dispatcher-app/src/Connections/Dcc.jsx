@@ -24,7 +24,7 @@ import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionSto
 
 export const Dcc = props => {
 
-  const { isConnected: mqttConnected } = useMqtt();
+  const { isConnected: mqttConnected, broker } = useMqtt();
   const [deviceOpen, setDeviceOpen] = useState(false);
   const dccDevice = useConnectionStore(state => state.dccDevice);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
@@ -76,7 +76,7 @@ export const Dcc = props => {
                   sx={{ paddingLeft: '.5rem' }} 
                 />
               }
-              label={<Skeleton width={150} />}
+              label={broker ? broker : <Skeleton width={150} />}
               onDelete={() => {}} />             
 
             <Typography>DCC-EC Command Station: </Typography>

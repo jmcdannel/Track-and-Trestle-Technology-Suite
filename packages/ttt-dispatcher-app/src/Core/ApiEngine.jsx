@@ -34,7 +34,7 @@ function ApiEngine() {
   
   const handleMessage = async (message) => {
     try {
-      console.log('[ApiEngine] handleMessage', message);
+      // console.log('[ApiEngine] handleMessage', message);
       const { action, payload } = message.data;
       // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
@@ -151,7 +151,7 @@ function ApiEngine() {
         log.error('api initialization error', err);
       }
     };    
-    console.log('[ApiEngine] mqtt.payload', mqtt.payload);
+    // console.log('[ApiEngine] mqtt.payload', mqtt.payload);
     mqtt.payload && parse();
   }, [mqtt.payload]);
     

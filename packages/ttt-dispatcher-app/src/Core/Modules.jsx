@@ -19,7 +19,7 @@ function Modules(props) {
       case 'turnouts' :
         return (
           <Route path="/dispatcher" key={module} element={
-            turnouts && <Dispatcher />
+            <Dispatcher />
           } />
         );
       case 'effects' :

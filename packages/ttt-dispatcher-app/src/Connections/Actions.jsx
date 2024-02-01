@@ -57,9 +57,6 @@ export const Actions = props => {
                 : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>                        
-            <Typography>Status: {mqttConnected ? 'connected' : 'disconnected'}</Typography>
-            <Chip label={mqttConnected?.toString() || 'unknown'} />   
-      
             {actionDevices?.map((device, index) => 
               <ActionDevice key={`device.${index}`} device={device} />
             )}
