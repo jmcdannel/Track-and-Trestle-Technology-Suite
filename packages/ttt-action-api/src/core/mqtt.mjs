@@ -2,7 +2,7 @@ import mqtt from "mqtt";
 import log from './logger.mjs'
 import interfaces from '../communication/interfaces.mjs';
 
-const mqttBroker = 'mqtt://joshs-mac-mini.local'
+const mqttBroker = process.env.MQTT_BROKER || 'mqtt://localhost';
 const mqttPort = 5005;
 
 let mqttClient;
@@ -19,7 +19,7 @@ const connect = () => {
   mqttClient = mqtt.connect(mqttBroker);
   // https://github.com/mqttjs/MQTT.js#event-connect
   mqttClient.on('connect', () => {
-    log.log('mqttClient connection successful')
+    log.log('mqttClient connection successful', mqttBroker)
     mqttClient.publish('ttt-dispatcher', JSON.stringify({ action: 'status', paylod: 'Hello mqtt' }))
     mqttClient.subscribe('ttt-dispatcher', handleSubscribeError)
     mqttClient.subscribe('ttt-turnout', handleSubscribeError)

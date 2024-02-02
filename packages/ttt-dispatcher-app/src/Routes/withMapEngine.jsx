@@ -17,7 +17,7 @@ export const withMapEngine = WrappedComponent => props => {
 
   const handleMapClick = async (e) => {
     const svgBtn = findClickableParent(e.target);    
-    console.log('handleMapClick', svgBtn);
+    console.log('[withMapEngine] handleMapClick', svgBtn);
     if (svgBtn) {
       switch(svgBtn.type) {
         case 'Routes':
@@ -37,7 +37,7 @@ export const withMapEngine = WrappedComponent => props => {
 
   const handleMapRouteClick = svgId => {
     const rte = routes.destinations.find(r => r.svgId === svgId);
-    console.log('handleMapRouteClick', svgId, rte);
+    console.log('[withMapEngine] handleMapRouteClick', svgId, rte);
     handleRouteToggle(rte, true);
 
   }

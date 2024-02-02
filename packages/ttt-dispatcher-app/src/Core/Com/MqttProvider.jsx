@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import mqtt from "mqtt";
 
-const mqttBroker = 'mqtt://joshs-mac-mini.local'
+const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
 const mqttPort = 5005;
 
 // Create a context for the MQTT provider
@@ -55,7 +55,7 @@ export default function MqttProvider({ children }) {
     if (mqttClient) {
       // https://github.com/mqttjs/MQTT.js#event-connect
       mqttClient.on('connect', () => {
-        console.log('[mqttClient] connection successful')
+        console.log('[mqttClient] connection successful', mqttBroker)
         setIsConnected(true)
       })
 

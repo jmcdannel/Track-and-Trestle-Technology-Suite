@@ -37,13 +37,18 @@ export const DccListener = () => {
         .replace( /(^.*\<|\>.*$)/g, '' )
         .split(' ');
       const address = parseInt(locoResponse[1]);
-      const speed = parseInt(locoResponse[3]);
-      const calculatedSpeed = speed < 127
-        ? -speed + 1
-        : speed - 129;
+      const dccSpeed = parseInt(locoResponse[3]);
+      let calculatedSpeed = 0;
+      if (dccSpeed === 0) {
+        calculatedSpeed = 0
+      } else if (dccSpeed < 127) {
+        calculatedSpeed = -dccSpeed + 1;
+      } else {
+        calculatedSpeed = dccSpeed - 129;
+      }
       const direction= parseInt(locoResponse[4]);
       upsertThrottle({ address, speed: calculatedSpeed });
-      console.log('[DccListener] parseDccResponse locoResponse', locoResponse, address, speed, calculatedSpeed, direction);
+      console.log('[DccListener] parseDccResponse locoResponse', locoResponse, address, dccSpeed, calculatedSpeed, direction);
     }
   }
 

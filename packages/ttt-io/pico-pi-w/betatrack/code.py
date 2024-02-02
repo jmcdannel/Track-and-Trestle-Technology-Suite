@@ -32,7 +32,7 @@ pixelPlatformAnimation = Solid(pixelPlatform, color=(0, 0, 0))
 # pixelPlatformAnimation = SparklePulse(pixelPlatform, speed=0.05, period=3, color=(220, 220, 220))
 
 # broker = "test.mosquitto.org"
-broker = "joshs-mac-mini.local"
+broker = os.getenv('MQTT_BROKER') # "joshs-mac-mini.local"
 
 def connect(client, userdata, flags, rc):
     print("Connected to MQTT Broker {}".format(broker))

@@ -40,7 +40,7 @@ export const AvailableThrottle = props => {
 
   return (
     <Box 
-      className={`available-throttle ${roadname?.toLowerCase()}`} 
+      className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
       onClick={handleLocoClick}>
       <header>
         <Chip label={name} size="small" variant="outlined"></Chip>
