@@ -39,7 +39,7 @@ export const handleMessage = async (msg, onSuccess) => {
     log.info('[INTERFACES] commandList', commandList);
     if (commandList && commandList.length > 0) {
       await commands.send(commandList);
-      onSuccess(JSON.stringify({ success: true, data: msg }));
+      // onSuccess(JSON.stringify({ success: true, data: msg }));
     } else {
       onSuccess(JSON.stringify({ success: false, data: msg }));
     }
@@ -53,7 +53,7 @@ export const handleMessage = async (msg, onSuccess) => {
       case 'connect':
         try {
           const com = { ...interfaces[msg.payload.device.id], ...msg.payload, baudRate };
-          log.info('[INTERFACES] serialConnect', msg, com?.serial, baudRate);
+          log.info('[INTERFACES] serialConnect', msg, typeof com?.serial, baudRate);
           if (!com?.serial) throw new Error('No serial port specified');
 
           const handleMessage = async (payload) => await onSuccess(JSON.stringify({ success: true, data: payload }));
@@ -65,7 +65,7 @@ export const handleMessage = async (msg, onSuccess) => {
           // com.status = 'connected';
           // interfaces[msg.payload.connectionId] = com;
           interfaces[com.id] = com; // TODO: refactor
-          log.info('[INTERFACES] serialConnected', msg, com);
+          log.info('[INTERFACES] serialConnected', msg, typeof com);
           onSuccess(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
         } catch (err) {
           log.error('[INTERFACES] connect', err);

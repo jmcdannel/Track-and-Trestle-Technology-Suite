@@ -118,18 +118,14 @@ const ialedCommand = effect => ({
 
 const effectCommand = async (payload) => {
   const uri = `${baseUri}/effects/${payload.effectId}`;
-  log.log('[COMMANDS] effect.uri', uri);
   const resp = await axios.get(uri);
-  log.log('[COMMANDS] effect.resp', resp?.data);
   const effect = {...resp?.data?.effects?.[0], state: payload.state};  
-  log.debug('[COMMANDS] effect', resp.data, payload?.state);
   
   switch(effect.type) {
     case 'light':
     case 'frog':
     case 'relay':
     case 'pin':
-      log.debug('[COMMANDS] light', effect);
       return [pinCommand(effect)];
     case 'ialed':
       return [ialedCommand(effect)];
@@ -147,32 +143,9 @@ const effectCommand = async (payload) => {
   }
 }
 
-// const effectCommand = async (effect, action, delay) => {
-//   log.debug('[COMMANDS] effectCommand', effect.type, action, delay);
-//   switch(effect.type) {
-//     case 'light':
-//     case 'frog':
-//     case 'relay':
-//     case 'pin':
-//       log.debug('[COMMANDS] light', effect);
-//       return await pinCommand(action, effect.state, delay);
-//     case 'signal':
-//       return await signalCommand(effect, action, delay);
-//     case 'sound':
-//       return await soundCommand(action, effect.state == action.state, delay);
-//     case 'macro':
-//       return await macroCommand(effect, action, delay);
-//     default: 
-//       // no op
-//       break;
-//   }
-// }
-
 const turnoutCommand = async (payload) => {
   const uri = `${baseUri}/turnouts/${payload.turnoutId}`;
-  log.log('[COMMANDS] turnouts.uri', uri);
   const resp = await axios.get(uri);
-  log.log('[COMMANDS] turnouts.resp', resp.data, resp.data?.turnouts?.[0]);
   const turnout = {...resp.data?.turnouts?.[0], state: payload.state};
   switch(turnout.config.type) {
     case 'kato':
@@ -205,7 +178,6 @@ const turnoutCommand = async (payload) => {
 }
 
 export const build = async (msg) => {
-  log.debug('[COMMANDS] build', msg);
   const { action, payload } = msg;
   let commandList = [];
   switch(action) {
@@ -219,19 +191,18 @@ export const build = async (msg) => {
       // no op
       break;
   }
-  log.debug('[COMMANDS] commandList', commandList);
+  // log.debug('[COMMANDS] commandList', commandList);
   return commandList;
 }
 
 export const send = (commands) => {
-  log.debug('[COMMANDS] send', commands);
+  log.start('[COMMANDS] send', commands);
   const coms = [...new Set(commands.map(cmd => cmd.iFaceId))];
-  log.debug('[COMMANDS] coms', coms);
   const cmdFormatter = ({ action, payload }) => ({ action, payload });
   coms.map(iFaceId => {
     try {
       // log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces, interfaces.interfaces[iFaceId], commands.map(cmdFormatter));
-      log.debug('[COMMANDS] interface', iFaceId, commands.map(cmdFormatter));
+      log.info('[COMMANDS] interface', iFaceId, commands.map(cmdFormatter));
       const { send: sendCmd, connection } = interfaces.interfaces[iFaceId];
       sendCmd(connection, commands.map(cmdFormatter));
     } catch (err) {

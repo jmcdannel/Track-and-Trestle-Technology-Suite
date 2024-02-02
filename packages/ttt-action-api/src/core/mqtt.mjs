@@ -38,8 +38,8 @@ const connect = () => {
 
   // https://github.com/mqttjs/MQTT.js#event-message
   mqttClient.on('message', (topic, message) => {
-    console.log(`mqttClient received message: ${message} from topic: ${topic}`)
-    console.log('message', message, typeof message)
+    // console.log(`mqttClient received message: ${message} from topic: ${topic}`)
+    // console.log('message', message, typeof message)
     interfaces.handleMessage(JSON.parse(message.toString()), 
       (resp) => mqttClient.publish('ttt-dispatcher', resp  )
     );
