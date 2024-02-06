@@ -42,8 +42,6 @@ export const Dispatcher = props => {
   const {
     computedRoutes,
     handleRouteToggle,
-    handleMapRouteClick,
-    handleMapTurnoutClick
   } = useLayoutRoute();
 
   const setTurnouts = async deltas => {

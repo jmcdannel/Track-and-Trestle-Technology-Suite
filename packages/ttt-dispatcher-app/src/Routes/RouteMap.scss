@@ -1,0 +1,11 @@
+$routes: ("MAINW", "MAINE", "SPUR1", "SPUR2");
+
+.disabled- {
+  @each $rte in $routes {
+    &#{$rte} ##{$rte} {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+}
