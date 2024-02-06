@@ -100,11 +100,9 @@ export function useLayoutRoute() {
         return parseInt(svgId.replace(/_/g, ''));
       }
     }
-    const turnout = turnouts.find(t => t.turnoutId === getTurnoutId(svgId));
-    turnout && handleTurnoutChange({
-      turnoutId: turnout.turnoutId,
-      state: !turnout.state
-    });
+    const t = turnouts.find(t => t.turnoutId === getTurnoutId(svgId));
+
+    updateTurnout({...t, state: !t.state});
 
   }
 
