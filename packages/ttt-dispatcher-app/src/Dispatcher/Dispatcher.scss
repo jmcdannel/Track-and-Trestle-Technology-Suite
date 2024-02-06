@@ -44,7 +44,7 @@ g.turnout:hover {
   opacity: .5;
 }
 
-$turnouts: 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 201, 202, 203, 204, 205, 300, 301, 302, 303, 304, 305, 306, 307, 308;
+$turnouts: 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 200, 201, 202, 203, 204, 205, 206, 207, 208, 215, 300, 301, 302, 303, 304;
 
 $routes: 'VLYNB1', 'VLYSB1', 'VLYNB2', 'VLYSB2', 'TS1', 'TS2', 'TS3', 'TS4', 'TSF1', 'ENG1', 'ENG2', 'UL', 'IND1', 'IND2', 'VLYNB3', 'VLYSB3';
 
@@ -84,11 +84,12 @@ $routes: 'VLYNB1', 'VLYSB1', 'VLYNB2', 'VLYSB2', 'TS1', 'TS2', 'TS3', 'TS4', 'TS
   .turnout-#{$turnout}-straight {
     #_#{$turnout} {
       visibility: visible;
+      display:block;
       cursor: pointer;
-      path:nth-child(1) {
+      g:nth-child(1) path {
         visibility: hidden;
       }
-      path:nth-child(2) {
+      g:nth-child(2) path {
         stroke: black !important;
         visibility: visible;
       }
@@ -96,13 +97,14 @@ $routes: 'VLYNB1', 'VLYSB1', 'VLYNB2', 'VLYSB2', 'TS1', 'TS2', 'TS3', 'TS4', 'TS
   }
   .turnout-#{$turnout}-divergent {
     #_#{$turnout} {
+      visibility: visible;
       display:block;
       cursor: pointer;
-      path:nth-child(1) {
+      g:nth-child(1) path {
         stroke: black !important;
         visibility: visible;
       }
-      path:nth-child(2) {
+      g:nth-child(2) path {
         visibility: hidden;
       }
     }
