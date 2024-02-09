@@ -1,9 +1,6 @@
 {
   "name": "trestle-tt-suite",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "devDependencies": {
     "lerna": "^7.1.1"
   },
@@ -14,11 +11,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package:layout-api": "lerna run start --scope @ttt/layout-api --stream",
     "package:dispatcher-app": "lerna run start --scope @ttt/dispatcher-app --verbose --stream",
-    "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/throttle-app --stream"
+    "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/dashboard-app --scope  @ttt/throttle-app --stream"
   },
   "author": "Josh McDannel",
   "license": "MIT",
   "dependencies": {
+    "mqtt": "^5.3.5",
     "wait-on": "^7.0.1"
   }
 }
