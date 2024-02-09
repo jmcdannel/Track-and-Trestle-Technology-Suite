@@ -1,19 +1,26 @@
 {
-  "name": "ttt-dashboard-app",
+  "name": "@ttt/dashboard-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "chart.js": "^4.4.1",
     "mqtt": "^5.3.5",
-    "preact": "^10.19.3"
+    "preact": "^10.19.3",
+    "react-chartjs-2": "^5.2.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.7.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }
