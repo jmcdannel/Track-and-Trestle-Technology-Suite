@@ -1,7 +1,7 @@
 import Head from "next/head";
 import clientPromise from "../lib/mongodb";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
-import LayoutList from "./components/LayoutList";
+import LayoutList from "../components/LayoutList";
 
 type ConnectionStatus = {
   isConnected: boolean;
