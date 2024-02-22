@@ -1,9 +1,12 @@
 @import "../theme";
 
 .effects {
+  overflow: auto;
   .effects__grid-item {
-    flex-basis: 25%;
-    min-width: 24rem;
+    // max-width: 50%;
+    flex-basis: 33%;
+    // width: 100%;
+    min-width: 20rem;
     .MuiAvatar-root {
       background: $bg-pink-orange-1;
       background: $bg-grad-pink-orange-1;        

@@ -27,6 +27,8 @@ import Snackbar from '@mui/material/Snackbar';
 
 import TurnoutIndSvg from './TurnoutInd.svg?react';
 import useLayoutLines from '../Shared/Hooks/useLayoutLines';
+import { useTurnout } from './useTurnout';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 import './Turnout.scss';
 
@@ -40,6 +42,7 @@ export const Turnout = props => {
   const [isPristine, setIsPristine] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
 
+  const { updateTurnout } = useTurnout();
   const [ line ] = useLayoutLines(turnout?.meta?.line);
 
   useEffect(() => {
@@ -54,10 +57,13 @@ export const Turnout = props => {
       setIsLoading(true);
       setIsPristine(false);
       console.log('[Turnout] handleToggle', turnout)
-      await handleTurnoutChange({ 
+      const delta = { 
         ...turnout,
-        state: !turnout.state 
-      });
+        state: isDivergent
+      }
+      // publish('ttt-turnout', JSON.stringify({ action: 'turnout', payload: delta }));
+      // handleTurnoutChange(delta);
+      updateTurnout(delta)
     } catch (err) {
       console.error(err);
       setError(err.toString());
@@ -73,10 +79,13 @@ export const Turnout = props => {
     try {
       setIsLoading(true);
       setIsPristine(false);
-      await handleTurnoutChange({ 
-        turnoutId: turnout.turnoutId, 
+      const delta = { 
+        ...turnout,
         state: false
-      });
+      }
+      // publish('ttt-turnout', JSON.stringify(delta));
+      updateTurnout(delta)
+      // handleTurnoutChange(delta);
     } catch (err) {
       console.error(err);
       setError(err.toString());
@@ -123,7 +132,7 @@ export const Turnout = props => {
             </Box> */}
             <Box className={`turnout__name`}>
               <Typography component="h6" variant="h6" noWrap >
-                {turnout.name}
+                {turnout.name} - {turnout.turnoutId}
               </Typography>
             </Box>
           </Box>

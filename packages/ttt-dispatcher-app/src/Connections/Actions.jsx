@@ -12,25 +12,25 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 
 import { ActionDevice } from './ActionDevice';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 export const Actions = props => {
 
   const actionDevices = useConnectionStore(state => state.actionDevices);
-  const actionApiStatus = useConnectionStore(state => state.actionApiStatus);
+  const { isConnected: mqttConnected } = useMqtt();
 
-  const apiConnected = actionApiStatus === CONNECTION_STATUS.CONNECTED;
 
   const devicesConnected = actionDevices.length > 0 &&
     actionDevices.every(device => device.status === CONNECTION_STATUS.CONNECTED);
 
   const connectionStateColor = () => {
-    if (apiConnected && devicesConnected) {
+    if (mqttConnected && devicesConnected) {
       return '#21ff15';
-    } else if (apiConnected && !devicesConnected) {
+    } else if (mqttConnected && !devicesConnected) {
       return 'yellow';
-    } else if (!apiConnected && devicesConnected) {
+    } else if (!mqttConnected && devicesConnected) {
       return 'orange';
-    } else if (!apiConnected && !devicesConnected) {
+    } else if (!mqttConnected && !devicesConnected) {
       return 'red';
     }
   }
@@ -41,7 +41,7 @@ export const Actions = props => {
         <CardHeader 
           title="Actions" 
           avatar={
-            apiConnected && devicesConnected 
+            mqttConnected && devicesConnected 
               ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor() }} />
               : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor() }} />
           } >
@@ -52,14 +52,11 @@ export const Actions = props => {
           display: 'flex',
         }}>
           <Box sx={{ padding: '1rem' }}>
-            {apiConnected && devicesConnected 
+            {mqttConnected && devicesConnected 
                 ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
                 : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
           <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>                        
-            <Typography>Status: {actionApiStatus}</Typography>
-            <Chip label={actionApiStatus || 'unknown'} />   
-      
             {actionDevices?.map((device, index) => 
               <ActionDevice key={`device.${index}`} device={device} />
             )}

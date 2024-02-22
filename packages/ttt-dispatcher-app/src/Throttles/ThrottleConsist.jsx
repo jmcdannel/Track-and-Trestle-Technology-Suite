@@ -22,7 +22,7 @@ import { Context } from '../Store/Store';
 
 const defaultLoco = '';
 
-export const ThrottleConsist = ({ consist = [], onChange }) => {
+export const ThrottleConsist = ({ address, consist = [], onChange }) => {
 
   const [ state, dispatch ] = useContext(Context);
   const { locos } = state;
@@ -58,7 +58,6 @@ export const ThrottleConsist = ({ consist = [], onChange }) => {
 
   const setConsist = async (consist) => {
     try {
-      setShowConsist(false)
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
     } catch (err) {
       console.error(err);

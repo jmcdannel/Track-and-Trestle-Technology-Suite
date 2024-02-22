@@ -1,32 +1,24 @@
 import React, { useContext } from 'react';
 import IconButton from '@mui/material/IconButton';
 import PanToolIcon from '@mui/icons-material/PanTool';
-import { Context } from '../Store/Store';
-import dccApi from '../Shared/api/dccApi';
+import { useMqtt } from '../Core/Com/MqttProvider'
 
 const STOP = '!';
 
-export const Stop = props => {
+export const Stop = () => {
 
-  const [ state, dispatch ] = useContext(Context);
-  const { locos } = state;
+  const { publish } = useMqtt();
 
   const handleStopClick = async () => {
-    console.log('handleStopClick');
 
     try {
-      await dccApi.send('dcc', '!');
-      // await dccApi.setSpeed(loco.address), 0);
+      console.log('handleStopClick');
+      publish('ttt-dcc',  JSON.stringify({
+        action: 'dcc',
+        payload: STOP
+      }))
     } catch (err) { console.error(err); }
-    // locos && locos.filter(loco => loco.isAcquired).map(async loco => {
-    //   try {
-    //     await dccApi.setSpeed(loco.address), 0);
-    //   } catch (err) { console.error(err); }
-    //   try {
-    //     await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, speed: 0 } });
-    //   } catch (err) { console.error(err); }
-    //   console.log('Stopped', loco, STOP);
-    // });
+   // TODO: set all locos to stopped, speed = 0
   }
 
   return (

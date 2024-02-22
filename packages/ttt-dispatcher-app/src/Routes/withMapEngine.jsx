@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 
 import { Context } from '../Store/Store';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 export const withMapEngine = WrappedComponent => props => {
 
@@ -10,12 +11,13 @@ export const withMapEngine = WrappedComponent => props => {
 
   const [ state ] = useContext(Context);
   const [ error, setError] = useState(false);
-  const { turnouts, routes } = state;
+  const { routes } = state;
+  const turnouts = useTurnoutStore(state => state.turnouts);
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
 
   const handleMapClick = async (e) => {
     const svgBtn = findClickableParent(e.target);    
-    console.log('handleMapClick', svgBtn);
+    console.log('[withMapEngine] handleMapClick', svgBtn);
     if (svgBtn) {
       switch(svgBtn.type) {
         case 'Routes':
@@ -35,7 +37,7 @@ export const withMapEngine = WrappedComponent => props => {
 
   const handleMapRouteClick = svgId => {
     const rte = routes.destinations.find(r => r.svgId === svgId);
-    console.log('handleMapRouteClick', svgId, rte);
+    console.log('[withMapEngine] handleMapRouteClick', svgId, rte);
     handleRouteToggle(rte, true);
 
   }

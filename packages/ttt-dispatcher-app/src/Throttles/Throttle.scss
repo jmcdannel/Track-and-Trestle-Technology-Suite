@@ -21,16 +21,26 @@ $blue: #146fac;
 $red: #f44336;
 $orange: #f89719;
 $neutral: #f89719;
-
+.halfthrottle {
+  // flex-basis: 50%;
+  // max-width: 50%;
+  min-height: 540px;
+}
 .throttle {
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 1;
 
+  &.fullthrottle {
+    flex-basis: 100%;
+    max-width: 100%;
+    max-height: 75vh;
+    min-height: 540px;
+  }
   &.halfthrottle {
-    flex-basis: 50%;
-    max-width: 50%;
+    // flex-basis: 50%;
+    // max-width: 50%;
     min-height: 540px;
   }
 
@@ -56,6 +66,14 @@ $neutral: #f89719;
     // TODO: roadname color
     background: rgb(254,0,107);
     background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
+  }
+
+  &__consist-badge {
+    &.MuiBadge-root {
+      .MuiBadge-badge {
+        bottom: 50%;
+      }
+    }
   }
 
   // .MuiCardHeader-action {

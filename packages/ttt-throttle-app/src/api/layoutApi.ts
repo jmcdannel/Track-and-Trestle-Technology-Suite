@@ -13,7 +13,7 @@ async function get(type:string, Id = null) {
     console.log('get', uri);
     const response:any = uri ? await instance.get(uri) : null;
     console.log('response', response);
-    return Id ? response.data : response.data?.[0]?.locos;
+    return Id ? response.data?.locos[0] : response.data?.[0]?.locos;
   } catch (err) {
     console.error(err);
     throw new Error(`Unable to read ${type}, Id=${Id}`);

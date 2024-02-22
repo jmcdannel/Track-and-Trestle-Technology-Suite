@@ -4,6 +4,14 @@ import actionApi from './actionApi.ts';
 import layoutApi from './layoutApi.ts';
 import favoritesApi from './favoritesApi.ts';
 import config from './config.ts'; // TODO: replace with configStore
+import { useMQTT } from 'mqtt-vue-hook'
+
+const mqttHook = useMQTT()
+const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
+const mqttPort = 5005;
+const listenTopic = 'DCCEX.js';
+const publishTopic = 'ttt-dcc';
+
 
 async function connect() {
   try {
@@ -30,6 +38,31 @@ async function connectInterfaces(host, layoutId) {
 
   try {
     console.log('connectInterfaces', layoutId);
+
+
+
+    mqttHook.registerEvent(
+      '+/root/#',
+      (topic: string, message: string) => {
+          console.log({
+              title: topic,
+              message: message.toString(),
+              type: 'info',
+          })
+      },
+      'string_key',
+    )
+    mqttHook.registerEvent(
+        'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
+        (topic: string, message: string) => {
+            console.log('mqtt connected')
+        },
+        'string_key',
+    )
+
+    mqttHook.subscribe(['ttt-dispatcher', 'DCCEX.js', 'ttt-dcc'])
+    await mqttHook.connect(`ws://joshs-mac-mini.local:${mqttPort}`)
+
     // await dccApi.connect(host);
     const layout = await layoutApi.layouts.get(layoutId);
     console.log('interfaces', layout, layout?.interfaces);
@@ -41,13 +74,13 @@ async function connectInterfaces(host, layoutId) {
 
         break;
       case 'action-api':
-        await actionApi.connect(host, iface);
+        // await actionApi.connect(host, iface);
         break;
       case 'serial':
         // await actionApi.connect(host, iface);
         const serial = await config.get(iface.id);
         console.log('connect serial', serial, iface);
-        await actionApi.put('serialConnect', { connectionId: iface.id, serial });
+        // await actionApi.put('serialConnect', { connectionId: iface.id, serial });
         break;
       default:
         console.warn('Unknown interface type', iface.type, iface);

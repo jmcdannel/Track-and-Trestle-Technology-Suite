@@ -1,0 +1,18 @@
+$routes: ("MAINW", "MAINE", "SPUR1", "SPUR2");
+$routes2: 'VLYNB1', 'VLYSB1', 'VLYNB2', 'VLYSB2', 'TS1', 'TS2', 'TS3', 'TS4', 'TSF1', 'ENG1', 'ENG2', 'UL', 'IND1', 'IND2', 'VLYNB3', 'VLYSB3';
+
+.disabled- {
+  @each $rte in $routes {
+    &#{$rte} ##{$rte} {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+  @each $rte in $routes2 {
+    &#{$rte} ##{$rte} {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+}

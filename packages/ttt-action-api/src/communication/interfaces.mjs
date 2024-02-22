@@ -29,9 +29,9 @@ const identifySerialConnections = async () => {
   return serialPorts;
 }
 
-export const handleMessage = async (msg, ws) => {
+export const handleMessage = async (msg, onSuccess) => {
   const commandActions = ['effects', 'turnouts'];
-  const reponseActions = ['ports', 'serialConnect'];
+  const reponseActions = ['listPorts', 'connect'];
 
   log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
   if (commandActions.includes(msg?.action)) { // command actions
@@ -39,30 +39,34 @@ export const handleMessage = async (msg, ws) => {
     log.info('[INTERFACES] commandList', commandList);
     if (commandList && commandList.length > 0) {
       await commands.send(commandList);
-      ws.send(JSON.stringify({ success: true, data: msg }));
+      // onSuccess(JSON.stringify({ success: true, data: msg }));
     } else {
-      ws.send(JSON.stringify({ success: false, data: msg }));
+      onSuccess(JSON.stringify({ success: false, data: msg }));
     }
   } else if (reponseActions.includes(msg.action)) { // response actions
     switch(msg.action) { 
-      case 'ports':
+      case 'listPorts':
         const response = await getPorts();
         log.info('[INTERFACES] response', response);
-        ws.send(JSON.stringify({ success: true, data: { action: msg.action, payload: response }}));
+        onSuccess(JSON.stringify({ success: true, data: { action: 'ports', payload: response }}));
         break;
-      case 'serialConnect':
+      case 'connect':
         try {
-          const com = { ...interfaces[msg.payload.connectionId], ...msg.payload, baudRate };
-          log.info('[INTERFACES] serialConnect', msg, com?.serial, baudRate);
-          com.connection = await serial.connect(com);
+          const com = { ...interfaces[msg.payload.device.id], ...msg.payload, baudRate };
+          log.info('[INTERFACES] serialConnect', msg, typeof com?.serial, baudRate);
+          if (!com?.serial) throw new Error('No serial port specified');
+
+          const handleMessage = async (payload) => await onSuccess(JSON.stringify({ success: true, data: payload }));
+          com.connection = await serial.connect({ path: com.serial, baudRate: com.baudRate, handleMessage });
           com.send = serial.send;
           com.status = 'connected';
           // com.connection = await serial.connect(com);
           // com.send = serial.send;
           // com.status = 'connected';
           // interfaces[msg.payload.connectionId] = com;
-          interfaces['serial'] = com; // TODO: refactor
-          ws.send(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
+          interfaces[com.id] = com; // TODO: refactor
+          log.info('[INTERFACES] serialConnected', msg, typeof com);
+          onSuccess(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
         } catch (err) {
           log.error('[INTERFACES] connect', err);
         }
@@ -85,11 +89,11 @@ const intialize = async (com) => {
       break;
     case 'serial':
       try {
-        com.serial && (com.connection = await serial.connect(com));
-        com.send = serial.send;
-        com.status = 'connected';
-        com.id = 'serial'; // TODO: refactor
-        interfaceId = 'serial';
+        // com.serial && (com.connection = await serial.connect(com));
+        // com.send = serial.send;
+        // com.status = 'connected';
+        // com.id = 'serial'; // TODO: refactor
+        interfaceId = com?.id;
       } catch (err) {
         com.status = 'fail';
         log.error(err);

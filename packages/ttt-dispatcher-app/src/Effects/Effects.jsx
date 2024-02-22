@@ -9,6 +9,8 @@ export const Effects = () => {
   const [ state ] = useContext(Context);
   const { effects } = state;
 
+  console.log('effects', effects);
+
   return (
     <Grid container 
       className={`effects`} 

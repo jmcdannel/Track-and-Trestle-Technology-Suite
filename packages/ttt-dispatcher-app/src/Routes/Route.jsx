@@ -17,7 +17,7 @@ import { useLayoutLines } from '../Shared/Hooks/useLayoutLines';
 import './Route.scss';
 export const Route = props => {
 
-  const { route, handleRouteToggle } = props;  
+  const { route, enabled, handleRouteToggle } = props;  
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -58,11 +58,11 @@ export const Route = props => {
         </CardHeader>
         <CardContent className="route__content">
           <Typography component="h6" variant="h6" noWrap >
-            {route.name}
+            {route.name} - {route.routeId}
           </Typography>
           <Box className={`route__line`}>
             <Typography component="h6" variant="h6" noWrap >
-                {line?.abbr.substring(0, 2) || '??'}
+                {route.disabled ? 'X' : 'OK'}
               </Typography>
           </Box>
         </CardContent>

@@ -66,7 +66,7 @@ export const Settings = () => {
         );
       })} */}
       <h3>LAYOUT</h3>
-      <pre>{JSON.stringify(layout, null, 2)}</pre>
+      <Box component="pre" sx={{ textAlign: 'left', fontSize: '10px' }}>{JSON.stringify(layout, null, 2)}</Box>
     </>
   );
 }

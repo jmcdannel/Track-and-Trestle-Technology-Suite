@@ -7,7 +7,9 @@ import DispatcherMenu from './DispatcherMenu';
 import Route from '../Routes/Route';
 import RouteMap from '../Routes/RouteMap';
 import Turnout from '../Turnouts/Turnout';
-import withRouteEngine from '../Routes/withRouteEngine';
+import useLayoutRoute from '../Routes/useLayoutRoute';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
+import { useTurnout } from '../Turnouts/useTurnout';
 
 import api from '../Shared/api/api';
 import { Context } from '../Store/Store';
@@ -20,29 +22,40 @@ const TURNOUT_DELAY = 10; // ms
 
 export const Dispatcher = props => {
 
-  const { 
+  // const { 
+  //   filter, 
+  //   enabled, 
+  //   overrideUserPrefs, 
+  //   computedRoutes, 
+  //   handleRouteToggle 
+  // } = props;
+  const {
     filter, 
     enabled, 
-    overrideUserPrefs, 
-    computedRoutes, 
-    handleRouteToggle 
+    overrideUserPrefs
   } = props;
+
+  const { updateTurnout } = useTurnout();
+  const turnouts = useTurnoutStore(state => state.turnouts);
   const [ state, dispatch ] = useContext(Context);
-  const { turnouts } = state;
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
+  const {
+    computedRoutes,
+    handleRouteToggle,
+  } = useLayoutRoute();
 
   const setTurnouts = async deltas => {
-    deltas.map(async (delta, idx) => {
-      await sleep(idx * TURNOUT_DELAY);
-      await handleTurnoutChange(delta);
-    });
+    for(const delta of deltas){
+      handleTurnoutChange(delta);
+      await sleep(TURNOUT_DELAY);
+    }
   }
 
   const handleTurnoutChange = async delta => {
     try {
-      console.log('handleTurnoutChange', delta);
-      await api.turnouts.put(delta);
-      await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
+      const t = turnouts.find(t => t.turnoutId === delta.turnoutId)
+      console.log('[ROUTE ENGINE] handleTurnoutChange', t.turnoutId, delta)
+      updateTurnout({...t, state: delta.state})
     } catch (err) {
       console.error(err);
       // throw err;
@@ -69,7 +82,7 @@ export const Dispatcher = props => {
 
       {isVisible('routes') && (
         <Box className="routes">
-          {computedRoutes.map(rte => (
+          {computedRoutes().map(rte => (
             <Box 
               key={rte.routeId} 
               sx={{
@@ -137,4 +150,4 @@ Dispatcher.defaultProps = {
   overrideUserPrefs: false
 };
 
-export default withRouteEngine(Dispatcher);
+export default Dispatcher;

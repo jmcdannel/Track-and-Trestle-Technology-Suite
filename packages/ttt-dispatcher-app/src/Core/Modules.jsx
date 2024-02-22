@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Conductor from '../Conductor/Conductor';
 import Pinout from '../Settings/Pinout';
 import Settings from '../Core/Settings';
-import DccLog from '../Monitor/DccLog';
+import { Dashboard as DccDashboard } from '../Dcc/Dashboard';
 import Dispatcher from '../Dispatcher/Dispatcher';
 import Effects from '../Effects/Effects';
 import { Context } from '../Store/Store';
@@ -19,7 +19,7 @@ function Modules(props) {
       case 'turnouts' :
         return (
           <Route path="/dispatcher" key={module} element={
-            turnouts && <Dispatcher />
+            <Dispatcher />
           } />
         );
       case 'effects' :
@@ -38,7 +38,7 @@ function Modules(props) {
       <Route path="/" exact element={locos ? <Conductor /> : loading} />
       <Route path="/pinout" exact element={<Pinout />} />
       <Route path="/settings" exact element={<Settings />} />
-      <Route path="/dcc" exact element={<DccLog />} />
+      <Route path="/dcc" exact element={<DccDashboard />} />
       {layout?.modules && layout.modules.map(getRoutedModule)}
     </Routes>)
 }

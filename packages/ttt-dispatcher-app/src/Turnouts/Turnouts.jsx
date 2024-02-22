@@ -1,32 +1,18 @@
 import React, { useContext } from 'react';
 import Turnout from '../Turnouts/Turnout';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 import { Context } from '../Store/Store';
 import api from '../Shared/api/api';
 
 const Turnouts = () => {
   
   const [ state, dispatch ] = useContext(Context);
-  const { turnouts, layout } = state;
-
-  const handleTurnoutChange = async delta => {
-    try {
-      await api.turnouts.put(delta);
-      await dispatch({ type: 'UPDATE_TURNOUT', payload: delta });
-    } catch (err) {
-      console.error(err);
-      // throw err;
-    }   
-  }
+  const turnouts = useTurnoutStore(state => state.turnouts);
+  const { layout } = state;
 
   const renderTurnouts = list => list
     ?.sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by the abbr property
-    .map(renderTurnout);
-
-  const renderTurnout = turnout => {
-    return (
-      <Turnout key={turnout.turnoutId} turnout={turnout} handleTurnoutChange={handleTurnoutChange} />
-    );
-  };
+    .map(turnout => <Turnout key={turnout.turnoutId} turnout={turnout} />);
 
   return (
     <>

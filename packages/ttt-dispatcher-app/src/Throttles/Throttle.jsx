@@ -2,18 +2,13 @@ import React, { useState, useContext, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import Typography from '@mui/material/Typography';
-
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import DccExThrottleController from './DccExThrottleController';
 import ThrottleSlider from './ThrottleSlider';
@@ -29,33 +24,30 @@ import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 import dccApi from '../Shared/api/dccApi';
-
-import BnsfLogoSvg from '../Shared/Images/logos/bnsf.svg?react';
+import { useDcc } from '../Dcc/useDcc';
+import { useThrottleStore } from '../Store/useThrottleStore';
 
 import './Throttle.scss';
 
 export const Throttle = props => {
 
-  // const EMERGENCY_STOP = '-1.0';
 	const STOP = '0.0';
-  // const FULL_SPEED = '1.0';
-  const WAY_UP_STEP = 5;
-
   const { 
     loco, 
-    cruiseDisabled, 
-    showAdvancedControls = false,
-    showFunctions = false,
-    className = '',
-    onLocoClick, loco: {
-      speed,
+    cruiseDisabled,
+    variant = 'full',
+    onLocoClick, 
+    loco: {
       autoStop,
       forward,
       consist,
       maxSpeed = 100
     } 
   } = props;
+
   const address = Number(props.loco.address);
+  const throttle = useThrottleStore(state => state.getThrottle)(address);
+  const speed = throttle?.speed || 0;
 
   const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
@@ -67,7 +59,12 @@ export const Throttle = props => {
 
   const debouncedSpeed = useDebounce(uiSpeed, 100);
 
+  const { setFunction } = useDcc();
+
   const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
+
+  const isVariantFull = variant === 'full';
+  const isVariantHalf = variant === 'half';
 
   const handleSliderSpeed = value => {
     setUiSpeed(value);
@@ -106,11 +103,7 @@ export const Throttle = props => {
       : { on: true };
     newFunctionState[clickedIndex] = newState;
     setFunctionState(newFunctionState)
-    dccApi.send('function', {
-        address,
-        state: newState.on,
-        func: clickedIndex
-      });
+    setFunction(address, clickedIndex, newState.on);
   }
 
   return (
@@ -139,15 +132,25 @@ export const Throttle = props => {
 
       <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
         <DialogTitle>Consist</DialogTitle>
-        <ThrottleConsist consist={loco.consist} onChange={() => { /* no op */ }} />
+        <ThrottleConsist address={address} consist={loco.consist} onChange={() => { /* no op */ }} />
       </Dialog>
-
+      <Box sx={{ padding: '.5rem', display: 'flex', flex: '1' }}>
       <Card
-        className={`${className} throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
+        className={`throttle ${variant}throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={up.lg ? <LocoName loco={loco} /> : null}
+          title={up.md && variant === 'full' ? <LocoName loco={loco} /> : null}
           avatar={
-            <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
+            <Badge 
+              badgeContent={1 + (loco.consist?.length || 0)} 
+              color="info"
+              className="throttle__consist-badge"
+              invisible={!loco?.consist?.length}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}>
+              <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
+            </Badge>
           } 
           action={
             <ThrottleActions
@@ -161,9 +164,9 @@ export const Throttle = props => {
             />
           }
         />
-        {down.lg && (
+        {/* {down.lg && (
           <CardHeader title={<LocoName loco={loco} />}></CardHeader>
-        )}
+        )} */}
         <CardContent className="throttle__content grow flex">
           <Grid container spacing={1} className="grow">
             {/* {up.lg && showFunctions && (
@@ -174,7 +177,7 @@ export const Throttle = props => {
                 <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
               </Grid>
             )} */}
-            {up.md && showAdvancedControls && (
+            {up.md && isVariantFull && (
               <Grid item 
                 xs={5} sm={4} md={4} 
                 display="flex" 
@@ -183,7 +186,8 @@ export const Throttle = props => {
                   cruiseDisabled={cruiseDisabled}
                   loco={loco}
                   onStop={handleStopClick}
-                  onFunctionClick={handleFunctionClick}
+                  onShowConsist
+                  onFunctionClick={() => setShowFunctionsDrawer(true)}
                   onShowSettings={() => setShowSettings(true)}
                   onShowFunctions={() => setShowFunctions(true)}
                 />
@@ -220,6 +224,7 @@ export const Throttle = props => {
           </Grid>
         </CardContent>
       </Card>
+      </Box>
     </>
   )
 }

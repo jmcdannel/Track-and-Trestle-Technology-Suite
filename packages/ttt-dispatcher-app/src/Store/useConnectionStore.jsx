@@ -14,12 +14,11 @@ const store = immer(
   persist((set, get) => ({
     host: null,
     layoutId: null,
-    dccDevice: null,
-    dccPorts: [],
+    dccDevice: null, // serial port path to DCC-EX Command
+    ports: [],
     actionPorts: [],
     status: CONNECTION_STATUS.DISCONNECTED,
     actionDevices: [],
-    dccApiStatus: CONNECTION_STATUS.DISCONNECTED,
     dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
     actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
 
@@ -27,10 +26,9 @@ const store = immer(
     setLayoutId: (layoutId) => set({ layoutId }),
 
     setDccDevice: (dccDevice) => {
-      console.log('[useConnectionStore] setDccDevice', dccDevice)
       set({ dccDevice })
     },
-    setDccPorts: (dccPorts) => set({ dccPorts }),
+    setPorts: (ports) => set({ ports }),
     setActionPorts: (actionPorts) => set({ actionPorts }),
 
     addActionDevice: (device) => {
@@ -50,6 +48,15 @@ const store = immer(
       }))
     },
 
+    resetActionDevices: () => {
+      set(state => ({
+        actionDevices: [...state.actionDevices].map(d => ({
+          ...d,
+          status: CONNECTION_STATUS.DISCONNECTED
+        }))
+      }))
+    },
+
     updateActionDeviceStatusByPort: (port, status) => {
       set(state => ({
         actionDevices: [...state.actionDevices.map(d => {
@@ -62,15 +69,14 @@ const store = immer(
     },
 
     setStatus: (status) => set({ status }),
-    setDccApiStatus: (dccApiStatus) => set({ dccApiStatus }),
     setDccDeviceStatus: (dccDeviceStatus) => set({ dccDeviceStatus }),
     setActionApiStatus: (actionApiStatus) => set({ actionApiStatus }),
     resetConnectionStatus: () => {
-      set({ 
-        dccApiStatus: CONNECTION_STATUS.DISCONNECTED,
+      set({
         dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
         actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
       })
+      get().resetActionDevices()
     }
   }), {
     name: '@ttt/connection-store',

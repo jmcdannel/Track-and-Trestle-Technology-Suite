@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 
 const store = persist((set, get) => ({
   throttles: [],
+  getThrottle: (address) => get().throttles.find(t => t.address === address),
   upsertThrottle: (throttle) => {
     const existing = get().throttles.find(t => t.address === throttle.address);
     if (existing) {

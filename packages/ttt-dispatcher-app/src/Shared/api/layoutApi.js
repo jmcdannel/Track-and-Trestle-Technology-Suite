@@ -44,6 +44,7 @@ async function setLayout(_layoutId) {
 
 async function initialize() {
   const payload = await getLayouts(layoutId);
+  console.log('init payload', payload);
   const getModules = payload.modules.reduce((reqs, module) => api[module] && api[module].get ? [...reqs, module] : [...reqs], []);
   const results = await Promise.all( getModules.map(req => api[req].get()) );
   const initialState = getModules.reduce((state, module, index) => ({ 
@@ -79,7 +80,7 @@ export const api = {
     get: getLayouts
   }, 
   turnouts: {
-    get: args => get('turnouts', args),
+    _get: args => get('turnouts', args),
     put: args => putWS('turnouts', args, 'turnoutId')
   },
   effects: {

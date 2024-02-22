@@ -19,13 +19,10 @@ import './AdvancedControls.scss';
 const AdvancedControls = (props) => {
 
   const { 
-    onShowSettings, 
-    onShowFunctions, 
     onShowConsist, 
     onStop, 
     onFunctionClick,
-    cruiseDisabled, 
-    handleFunctionClick,
+    cruiseDisabled,
     loco,
   } = props;
   const address = Number(props.loco.address);
@@ -58,6 +55,11 @@ const AdvancedControls = (props) => {
 
   const handleConsistClick = async () => {
     onShowConsist()
+  }
+
+
+  const handleFunctionClick = async () => {
+    onFunctionClick()
   }
 
   const handleParkClick = async () => {
@@ -119,8 +121,8 @@ const AdvancedControls = (props) => {
     display: {
       xs: 'none',
       sm: 'none',
-      md: 'block',
-      lg: 'block',
+      md: 'none',
+      lg: 'none',
       xl: 'block'
     }
   }
@@ -137,13 +139,24 @@ const AdvancedControls = (props) => {
         className="rounded-button-group throttle__advanced-controls">
         <Tooltip title="Cruise Control">
           <Button 
-            onClick={handleCruiceControlClick} 
-            disabled={cruiseDisabled}
+            onClick={handleCruiceControlClick}
             sx={buttonStyle}
             startIcon={<SpeedIcon sx={iconStyle} />} 
           >
             <Box sx={buttonLabelStyle}>
               Cruise Control
+            </Box>
+          </Button>
+        </Tooltip>
+        <Tooltip title="Functions">
+          <Button 
+            onClick={handleFunctionClick} 
+            disabled={cruiseDisabled}
+            sx={buttonStyle}
+            startIcon={<TrainIcon sx={iconStyle} />} 
+          >
+            <Box sx={buttonLabelStyle}>
+            Functions
             </Box>
           </Button>
         </Tooltip>

@@ -2,14 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-// import dccApi from './Shared/api/dccApi';
 import reportWebVitals from './reportWebVitals';
-
-// const dccSerial = '/dev/tty.usbmodem2301'; // TODO: remove hard-coded port
-// const host = 'joshs-mac-mini.local'; // TODO: remove hard-coded host
-// const iface = { id: 'dcc-js-api', type: 'dcc-js-api' }; // TODO: remove hard-coded iface
-
-// await dccApi.connect(host, iface, dccSerial);
 
 ReactDOM.render(
   <React.StrictMode>

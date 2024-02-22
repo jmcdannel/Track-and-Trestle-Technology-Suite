@@ -15,6 +15,7 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import Signal from './Signal';
 import { Context } from '../Store/Store';
 import api from '../Shared/api/api';
+import useLayoutEffect from './useLayoutEffect';
 
 const PLAY_SOUND_DELAY = 2000;
 
@@ -24,27 +25,27 @@ export const Effect = props => {
 
   const [ ,dispatch ] = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
+  const { updateEffect } = useLayoutEffect();
 
   const handleSwitchChange = (event) => {
-    updateEffect({ ...effect, state: event.target.checked ? 1 : 0 });;
+    handleUpdateEffect({ ...effect, state: event.target.checked ? 1 : 0 });;
   };
 
   const handleButtonClick = (event) => {
-    updateEffect({ ...effect, state: 1 });
-    setTimeout(async () => {
-      updateEffect({ ...effect, state: 0 });
-    }, PLAY_SOUND_DELAY);
+    handleUpdateEffect({ ...effect, state: 1 });
+    // setTimeout(async () => {
+    //   handleUpdateEffect({ ...effect, state: 0 });
+    // }, PLAY_SOUND_DELAY);
   };
 
-  const updateEffect = async (changedEffect) => {
+  const handleUpdateEffect = async (changedEffect) => {
     if (isLoading) { 
       return;
     }
     try {
       console.log('[Effect] updateEffect');
       setIsLoading(true);
-      await api.effects.put(changedEffect, 'effectId');
-      await dispatch({ type: 'UPDATE_EFFECT', payload: changedEffect });
+      await updateEffect(changedEffect);
     } catch (err) {
       console.error(err);
     } finally {
@@ -130,7 +131,7 @@ export const Effect = props => {
   const renderContent = () => {
     switch(effect.type.toLowerCase()) {
       case 'signal':
-        return (<Signal effect={effect} getMetaData={() => {}} onChange={updateEffect} view={view} />);
+        return (<Signal effect={effect} getMetaData={() => {}} onChange={handleUpdateEffect} view={view} />);
       default:
         return (
         <Grid container 
@@ -156,7 +157,7 @@ export const Effect = props => {
         title={effect.name}
       />
       <CardContent>
-          {renderContent()}
+        {renderContent()}
       </CardContent>
       
     </Card>
