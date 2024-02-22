@@ -59,6 +59,7 @@ export const DccListener = () => {
       // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
         case 'listPorts':
+          console.log('[DccListener] setPorts', action, payload);
           setPorts(payload);
           break;
         case 'connected':

@@ -143,7 +143,13 @@ export const MiniThrottle = props => {
           handleDownClick={handleDownClick}
           handleWayDownClick={handleWayDownClick}
         />
-        <Box sx={{ alignSelf: 'center' }}>
+        <Box sx={{ 
+          alignSelf: 'center',
+          display: {
+            xs: 'none',
+            sm: 'block'
+          }
+        }}>
           <ThrottleActions
             cruiseDisabled={cruiseDisabled}
             loco={loco}

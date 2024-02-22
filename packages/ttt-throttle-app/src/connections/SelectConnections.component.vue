@@ -18,7 +18,7 @@
   const interfaces:any = ref(null);
 
 
-  const loadLayout = async (layoutId) => {
+  const loadLayout = async (layoutId:string) => {
     const layout = await api.layouts.get(layoutId);
     console.log('loadLayout', layoutId, layout, layout?.interfaces);
     interfaces.value = layout?.interfaces;
@@ -53,7 +53,7 @@
     <template v-for="conn in connections" :key="conn.connectionId">
       <pre>conn: {{ conn }}</pre>
     </template>
-    <template v-for="iface in interfaces" :key="iface.id">
+    <!-- <template v-for="iface in interfaces" :key="iface.id">
       <template v-if="iface.type === 'dcc-js-api'">
         <DccExStatus 
           :iface="iface" 
@@ -74,7 +74,7 @@
           :connection="connections.get(iface.id)" 
         /> 
       </template>
-    </template>
+    </template> -->
 
   </main>
 </template>

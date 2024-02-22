@@ -16,22 +16,28 @@ export const ThrottleSpeed = props => {
   }
 
   return (
-    <div className={computedClassName()}>
+    <Box className={computedClassName()} sx={{
+      minWidth: {
+        xs: '3rem',
+        md: '4rem',
+        xl: '6rem'
+      }
+    }}>
       <Box component="span" sx={{ 
         fontSize: {
-          xs: '1.5rem',
-          md: '1rem',
+          xs: '1rem',
           lg: '1.5rem',
           xl: '3rem'
         },
         padding: {
-          xs: '1rem .5rem .5rem',
-          xl: '1rem'
+          xs: '0',
+          md: '1.5rem .5rem',
+          lg: '1.5rem 1rem'
         }
       }}>
         {Math.abs(parseInt(speed))}
       </Box>
-    </div>
+    </Box>
   );
 
 }

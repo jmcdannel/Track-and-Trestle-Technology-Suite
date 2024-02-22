@@ -10,8 +10,10 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2'
 
-const mqttBroker = 'mqtt://joshs-mac-mini.local'
-const mqttPort = 5005
+// const mqttBroker = 'mqtt://joshs-mac-mini.local'
+// const mqttPort = 5005
+const mqttBroker = 'mqtt://test.mosquitto.org'
+const mqttPort = 8081
 const pollIntervalMS = 2000
 
 ChartJS.register(
@@ -73,7 +75,7 @@ const CurrentMonitor: FunctionComponent = () => {
 
   useEffect(() => {
     isConnected && setInterval(() => {
-      // mqttClient?.publish('ttt-dcc', JSON.stringify({ action: 'dcc', payload: 'JI'}))
+      mqttClient?.publish('@ttt/dccex', JSON.stringify({ action: 'dcc', payload: 'JI'}))
     }, pollIntervalMS)
   }, [isConnected])
 
@@ -87,7 +89,7 @@ const CurrentMonitor: FunctionComponent = () => {
         parseMqttMessage(JSON.parse(message.toString()))
         console.log(`mqttClient received message:`,topic, message.toString())
       })
-      mqttClient.subscribe('DCCEX.js')
+      mqttClient.subscribe('@ttt/DCCEX.js')
     }
   }, [mqttClient])
 

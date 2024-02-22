@@ -1,5 +1,9 @@
 import { useConnectionStore } from '../store/connectionStore.jsx';
 import actions from '../store/actions.tsx';
+import { useMQTT } from 'mqtt-vue-hook'
+
+const mqttHook = useMQTT()
+const mqttPort = 5005;
 
 let ws:WebSocket;
 let connectionId:string;
@@ -30,6 +34,39 @@ function onError(event:any) {
 async function connectSerial(serial) {
   if (serial) {
     await putWS('serialConnect', { serial });
+  }
+}
+
+async function parseMessage(topic, message) {
+  try {
+    console.log('[DCC API] parseMessage', topic, message);
+    const { action, payload } = JSON.parse(message);
+    const connStore = useConnectionStore();
+    console.log('[DCC API] parseMessage', action, payload);
+    switch (action) {
+      case 'turnouts':
+        console.log('turnouts', payload);
+        actions.reportTurnout({ [payload.turnoutId]: { state: payload.state } });
+        break;
+      case 'effects':
+        console.log('effects', payload);
+        break;
+      case 'connected':
+        console.log('[ACTION API] setConnection', payload.connectionId, action, payload);
+        await connStore.setConnection(payload.connectionId, { connected: true });
+        break;
+      case 'socketConnected':
+        console.log('[ACTION API] socketConnected', action, payload);
+        // connectSerial(payload.serial);
+        break;
+      case 'ports':
+        await connStore.setConnection(connectionId, { ports: payload });
+        break;
+      default:
+        console.log('Unknown action', action, payload);
+    }
+  } catch { 
+    console.warn('Message not in JSON format.', event.data); 
   }
 }
 
@@ -66,14 +103,37 @@ async function onMessage(event:any) {
 }
 
 async function connect(host, iface) {
-  console.log('[ACTION API] connect', host, iface?.id);
-  connectionId = iface?.id;
-  const connStore = useConnectionStore();
-  await connStore.setConnection(connectionId, { connected: false });
-  ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
-  ws.onerror = onError;
-  ws.addEventListener('open', onOpen);   
-  ws.addEventListener('message',  onMessage);
+  // console.log('[ACTION API] connect', host, iface?.id);
+  // connectionId = iface?.id;
+  // const connStore = useConnectionStore();
+  // await connStore.setConnection(connectionId, { connected: false });
+  // ws = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
+  // ws.onerror = onError;
+  // ws.addEventListener('open', onOpen);   
+  // ws.addEventListener('message',  onMessage);
+
+
+  mqttHook.subscribe(['DCCEX.js'])
+
+  mqttHook.registerEvent(
+    'DCCEX.js',
+    (topic: string, message: string) => {
+        parseMessage(topic, message.toString())
+        console.log({
+            title: topic,
+            message: message.toString(),
+            type: 'info',
+        })
+    },
+    'string_key',
+  )
+  mqttHook.registerEvent(
+      'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
+      (topic: string, message: string) => {
+          console.log('mqtt connected')
+      },
+      'string_key',
+  )
 }
 
 async function disconnect() {

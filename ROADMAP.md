@@ -17,13 +17,13 @@
 [x] dcc-ex turnouts
 [x] action api servos
 [x] dispatcher effects
-[ ] led strips
+[x] led strips
 [x] fix sounds
 [x] signals
-[ ] dispatcher macros
+[-] dispatcher macros
 [x] DCC functions
 --
-[ ] clean up connections / env / config
+[x] clean up connections / env / config
 [x] tam junc config - servos 
 [ ] update readme with sccreenshots
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?

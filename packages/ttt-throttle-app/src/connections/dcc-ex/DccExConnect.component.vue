@@ -6,40 +6,58 @@
   import router from '../../router/index.ts';
   import api from '../../api/api.ts';
   import { useConnectionStore } from '../../store/connectionStore.jsx';
+  import { useMQTT } from 'mqtt-vue-hook'
 
-  const route = useRoute();
-  const connectionId = route.params.connectionId;
 
-  const connStore = useConnectionStore();
-  const { connections } = storeToRefs(connStore);
+  const route = useRoute()
+  const connectionId = route.params.connectionId
+
+  const ports = ref(api.dcc.ports())
+  const connStore = useConnectionStore()
+  const { connections } = storeToRefs(connStore)
 
   const dccApi = computed(() => {
     return connections.value.get(connectionId)
   })
 
+  console.log('DccExConnect', connectionId, dccApi.value)
+
+
+  
   onMounted(() => {
+    
+    
     api.dcc.send('listPorts', { });
+    // mqttHook.publish('ttt-dcc', JSON.stringify({ action: 'listPorts', payload: { } }));
   });
+
+  const handleRefreshClick = () => {
+    console.log('handleRefreshClick');
+    api.dcc.send('listPorts', { });
+    // mqttHook.publish('ttt-dcc', JSON.stringify({ action: 'listPorts', payload: { } }));
+  }
 
   const handlePortClick = async (e) => {
     try {
       e.preventDefault();
       const serial = e.target.value;
       console.log('handlePortClick', serial);
-      await api.config.set(connectionId, serial);
-      await api.dcc.send('connect', { serial });
+      // await api.config.set(connectionId, serial);
+      // await api.dcc.send('connect', { serial });
+      // mqttClient.publish(publishTopic, JSON.stringify({ action: 'connect', payload: { serial } }));
       router.push({ name: 'home' });
     } catch (err) {
       console.error(err);
     }
   }
 
-  watch(dccApi, (o, n) => {
-    console.log('[DccExConnect].WATCH', o, n);
-    if (n?.connected && !o?.connected) {
-      api.dcc.send('listPorts', { });
-    }
-  });
+  // watch(mqttHook.isConnected(), (o, n) => {
+  //   console.log('[DccExConnect].WATCH', o, n);
+  //   if (mqttHook.isConnected()) {
+  //     // api.dcc.send('listPorts', { });
+  //     api.dcc.send('listPorts', { });
+  //   }
+  // });
 
 </script>
 
@@ -65,9 +83,11 @@
           <!-- <pre>dccApi: {{ dccApi }}</pre>
           <pre>dccApi?.connected: {{ dccApi?.connected }}</pre> -->
         </div> 
+        <button class="btn btn-sm btn-outline w-full border-teal-500" @click="handleRefreshClick">Refresh</button>
+          
         <div className="divider"></div> 
       <ul>
-        <li v-for="port in dccApi?.ports" :key="port">
+        <li v-for="port in ports" :key="port">
           <button class="btn btn-sm btn-outline w-full border-teal-500" :value="port" @click="handlePortClick">{{ port }}</button>
           <div className="divider"></div> 
         </li>
