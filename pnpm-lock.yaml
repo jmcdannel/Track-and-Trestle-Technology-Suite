@@ -97,9 +97,15 @@ importers:
       '@faker-js/faker':
         specifier: ^8.4.1
         version: 8.4.1
+      axios:
+        specifier: ^1.6.7
+        version: 1.6.7
       chart.js:
         specifier: ^4.4.1
         version: 4.4.1
+      cors:
+        specifier: ^2.8.5
+        version: 2.8.5
       mqtt:
         specifier: ^5.3.5
         version: 5.3.5
@@ -108,7 +114,7 @@ importers:
         version: 10.19.4
       react-chartjs-2:
         specifier: ^5.2.0
-        version: 5.2.0(chart.js@4.4.1)(react@17.0.2)
+        version: 5.2.0(chart.js@4.4.1)(react@18.2.0)
     devDependencies:
       '@preact/preset-vite':
         specifier: ^2.7.0
@@ -12845,14 +12851,14 @@ packages:
       strip-json-comments: 2.0.1
     dev: false
 
-  /react-chartjs-2@5.2.0(chart.js@4.4.1)(react@17.0.2):
+  /react-chartjs-2@5.2.0(chart.js@4.4.1)(react@18.2.0):
     resolution: {integrity: sha512-98iN5aguJyVSxp5U3CblRLH67J8gkfyGNbiK3c+l1QI/G4irHMPQw44aEPmjVag+YKTyQ260NcF82GTQ3bdscA==}
     peerDependencies:
       chart.js: ^4.1.1
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       chart.js: 4.4.1
-      react: 17.0.2
+      react: 18.2.0
     dev: false
 
   /react-dom@17.0.2(react@17.0.2):
