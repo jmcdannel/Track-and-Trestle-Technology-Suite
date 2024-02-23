@@ -3,15 +3,15 @@ import clientPromise from "../../lib/mongodb";
 
 
 // Initializing the cors middleware
-const cors = Cors({
+const cors:any = Cors({
 methods: ['GET', 'HEAD'],
 })
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
+function runMiddleware(req:any, res:any, fn:any) {
     return new Promise((resolve, reject) => {
-        fn(req, res, (result) => {
+        fn(req, res, (result:any) => {
         if (result instanceof Error) {
             return reject(result)
         }
@@ -21,7 +21,7 @@ function runMiddleware(req, res, fn) {
     })
 }
 
-async function handler(req, res) {
+async function handler(req:any, res:any) {
     // Run the middleware
     await runMiddleware(req, res, cors)
   
