@@ -132,7 +132,7 @@ export const Turnout = props => {
             </Box> */}
             <Box className={`turnout__name`}>
               <Typography component="h6" variant="h6" noWrap >
-                {turnout.name}
+                {turnout.name} - {turnout.turnoutId}
               </Typography>
             </Box>
           </Box>

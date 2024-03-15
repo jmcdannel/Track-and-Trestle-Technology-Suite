@@ -28,7 +28,6 @@
 <template>
 
   <button @click="handlePower"
-    :disabled="!dccApi?.connected"
     class="btn btn-ghost btn-circle relative"
     :class="{
       'text-gray-500': disabled,

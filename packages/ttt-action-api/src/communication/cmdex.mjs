@@ -1,5 +1,5 @@
 import { SerialPort } from 'serialport';
-import { ReadlineParser } from '@serialport/parser-readline'
+// import { ReadlineParser } from '@serialport/parser-readline'
 import log from '../core/logger.mjs';
 
 
@@ -19,11 +19,11 @@ const connect = (com) => {
       autoOpen: false,
     });
 
-    const parser = port.pipe(new ReadlineParser());
-    parser.on('data', (data) => {
-      log.watch(data, data.indexOf('DCC++ EX') > -1);
-      data.indexOf('DCC++ EX') > -1 && resolve(port);
-    })
+    // const parser = port.pipe(new ReadlineParser());
+    // parser.on('data', (data) => {
+    //   log.watch(data, data.indexOf('DCC++ EX') > -1);
+    //   data.indexOf('DCC++ EX') > -1 && resolve(port);
+    // })
 
     port.open(function (err) {
       if (err) {

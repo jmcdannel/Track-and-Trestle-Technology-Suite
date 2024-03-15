@@ -58,7 +58,7 @@ export const Route = props => {
         </CardHeader>
         <CardContent className="route__content">
           <Typography component="h6" variant="h6" noWrap >
-            {route.name}
+            {route.name} - {route.routeId}
           </Typography>
           <Box className={`route__line`}>
             <Typography component="h6" variant="h6" noWrap >

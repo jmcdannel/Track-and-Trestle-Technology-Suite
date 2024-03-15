@@ -1,8 +1,15 @@
+import { ref, reactive } from 'vue';
 import { useConnectionStore } from '../store/connectionStore.jsx';
+import { useMQTT } from 'mqtt-vue-hook'
+
+const mqttHook = useMQTT()
+const mqttPort = 5005;
+
 let wsDCC;
-let connectionId;
+let connectionId = 'dcc-ex-js';
 let serial;
 let queue = [];
+let ports = [];
 
 const defaultProtocol = 'ws';
 const defaultPort = 8082;
@@ -32,14 +39,16 @@ function onError(event) {
   console.log('[DCC API] Websocket error', event);
 }
 
-async function onMessage(event) {
+async function parseMessage(topic, message) {
   try {
-    const { action, payload } = JSON.parse(event.data);
+    console.log('[DCC API] parseMessage', topic, message);
+    const { action, payload } = JSON.parse(message);
     const connStore = useConnectionStore();
-    console.log('[DCC API] onMessage', action, payload);
+    console.log('[DCC API] parseMessage', action, payload);
     switch (action) {
       case 'listPorts':
-        await connStore.setConnection(connectionId, { ports: payload });
+        // await connStore.setConnection(connectionId, { ports: payload });
+        ports = payload;
         break;
       case 'socketConnected':
         connectSerial();
@@ -63,13 +72,37 @@ async function onMessage(event) {
 }
 
 async function connect(host, iface, _serial) {
-  connectionId = iface?.id;
-  serial = _serial;
-  console.log('[DCC API] connect', host, iface?.id, connectionId, serial);
-  wsDCC = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
-  wsDCC.onerror = onError;
-  wsDCC.addEventListener('open', onOpen);   
-  wsDCC.addEventListener('message',  onMessage);
+  // connectionId = iface?.id;
+  // serial = _serial;
+  // console.log('[DCC API] connect', host, iface?.id, connectionId, serial);
+  // wsDCC = new WebSocket(`${defaultProtocol}://${host}:${defaultPort}`);
+  // wsDCC.onerror = onError;
+  // wsDCC.addEventListener('open', onOpen);   
+  // wsDCC.addEventListener('message',  onMessage);
+  
+
+
+  mqttHook.subscribe(['DCCEX.js'])
+
+  mqttHook.registerEvent(
+    'DCCEX.js',
+    (topic: string, message: string) => {
+        parseMessage(topic, message.toString())
+        console.log({
+            title: topic,
+            message: message.toString(),
+            type: 'info',
+        })
+    },
+    'string_key',
+  )
+  mqttHook.registerEvent(
+      'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
+      (topic: string, message: string) => {
+          console.log('mqtt connected')
+      },
+      'string_key',
+  )
 }
 
 async function setPower(payload) {
@@ -87,6 +120,15 @@ async function setSpeed(address, speed) {
     await send('throttle', { address, speed });
   } catch (err) {
     console.error('[DCC API].setPower', err);
+    throw new Error('Unable to read', err);
+  }
+}
+
+async function setTurnout(turnoutId, state) {
+  try {   
+    send('turnout', { turnoutId, state });
+  } catch (err) {
+    console.error('[DCC API].setTurnout', err);
     throw new Error('Unable to read', err);
   }
 }
@@ -114,12 +156,14 @@ async function sendOutput(pin, state) {
 
 async function send(action, payload) {
   try { 
-    if (wsDCC) {  
-      await wsDCC.send(JSON.stringify({ action, payload  }));
-    } else {
-      queue.push({ action, payload });
-      throw new Error('Not connected', connectionId);
-    }
+    // if (wsDCC) {  
+    //   await wsDCC.send(JSON.stringify({ action, payload  }));
+    // } else {
+    //   queue.push({ action, payload });
+    //   throw new Error('Not connected', connectionId);
+    // }
+    console.log('[dccApi] send', action, payload);
+    mqttHook.publish('ttt-dcc', JSON.stringify({ action, payload }))
   } catch (err) {
     console.error('[DCC API].send', err);
   }
@@ -136,7 +180,9 @@ export const dccApi = {
   setSpeed,
   setFunction,
   sendOutput,
-  getConnectionId
+  setTurnout,
+  getConnectionId,
+  ports: () => ports
 }
 
 export default dccApi;

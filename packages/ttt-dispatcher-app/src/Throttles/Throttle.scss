@@ -21,7 +21,11 @@ $blue: #146fac;
 $red: #f44336;
 $orange: #f89719;
 $neutral: #f89719;
-
+.halfthrottle {
+  // flex-basis: 50%;
+  // max-width: 50%;
+  min-height: 540px;
+}
 .throttle {
   display: flex;
   flex-direction: column;
@@ -35,8 +39,8 @@ $neutral: #f89719;
     min-height: 540px;
   }
   &.halfthrottle {
-    flex-basis: 50%;
-    max-width: 50%;
+    // flex-basis: 50%;
+    // max-width: 50%;
     min-height: 540px;
   }
 

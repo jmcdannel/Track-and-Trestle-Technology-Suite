@@ -1,9 +1,13 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
   import TurnoutSvg from './Turnout.svg.vue';
-  import api from '../api/api.ts'
-  import actionState from '../store/actions.tsx'
+  // import api from '../api/api.ts'
+  // import actionState from '../store/actions.tsx'
+  import { useMQTT } from 'mqtt-vue-hook'
+  import dccApi from '../api/dccApi.js';
 
+
+  const { publish } = useMQTT();
 
   const props = defineProps({
     turnout: {
@@ -13,30 +17,54 @@
   const emit = defineEmits(['update:turnout'])
 
   const turnout = ref(props.turnout);
-  const layoutState = ref(props.turnout.state);
-
-  console.log('[TURNOUT]', props.turnout, actionState);
+  const layoutState = ref(props.turnout?.state);
 
   const toggleTurnout = async (e) => {
     console.log('TURNOUT.toggleTurnout', turnout.value);
-    const { turnoutId, state } = turnout.value;
-    await api.turnouts.put({ turnoutId, state: !state });
+    await updateTurnout(turnout.value)
+    layoutState.value = !layoutState.value;
     // await emit('update:turnout', { ...turnout.value, state: !state });
-    turnout.value = { ...turnout.value, state: !state };
+    turnout.value = { ...turnout.value, state: !layoutState.value };
   }
 
   async function addFav() {
-    api.favorites.add({ type: 'turnout', ...turnout.value });
+    // api.favorites.add({ type: 'turnout', ...turnout.value });
   }
 
-  function actionStateChanged(newVal) {
-    console.log('actionStateChanged', newVal.turnouts?.[turnout.value.turnoutId]?.state);
-    setTimeout(() => {
-      layoutState.value = newVal.turnouts?.[turnout.value.turnoutId]?.state;
-    }, 50);
+  // function actionStateChanged(newVal) {
+  //   console.log('actionStateChanged', newVal.turnouts?.[turnout.value.turnoutId]?.state);
+  //   setTimeout(() => {
+  //     layoutState.value = newVal.turnouts?.[turnout.value.turnoutId]?.state;
+  //   }, 50);
+  // }
+  
+  async function updateTurnout(turnout) {
+    console.log('API.updateTurnout', turnout);
+    // updateTurnoutState(turnout)
+    switch(turnout?.config?.interface) {
+      case 'dcc-js-api':
+        dccApi.setTurnout(turnout.config.dccExId, turnout.state);
+        break;
+      case 'mqtt':
+        publish('ttt-turnout', JSON.stringify({ turnout }));
+        break;
+      case 'betatrack-io':
+      case 'tamarack-junction-station-south-io':
+      case 'serial':
+      case 'action-api':
+        // actionApi.turnouts.put(turnout);
+        publish('ttt-turnout', JSON.stringify({ 
+          action: 'turnouts',
+          payload: turnout 
+        }));
+        break;
+      default:
+        console.warn('Unknown interface type', turnout?.config?.interface, turnout);
+        break;
+    }
   }
 
-  watch(actionState.actions, actionStateChanged);
+  // watch(actionState.actions, actionStateChanged);
 
 </script>
 
@@ -50,7 +78,7 @@
       </button>
     </div>
     <button @click="toggleTurnout" class="btn btn-outline btn-primary block flex-grow mx-2 font-bold py-2 px-4 rounded flex items-center">
-      <div>{{  turnout.name  }}</div>
+      <div>{{  turnout?.name  }}</div>
       <div class="w-12">
         <TurnoutSvg :class="layoutState ? 'straight' : 'divergent'" />
       </div>

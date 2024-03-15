@@ -9,6 +9,7 @@
   const defaultPort = '5001';
   const defaultHosts = [
     'tamarackjunctionmbp.local',
+    'joshs-mac-mini.local',
     'tttpi.local',
     'localhost',
     '127.0.0.1'

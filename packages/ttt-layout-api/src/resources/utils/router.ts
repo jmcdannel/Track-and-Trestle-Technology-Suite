@@ -60,7 +60,7 @@ router.get("/:layoutId/effects/:id", async (req, res) => {
 
 router.get("/:layoutId/turnouts", async (req, res) => {
 	const data = await Turnout.find({ layoutId: req.params.layoutId })
-  console.log("/:layoutId/turnouts", data, req.params.layoutId )
+  // console.log("/:layoutId/turnouts", data, req.params.layoutId )
   res.type('application/json')
 	res.send(data)
 })

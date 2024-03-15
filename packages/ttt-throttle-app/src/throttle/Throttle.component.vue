@@ -43,8 +43,8 @@
 
   async function sendLocoSpeed(newSpeed:number, oldSpeed:number) {
 
-    console.log('new-old', newSpeed, oldSpeed);
     const address = loco.value?.address;
+    console.log('new-old', newSpeed, oldSpeed, loco.value);
     if (!address) {
       // TODO: handle error
       return;

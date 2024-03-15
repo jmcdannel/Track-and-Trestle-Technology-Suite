@@ -134,7 +134,7 @@ export const Throttle = props => {
         <DialogTitle>Consist</DialogTitle>
         <ThrottleConsist address={address} consist={loco.consist} onChange={() => { /* no op */ }} />
       </Dialog>
-
+      <Box sx={{ padding: '.5rem', display: 'flex', flex: '1' }}>
       <Card
         className={`throttle ${variant}throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
@@ -224,6 +224,7 @@ export const Throttle = props => {
           </Grid>
         </CardContent>
       </Card>
+      </Box>
     </>
   )
 }

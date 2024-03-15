@@ -12,6 +12,8 @@ import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionSto
 export const DccDeviceDialog = ({ onClose, open }) => {
 
   const setDccDevice = useConnectionStore(state => state.setDccDevice);
+  const connsStore = useConnectionStore(state => state);
+  console.log('[DccDeviceDialog] connsStore', connsStore);
   const ports = useConnectionStore(state => state.ports);
   const { publish, isConnected } = useMqtt();
   const [newDccDevice, setNewDccDevice] = useState(null);
@@ -39,7 +41,7 @@ export const DccDeviceDialog = ({ onClose, open }) => {
           sx={{ padding: '1rem', width: '360px' }}
           id="dcc-deviced"
           freeSolo
-          options={ports || []}
+          options={Array.isArray(ports) ? ports : []} // Added array check
           value={newDccDevice}
           onInputChange={(event, newValue) => {
             setNewDccDevice(newValue);
