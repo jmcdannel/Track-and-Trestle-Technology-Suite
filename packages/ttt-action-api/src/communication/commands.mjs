@@ -159,7 +159,7 @@ const turnoutCommand = async (payload) => {
       };
     case 'servo':
       return {
-        iFaceId: 'serial', //iFaceId: turnout.config.interface,
+        iFaceId: turnout.config.interface,
         action: 'servo', 
         payload: { 
           servo: turnout.config.servo, 

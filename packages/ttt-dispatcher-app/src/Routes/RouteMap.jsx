@@ -29,7 +29,7 @@ const RouteMap = props => {
     
   const mapClassName = `${routeClasses} ${turnoutClasses}`
 
-  console.log('[RouteMap] mapClassName', mapClassName)
+  // console.log('[RouteMap] mapClassName', mapClassName)
 
   function getMap() {
     switch (layoutId) {
