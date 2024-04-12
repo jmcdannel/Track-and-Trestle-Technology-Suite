@@ -60,7 +60,6 @@ export const Throttles = () => {
         position: 'relative', 
         'display': 'flex', 
         'flexWrap': 'wrap',
-        'flex': '1',
         backgroundColor: 'rgb(55, 61, 72)',
       }}>
         {throttles && throttles.length 

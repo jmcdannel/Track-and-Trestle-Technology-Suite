@@ -38,30 +38,51 @@ export const AvailableThrottle = props => {
     }    
   }
 
+  const limitString = (str, maxLength) => {
+    if (str.length <= maxLength) {
+      return str;
+    } else {
+      return str.slice(0, maxLength);
+    }
+  };
+
   return (
-    <Box 
-      className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
-      onClick={handleLocoClick}>
-      <header>
-        <Chip label={name} size="small" variant="outlined"></Chip>
-        <Chip label={name} size="small" variant="outlined"></Chip>
-      </header>
-      <Box className="throttle-body">
-        <Box className="throttle-body-window">
-        {address}
-        </Box>
-        <Box className="throttle-body-window">
-        {roadname}
-        </Box>
-      </Box>
-      <Box className="throttle-hood">
-        <hr />
-      </Box>
-      <Box className="throttle-logo">
-        {roadlogo ? roadlogo : <TrainIcon />}
+    <Box className="available-throttle-wrapper">
+      <Box 
+        className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
+        onClick={handleLocoClick}>
+          <Chip className="throttle-nameplate" label={limitString(name, 4)} size="small" variant="outlined"></Chip>
+          <Box className="throttle-logo">
+            {roadlogo ? roadlogo : <TrainIcon />}
+          </Box>
       </Box>
     </Box>
   )
+
+  // return (
+  //   <Box 
+  //     className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
+  //     onClick={handleLocoClick}>
+  //     <header>
+  //       <Chip label={name} size="small" variant="outlined"></Chip>
+  //       <Chip label={name} size="small" variant="outlined"></Chip>
+  //     </header>
+  //     <Box className="throttle-body">
+  //       <Box className="throttle-body-window">
+  //       {address}
+  //       </Box>
+  //       <Box className="throttle-body-window">
+  //       {roadname}
+  //       </Box>
+  //     </Box>
+  //     <Box className="throttle-hood">
+  //       <hr />
+  //     </Box>
+  //     <Box className="throttle-logo">
+  //       {roadlogo ? roadlogo : <TrainIcon />}
+  //     </Box>
+  //   </Box>
+  // )
 
         /* <Button
           sx={{
