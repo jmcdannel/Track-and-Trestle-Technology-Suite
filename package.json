@@ -4,6 +4,9 @@
   "devDependencies": {
     "lerna": "^7.1.1"
   },
+  "engines": {
+    "node": ">=18.7.0"
+  },
   "description": "Monorepo of apps and apis for the Trestle TT Suite",
   "version": "0.0.1",
   "main": "index.mts",
