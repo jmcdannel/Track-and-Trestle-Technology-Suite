@@ -11,10 +11,10 @@ export function useLayoutApi() {
   async function get(type, Id = null) {
     try {
       const path = Id !== null
-          ? `/${layoutId}/${type}/${Id}`
-          : `/${layoutId}/${type}`;
-      // console.log('[layoutApi] get', uri);
-      const response = await axios.get(`http://${host}:5200/api${path}`);
+          ? `/${type}/${layoutId}/${Id}`
+          : `/${type}/${layoutId}`;
+      const response = await axios.get(`http://${host}:3000/api${path}`);
+      console.log('[layoutApi] get', host, path, response.data?.[0]?.[type]);
       
       return Id 
         ? response.data 
