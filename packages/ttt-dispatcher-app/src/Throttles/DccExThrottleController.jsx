@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../Store/Store';
 import { usePrevious } from '../Shared/Hooks/usePrevious';
+import { useThrottleStore } from '../Store/useThrottleStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 
 const SWITCH_DIR_DELAY = 250;
@@ -9,26 +10,30 @@ export const DccExThrottleController = props => {
 
     const { speed, address, consist } = props;
 
+    const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
     const { publish } = useMqtt();
     const [ , dispatch ] = useContext(Context);
     const prevSpeed = usePrevious(speed);
 
-    const publishSepeed = (address, speed) => {
+    const publishSepeed = (address, speed, enableThrottleUpsert = true) => {
       publish('ttt-dcc', JSON.stringify({
         action: 'throttle',
         payload: { address, speed }
       }))
+      if (enableThrottleUpsert) {
+        upsertThrottle({ address, speed });
+      }
     }
 
     useEffect(async () => {
       const setConsist = async () => {
         consist.forEach(async (consistAddress) => {
-          publishSepeed(Math.abs(consistAddress), consistAddress > 0 ? speed : -speed)
+          publishSepeed(Math.abs(consistAddress), consistAddress > 0 ? speed : -speed, false)
         });
       }
       const stopConsist = async () => {
         consist.forEach(async (consistAddress) => {
-          publishSepeed(Math.abs(consistAddress), 0);
+          publishSepeed(Math.abs(consistAddress), 0, false);
         });
       }
       if (!address) {

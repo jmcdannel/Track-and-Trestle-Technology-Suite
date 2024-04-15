@@ -64,7 +64,7 @@ const AdvancedControls = (props) => {
 
   const handleParkClick = async () => {
     try {
-      onStop();
+      await onStop();
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, speed: 0, cruiseControl: false } });
     } catch (err) {
       console.error(err);
