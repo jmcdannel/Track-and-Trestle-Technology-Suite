@@ -8,220 +8,68 @@ $amtk: rgb(38,75,115);
 $mrl: rgb(10, 24, 99);
 $bnsf: rgb(231, 109, 38);
 
+
+.available-throttle-wrapper {
+  padding: .25rem;
+  flex: 0 0 50%;
+  display: flex;
+}
+
 .available-throttle {
   display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
-  flex: 0 0 33%;
-  flex-direction: column;
-  margin-bottom: 4rem;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 0 1rem;
   cursor: pointer;
+  background: linear-gradient(90deg, #555 0%, rgba(0,0,0,1) 80%);
 
-  header {
-    margin: .5rem .5rem 0 .5rem;
-    position: relative;
-    border-bottom: 20px solid orange;
-    border-right: 50px solid transparent;
-    border-left: 50px solid transparent;
 
-    .MuiChip-root:first-child {
-      left: -1rem;
-    }
-    .MuiChip-root:last-child {
-      right: -1rem;
-    }
-    .MuiChip-root {
-      background: #000;
-      position: absolute;
-      top: -10px;
-      font-weight: 500;
-      margin: 0;
-      border-radius: .5rem;
-    }
-  }
-
-  .throttle-body {
-    display: flex;
-    flex-direction: row;
-    background-color: rgb(255, 162, 0);
-    margin: 0 .5rem;
-    padding: .5rem;
-    justify-content: space-around;
-  }
-
-  .throttle-body-window {
-    background-color: rgba(0, 0, 0, .5);    
-    flex: 0 0 45%;
-    padding: .5rem;
-    border-radius: .25rem;
-  }
-
-  .throttle-hood {
-    background: #000;
-    margin: 0 .5rem;
-    position: relative;
-    border-bottom: 20px solid orange;
-    border-right: 50px solid transparent;
-    border-left: 50px solid transparent;
-
-    hr {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: -.75rem;
-      border: none;
-      background-color: rgb(11, 11, 11);
-      padding: .25rem;
-      &:after {
-        content: '';
-        display: block;
-        background-color: beige;
-        border-radius: 50%;
-        width: 1rem;
-        height: 1rem
-      }
-      &:before {
-        content: '';
-        display: block;
-        background-color: beige;
-        border-radius: 50%;
-        width: 1rem;
-        height: 1rem;
-        top: 2rem;
-      }
+  .throttle-nameplate.MuiChip-root {
+    background-color: #000;
+    border-radius: .5rem;
+    height: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 1);
+    .MuiChip-label {
+      padding: 0 2rem;
+      font-size: 2rem;
     }
   }
 
   .throttle-logo {
-    margin: 0 .5rem;
-    border-bottom: 2px solid orange;
-    border-top: 2px solid orange;
-    background-color: rgb(255, 162, 0);
-    padding-top: 1rem;
+    display: flex;
+    margin: 0 0 0 .5rem;
     svg, img {
-      height: 2rem;
+      height: 5rem;
       max-width: 5rem;
     }
   }
 
   &.bnsf {
-    header {
-      border-bottom-color: $bnsf;
-    }
-    .throttle-body {
-      background-color: $bnsf;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $bnsf;
-    }
-    .throttle-logo {
-      border-bottom-color: $bnsf;
-      border-top-color: $bnsf;
-      background-color: $bnsf;
-    }
+    background: linear-gradient(90deg, $bnsf 0%, rgba(0,0,0,1) 80%);
   }
 
   &.sf {
-    header {
-      border-bottom-color: $sf;
-    }
-    .throttle-body {
-      background-color: $sf;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $sf;
-    }
-    .throttle-logo {
-      border-bottom-color: $sf;
-      border-top-color: $sf;
-      background-color: $sf;
-    }
+    background: linear-gradient(90deg, $sf 0%, rgba(0,0,0,1) 80%);
   }
 
   &.gn {
-    header {
-      border-bottom-color: $gn;
-    }
-    .throttle-body {
-      background-color: $gn;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $gn;
-    }
-    .throttle-logo {
-      border-bottom-color: $gn;
-      border-top-color: $gn;
-      background-color: $gn;
-    }
+    background: linear-gradient(90deg, $gn 0%, rgba(0,0,0,1) 80%);
   }
 
   &.up {
-    header {
-      border-bottom-color: $up;
-    }
-    .throttle-body {
-      background-color: $up;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $up;
-    }
-    .throttle-logo {
-      border-bottom-color: $up;
-      border-top-color: $up;
-      background-color: $up;
-    }
+    background: linear-gradient(90deg, $up 0%, rgba(0,0,0,1) 80%);
   }
   
-
-
   &.amtk {
-    header {
-      border-bottom-color: $amtk;
-    }
-    .throttle-body {
-      background-color: $amtk;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $amtk;
-    }
-    .throttle-logo {
-      border-bottom-color: $amtk;
-      border-top-color: $amtk;
-      background-color: $amtk;
-    }
+    background: linear-gradient(90deg, $amtk 0%, rgba(0,0,0,1) 80%);
   }
   
   &.mrl {
-    header {
-      border-bottom-color: $mrl;
-    }
-    .throttle-body {
-      background-color: $mrl;
-    }
-    .throttle-body-window {
-      background-color: rgba(0, 0, 0, .5);    
-    }
-    .throttle-hood {
-      border-bottom-color: $mrl;
-    }
+    background-color: $mrl;
+    background: linear-gradient(90deg, $mrl 0%, rgba(0,0,0,1) 80%);
     .throttle-logo {
-      border-bottom-color: $mrl;
-      border-top-color: $mrl;
+      padding: 0 1rem;
       background-color: $mrl;
     }
   }
