@@ -25,17 +25,6 @@ $bnsf: rgb(231, 109, 38);
   background: linear-gradient(90deg, #555 0%, rgba(0,0,0,1) 80%);
 
 
-  .throttle-nameplate.MuiChip-root {
-    background-color: #000;
-    border-radius: .5rem;
-    height: auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 1);
-    .MuiChip-label {
-      padding: 0 2rem;
-      font-size: 2rem;
-    }
-  }
-
   .throttle-logo {
     display: flex;
     margin: 0 0 0 .5rem;

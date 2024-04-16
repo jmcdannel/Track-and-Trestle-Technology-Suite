@@ -18,27 +18,8 @@ export const LocoName = ({ loco, consist }) => {
       justifyContent: 'flex-start',
       flexWrap: 'wrap'
     }}>
-     <Chip variant="outline" icon={<ArrowCircleLeftOutlinedIcon />} label={loco.address} />
-      {consist && consist.length > 0
-        && ( <Chip variant="outline" icon={<ArrowCircleLeftOutlinedIcon />} label={loco.name} />)
-        && consist.map(cLoco =>
-          <Box key={cLoco.address}>
-            {/* <Divider sx={{
-              border: '0',
-              height: '8px',
-              marginLeft: '0px',
-              marginRight: '0',
-              padding: '0 15px',
-              backgroundColor: 'rgba(255, 255, 255, 0.16)'
-            }} /> */}
-            <Chip
-              variant="outline"
-              icon={cLoco > 0 ? <ArrowCircleLeftOutlinedIcon /> : <ArrowCircleRightOutlinedIcon />}
-              key={cLoco}
-              label={Math.abs(cLoco)}
-            />
-          </Box>)}
-      {/* {roadlogo && roadlogo} */}
+     <Chip variant="outline" icon={<ArrowCircleLeftOutlinedIcon />} label={loco.name} />      
+      {roadlogo && roadlogo}
     </Box>
   );
 

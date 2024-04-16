@@ -2,20 +2,13 @@ import React, { useEffect, useContext, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import TrainIcon from '@mui/icons-material/Train';
-import Badge from '@mui/material/Badge';
+
+import NamePlate from '../Shared/components/NamePlate';
 import { useLayoutRoadnames } from '../Shared/Hooks/useLayoutRoadnames';
 import { useThrottleStore } from '../Store/useThrottleStore';
 import { useLocoStore } from '../Store/useLocoStore';
 
 import './AvailableThrottle.scss';
-
-const limitString = (str, maxLength) => {
-  if (str.length <= maxLength) {
-    return str;
-  } else {
-    return str.slice(0, maxLength);
-  }
-};
 
 export const AvailableThrottle = props => {
 
@@ -53,17 +46,8 @@ export const AvailableThrottle = props => {
       <Box 
         className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
         onClick={handleLocoClick}>
-          <Badge 
-              badgeContent={1 + (consist?.length || 0)} 
-              color="info"
-              className="throttle__consist-badge"
-              invisible={!consist?.length}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}>
-             <Chip className="throttle-nameplate" label={limitString(name, 4)} size="small" variant="outlined"></Chip>
-            </Badge>
+
+          <NamePlate name={name} consistCount={1 + (consist?.length || 0)} />
            <Box className="throttle-logo">
             {roadlogo ? roadlogo : <TrainIcon />}
           </Box>

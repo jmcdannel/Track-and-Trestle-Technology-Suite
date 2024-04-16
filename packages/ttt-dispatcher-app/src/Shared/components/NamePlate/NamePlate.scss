@@ -1,0 +1,21 @@
+
+
+.throttle-nameplate.MuiChip-root {
+  background-color: #000;
+  border-radius: .5rem;
+  height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 1);
+  .MuiChip-label {
+    padding: 0 2rem;
+    font-size: 2rem;
+    &.MuiChip-labelSmall {
+      font-size: 1rem;
+      padding: 0 1rem;
+    }
+  }
+}
+.MuiBadge-root {
+  .MuiBadge-badge {
+    top: 50%;
+  }
+}
