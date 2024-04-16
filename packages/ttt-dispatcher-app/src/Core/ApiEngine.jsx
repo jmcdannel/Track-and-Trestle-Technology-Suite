@@ -82,6 +82,8 @@ function ApiEngine() {
     const initializeStores = async function() {
       try {
         console.log('initializeStores');
+        const turnouts = await getByType('turnouts');
+        console.log('turnouts', turnouts);
         initTurnouts(await getByType('turnouts'));
         initLocos(await getByType('locos'));
         initEffects(await getByType('effects'));
