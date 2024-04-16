@@ -5,7 +5,10 @@ import { Context } from '../Store/Store';
 import log from '../Shared/utils/logger';
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useDccStore } from '../Store/useDccStore';
-import { useThrottleStore } from '../Store/useThrottleStore';
+import { useEffectStore } from '../Store/useEffectStore';
+import { useLocoStore } from '../Store/useLocoStore';
+import { useLayoutStore } from '../Store/useLayoutStore';
+import { useRouteStore } from '../Store/useRouteStore';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
 import { useMqtt } from './Com/MqttProvider'
 import { DccListener } from '../Dcc/DccListener';
@@ -22,7 +25,11 @@ function ApiEngine() {
   const dccDevice = useConnectionStore(state => state.dccDevice);
 
   const { getByType } = useLayoutApi();
+  const initLocos = useLocoStore(state => state.initLocos);
+  const initEffects = useEffectStore(state => state.initEffects);
   const initTurnouts = useTurnoutStore(state => state.initTurnouts);
+  const initLayouts = useLayoutStore(state => state.initLayouts);
+  const initRoutes = useRouteStore(state => state.initRoutes);
 
   const actionDevices = useConnectionStore(state => state.actionDevices);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
@@ -64,7 +71,7 @@ function ApiEngine() {
         resetConnectionStatus();
         mqtt.reset();
         mqtt.connect();
-        const result = await api.connect(dispatch, host, layoutId);
+        const result = true; //await api.connect(dispatch, host, layoutId);
         setStatus(result 
           ? CONNECTION_STATUS.CONNECTED
           : CONNECTION_STATUS.DISCONNECTED);
@@ -76,6 +83,11 @@ function ApiEngine() {
       try {
         console.log('initializeStores');
         initTurnouts(await getByType('turnouts'));
+        initLocos(await getByType('locos'));
+        initEffects(await getByType('effects'));
+        initTurnouts(await getByType('turnouts'));
+        initLayouts(await getByType('layouts'), layoutId);
+        initRoutes(await getByType('routes'));
       } catch (err) {
         log.error('[ApiEngine] api initialization error', err);
       }

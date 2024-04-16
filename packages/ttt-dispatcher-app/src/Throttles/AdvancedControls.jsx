@@ -1,4 +1,4 @@
-import React, { useContext, useState}  from 'react';
+import React, { useState}  from 'react';
 import axios from  'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import ExpandIcon from '@mui/icons-material/Expand';
 import CompressIcon from '@mui/icons-material/Compress';
 
 import { PrecisionDialog } from './PrecisionDialog';
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 
 import './AdvancedControls.scss';
 
@@ -29,8 +29,7 @@ const AdvancedControls = (props) => {
 
   const [showPrecision, setShowPrecision] = useState(false);
 
-  const [ state, dispatch ] = useContext(Context);
-  const { locos } = state;
+  const locos = useLocoStore(state => state.locos);
 
 
   const handleCruiceControlClick = async () => {
@@ -64,7 +63,7 @@ const AdvancedControls = (props) => {
 
   const handleParkClick = async () => {
     try {
-      onStop();
+      await onStop();
       await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, speed: 0, cruiseControl: false } });
     } catch (err) {
       console.error(err);

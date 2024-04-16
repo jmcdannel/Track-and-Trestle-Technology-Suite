@@ -6,128 +6,117 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DraftsIcon from '@mui/icons-material/Drafts';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Switch from '@mui/material/Switch';
 import TrainIcon from '@mui/icons-material/Train';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import AddIcon from '@mui/icons-material/Add';
-import { Context } from '../Store/Store';
 
-const defaultLoco = '';
+import ConsistLoco from './ConsistLoco';
+import AvailableConsistLoco from './AvailableConsistLoco';
+import { useLocoStore } from '../Store/useLocoStore';
+import { useThrottleStore } from '../Store/useThrottleStore';
+import './ThrottleConsist.scss';
 
-export const ThrottleConsist = ({ address, consist = [], onChange }) => {
+export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
 
-  const [ state, dispatch ] = useContext(Context);
-  const { locos } = state;
+  const throttles = useThrottleStore(state => state.throttles);
+  const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
+  const locos = useLocoStore(state => state.locos);
+  const [newConsist, setNewConsist] = useState(consist);
 
-  const [newLoco, setNewLoco] = useState(defaultLoco);
-  const [fwd, setFwd] = useState(true);
-
-  const handleChange = (event) => {
-    setNewLoco(event.target.value);
-  };
-
-  const handleAddLoco = async () => {
+  const handleAddLoco = async (newLoco) => {
     console.log('Add loco: ', newLoco, consist);
-    const newConsist = [...consist, fwd ? newLoco : -newLoco];
-    await setConsist(newConsist);
-    onChange(newConsist);
-    reset();
+    await setNewConsist([...newConsist, newLoco]);
+  }
+
+  const handleClose = () => {
+    onClose();
+  }
+
+  const handleSave = async () => {
+    upsertThrottle({ address: loco.address, consist: newConsist });
+    onChange(consist);
   }
 
   const handleRemoveLoco = async (idx) => {
     console.log('Remove loco: ', idx);
-    const newConsist = [...consist];
-    newConsist.splice(idx, 1);
-    await setConsist(newConsist);
-    onChange(newConsist);
-    reset();
+    await setNewConsist(newConsist.filter((_, i) => i !== idx));
   }
 
-  const reset = () => {
-    setNewLoco(defaultLoco);
-    setFwd(true);
+  const isLocoInUse = (aloco) => {
+    return isLocoInConsist(aloco) || isLocoInThrottles(aloco) || aloco.address === loco.address;
   }
 
-  const setConsist = async (consist) => {
-    try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
-    } catch (err) {
-      console.error(err);
-    }
+  const isLocoInConsist = (aloco) => {
+    return newConsist?.some(t => t == aloco.address || t == -aloco.address);
   }
 
+  const isLocoInThrottles = (aloco) => {
+    return throttles.some(t => t?.consist?.includes(aloco.address) || t?.consist?.includes(-aloco.address));
+  }
 
   return (
-    <List dense={false} sx={{ minWidth: '24rem' }}>
-      {consist && consist.length > 0 && (consist.map((loco, idx) => (
-        <ListItem key={loco}              
-          secondaryAction={
-            <IconButton edge="end" aria-label="delete" onClick={() =>handleRemoveLoco(idx)}>
-              <RemoveCircleIcon />
-            </IconButton>
-          }
-        >
-          <ListItemAvatar>
-            <Avatar>
-              <TrainIcon />
-            </Avatar>
-          </ListItemAvatar>
-
-          <ListItemText secondary={(idx+1)} />
-          <ListItemText primary={Math.abs(loco)} />
-          <ListItemText secondary={loco < 0 ? 'rev' : 'fwd'} />
-        </ListItem>          
-      )))}
-      <Divider />
-      <ListItem              
-        secondaryAction={
-          <IconButton edge="end" aria-label="add" onClick={handleAddLoco}>
-            <AddIcon />
-          </IconButton>
-        }
-      >
-        <ListItemAvatar>
-          <Avatar>
-            <TrainIcon />
-          </Avatar>
-        </ListItemAvatar>
-
-        <ListItemText secondary={(consist ? consist.length+1 : 1)} />
-        <FormControl fullWidth sx={{ mr: '2rem', ml: '2rem' }}>
-          <InputLabel id="consist-loco-label">DPU</InputLabel>
-          <Select
-            labelId="consist-loco-label"
-            id="consist-loco"
-            value={newLoco}
-            size="small"
-            label="DPU"
-            onChange={handleChange}
+    <>
+      <AppBar sx={{ position: 'relative' }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
           >
-            <MenuItem value="">Select</MenuItem>
-            {locos && locos.map((loco) => (
-              <MenuItem key={loco.address} value={loco.address}>{loco.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControlLabel control={              
-          <Switch
-            label="FWD"
-            edge="end"
-            size="small"
-            checked={fwd}
-            onChange={(e) => setFwd(e.target.checked)}
-          />
-        } label="FWD" />
-      </ListItem>
-    </List>
+            <CloseIcon />
+          </IconButton>
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Consist
+          </Typography>
+          <Button autoFocus color="inherit" onClick={handleSave}>
+            save
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Stack 
+        className="current-consist"
+        direction="row"
+        alignItems="flex-start"
+        useFlexGap
+        spacing={1}
+        flexWrap="wrap">
+        <ConsistLoco loco={loco} dir="left" />
+        {newConsist && newConsist.length > 0 && (newConsist.map((cloco, idx) => (
+          // <div key={cloco}>{Math.abs(cloco)} {locos.find(l => l.address === Math.abs(cloco))?.name}</div>
+          <ConsistLoco 
+            key={cloco} 
+            dir={cloco < 0 ? 'right' : 'left'} 
+            locoIdx={idx}
+            onRemoveLoco={handleRemoveLoco}
+            loco={locos.find(l => l.address === Math.abs(cloco))} />
+        )))}
+      </Stack>
+
+      <Stack 
+        className="available-locos"
+        direction="row"
+        useFlexGap
+        spacing={1}
+        flexWrap="wrap">
+        {locos && locos.map((aloco) => (
+          <AvailableConsistLoco key={aloco.name} loco={aloco} onAddLoco={handleAddLoco} disabled={isLocoInUse(aloco)} />
+        ))}
+      </Stack>
+    </>
   );
 }
 export default ThrottleConsist;

@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import Grid from '@mui/material/Grid';
-import { Context } from '../Store/Store';
+import { useEffectStore } from '../Store/useEffectStore';
 import Effect from './Effect';
 import './Effects.scss';
 
 export const Effects = () => {
 
-  const [ state ] = useContext(Context);
-  const { effects } = state;
+  const effects = useEffectStore(state => state.effects);
 
   console.log('effects', effects);
 

@@ -1,0 +1,102 @@
+
+$sf: rgb(235, 0, 0);
+$up: rgb(249, 213, 7);
+$gn: rgb(0, 101, 25);
+$amtk: rgb(38,75,115);
+$mrl: rgb(10, 24, 99);
+$bnsf: rgb(231, 109, 38);
+
+.throttle-nameplate.MuiChip-root {
+  background-color: #000;
+  border-radius: .5rem;
+  height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 1px rgba(0, 0, 0, 1);
+  .MuiChip-label {
+    color: #fff;
+    padding: 0 2rem;
+    font-size: 1.3rem;
+  }
+}
+
+.current-consist {
+  margin: 2rem 1rem;}
+
+.consisted-loco {
+  flex: 1;
+  max-width: 33%;
+}
+
+.available-locos {
+  margin: 2rem 1rem;
+}
+
+.available-loco {
+  flex: 1;
+  min-width: 45%;
+  
+  &.bnsf {
+    background: linear-gradient(90deg, $bnsf 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $bnsf !important;
+      }
+    }
+  }
+  
+  &.sf {
+    background: linear-gradient(90deg, $sf 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $sf !important;
+      }
+    }
+  }
+  
+  &.gn {
+    background: linear-gradient(90deg, $gn 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $gn !important;
+      }
+    }
+  }
+  
+  &.up {
+    background: linear-gradient(90deg, $up 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $up !important;
+      }
+    }
+  }
+  
+  &.amtk {
+    background: linear-gradient(90deg, $amtk 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $amtk !important;
+      }
+    }
+  }
+  
+  &.mrl {
+    background: linear-gradient(90deg, $mrl 0%, rgba(0,0,0,1) 80%);
+    .consist-loco {
+      path {
+        fill: $mrl !important;
+      }
+    }
+  }
+}
+
+.consist-loco {
+  path {
+    fill: rgba(69, 169, 149, 0.5) !important;
+  }
+  &--left {
+    transform: scaleX(-1);
+  }
+  &--right {
+    
+  }
+}

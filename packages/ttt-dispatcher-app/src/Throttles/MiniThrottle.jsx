@@ -11,6 +11,7 @@ import Functions from './Functions';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import LocoName from './LocoName';
+import NamePlate from '../Shared/components/NamePlate';
 import LocoAvatar from './LocoAvatar';
 import AdvancedControls from './AdvancedControls';
 import { ThrottleConsist } from './ThrottleConsist';
@@ -18,6 +19,7 @@ import { ThrottleConsist } from './ThrottleConsist';
 import DccExThrottleController from './DccExThrottleController';
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useLocoStore } from '../Store/useLocoStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
 
@@ -34,7 +36,6 @@ export const MiniThrottle = props => {
     loco: { 
       cruiseDisabled, 
       isAcquired, 
-      consist,
       maxSpeed = 100,
       forward
     } 
@@ -43,7 +44,9 @@ export const MiniThrottle = props => {
   const address = Number(props.loco.address);
   const { dcc } = useMqtt();
   const throttle = useThrottleStore(state => state.getThrottle)(address);
+  const updateLoco = useLocoStore(state => state.updateLoco);
   const speed = throttle?.speed || 0;
+  const consist = throttle?.consist || [];
 
   const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
@@ -88,17 +91,12 @@ export const MiniThrottle = props => {
       });
   }
 
-  // useEffect(() => {
-  //   jmriApi.on('acquire', 'Throttles', async address => {
-  //     await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
-  //   });
-  // }, [jmriApi, dispatch]);
-
-  // const computedClassName = () => {
-  //   return ['mini-throttle', 
-  //     `mini-throttle--${loco.name.replace(' ', '')}  mini-throttle--${loco.meta?.roadname?.replace(' ', '')}`,
-  //     isAcquired ? 'mini-throttle__acquired' : 'mini-throttle__notacquired'].join(' ');
-  // }
+  const handleLocoClick = async () => {
+    await updateLoco({ address: loco.address, cruiseControl: false }); 
+    if (onLocoClick) {
+      onLocoClick(loco);
+    }
+  }
 
   return (
     <>
@@ -126,11 +124,16 @@ export const MiniThrottle = props => {
 
       <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
         <DialogTitle>Consist</DialogTitle>
-        <ThrottleConsist address={address} consist={loco.consist} onChange={() => { /* no op */ }} />
+        <ThrottleConsist address={address} consist={consist} onChange={() => { /* no op */ }} />
       </Dialog>
 
       <Paper className="mini-throttle">
-        <LocoAvatar loco={loco} />
+        <NamePlate 
+          size="small" 
+          name={loco.name} 
+          onClick={handleLocoClick}
+          consistCount={1 + (consist?.length || 0)} 
+        />
         {/* <LocoName loco={loco} /> */}
         <SpeedControl
           orientation="horizontal"

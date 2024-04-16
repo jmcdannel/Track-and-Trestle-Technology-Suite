@@ -10,7 +10,7 @@ const store = persist((set, get) => ({
       set(state => ({
         throttles: [...state.throttles.map(t => {
           if (t.address === throttle.address) {
-            return throttle;
+            return { ...t, ...throttle };
           }
           return t;
         })]

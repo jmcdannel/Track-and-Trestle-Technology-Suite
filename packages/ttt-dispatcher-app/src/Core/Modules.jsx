@@ -6,20 +6,33 @@ import Settings from '../Core/Settings';
 import { Dashboard as DccDashboard } from '../Dcc/Dashboard';
 import Dispatcher from '../Dispatcher/Dispatcher';
 import Effects from '../Effects/Effects';
-import { Context } from '../Store/Store';
+import { useEffectStore } from '../Store/useEffectStore';
+import { useLocoStore } from '../Store/useLocoStore';
+import { useLayoutStore } from '../Store/useLayoutStore';
+import { useRouteStore } from '../Store/useRouteStore';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 function Modules(props) {
 
-  const [ state ] = useContext(Context);
-  const { locos, turnouts, effects, layout } = state;
+  const locos = useLocoStore(state => state.locos);
+  const turnouts = useTurnoutStore(state => state.turnouts);
+  const routes = useRouteStore(state => state.routes);
+  const effects = useEffectStore(state => state.effects);
+  const layout = useLayoutStore(state => state.layout);
   const loading = (<div>Loading</div>);
+
+  console.log('[Modules] locos', locos);
+  console.log('[Modules] turnouts', turnouts);
+  console.log('[Modules] routes', routes);
+  console.log('[Modules] effects', effects);
+  console.log('[Modules] layout', layout);
 
   const getRoutedModule = module => {
     switch(module) {
       case 'turnouts' :
         return (
           <Route path="/dispatcher" key={module} element={
-            <Dispatcher />
+            (routes || turnouts) && <Dispatcher />
           } />
         );
       case 'effects' :

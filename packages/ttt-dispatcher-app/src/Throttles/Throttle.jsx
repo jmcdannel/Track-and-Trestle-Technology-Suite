@@ -15,6 +15,7 @@ import ThrottleSlider from './ThrottleSlider';
 import SpeedControl from './SpeedControl';
 import Functions from './Functions';
 import LocoName from './LocoName';
+import NamePlate from '../Shared/components/NamePlate';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import AdvancedControls from './AdvancedControls';
@@ -40,7 +41,6 @@ export const Throttle = props => {
     loco: {
       autoStop,
       forward,
-      consist,
       maxSpeed = 100
     } 
   } = props;
@@ -48,6 +48,7 @@ export const Throttle = props => {
   const address = Number(props.loco.address);
   const throttle = useThrottleStore(state => state.getThrottle)(address);
   const speed = throttle?.speed || 0;
+  const consist = throttle?.consist || [];
 
   const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
@@ -130,27 +131,23 @@ export const Throttle = props => {
         <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
       </Dialog>
 
-      <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
-        <DialogTitle>Consist</DialogTitle>
-        <ThrottleConsist address={address} consist={loco.consist} onChange={() => { /* no op */ }} />
+      <Dialog 
+        fullScreen
+        onClose={() => setShowConsist(false)} open={showConsist}>
+        <ThrottleConsist
+          loco={loco}
+          consist={consist}
+          onClose={() => setShowConsist(false)}
+          onChange={() => { setShowConsist(false) }}
+        />
       </Dialog>
       <Box sx={{ padding: '.5rem', display: 'flex', flex: '1' }}>
       <Card
         className={`throttle ${variant}throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={up.md && variant === 'full' ? <LocoName loco={loco} /> : null}
+          title={null}
           avatar={
-            <Badge 
-              badgeContent={1 + (loco.consist?.length || 0)} 
-              color="info"
-              className="throttle__consist-badge"
-              invisible={!loco?.consist?.length}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}>
-              <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
-            </Badge>
+            <NamePlate name={loco.name} size="small" consistCount={1 + (consist?.length || 0)} />
           } 
           action={
             <ThrottleActions
@@ -186,7 +183,7 @@ export const Throttle = props => {
                   cruiseDisabled={cruiseDisabled}
                   loco={loco}
                   onStop={handleStopClick}
-                  onShowConsist
+                  onShowConsist={() => setShowConsist(true)}
                   onFunctionClick={() => setShowFunctionsDrawer(true)}
                   onShowSettings={() => setShowSettings(true)}
                   onShowFunctions={() => setShowFunctions(true)}

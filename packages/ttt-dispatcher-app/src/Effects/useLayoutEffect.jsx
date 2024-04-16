@@ -1,15 +1,12 @@
-import { useContext } from 'react';
-import { Context } from '../Store/Store';
-import actionApi from '../Shared/api/actionApi';
+import { useEffectStore } from '../Store/useEffectStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 import { useDcc } from '../Dcc/useDcc'
 
 export function useLayoutEffect() {
-  const [ state,dispatch ] = useContext(Context);
   const { publish } = useMqtt();
   const { setOutput } = useDcc()
 
-  const effects = state.effects
+  const effects = useEffectStore(state => state.effects)
 
   async function updateEffect(effect) {
     try {
@@ -30,7 +27,6 @@ export function useLayoutEffect() {
             type: effect.type
           }
         }))
-        // actionApi.effects.put(effect);
       }
       await dispatch({ type: 'UPDATE_EFFECT', payload: effect });
 

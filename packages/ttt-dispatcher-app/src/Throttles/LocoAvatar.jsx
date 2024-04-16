@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import { Badge, Avatar } from '@mui/material';
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 
 const LocoAvatar = ({ loco }) => {
-  const [ , dispatch ] = useContext(Context);
+  const updateLoco = useLocoStore(state => state.updateLoco);
   const formattedAddress = (loco) => {
     // Format the address here
     return loco.address;
   };
 
   const handleLocoClick = async () => {
-    await dispatch({ type: 'UPDATE_LOCO', payload: { address: loco.address, cruiseControl: false } }); 
+    await updateLoco({ address: loco.address, cruiseControl: false }); 
     if (onLocoClick) {
       onLocoClick(loco);
     }

@@ -11,20 +11,19 @@ import ExpandIcon from '@mui/icons-material/Expand';
 import CompressIcon from '@mui/icons-material/Compress';
 
 import { ThrottleConsist } from './ThrottleConsist';
-
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 
 export const ThrottleSettings = props => {
   
   const { loco, maxSpeed, show, onHide, loco: { consist } } = props;
   const address = Number(props.loco.address);
 
-  const [ state, dispatch ] = useContext(Context);
-  const { locos } = state;
+  const locos = useLocoStore(state => state.locos);
+  const updateLoco = useLocoStore(state => state.updateLoco);
 
   const handlePrecisionChange = async (event) => {
     try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed: event.target.value } });
+      await updateLoco({ address, maxSpeed: event.target.value });
     } catch (err) {
       console.error(err);
     }
@@ -33,7 +32,7 @@ export const ThrottleSettings = props => {
   const handleConsistChange = async (consist) => {
     try {
       console.log('newConsist', consist);
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, consist } });
+      await updateLoco({ address, consist });
     } catch (err) {
       console.error(err);
     }
@@ -41,7 +40,7 @@ export const ThrottleSettings = props => {
 
   const handleStickyThrottleClick = async () => {
     try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, autoStop: !loco.autoStop } });
+      await updateLoco({ address, autoStop: !loco.autoStop });
     } catch (err) {
       console.error(err);
     }

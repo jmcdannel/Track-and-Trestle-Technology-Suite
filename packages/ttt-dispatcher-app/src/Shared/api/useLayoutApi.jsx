@@ -5,16 +5,17 @@ import { useConnectionStore, CONNECTION_STATUS } from '../../Store/useConnection
 
 export function useLayoutApi() {
   
-  const host = useConnectionStore(state => state.host);
+  // const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
 
   async function get(type, Id = null) {
     try {
+      const host = 'https://ttt-7mzhiuxob-jmcdannels-projects.vercel.app:3000'
       const path = Id !== null
-          ? `/${layoutId}/${type}/${Id}`
-          : `/${layoutId}/${type}`;
-      // console.log('[layoutApi] get', uri);
-      const response = await axios.get(`http://${host}:5200/api${path}`);
+          ? `/${type}/${layoutId}/${Id}`
+          : `/${type}/${layoutId}`;
+      const response = await axios.get(`${host}/api${path}`);
+      console.log('[layoutApi] get', host, path, response.data?.[0]?.[type]);
       
       return Id 
         ? response.data 

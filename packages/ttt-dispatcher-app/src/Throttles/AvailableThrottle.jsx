@@ -2,16 +2,18 @@ import React, { useEffect, useContext, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import TrainIcon from '@mui/icons-material/Train';
-import { Context } from '../Store/Store';
+
+import NamePlate from '../Shared/components/NamePlate';
 import { useLayoutRoadnames } from '../Shared/Hooks/useLayoutRoadnames';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useLocoStore } from '../Store/useLocoStore';
 
 import './AvailableThrottle.scss';
 
 export const AvailableThrottle = props => {
 
   const [ isLoading, setIsLoading ] = useState(false);
-  const [ , dispatch ] = useContext(Context);
+  const updateLoco = useLocoStore(state => state.updateLoco);
   
   const { 
     onLocoClick, 
@@ -22,6 +24,7 @@ export const AvailableThrottle = props => {
 
   const throttle = useThrottleStore(state => state.getThrottle)(address);
   const [roadname, roadlogo] = useLayoutRoadnames(loco?.meta?.roadname);
+  const consist = throttle?.consist || [];
 
   const handleLocoClick = async () => {
     try {
@@ -29,7 +32,7 @@ export const AvailableThrottle = props => {
         setIsLoading(false);
         return;
       }
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+      updateLoco({ address, isAcquired: true, lastAcquired: new Date() });
       if (onLocoClick) {
         await onLocoClick(loco);
       }
@@ -39,45 +42,19 @@ export const AvailableThrottle = props => {
   }
 
   return (
-    <Box 
-      className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
-      onClick={handleLocoClick}>
-      <header>
-        <Chip label={name} size="small" variant="outlined"></Chip>
-        <Chip label={name} size="small" variant="outlined"></Chip>
-      </header>
-      <Box className="throttle-body">
-        <Box className="throttle-body-window">
-        {address}
-        </Box>
-        <Box className="throttle-body-window">
-        {roadname}
-        </Box>
-      </Box>
-      <Box className="throttle-hood">
-        <hr />
-      </Box>
-      <Box className="throttle-logo">
-        {roadlogo ? roadlogo : <TrainIcon />}
+    <Box className="available-throttle-wrapper">
+      <Box 
+        className={`available-throttle ${roadname?.toLowerCase()} ${throttle?.speed ? 'vibrate-1' : ''}`} 
+        onClick={handleLocoClick}>
+
+          <NamePlate name={name} consistCount={1 + (consist?.length || 0)} />
+           <Box className="throttle-logo">
+            {roadlogo ? roadlogo : <TrainIcon />}
+          </Box>
       </Box>
     </Box>
   )
 
-        /* <Button
-          sx={{
-            justifyContent: 'space-between'
-          }}
-          variant="contained" 
-          size="medium"
-          color="secondary"
-          disabled={disabled}
-          fullWidth
-          startIcon={<Avatar>{address}</Avatar>}
-          endIcon={<TrainIcon />}
-          onClick={handleLocoClick}>
-            <LocoName loco={loco} />
-            {throttle && <Chip label={throttle.speed}></Chip>}
-        </Button> */
 
 }
 
