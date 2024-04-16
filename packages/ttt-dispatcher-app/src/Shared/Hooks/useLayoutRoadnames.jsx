@@ -3,14 +3,12 @@ import BnsfLogoSvg from '../Images/logos/bnsf.svg?react';
 import UpLogoSvg from '../Images/logos/up.svg?react';
 import SfLogoSvg from '../Images/logos/sf.svg?react';
 import MrlLogoSvg from '../Images/logos/mrl.svg?react';
-import { Context } from '../../Store/Store'
+import { useLayoutStore } from '../../Store/useLayoutStore'
 
 const MRLLogoPng = '/images/logos/mrl.png';
 
 export function useLayoutRoadnames(_id) {
-
-  const [ state ] = useContext(Context)
-  const { layout } = state
+  const layout = useLayoutStore(state => state.layout)
 
   function getRoadnameById(id) {
     return layout?.meta?.roadnames.find(rd => rd.id === id)?.abbr || 'NA'

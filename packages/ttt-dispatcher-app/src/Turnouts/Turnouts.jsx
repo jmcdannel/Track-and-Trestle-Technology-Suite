@@ -1,14 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Turnout from '../Turnouts/Turnout';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
-import { Context } from '../Store/Store';
-import api from '../Shared/api/api';
+import { useLayoutStore } from '../Store/useLayoutStore';
 
 const Turnouts = () => {
   
-  const [ state, dispatch ] = useContext(Context);
   const turnouts = useTurnoutStore(state => state.turnouts);
-  const { layout } = state;
+  const layout = useLayoutStore(state => state.layout);
 
   const renderTurnouts = list => list
     ?.sort((a, b) => a.name.localeCompare(b.name)) // Sort alphabetically by the abbr property

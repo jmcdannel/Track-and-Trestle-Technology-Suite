@@ -1,10 +1,8 @@
-import { useContext } from 'react'
-import { Context } from '../../Store/Store'
+import { useLayoutStore } from '../../Store/useLayoutStore'
 
 export function useLayoutLines(_id) {
 
-  const [ state ] = useContext(Context)
-  const { layout } = state
+  const layout = useLayoutStore(state => state.layout)
 
   function getLineById(id) {
     return layout?.meta?.lines.find(line => line.id === id)

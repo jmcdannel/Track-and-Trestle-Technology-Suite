@@ -1,4 +1,4 @@
-import React, { useContext, useState}  from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -9,7 +9,7 @@ import TrainIcon from '@mui/icons-material/Train';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 
 const ThrottleActions = (props) => {
@@ -28,7 +28,7 @@ const ThrottleActions = (props) => {
   } = props;
   const address = Number(props.loco.address);
 
-  const [ , dispatch ] = useContext(Context);
+  const updateLoco = useLocoStore(state => state.updateLoco);
   const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
 
   const iconStyle = size === 'large' ? { fontSize: '2rem' } : { fontSize: '1.4rem' };
@@ -43,7 +43,7 @@ const ThrottleActions = (props) => {
 
   const handleCruiceControlClick = async () => {
     try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, cruiseControl: true } });
+      await updateLoco( { address, cruiseControl: true });
     } catch (err) {
       console.error(err);
     }
@@ -56,7 +56,7 @@ const ThrottleActions = (props) => {
   const handleParkClick = async () => {
     try {
       onStop();
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, cruiseControl: false } });
+      await updateLoco( { address, isAcquired: false, cruiseControl: false });
     } catch (err) {
       console.error(err);
     }    

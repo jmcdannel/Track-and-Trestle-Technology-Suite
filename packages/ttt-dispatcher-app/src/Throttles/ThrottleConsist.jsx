@@ -25,16 +25,15 @@ import AddIcon from '@mui/icons-material/Add';
 
 import ConsistLoco from './ConsistLoco';
 import AvailableConsistLoco from './AvailableConsistLoco';
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 import { useThrottleStore } from '../Store/useThrottleStore';
 import './ThrottleConsist.scss';
 
 export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
 
-  const [ state ] = useContext(Context);
   const throttles = useThrottleStore(state => state.throttles);
   const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
-  const { locos } = state;
+  const locos = useLocoStore(state => state.locos);
   const [newConsist, setNewConsist] = useState(consist);
 
   const handleAddLoco = async (newLoco) => {

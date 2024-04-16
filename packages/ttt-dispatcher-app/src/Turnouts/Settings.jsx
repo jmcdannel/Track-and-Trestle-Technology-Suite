@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Box from '@mui/material/Box';
@@ -26,7 +26,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { Context } from '../Store/Store';
+import useTurnoutStore from '../Store/useTurnoutStore';
 // import api from '../Api';
 
 const getInverse = degrees => {
@@ -38,7 +38,7 @@ const getInverse = degrees => {
 export const Settings = props => {
   const { turnout: { turnoutId }, turnout, open, onClose } = props;
 
-  const [ , dispatch ] = useContext(Context);
+  const updateTurnout = useTurnoutStore(state => state.updateTurnout);
 
   const [name, setName] = useState(turnout.name);
   const [straight, setStraight] = useState(turnout?.config?.straight);
@@ -90,7 +90,7 @@ export const Settings = props => {
       //     divergent
       //   }
       // });
-      await dispatch({ type: 'UPDATE_TURNOUT', payload: resp });
+      await updateTurnout(resp);
       onClose();
     } catch (err) {
       console.error(err);
@@ -133,7 +133,7 @@ export const Settings = props => {
   }
   const sendDegrees = async degrees => {
     // const turnout = await api.turnouts.put({ turnoutId, current: parseInt(degrees) });
-    await dispatch({ type: 'UPDATE_TURNOUT', payload: turnout });
+    await updateTurnout(turnout)
     return turnout;
   }
 

@@ -5,7 +5,7 @@ const store = persist((set, get) => ({
   locos: [],
   updateLoco: (loco) => set(state => ({
     locos: [...state.locos.map(t => {
-      if (t.locoId === loco.locoId) {
+      if (t.address === loco.address) {
         return {...t, ...loco}
       }
       return t;

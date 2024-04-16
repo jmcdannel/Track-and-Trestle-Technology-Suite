@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Context } from '../Store/Store';
+import { useState, useEffect, useCallback } from 'react';
 import { useTurnout } from '../Turnouts/useTurnout';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
+import { useRouteStore } from '../Store/useRouteStore';
 
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -9,12 +9,11 @@ const TURNOUT_DELAY = 2000; // ms
 
 export function useLayoutRoute() {
 
-  const [ state ] = useContext(Context);
-  const { routes } = state;
   const [ routeOrigin, setRouteOrigin ] = useState(undefined);
   const [ routeDestination, setRouteDestination ] = useState(undefined);
   const { updateTurnout } = useTurnout();
   const turnouts = useTurnoutStore(state => state.turnouts);
+  const routes = useRouteStore(state => state.routes);
 
   const findClickableParent = target => {
     const clickableContainers = ['Routes', 'Turnouts', 'TurnoutLabels']; 

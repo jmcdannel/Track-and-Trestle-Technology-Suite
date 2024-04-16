@@ -3,9 +3,9 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import TrainIcon from '@mui/icons-material/Train';
 import Badge from '@mui/material/Badge';
-import { Context } from '../Store/Store';
 import { useLayoutRoadnames } from '../Shared/Hooks/useLayoutRoadnames';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useLocoStore } from '../Store/useLocoStore';
 
 import './AvailableThrottle.scss';
 
@@ -20,7 +20,7 @@ const limitString = (str, maxLength) => {
 export const AvailableThrottle = props => {
 
   const [ isLoading, setIsLoading ] = useState(false);
-  const [ , dispatch ] = useContext(Context);
+  const updateLoco = useLocoStore(state => state.updateLoco);
   
   const { 
     onLocoClick, 
@@ -39,7 +39,7 @@ export const AvailableThrottle = props => {
         setIsLoading(false);
         return;
       }
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: true, lastAcquired: new Date() } });
+      updateLoco({ address, isAcquired: true, lastAcquired: new Date() });
       if (onLocoClick) {
         await onLocoClick(loco);
       }
