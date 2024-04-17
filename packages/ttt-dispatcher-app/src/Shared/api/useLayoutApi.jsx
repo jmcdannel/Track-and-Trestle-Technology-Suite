@@ -10,11 +10,14 @@ export function useLayoutApi() {
 
   async function get(type, Id = null) {
     try {
-      const host = 'https://ttt-7mzhiuxob-jmcdannels-projects.vercel.app:3000'
+      // const host = 'https://ttt-app-git-dev-jmcdannels-projects.vercel.app'
+      const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
+      // const host = 'https://ttt-7mzhiuxob-jmcdannels-projects.vercel.app'
       const path = Id !== null
           ? `/${type}/${layoutId}/${Id}`
           : `/${type}/${layoutId}`;
-      const response = await axios.get(`${host}/api${path}`);
+      const qs = '';//'?_vercel_share=B64pZzYba7TVUidqjsmnfJBDZT0YpLei'
+      const response = await axios.get(`${host}/api${path}${qs}`);
       console.log('[layoutApi] get', host, path, response.data?.[0]?.[type]);
       
       return Id 
