@@ -28,16 +28,23 @@ async function handler(req:NextApiRequest, res:NextApiResponse) {
     // Rest of the API logic
     try {
         console.log('turnouts', req.query);
-        const { layoutId } = req.query
+        const { params } = req.query;
+        const layoutId = params?.[0];
+        const turnoutId = params?.[1];
         const client = await clientPromise;
         const db = client.db('trestledb');
  
-        const layouts = await db
+        const result = await db
             .collection('turnouts')
             .find({ layoutId  })
             .toArray();
+        
+        if (turnoutId) {
+            const turnout = result.find((t) => t.turnoutId === turnoutId);
+            res.json(turnout);
+        }
  
-        res.json(layouts);
+        res.json(result);
     } catch (e) {
         console.error(e);
     }
