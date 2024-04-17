@@ -40,7 +40,7 @@ async function handler(req:NextApiRequest, res:NextApiResponse) {
             .toArray();
         
         if (turnoutId) {
-             const turnout = result?.[0].turnouts.find(t => t.turnoutId === parseInt(turnoutId));
+            const turnout: Turnout | undefined = result?.[0].turnouts.find((t: { turnoutId: number }) => t.turnoutId === parseInt(turnoutId));
             res.json(turnout);
         } else { 
             res.json(result);
