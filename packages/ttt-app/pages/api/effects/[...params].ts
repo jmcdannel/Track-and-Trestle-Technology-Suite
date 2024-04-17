@@ -40,7 +40,7 @@ async function handler(req:NextApiRequest, res:NextApiResponse) {
             .toArray();
             
         if (effectId) {
-            const effect = result?.[0].effects.find(t => t.effectId === parseInt(effectId));
+            const effect = result?.[0].effects.find((t: { effectId: number }) => t.effectId === parseInt(effectId));
             res.json(effect);
         } else { 
             res.json(result);
