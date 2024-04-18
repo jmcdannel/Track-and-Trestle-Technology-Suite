@@ -16,7 +16,6 @@ import { DccListener } from '../Dcc/DccListener';
 function ApiEngine() {
 
   const [ state, dispatch ] = useContext(Context);
-  const { layout } = state;
   const mqtt = useMqtt();
 
   const host = useConnectionStore(state => state.host);
@@ -31,6 +30,8 @@ function ApiEngine() {
   const initLayouts = useLayoutStore(state => state.initLayouts);
   const initRoutes = useRouteStore(state => state.initRoutes);
 
+  const layout = useLayoutStore(state => state.layout);
+  
   const actionDevices = useConnectionStore(state => state.actionDevices);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
