@@ -12,6 +12,7 @@ export const DccListener = () => {
 
   const { isConnected, publish, subscribe, payload: mqttMessage, isConnected: mqttConnected } = useMqtt();
 
+  const layoutId = useConnectionStore(state => state.layoutId);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
 
   const dccDevice = useConnectionStore(state => state.dccDevice);
@@ -65,7 +66,7 @@ export const DccListener = () => {
         case 'connected':
           setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           setDccDevice(payload.path);
-          publish('ttt-dcc', {
+          publish(`@ttt/dcc/${layoutId}`, {
             action: 'dcc',
             payload: 's'
           });
@@ -99,9 +100,8 @@ export const DccListener = () => {
   useEffect(() => {
     const initialize = async function() {
       try {        
-        publish('ttt-dcc', JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
-        subscribe('@ttt/DCCEX.js');
-        console.log('[DccListener] subscribed', '@ttt/DCCEX.js', isConnected);
+        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
+        subscribe(`@ttt/DCCEX.js/${layoutId}`);
       } catch (err) {
         log.error('api initialization error', err);
       }
@@ -115,7 +115,7 @@ export const DccListener = () => {
       console.log('[DccListener] Connect DCC Device', mqttConnected, dccDeviceStatus, dccDevice);
       try {
         setDccDeviceStatus(CONNECTION_STATUS.PENDING);
-        publish('ttt-dcc', {
+        publish(`@ttt/dcc/${layoutId}`, {
           action: 'connect',
           payload: { serial: dccDevice, dcc: true }
         });

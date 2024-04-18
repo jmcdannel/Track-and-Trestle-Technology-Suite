@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import mqtt from "mqtt";
+import { useConnectionStore } from '../../Store/useConnectionStore';
 
 const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
 const mqttPort = 8081;
@@ -13,6 +14,7 @@ export default function MqttProvider({ children }) {
   const [mqttClient, setMqttClient] = useState(null)
   const [isConnected, setIsConnected] = useState(false)
   const [payload, setPayload] = useState(null)
+  const layoutId = useConnectionStore(state => state.layoutId);
 
   // Function to connect to MQTT broker
   const connectToBroker = async () => {
@@ -56,7 +58,7 @@ export default function MqttProvider({ children }) {
     broker: mqttBroker,
     publish,
     subscribe,
-    dcc: (action, payload) => publish('ttt-dcc', JSON.stringify({ action, payload })),
+    dcc: (action, payload) => publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action, payload })),
     reset,
     connect: connectToBroker,
     disconnected: disconnectFromBroker,

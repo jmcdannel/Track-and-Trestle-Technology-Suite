@@ -18,9 +18,6 @@ export default defineConfig(() => {
           secure: false
         }
       }
-    },
-    define: {
-      __APP_ENV__: process.env.VITE_VERCEL_ENV,
-    },
+    }
   };
 });
