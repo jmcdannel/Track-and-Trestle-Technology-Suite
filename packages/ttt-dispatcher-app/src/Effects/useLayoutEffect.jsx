@@ -1,19 +1,17 @@
-import { useContext } from 'react';
-import { Context } from '../Store/Store';
-import actionApi from '../Shared/api/actionApi';
+import { useEffectStore } from '../Store/useEffectStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 import { useDcc } from '../Dcc/useDcc'
 
 export function useLayoutEffect() {
-  const [ state,dispatch ] = useContext(Context);
   const { publish } = useMqtt();
   const { setOutput } = useDcc()
 
-  const effects = state.effects
+  const effects = useEffectStore(state => state.effects)
+  const updateEffect = useEffectStore(state => state.updateEffect)
 
-  async function updateEffect(effect) {
+  async function handleUpdateEffect(effect) {
     try {
-      console.log('API.handleEffect', effect);
+      console.log('useLayoutEffect.handleEffect', effect);
 
       if (effect?.config?.interface === 'dcc-js-api') {
         handleDcc(effect);
@@ -30,9 +28,8 @@ export function useLayoutEffect() {
             type: effect.type
           }
         }))
-        // actionApi.effects.put(effect);
       }
-      await dispatch({ type: 'UPDATE_EFFECT', payload: effect });
+      await updateEffect(effect);
 
     } catch (error) {
       console.error('API.handleEffect', error, effect);
@@ -66,15 +63,15 @@ export function useLayoutEffect() {
   async function handleMarcro(effect) {
     try {
       console.log('API.handleMarcro', effect);
-      effect.config?.on.map(async e => await updateEffect({...getEffectbyId(e), state: effect.state}));
-      effect.config?.off.map(async e => await updateEffect({...getEffectbyId(e), state: !effect.state}));
+      effect.config?.on.map(async e => await handleUpdateEffect({...getEffectbyId(e), state: effect.state}));
+      effect.config?.off.map(async e => await handleUpdateEffect({...getEffectbyId(e), state: !effect.state}));
     } catch (err) {
       console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
     }
   }
 
   return {
-    updateEffect
+    updateEffect: handleUpdateEffect
   }
 
 }

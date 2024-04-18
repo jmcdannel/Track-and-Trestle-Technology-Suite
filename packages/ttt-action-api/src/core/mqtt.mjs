@@ -2,8 +2,10 @@ import mqtt from "mqtt";
 import log from './logger.mjs'
 import interfaces from '../communication/interfaces.mjs';
 
-const mqttBroker = process.env.MQTT_BROKER || 'mqtt://localhost';
-const mqttPort = 5005;
+const mqttBroker = process.env.VITE_MQTT_BROKER || 'mqtt://localhost';
+// const mqttBroker = 'mqtt://test.mosquitto.org'
+// const mqttPort = 5005;
+const mqttPort = 8081;
 
 let mqttClient;
 

@@ -13,8 +13,6 @@ import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import Signal from './Signal';
-import { Context } from '../Store/Store';
-import api from '../Shared/api/api';
 import useLayoutEffect from './useLayoutEffect';
 
 const PLAY_SOUND_DELAY = 2000;
@@ -23,7 +21,6 @@ export const Effect = props => {
 
   const { effect, effect: { effectId }, view } = props;
 
-  const [ ,dispatch ] = useContext(Context);
   const [isLoading, setIsLoading] = useState(false);
   const { updateEffect } = useLayoutEffect();
 

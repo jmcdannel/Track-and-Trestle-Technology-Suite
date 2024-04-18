@@ -15,6 +15,7 @@ import ThrottleSlider from './ThrottleSlider';
 import SpeedControl from './SpeedControl';
 import Functions from './Functions';
 import LocoName from './LocoName';
+import NamePlate from '../Shared/components/NamePlate';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleActions from './ThrottleActions';
 import AdvancedControls from './AdvancedControls';
@@ -144,19 +145,9 @@ export const Throttle = props => {
       <Card
         className={`throttle ${variant}throttle throttle--${loco.name?.replace(' ', '')}  throttle--${loco?.meta?.roadname.replace(' ', '')} disable-dbl-tap-zoom`} >
         <CardHeader
-          title={up.md && variant === 'full' ? <LocoName loco={loco} consist={consist} /> : null}
+          title={null}
           avatar={
-            <Badge 
-              badgeContent={1 + (consist?.length || 0)} 
-              color="info"
-              className="throttle__consist-badge"
-              invisible={!consist?.length}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}>
-              <Avatar sx={{ width: '4rem', height: '4rem' }} onClick={handleLocoClick} variant="square">{formattedAddress(loco)}</Avatar>
-            </Badge>
+            <NamePlate name={loco.name} size="small" consistCount={1 + (consist?.length || 0)} />
           } 
           action={
             <ThrottleActions

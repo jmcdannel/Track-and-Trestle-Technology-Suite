@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import CallSplit from '@mui/icons-material/CallSplit';
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from '@mui/material/Skeleton'
 
-import api from '../Shared/api/api';
-import { Context } from '../Store/Store';
+import { useLayoutStore } from '../Store/useLayoutStore';
 import { Host } from './Host';
 import { Dcc } from './Dcc';
 import { Actions } from './Actions';
@@ -15,16 +13,7 @@ import './Connections.scss';
 
 export const Settings = () => {
   
-  const [hostType, setHostType] = useState('EX-JS-API');
-  const [hostConnected, setHostConnected] = useState(false);
-  const [layoutId, setLayoutId] = useState(api.config.getLayoutId() || '');
-  const [state, dispatch] = useContext(Context);
-  const { layout, connections } = state;
-
-  // useEffect(() => {
-  //   console.log('connections updated, layoutId updated', layoutId, connections);
-  //   // setLayoutApiConnection(connections?.get('layoutApi') || null);
-  // }, [layoutId, connections]);
+  const layout = useLayoutStore(state => state.layout);
 
   const renderConnection = (connection, idx) => {
     switch (connection.type) {

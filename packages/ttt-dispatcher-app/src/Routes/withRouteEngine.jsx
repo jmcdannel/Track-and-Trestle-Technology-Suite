@@ -1,22 +1,20 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import { Context } from '../Store/Store';
 import { useTurnout } from '../Turnouts/useTurnout';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
+import { useRouteStore } from '../Store/useRouteStore';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const TURNOUT_DELAY = 2000; // ms
 
 export const withRouteEngine = WrappedComponent => props => {
 
-  const [ state ] = useContext(Context);
-  const { routes } = state;
   const [ routeOrigin, setRouteOrigin ] = useState(undefined);
   const [ routeDestination, setRouteDestination ] = useState(undefined);
   const [ autoRun, setAutoRun ] = useState(false);
   const { updateTurnout } = useTurnout();
   const turnouts = useTurnoutStore(state => state.turnouts);
-  const view = state.userPreferences.turnoutView;
+  const routes = useRouteStore(state => state.routes);
 
   const setTurnouts = async deltas => {
     for(const delta of deltas){
@@ -115,7 +113,6 @@ export const withRouteEngine = WrappedComponent => props => {
       computedRoutes={computedRoutes()}
       routeOrigin={routeOrigin}
       routeDestination={routeDestination}
-      view={view}
       { ...props } 
     />
   );

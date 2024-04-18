@@ -34,7 +34,7 @@ import './Turnout.scss';
 
 export const Turnout = props => {
 
-  const { turnout, handleTurnoutChange } = props;  
+  const { turnout, handleTurnoutChange } = props;
 
   const [isDivergent, setIsDivergent] = useState(!turnout.state);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,65 +108,52 @@ export const Turnout = props => {
 
 	return (
     <Card className={`turnout turnout__line__${line?.id}`}>
-      <CardHeader className="turnout__header">
-        <CallSplit />
-        <Typography variant="h6" >{turnout.name}</Typography>
+      {/* <CardHeader 
+        className="turnout__header" 
+        avatar={<CallSplit />}
+        // action={isLoading || isPristine 
+        //   ? <PortableWifiOffIcon style={{color: 'gray'}} /> 
+        //   :  <WifiTetheringIcon style={{color: 'green'}} />}        
+      >
+        
           <Box className="turnout__header__status">
-            {isLoading || isPristine 
-              ? <PortableWifiOffIcon style={{color: 'gray'}} /> 
-              :  <WifiTetheringIcon style={{color: 'green'}} />}            
+                
           </Box>
-      </CardHeader>
+      </CardHeader> */}
       <CardContent className="turnout__content">
         <CardActionArea className={`turnout__state ${isLoading ? 'loading' : ''}`} onClick={handleToggle}>
+
           <Box className={`turnout__id`}>
-            <Box className={`turnout__line`}>
-              <Typography component="h6" variant="h6" noWrap >
-                  {line?.abbr.substring(0, 2) || '??'}
-                </Typography>
-            </Box>
-            {/* <Box className={`turnout__dir`}>
-              <Typography component="h6" variant="h6" noWrap >
-                  N
-                </Typography>
-            </Box> */}
+            
+            <CallSplit className="turnout__line" />
+
             <Box className={`turnout__name`}>
-              <Typography component="h6" variant="h6" noWrap >
-                {turnout.name} - {turnout.turnoutId}
+              <Typography component="span" variant="h6" noWrap  className="turnout__line">
+                {turnout.name}
+              </Typography>
+              <Typography component="small" variant="small" noWrap sx={{ paddingLeft: '0.25rem'}} >
+                  [{line?.abbr.substring(0, 2) || '??'}]
               </Typography>
             </Box>
+            <Chip label={turnout.turnoutId} size="small" />
+            
           </Box>
           
           {isLoading && (<CircularProgress color="primary" className="spinner" />)}
           <Box className={`turnout__indicator turnout__indicator__${isDivergent ? 'divergent' : 'straight'}`}>
-            <Box sx={{ 'visibility': 'hidden' }}>IND</Box>
+            <Box sx={{ width: '5rem' }} className="turnout__line">
+              <TurnoutIndSvg />
+            </Box>
           </Box>
         </CardActionArea>
       </CardContent>
       <CardActions className="turnout__actions">
-            {/* <SvgIcon>
-              <TurnoutIndSvg />
-            </SvgIcon> */}
-        <Button 
-          className="compact-hidden"
-          variant="contained" 
-          color="primary" 
-          onClick={handleToggle}
-          // startIcon={<CallSplit />}
-          >
-            Toggle
-        </Button>
-        <span>
-          <IconButton variant="outlined" onClick={handleReset} color="primary" disabled={isLoading}>
-            <RestoreIcon />
-          </IconButton>
-          {/* <IconButton variant="outlined" color="default">
-            <MapIcon />
-          </IconButton> */}
-          <IconButton variant="outlined" color="default" onClick={handleSettings}>
-            <TuneIcon />
-          </IconButton>
-        </span>
+        {/* <IconButton variant="outlined" onClick={handleReset} color="primary" disabled={isLoading}>
+          <RestoreIcon />
+        </IconButton> */}
+        <IconButton variant="outlined" color="default" onClick={handleSettings}>
+          <TuneIcon />
+        </IconButton>
       </CardActions>
       {showSettings && 
         <Settings 

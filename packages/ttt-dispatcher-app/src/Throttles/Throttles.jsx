@@ -12,13 +12,12 @@ import AvailableThrottle from './AvailableThrottle';
 
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 
-import { Context } from '../Store/Store';
+import { useLocoStore } from '../Store/useLocoStore';
 
 export const Throttles = () => {
 
   const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
-  const [ state ] = useContext(Context);
-  const { locos } = state;
+  const locos = useLocoStore(state => state.locos);
 
   const [ isDrawerOpen, setIsDrawerOpen ] = useState(false);
 

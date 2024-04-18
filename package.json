@@ -4,6 +4,9 @@
   "devDependencies": {
     "lerna": "^7.1.1"
   },
+  "engines": {
+    "node": ">=18.7.0"
+  },
   "description": "Monorepo of apps and apis for the Trestle TT Suite",
   "version": "0.0.1",
   "main": "index.mts",
@@ -11,7 +14,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package:layout-api": "lerna run start --scope @ttt/layout-api --stream",
     "package:dispatcher-app": "lerna run start --scope @ttt/dispatcher-app --verbose --stream",
-    "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/dashboard-app --scope  @ttt/throttle-app  --scope  @ttt/app --stream"
+    "start:all": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/dashboard-app --scope  @ttt/throttle-app  --scope  @ttt/app --stream",
+    "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/app --stream"
   },
   "author": "Josh McDannel",
   "license": "MIT",

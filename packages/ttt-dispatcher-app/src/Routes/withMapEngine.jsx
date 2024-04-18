@@ -1,18 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 
 import Snackbar from '@mui/material/Snackbar';
 
-import { Context } from '../Store/Store';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
+import { useRouteStore } from '../Store/useRouteStore';
 
 export const withMapEngine = WrappedComponent => props => {
 
   const { computedRoutes, handleRouteToggle, handleTurnoutChange } = props;
 
-  const [ state ] = useContext(Context);
   const [ error, setError] = useState(false);
-  const { routes } = state;
   const turnouts = useTurnoutStore(state => state.turnouts);
+  const routes = useRouteStore(state => state.routes);
   const dispatcherLayout = state.userPreferences.dispatcherLayout;
 
   const handleMapClick = async (e) => {

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Context } from '../Store/Store';
+import React, { useEffect } from 'react';
 import { usePrevious } from '../Shared/Hooks/usePrevious';
 import { useThrottleStore } from '../Store/useThrottleStore';
+import { useLocoStore } from '../Store/useLocoStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 
 const SWITCH_DIR_DELAY = 250;
@@ -11,8 +11,8 @@ export const DccExThrottleController = props => {
     const { speed, address, consist } = props;
 
     const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
+    const updateLoco = useLocoStore(state => state.updateLoco);
     const { publish } = useMqtt();
-    const [ , dispatch ] = useContext(Context);
     const prevSpeed = usePrevious(speed);
 
     const publishSepeed = (address, speed, enableThrottleUpsert = true) => {
@@ -63,7 +63,7 @@ export const DccExThrottleController = props => {
         console.log('[DccExThrottleController] sendLocoSpeed', speed, consist);
         publishSepeed(address, speed);
         consist && setConsist(consist);
-        await dispatch({ type: 'UPDATE_LOCO', payload: { address, speed } });
+        updateLoco({ address, speed });
 
       }, delay);
 

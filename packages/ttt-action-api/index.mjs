@@ -21,9 +21,9 @@ async function main() {
   console.log('@ttt/action-api', '[MAIN]');
   try {
     mqtt.connect();
-    await waitOn(opts);
+    // await waitOn(opts);
     await interfaces.connect();
-    await server.connect();
+    // await server.connect();
   } catch (err) {
     log.fatal('main', err);
   }

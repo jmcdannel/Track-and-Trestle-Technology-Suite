@@ -9,11 +9,15 @@ const instance = axios.create();
 
 async function get(type, Id = null) {
   try {
-    const uri = Id !== null
-        ? `/${layoutId}/${type}/${Id}`
-        : `/${layoutId}/${type}`;
+    // const uri = Id !== null
+    //     ? `/${layoutId}/${type}/${Id}`
+    //     : `/${layoutId}/${type}`;
+    const path = Id !== null
+        ? `/${type}/${layoutId}/${Id}`
+        : `/${type}/${layoutId}`;
+    // const response = await axios.get(`http://${host}:3000/api${path}`);
     // console.log('[layoutApi] get', uri);
-    const response = uri ? await instance.get(uri) : null;
+    const response = path ? await instance.get(path) : null;
     return Id 
       ? response.data 
       : response.data?.[0]?.[type]
@@ -31,7 +35,7 @@ async function getLayouts(Id = null) {
         ? `/layouts/${Id}`
         : `/layouts`;
     const { data } = await instance.get(uri);
-    return data;
+    return data?.[0];
   } catch (err) {
     console.error(err);
     throw new Error(`Unable to read layouts, Id=${Id}`);
@@ -59,9 +63,10 @@ async function connect(_dispatch, host, _layoutId) {
     console.log('[layoutApi] connect', host, _layoutId);
     dispatch = _dispatch;
     layoutId = _layoutId ? _layoutId : layoutId;
-    instance.defaults.baseURL = `http://${host}:5200/api`;
+    // instance.defaults.baseURL = `http://${host}:5200/api`;
+    instance.defaults.baseURL =  'http://localhost:3000/api';
     if (layoutId) {
-      await initialize();
+      // await initialize();
     } else {
       const payload = await getLayouts();
     }
