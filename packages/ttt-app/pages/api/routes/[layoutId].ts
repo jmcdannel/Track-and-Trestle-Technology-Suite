@@ -27,7 +27,7 @@ async function handler(req:NextApiRequest, res:NextApiResponse) {
   
     // Rest of the API logic
     try {
-        console.log('turnouts', req.query);
+        console.log('routes', req.query);
         const { layoutId } = req.query
         const client = await clientPromise;
         const db = client.db('trestledb');

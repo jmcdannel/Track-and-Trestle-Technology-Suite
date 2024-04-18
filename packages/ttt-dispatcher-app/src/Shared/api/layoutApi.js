@@ -66,7 +66,7 @@ async function connect(_dispatch, host, _layoutId) {
     // instance.defaults.baseURL = `http://${host}:5200/api`;
     instance.defaults.baseURL =  'http://localhost:3000/api';
     if (layoutId) {
-      await initialize();
+      // await initialize();
     } else {
       const payload = await getLayouts();
     }

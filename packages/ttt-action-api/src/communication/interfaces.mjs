@@ -15,10 +15,14 @@ const interfaces = {};
 const baudRate = 115200;
 
 const getLayout = async layoutId => {
-  const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
+  // const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
+  const host = process.env.VITE_LAYOUT_API_HOST
+  const uri = `${host}/api/layouts/${layoutId}`;
+  // const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
   try {
     const { data } = await axios.get(uri);
-    return data;
+    console.log('[GETLAYOUT]', uri, data)
+    return data?.[0];
   } catch (err) {
     console.error('[GETLAYOUT]', uri, err?.message, err);
   }
@@ -47,7 +51,7 @@ export const handleMessage = async (msg, onSuccess) => {
     switch(msg.action) { 
       case 'listPorts':
         const response = await getPorts();
-        log.info('[INTERFACES] response', response);
+        // log.info('[INTERFACES] response', response);
         onSuccess(JSON.stringify({ success: true, data: { action: 'ports', payload: response }}));
         break;
       case 'connect':
@@ -64,7 +68,7 @@ export const handleMessage = async (msg, onSuccess) => {
           // com.send = serial.send;
           // com.status = 'connected';
           // interfaces[msg.payload.connectionId] = com;
-          interfaces[com.id] = com; // TODO: refactor
+          interfaces[com.device.id] = com; // TODO: refactor
           log.info('[INTERFACES] serialConnected', msg, typeof com);
           onSuccess(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
         } catch (err) {
@@ -141,7 +145,7 @@ export const connect = async () => {
   log.start('Connecting Interfaces', process.env.LAYOUT_ID);
   await identifySerialConnections();
   const layoutConfig = await getLayout(process.env.LAYOUT_ID);
-  layoutConfig.interfaces.map(await intialize);
+  layoutConfig.interfaces?.map(await intialize);
 }
 
 export default { connect, interfaces, handleMessage };

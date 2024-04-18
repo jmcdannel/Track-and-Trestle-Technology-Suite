@@ -21,12 +21,6 @@ function Modules(props) {
   const layout = useLayoutStore(state => state.layout);
   const loading = (<div>Loading</div>);
 
-  console.log('[Modules] locos', locos);
-  console.log('[Modules] turnouts', turnouts);
-  console.log('[Modules] routes', routes);
-  console.log('[Modules] effects', effects);
-  console.log('[Modules] layout', layout);
-
   const getRoutedModule = module => {
     switch(module) {
       case 'turnouts' :

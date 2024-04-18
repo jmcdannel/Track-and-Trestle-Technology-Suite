@@ -30,7 +30,7 @@ async function handler(req:NextApiRequest, res:NextApiResponse) {
         const { params } = req.query;
         const layoutId = params?.[0];
         const effectId = params?.[1];
-        console.log('turnouts', req.query, layoutId, effectId);
+        console.log('effects', req.query, layoutId, effectId);
         const client = await clientPromise;
         const db = client.db('trestledb');
  

@@ -71,7 +71,7 @@ function ApiEngine() {
         resetConnectionStatus();
         mqtt.reset();
         mqtt.connect();
-        const result = true; //await api.connect(dispatch, host, layoutId);
+        const result = await api.connect(dispatch, host, layoutId);
         setStatus(result 
           ? CONNECTION_STATUS.CONNECTED
           : CONNECTION_STATUS.DISCONNECTED);
@@ -82,13 +82,10 @@ function ApiEngine() {
     const initializeStores = async function() {
       try {
         console.log('initializeStores');
-        const turnouts = await getByType('turnouts');
-        console.log('turnouts', turnouts);
+        initLayouts(await getByType('layouts'), layoutId);
         initTurnouts(await getByType('turnouts'));
         initLocos(await getByType('locos'));
         initEffects(await getByType('effects'));
-        initTurnouts(await getByType('turnouts'));
-        initLayouts(await getByType('layouts'), layoutId);
         initRoutes(await getByType('routes'));
       } catch (err) {
         log.error('[ApiEngine] api initialization error', err);

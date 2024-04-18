@@ -10,6 +10,10 @@ $off: rgba(0,0,0,.4);
   align-items: center;
   justify-content: space-between;
 
+  &.MuiPaper-root {
+    background: linear-gradient(90deg, #151515 0%, #222 100%);
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
@@ -42,20 +46,10 @@ $off: rgba(0,0,0,.4);
   }
   &__id {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     width: 100%;
     text-align: center;
-    &.MuiCardContent-root {
-      padding: 0.25rem;
-      padding: 0;
-    }
-  }
-  &__line {
-    background: $bg-blue-green-1;
-    background: $bg-grad-blue-green-1;
-    min-width: 3rem;
-    display: block;
-    padding: 0.25rem 1rem;
+    padding-left: .5rem;
   }
   &__dir {
     background: $bg-purple-violet-1;
@@ -73,8 +67,8 @@ $off: rgba(0,0,0,.4);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: $bg-blue-green-1;
-    background: $bg-grad-blue-green-1;
+    // background: $bg-blue-green-1;
+    // background: $bg-grad-blue-green-1;
     padding: 0.25rem 1rem;
     padding: .75rem;
     &.MuiCardContent-root {
@@ -82,45 +76,84 @@ $off: rgba(0,0,0,.4);
       padding: 0.25rem 1rem;
       padding: 0;
     }
+    svg g:first-child {
+      display: none;
+    }
+    svg g:last-child {
+      display: block;
+    }
     &__divergent {
-      background: $bg-pink-orange-1;
-      background: $bg-grad-pink-orange-1;
-
+      svg g:first-child {
+        display: block;
+      }
+      svg g:last-child {
+        display: none;
+      }
     }
   }
 
 
   &__header .MuiTypography-root,
   &__actions.MuiCardActions-root {
-    display: none;
+    // display: none;
   }
 }
 
 
 .turnout__line {
-  &__eng .turnout__line {
-    background: $bg-pink-orange-1;
-    background: $bg-grad-pink-orange-1;
+  &__eng {
+    .turnout__line { 
+      color:  $bg-pink-orange-1;
+      path {
+        fill: $bg-pink-orange-1;
+        stroke: $bg-pink-orange-1 !important;
+      }
+    }
   }
-  &__ss .turnout__line  {
-    background: $bg-blue-green-1;
-    background: $bg-grad-blue-green-1;
+  &__ss {
+    .turnout__line { 
+      color:  $bg-blue-green-1;
+      path {
+        fill: $bg-blue-green-1;
+        stroke: $bg-blue-green-1 !important;
+      }
+    }
   }
-  &__sn .turnout__line  {
-    background: $bg-purple-violet-1;
-    background: $bg-grad-purple-violet-1;
+  &__sn {
+    .turnout__line { 
+      color: $bg-purple-violet-1;
+      path {
+        fill: $bg-purple-violet-1;
+        stroke: $bg-purple-violet-1 !important;
+      }
+    }
   }
-  &__vl .turnout__line  {
-    background: $bg-yellow-orange-1;
-    background: $bg-grad-yellow-orange-1;
+  &__vl {
+    .turnout__line { 
+      color:  $bg-yellow-orange-1;
+      path {
+        fill: $bg-yellow-orange-1;
+        stroke: $bg-yellow-orange-1 !important;
+      }
+    }
   }
-  &__sl .turnout__line  {
-    background: $bg-pink-orange-1;
-    background: $bg-grad-pink-orange-1;
+  &__sl {
+    .turnout__line { 
+      color: $bg-blue-green-1;
+      path {
+        fill: $bg-blue-green-1;
+        stroke: $bg-blue-green-1 !important;
+      }
+    }
   }
-  &__hx .turnout__line  {
-    background: $bg-pink-orange-1;
-    background: $bg-grad-pink-orange-1;
+  &__hx {
+    .turnout__line { 
+      color:  $bg-green-blue-1;
+      path {
+        fill: $bg-green-blue-1;
+        stroke: $bg-green-blue-1 !important;
+      }
+    }
   }
 }
 // .turnouts {
