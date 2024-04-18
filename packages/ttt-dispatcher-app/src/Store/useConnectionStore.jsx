@@ -12,7 +12,6 @@ export const CONNECTION_STATUS = {
 const store = immer(
   
   persist((set, get) => ({
-    host: null,
     layoutId: null,
     dccDevice: null, // serial port path to DCC-EX Command
     ports: [],
@@ -22,7 +21,6 @@ const store = immer(
     dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
     actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
 
-    setHost: (host) => set({ host }),
     setLayoutId: (layoutId) => set({ layoutId }),
 
     setDccDevice: (dccDevice) => {

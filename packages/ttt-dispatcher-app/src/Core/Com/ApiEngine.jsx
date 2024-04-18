@@ -1,24 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import api from '../Shared/api/api';
-import useLayoutApi from '../Shared/api/useLayoutApi';
-import { Context } from '../Store/Store';
-import log from '../Shared/utils/logger';
-import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
-import { useDccStore } from '../Store/useDccStore';
-import { useEffectStore } from '../Store/useEffectStore';
-import { useLocoStore } from '../Store/useLocoStore';
-import { useLayoutStore } from '../Store/useLayoutStore';
-import { useRouteStore } from '../Store/useRouteStore';
-import { useTurnoutStore } from '../Store/useTurnoutStore';
-import { useMqtt } from './Com/MqttProvider'
-import { DccListener } from '../Dcc/DccListener';
+import useLayoutApi from '../../Shared/api/useLayoutApi';
+import log from '../../Shared/utils/logger';
+import { useConnectionStore, CONNECTION_STATUS } from '../../Store/useConnectionStore';
+import { useEffectStore } from '../../Store/useEffectStore';
+import { useLocoStore } from '../../Store/useLocoStore';
+import { useLayoutStore } from '../../Store/useLayoutStore';
+import { useRouteStore } from '../../Store/useRouteStore';
+import { useTurnoutStore } from '../../Store/useTurnoutStore';
+import { useMqtt } from './MqttProvider'
+import { DccListener } from '../../Dcc/DccListener';
+
 
 function ApiEngine() {
 
-  const [ state, dispatch ] = useContext(Context);
   const mqtt = useMqtt();
 
-  const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const setStatus = useConnectionStore(state => state.setStatus);
   const dccDevice = useConnectionStore(state => state.dccDevice);
@@ -39,6 +35,12 @@ function ApiEngine() {
   const updateActionDeviceStatusByPort = useConnectionStore(state => state.updateActionDeviceStatusByPort);
   
   const resetConnectionStatus = useConnectionStore(state => state.resetConnectionStatus);
+
+
+  const topics = {
+    dispatcher: `@ttt/dispatcher/${layoutId}`,
+    turnouts: `@ttt/turnouts/${layoutId}`,
+  }
   
   const handleMessage = async (message) => {
     try {
@@ -64,60 +66,51 @@ function ApiEngine() {
     }
   }
 
-  // Connect Host
+  // Connect Layout
   useEffect(async () => {
     const initialize = async function() {
       try {
         setStatus(CONNECTION_STATUS.PENDING);
         resetConnectionStatus();
         mqtt.reset();
-        mqtt.connect();
-        const result = await api.connect(dispatch, host, layoutId);
-        setStatus(result 
-          ? CONNECTION_STATUS.CONNECTED
-          : CONNECTION_STATUS.DISCONNECTED);
-      } catch (err) {
-        log.error('[ApiEngine] api initialization error', err);
-      }
-    };
-    const initializeStores = async function() {
-      try {
-        console.log('initializeStores');
+        mqtt.connect();        
+        
         initLayouts(await getByType('layouts'), layoutId);
         initTurnouts(await getByType('turnouts'));
         initLocos(await getByType('locos'));
         initEffects(await getByType('effects'));
         initRoutes(await getByType('routes'));
+        setStatus(CONNECTION_STATUS.CONNECTED);
       } catch (err) {
         log.error('[ApiEngine] api initialization error', err);
       }
     }
-    host && await initialize();
-    host && layoutId && await initializeStores();
-    !host && setStatus(CONNECTION_STATUS.DISCONNECTED);
+    layoutId && await initialize();
     !layoutId && setStatus(CONNECTION_STATUS.DISCONNECTED);
-  }, [host, layoutId]);
+  }, [layoutId]);
   
-  // Connect MQTT Client
+  // Setup MQTT Topics
   useEffect(() => {
     const initialize = async function() {
       try {        
-        mqtt.publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'status', payload: 'ApiEngine connected' }));
-        mqtt.subscribe(`@ttt/dispatcher/${layoutId}`);
-        mqtt.subscribe(`@ttt/turnouts/${layoutId}`);
+        const msg = { action: 'status', payload: 'ApiEngine connected' };
+        mqtt.publish(topics.dispatcher, JSON.stringify(msg));
+        mqtt.subscribe(topics.dispatcher);
+        mqtt.subscribe(topics.turnouts);
       } catch (err) {
         log.error('mqtt pub/sub error', err);
       }
+      
     };    
     layoutId && mqtt.isConnected && initialize();
   }, [mqtt.isConnected, layoutId ]);
 
-  // Initialze Action Device(s)
+  // Initialze Serial Action Device(s)
   useEffect(() => {
     const initialize = async function() {
       try {
         console.log('[ApiEngine] Action Device(s) initialize', actionDevices);    
-        layout?.interfaces?.filter(i => i.type === 'serial').map(addActionDevice);
+        layout.interfaces?.filter(i => i.type === 'serial').map(addActionDevice);
       } catch (err) {
         log.error('dcc device initialization error', err);
       }
@@ -136,8 +129,7 @@ function ApiEngine() {
         .filter(d => !!d.port && (d.status === CONNECTION_STATUS.DISCONNECTED || d.status === CONNECTION_STATUS.UNKNOWN))
         .map(async device => {
           try {
-            // const result = await api.actionApi.connectDevice(device.port);
-            mqtt.publish(`@ttt/dispatcher/${layoutId}`, {
+            mqtt.publish(topics.dispatcher, {
               action: 'connect',
               payload: { serial: device.port, device }
             });

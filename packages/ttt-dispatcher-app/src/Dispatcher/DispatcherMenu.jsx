@@ -1,29 +1,19 @@
-import React, { useContext } from 'react';
-
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-
-import { Context } from '../Store/Store';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 import './DispatcherMenu.scss';
 
 export const DispatcherMenu = props => {
 
-  const { setTurnouts } = props;
-  const [ state, dispatch ] = useContext(Context);
-  const turnouts = useTurnoutStore(state => state.turnouts);
-  
-  const dispatcherLayout = state.userPreferences.dispatcherLayout;
+  const { setTurnouts, dispatcherLayout } = props;
+  const turnouts = useTurnoutStore(state => state.turnouts);  
 
   const handleTurnoutsAction = async action => {
     switch(action) {
@@ -47,9 +37,7 @@ export const DispatcherMenu = props => {
   }
 
   const hanldeLayoutClick = async event => {
-    await dispatch({ type: 'UPDATE_USER_PREFERENCES', payload: { 
-      dispatcherLayout: { ...dispatcherLayout, ...{[event.target.value]: event.target.checked }} 
-    } });
+    
   };
 
   return (

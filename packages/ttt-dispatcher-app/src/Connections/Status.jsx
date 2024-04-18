@@ -14,7 +14,6 @@ import { useMqtt } from '../Core/Com/MqttProvider'
 export const Status = () => {
 
   const { isConnected: mqttConnected } = useMqtt();
-  const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const status = useConnectionStore(state => state.status);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
@@ -59,7 +58,7 @@ export const Status = () => {
       </Link>
       <Link to="/settings">
         <Chip
-          label={`${host} * ${layoutId}`}
+          label={`${layoutId}`}
           color={allConnected ? 'info' : 'error'}
           size="small"
           icon={renderIcon()}
