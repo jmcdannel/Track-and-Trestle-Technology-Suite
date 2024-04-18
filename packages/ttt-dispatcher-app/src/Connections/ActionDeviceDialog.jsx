@@ -6,20 +6,20 @@ import Dialog from '@mui/material/Dialog';
 import SaveIcon from '@mui/icons-material/Save';
 import Button from '@mui/material/Button';
 import { useMqtt } from '../Core/Com/MqttProvider'
-
-import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
+import { useConnectionStore } from '../Store/useConnectionStore';
 
 export const ActionDeviceDialog = ({ onClose, open, device }) => {
 
   const updateActionDevice = useConnectionStore(state => state.updateActionDevice);
+  const layoutId = useConnectionStore(state => state.layoutId);
   const ports = useConnectionStore(state => state.ports);
   const { publish, isConnected } = useMqtt();
   const [newPort, setNewPort] = useState(null);
 
   useEffect(() => {
     function requestPorts() {
-      console.log('[DccDeviceDialog] requestPorts', isConnected, open);
-      publish('ttt-dispatcher', JSON.stringify({ action: 'listPorts', payload: {} }));
+      console.log('[ActionDeviceDialog] requestPorts', isConnected, open);
+      publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'listPorts', payload: {} }));
     }
     open && isConnected && requestPorts()
 
