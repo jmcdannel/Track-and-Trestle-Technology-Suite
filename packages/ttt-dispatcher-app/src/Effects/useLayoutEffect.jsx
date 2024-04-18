@@ -1,11 +1,13 @@
 import { useEffectStore } from '../Store/useEffectStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 import { useDcc } from '../Dcc/useDcc'
+import { useConnectionStore } from '../Store/useConnectionStore';
 
 export function useLayoutEffect() {
   const { publish } = useMqtt();
   const { setOutput } = useDcc()
 
+  const layoutId = useConnectionStore(state => state.layoutId);
   const effects = useEffectStore(state => state.effects)
   const updateEffect = useEffectStore(state => state.updateEffect)
 
@@ -20,7 +22,7 @@ export function useLayoutEffect() {
       } else if (effect?.type === 'macro') {
         await handleMarcro(effect);
       } else {
-        publish('ttt-dispatcher', JSON.stringify({
+        publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({
           action: 'effects',
           payload: { 
             effectId: effect.effectId, 
@@ -46,7 +48,7 @@ export function useLayoutEffect() {
         ...effect.config, 
         command: effect.state ? effect.config.command : 'off'
       }
-      publish('ttt-ialed', JSON.stringify(action));
+      publish(`@ttt/ialed/${layoutId}`, JSON.stringify(action));
     } catch (err) {
       console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
     }

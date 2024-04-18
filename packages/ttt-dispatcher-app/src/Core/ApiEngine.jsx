@@ -31,7 +31,7 @@ function ApiEngine() {
   const initRoutes = useRouteStore(state => state.initRoutes);
 
   const layout = useLayoutStore(state => state.layout);
-  
+
   const actionDevices = useConnectionStore(state => state.actionDevices);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
@@ -102,16 +102,15 @@ function ApiEngine() {
   useEffect(() => {
     const initialize = async function() {
       try {        
-        mqtt.publish('ttt-dispatcher', JSON.stringify({ action: 'status', payload: 'ApiEngine connected' }));
-        mqtt.subscribe('ttt-dispatcher');
-        mqtt.subscribe('ttt-turnouts');
-        console.log('[ApiEngine] subscribed', 'ttt-dispatcher', mqtt. isConnected);
+        mqtt.publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'status', payload: 'ApiEngine connected' }));
+        mqtt.subscribe(`@ttt/dispatcher/${layoutId}`);
+        mqtt.subscribe(`@ttt/turnouts/${layoutId}`);
       } catch (err) {
         log.error('mqtt pub/sub error', err);
       }
     };    
-    mqtt.isConnected && initialize();
-  }, [mqtt.isConnected ]);
+    layoutId && mqtt.isConnected && initialize();
+  }, [mqtt.isConnected, layoutId ]);
 
   // Initialze Action Device(s)
   useEffect(() => {
@@ -138,7 +137,7 @@ function ApiEngine() {
         .map(async device => {
           try {
             // const result = await api.actionApi.connectDevice(device.port);
-            mqtt.publish('ttt-dispatcher', {
+            mqtt.publish(`@ttt/dispatcher/${layoutId}`, {
               action: 'connect',
               payload: { serial: device.port, device }
             });
@@ -158,7 +157,6 @@ function ApiEngine() {
           const message = JSON.parse(mqtt.payload.message);
           message && message.data && handleMessage(message);
         }
-        // handleMessage({ data: mqtt.payload?.message?.data &&  mqtt.payload?.topic === 'ttt-dispatcher' ?  mqtt.payload.message?.data : { action: null, payload: null } });
       } catch (err) {
         log.error('api initialization error', err);
       }

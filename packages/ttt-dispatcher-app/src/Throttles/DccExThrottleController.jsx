@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { usePrevious } from '../Shared/Hooks/usePrevious';
 import { useThrottleStore } from '../Store/useThrottleStore';
 import { useLocoStore } from '../Store/useLocoStore';
+import { useConnectionStore } from '../Store/useConnectionStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 
 const SWITCH_DIR_DELAY = 250;
@@ -10,13 +11,14 @@ export const DccExThrottleController = props => {
 
     const { speed, address, consist } = props;
 
+    const layoutId = useConnectionStore(state => state.layoutId);
     const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
     const updateLoco = useLocoStore(state => state.updateLoco);
     const { publish } = useMqtt();
     const prevSpeed = usePrevious(speed);
 
     const publishSepeed = (address, speed, enableThrottleUpsert = true) => {
-      publish('ttt-dcc', JSON.stringify({
+      publish(`@ttt/dcc/${layoutId}`, JSON.stringify({
         action: 'throttle',
         payload: { address, speed }
       }))

@@ -2,6 +2,7 @@ import mqtt from "mqtt";
 import log from './logger.mjs'
 import interfaces from '../communication/interfaces.mjs';
 
+const layoutId = process.env.LAYOUT_ID
 const mqttBroker = process.env.VITE_MQTT_BROKER || 'mqtt://localhost';
 // const mqttBroker = 'mqtt://test.mosquitto.org'
 // const mqttPort = 5005;
@@ -22,9 +23,9 @@ const connect = () => {
   // https://github.com/mqttjs/MQTT.js#event-connect
   mqttClient.on('connect', () => {
     log.log('mqttClient connection successful', mqttBroker)
-    mqttClient.publish('ttt-dispatcher', JSON.stringify({ action: 'status', paylod: 'Hello mqtt' }))
-    mqttClient.subscribe('ttt-dispatcher', handleSubscribeError)
-    mqttClient.subscribe('ttt-turnout', handleSubscribeError)
+    mqttClient.publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'status', paylod: 'Hello mqtt' }))
+    mqttClient.subscribe(`@ttt/dispatcher/${layoutId}`, handleSubscribeError)
+    mqttClient.subscribe(`@ttt/turnout/${layoutId}`, handleSubscribeError)
   })
 
   // https://github.com/mqttjs/MQTT.js#event-error
@@ -43,7 +44,7 @@ const connect = () => {
     // console.log(`mqttClient received message: ${message} from topic: ${topic}`)
     // console.log('message', message, typeof message)
     interfaces.handleMessage(JSON.parse(message.toString()), 
-      (resp) => mqttClient.publish('ttt-dispatcher', resp  )
+      (resp) => mqttClient.publish(`@ttt/dispatcher/${layoutId}`, resp  )
     );
   })
 };

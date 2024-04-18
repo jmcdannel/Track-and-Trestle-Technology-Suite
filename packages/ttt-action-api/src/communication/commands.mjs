@@ -184,7 +184,7 @@ const turnoutCommand = async (payload) => {
         break;
     }
   } catch (err) {
-    log.error('[COMMANDS] turnoutCommand', err);
+    log.error('[COMMANDS] turnoutCommand', err?.message);
   }
 }
 
