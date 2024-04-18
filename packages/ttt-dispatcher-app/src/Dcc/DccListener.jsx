@@ -100,8 +100,8 @@ export const DccListener = () => {
     const initialize = async function() {
       try {        
         publish('ttt-dcc', JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
-        subscribe('DCCEX.js');
-        console.log('[DccListener] subscribed', 'DCCEX.js', isConnected);
+        subscribe('@ttt/DCCEX.js');
+        console.log('[DccListener] subscribed', '@ttt/DCCEX.js', isConnected);
       } catch (err) {
         log.error('api initialization error', err);
       }

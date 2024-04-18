@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import mqtt from "mqtt";
 
 const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
-const mqttPort = 5005;
+const mqttPort = 8081;
 
 // Create a context for the MQTT provider
 const MqttContext = createContext();
@@ -13,8 +13,18 @@ export default function MqttProvider({ children }) {
   const [payload, setPayload] = useState(null)
 
   // Function to connect to MQTT broker
-  const connectToBroker = () => {
-    setMqttClient(mqtt.connect(mqttBroker, { port: mqttPort }));
+  const connectToBroker = async () => {
+    let client;
+    try {
+      console.log('connecting to broker', mqttBroker)
+      client = await mqtt.connect(mqttBroker, { port: mqttPort })
+    } catch (err) {
+      console.error(err)
+      throw err
+    } finally {
+      setMqttClient(client)
+    }
+    
   };
 
   // Function to disconnect from MQTT broker
@@ -52,6 +62,7 @@ export default function MqttProvider({ children }) {
 
   // Initiate MQTT CLient
   useEffect(() => {
+    console.log('Initiating MQTT Client', mqttClient)
     if (mqttClient) {
       // https://github.com/mqttjs/MQTT.js#event-connect
       mqttClient.on('connect', () => {

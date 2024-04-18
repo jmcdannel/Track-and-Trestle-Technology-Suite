@@ -85,7 +85,7 @@ async function connect(host, iface, _serial) {
   mqttHook.subscribe(['DCCEX.js'])
 
   mqttHook.registerEvent(
-    'DCCEX.js',
+    '@ttt/DCCEX.js',
     (topic: string, message: string) => {
         parseMessage(topic, message.toString())
         console.log({
