@@ -103,7 +103,7 @@ function ApiEngine() {
     const initialize = async function() {
       try {        
         mqtt.publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'status', payload: 'ApiEngine connected' }));
-        mqtt.subscribe(`@ttt/dispatcher/-${layoutId}`);
+        mqtt.subscribe(`@ttt/dispatcher/${layoutId}`);
         mqtt.subscribe(`@ttt/turnouts/${layoutId}`);
       } catch (err) {
         log.error('mqtt pub/sub error', err);
