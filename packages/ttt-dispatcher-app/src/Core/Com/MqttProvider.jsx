@@ -4,6 +4,8 @@ import mqtt from "mqtt";
 const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
 const mqttPort = 8081;
 
+console.log('[MqttProvider] mqttBroker', mqttBroker)
+
 // Create a context for the MQTT provider
 const MqttContext = createContext();
 
