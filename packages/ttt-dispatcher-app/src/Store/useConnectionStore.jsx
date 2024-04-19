@@ -21,7 +21,17 @@ const store = immer(
     dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
     actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
 
-    setLayoutId: (layoutId) => set({ layoutId }),
+    setLayoutId: (layoutId) => {
+      set(state => ({ 
+        layoutId,
+        dccDevice: null,
+        ports: [],
+        status: CONNECTION_STATUS.DISCONNECTED,
+        dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
+        actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
+        actionDevices: [],
+      }))      
+    },
 
     setDccDevice: (dccDevice) => {
       set({ dccDevice })
@@ -40,6 +50,17 @@ const store = immer(
         actionDevices: [...state.actionDevices.map(d => {
           if (d.id === device.id) {
             return device;
+          }
+          return d;
+        })]
+      }))
+    },
+
+    updateActionDeviceById: (deviceId) => {
+      set(state => ({
+        actionDevices: [...state.actionDevices.map(d => {
+          if (d.id === deviceId) {
+            return d;
           }
           return d;
         })]

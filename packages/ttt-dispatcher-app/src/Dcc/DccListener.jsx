@@ -21,7 +21,7 @@ export const DccListener = () => {
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
   const appendtoDccLog = useDccStore(state => state.appendtoLog);
   const setPowerStatus = useDccStore(state => state.setPowerStatus);
-  const setPorts = useConnectionStore(state => state.setPorts);
+  // const setPorts = useConnectionStore(state => state.setPorts);
 
   const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
 
@@ -59,10 +59,10 @@ export const DccListener = () => {
       const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
       // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
-        case 'listPorts':
-          console.log('[DccListener] setPorts', action, payload);
-          setPorts(payload);
-          break;
+        // case 'listPorts':
+        //   console.log('[DccListener] setPorts', action, payload);
+        //   setPorts(payload);
+        //   break;
         case 'connected':
           setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           setDccDevice(payload.path);

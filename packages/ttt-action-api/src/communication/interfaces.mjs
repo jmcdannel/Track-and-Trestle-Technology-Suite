@@ -35,7 +35,7 @@ const identifySerialConnections = async () => {
 
 export const handleMessage = async (msg, onSuccess) => {
   const commandActions = ['effects', 'turnouts'];
-  const reponseActions = ['listPorts', 'connect'];
+  const reponseActions = ['listPorts', 'connect', 'status'];
 
   log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
   if (commandActions.includes(msg?.action)) { // command actions
@@ -54,6 +54,10 @@ export const handleMessage = async (msg, onSuccess) => {
         // log.info('[INTERFACES] response', response);
         onSuccess(JSON.stringify({ success: true, data: { action: 'ports', payload: response }}));
         break;
+      case 'status':
+        const connectedInterfaces = Object.keys(interfaces).filter(key => interfaces[key].status === 'connected');
+        onSuccess(JSON.stringify({ success: true, data: { action: 'interfaces', payload: connectedInterfaces }}));
+        break
       case 'connect':
         try {
           const com = { ...interfaces[msg.payload.device.id], ...msg.payload, baudRate };

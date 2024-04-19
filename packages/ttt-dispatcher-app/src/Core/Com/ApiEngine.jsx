@@ -33,7 +33,7 @@ function ApiEngine() {
   const addActionDevice = useConnectionStore(state => state.addActionDevice);
   const setPorts = useConnectionStore(state => state.setPorts);
   const updateActionDeviceStatusByPort = useConnectionStore(state => state.updateActionDeviceStatusByPort);
-  
+  const updateActionDeviceById = useConnectionStore(state => state.updateActionDeviceById);
   const resetConnectionStatus = useConnectionStore(state => state.resetConnectionStatus);
 
 
@@ -44,12 +44,15 @@ function ApiEngine() {
   
   const handleMessage = async (message) => {
     try {
-      // console.log('[ApiEngine] handleMessage', message);
+      console.log('[ApiEngine] handleMessage', message);
       const { action, payload } = message.data;
       // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
         case 'ports':
           setPorts(payload);
+          break;
+        case 'interfaces':
+          payload?.map(updateActionDeviceById)
           break;
         case 'connected':
           console.log('[ApiEngine] connected', payload, dccDevice);
@@ -70,6 +73,7 @@ function ApiEngine() {
   useEffect(async () => {
     const initialize = async function() {
       try {
+        log.info('[ApiEngine] api initialize ', layoutId);
         setStatus(CONNECTION_STATUS.PENDING);
         resetConnectionStatus();
         mqtt.reset();
@@ -147,13 +151,14 @@ function ApiEngine() {
       try {
         if (mqtt.payload?.message) {
           const message = JSON.parse(mqtt.payload.message);
+          console.log('[ApiEngine] mqtt.parse', message);
           message && message.data && handleMessage(message);
         }
       } catch (err) {
         log.error('api initialization error', err);
       }
     };    
-    // console.log('[ApiEngine] mqtt.payload', mqtt.payload);
+    console.log('[ApiEngine] mqtt.payload', mqtt.payload);
     mqtt.payload && parse();
   }, [mqtt.payload]);
     
