@@ -12,7 +12,6 @@ export const withMapEngine = WrappedComponent => props => {
   const [ error, setError] = useState(false);
   const turnouts = useTurnoutStore(state => state.turnouts);
   const routes = useRouteStore(state => state.routes);
-  const dispatcherLayout = state.userPreferences.dispatcherLayout;
 
   const handleMapClick = async (e) => {
     const svgBtn = findClickableParent(e.target);    
@@ -97,12 +96,7 @@ export const withMapEngine = WrappedComponent => props => {
     });
     // console.log('svgIds', computedRoutes.map(rte => rte.svgId));
     const classNames = [...turnoutClassNames, ...routeClassNames];
-    if (!dispatcherLayout.routes) {
-      classNames.push('hide-routes');
-    }
-    if (!dispatcherLayout.turnouts) {
-      classNames.push('hide-turnouts');
-    }
+   
     return classNames.join(' ');
   };
 

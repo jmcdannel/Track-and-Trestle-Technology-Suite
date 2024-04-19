@@ -19,22 +19,22 @@ import './AdvancedControls.scss';
 const AdvancedControls = (props) => {
 
   const { 
-    onShowConsist, 
+    onShowFunctions, 
+    onShowConsist,
     onStop, 
-    onFunctionClick,
-    cruiseDisabled,
-    loco,
+    cruiseDisabled, 
+    loco
   } = props;
-  const address = Number(props.loco.address);
+  const address = Number(loco.address);
+
+  const updateLoco = useLocoStore(state => state.updateLoco);
 
   const [showPrecision, setShowPrecision] = useState(false);
-
-  const locos = useLocoStore(state => state.locos);
 
 
   const handleCruiceControlClick = async () => {
     try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, cruiseControl: true } });
+      await updateLoco( { address, cruiseControl: true });
     } catch (err) {
       console.error(err);
     }
@@ -42,7 +42,7 @@ const AdvancedControls = (props) => {
 
   const handleAutoStopClick = async () => {
     try {
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, autoStop: !loco.autoStop } });
+      await updateLoco( { address, autoStop: !loco.autoStop });
     } catch (err) {
       console.error(err);
     }
@@ -58,13 +58,13 @@ const AdvancedControls = (props) => {
 
 
   const handleFunctionClick = async () => {
-    onFunctionClick()
+    onShowFunctions()
   }
 
   const handleParkClick = async () => {
     try {
-      await onStop();
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, isAcquired: false, speed: 0, cruiseControl: false } });
+      onStop();
+      await updateLoco( { address, isAcquired: false, cruiseControl: false });
     } catch (err) {
       console.error(err);
     }    
@@ -73,28 +73,10 @@ const AdvancedControls = (props) => {
   const setPrecision = async (maxSpeed) => {
     try {
       setShowPrecision(false)
-      await dispatch({ type: 'UPDATE_LOCO', payload: { address, maxSpeed } });
+      await updateLoco( { address, maxSpeed });
     } catch (err) {
       console.error(err);
     }
-  }
-
-  const handleLed = async () => {
-    console.log('handleLed', loco);
-    const url = 'http://192.168.86.51:80/led';
-    const data = {
-      start: 0,
-      end: 20,
-      command: "color",
-      r: 200,
-      g: 0,
-      b: 50
-    };
-
-    const result = await axios.post(url, data);
-
-    console.log('result', result);
-
   }
 
   const buttonStyle = {
@@ -129,9 +111,6 @@ const AdvancedControls = (props) => {
   return (    
     <Box className="height100" sx={{ pb: '2rem' }} flex="1" alignItems="center" display="flex" justifyContent="flex-end" flexDirection="column" >
       <slot></slot>
-
-      {/* <IconButton onClick={handleLed}>< TrainIcon /></IconButton> */}
-
       <ButtonGroup
         variant="text"
         size="large"

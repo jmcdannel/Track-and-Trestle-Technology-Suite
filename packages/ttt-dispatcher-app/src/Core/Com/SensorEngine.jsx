@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useCallback } from 'react';
-import { Context } from '../Store/Store';
+import { Context } from '../../Store/Store';
 import api from '../Api';
-import log from '../Shared/utils/logger';
+import log from '../../Shared/utils/logger';
 
 function SensorEngine(props) {
 

@@ -1,20 +1,13 @@
-import { useEffect } from 'react';
 import axios from 'axios';
-import log from '../utils/logger';
-import { useConnectionStore, CONNECTION_STATUS } from '../../Store/useConnectionStore';
+import { useConnectionStore } from '../../Store/useConnectionStore';
 
 export function useLayoutApi() {
   
-  // const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
 
   async function get(type, Id = null) {
     try {
-      // const host = 'https://ttt-app-git-dev-jmcdannels-projects.vercel.app'
-      // const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
-      // const host = 'http://127.0.0.1:5001'
       const host = import.meta.env.VITE_LAYOUT_API_HOST;
-      // const host = 'https://ttt-7mzhiuxob-jmcdannels-projects.vercel.app'
       const path = Id !== null
           ? `/${type}/${layoutId}/${Id}`
           : `/${type}/${layoutId}`;

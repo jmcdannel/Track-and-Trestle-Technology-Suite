@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,9 +11,6 @@ import useLayoutRoute from '../Routes/useLayoutRoute';
 import { useTurnoutStore } from '../Store/useTurnoutStore';
 import { useTurnout } from '../Turnouts/useTurnout';
 
-import api from '../Shared/api/api';
-import { Context } from '../Store/Store';
-
 import './Dispatcher.scss';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -22,13 +19,6 @@ const TURNOUT_DELAY = 10; // ms
 
 export const Dispatcher = props => {
 
-  // const { 
-  //   filter, 
-  //   enabled, 
-  //   overrideUserPrefs, 
-  //   computedRoutes, 
-  //   handleRouteToggle 
-  // } = props;
   const {
     filter, 
     enabled, 
@@ -37,8 +27,7 @@ export const Dispatcher = props => {
 
   const { updateTurnout } = useTurnout();
   const turnouts = useTurnoutStore(state => state.turnouts);
-  const [ state, dispatch ] = useContext(Context);
-  const dispatcherLayout = state.userPreferences.dispatcherLayout;
+  const dispatcherLayout = { map: true, routes: true, turnouts: true };
   const {
     computedRoutes,
     handleRouteToggle,
@@ -73,7 +62,7 @@ export const Dispatcher = props => {
       flex: '1'
       }}>
       {isVisible('menu') && (
-        <DispatcherMenu setTurnouts={setTurnouts}  />
+        <DispatcherMenu setTurnouts={setTurnouts} dispatcherLayout={dispatcherLayout}  />
       )}
 
       {isVisible('map') && (

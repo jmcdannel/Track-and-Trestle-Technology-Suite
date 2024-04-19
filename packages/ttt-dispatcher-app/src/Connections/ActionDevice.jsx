@@ -39,12 +39,13 @@ export const ActionDevice = props => {
   return (
     <>
       <Box>
-        {/* <pre>{ JSON.stringify(device, null, 2) }</pre> */}
+        {/* <pre>{ JSON.stringify(device, null, 2) }</pre> */} 
+        <Typography>{device.id} </Typography>   
         <Chip 
           sx={{
             borderColor: connectionStateColor()
           }}
-          label={device.id ? `${device.id}:${device.port}` : <Skeleton width={120} />} 
+          label={`${device.port}` || <Skeleton width={120} />} 
           onDelete={() => setDccDevice(null)}
           onClick={() => setDeviceOpen(true)}
           icon={

@@ -47,14 +47,6 @@ export const Dcc = props => {
   return (
     <>
       <Card className="connection">
-        <CardHeader 
-          title="DCC" 
-          avatar={
-            mqttConnected && deviceConnected 
-              ? <UsbOutlinedIcon sx={{ fill: connectionStateColor() }} />
-              : <UsbOffOutlinedIcon sx={{ fill: connectionStateColor() }} />
-          } >
-        </CardHeader>
         <CardContent sx={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -76,6 +68,7 @@ export const Dcc = props => {
                   sx={{ paddingLeft: '.5rem' }} 
                 />
               }
+              disabled
               label={broker ? broker : <Skeleton width={150} />}
               onDelete={() => {}} />             
 

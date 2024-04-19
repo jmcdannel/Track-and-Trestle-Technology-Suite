@@ -12,7 +12,6 @@ export const CONNECTION_STATUS = {
 const store = immer(
   
   persist((set, get) => ({
-    host: null,
     layoutId: null,
     dccDevice: null, // serial port path to DCC-EX Command
     ports: [],
@@ -22,8 +21,17 @@ const store = immer(
     dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
     actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
 
-    setHost: (host) => set({ host }),
-    setLayoutId: (layoutId) => set({ layoutId }),
+    setLayoutId: (layoutId) => {
+      set(state => ({ 
+        layoutId,
+        dccDevice: null,
+        ports: [],
+        status: CONNECTION_STATUS.DISCONNECTED,
+        dccDeviceStatus: CONNECTION_STATUS.DISCONNECTED,
+        actionApiStatus: CONNECTION_STATUS.DISCONNECTED,
+        actionDevices: [],
+      }))      
+    },
 
     setDccDevice: (dccDevice) => {
       set({ dccDevice })
@@ -42,6 +50,17 @@ const store = immer(
         actionDevices: [...state.actionDevices.map(d => {
           if (d.id === device.id) {
             return device;
+          }
+          return d;
+        })]
+      }))
+    },
+
+    updateActionDeviceById: (deviceId) => {
+      set(state => ({
+        actionDevices: [...state.actionDevices.map(d => {
+          if (d.id === deviceId) {
+            return d;
           }
           return d;
         })]
