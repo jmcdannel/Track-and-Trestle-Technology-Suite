@@ -28,17 +28,17 @@
 [ ] update readme with sccreenshots
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
 [ ] transition exploration (vue throttle app)
-[ ] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
+[x] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
 
 [x] stop all
 [x] verrical UI (or respnsive horiztonal?)
 [x] keep alive
 [x] disconnect bug
-[ ] GrpahQL / better state management
-[ ] convert to typescript
+[-] GrpahQL / better state management
+[-] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)
-[ ] status display (mounted screen/tv?)
+[-] status display (mounted screen/tv?)
 [ ] ad hoc loco (enter loco address:___ [Acquire])
 [ ] icons to svg files
 
@@ -58,9 +58,35 @@
 
 
 #### Bugs:
-[ ] WS Disconnect
-[ ] Double audio file play
+[ ] mqtt Disconnect
 
 
 ### TODO
+
+[ ] Interchange Route Map + Helix
+[ ] Lower Level Route Map
+
+[ ] Power / Main Control UI
+[ ] Route Button UI
+[ ] motion
+[ ] Route Map styles to show status
+
+[ ] dispatcher throttle state on reload
+[ ] show speed in available throttle
+[ ] effect state management
+[ ] zustand optimization
+
+[ ] README
+[ ] hotfix branch
+[ ] explore vercel options
+
+[-] dashboard UI
+[x] dashboard DCC log
+[ ] dashboard dcc command
+[x] dashboard throttle status
+
+[ ] platform lighting
+[ ] city street/sidewalks
+[ ] city bridge
+
 

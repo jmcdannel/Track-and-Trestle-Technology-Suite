@@ -2,8 +2,12 @@ import { FunctionComponent } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { getLayouts } from "../lib/layoutApi";
 
+interface SelectLayoutProps {
+  onSelected: (layout: any) => void;
+}
 
-export const SelectLayout: FunctionComponent = () => {
+export const SelectLayout: FunctionComponent<SelectLayoutProps> = ({ onSelected }) => {
+
   const [layouts, setLayouts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ export const SelectLayout: FunctionComponent = () => {
       <h1>Select Layout</h1>
       <ul>
         {layouts.map((layout) => (
-          <li key={layout.layoutId}>{layout.name}</li>
+          <li onClick={() => onSelected(layout.layoutId)} key={layout.layoutId}>{layout.name}</li>
         ))}
       </ul>
     </div>

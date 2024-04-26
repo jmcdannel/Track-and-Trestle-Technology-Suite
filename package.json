@@ -5,7 +5,7 @@
     "lerna": "^7.1.1"
   },
   "engines": {
-    "node": ">=18.7.0"
+    "node": ">=20"
   },
   "description": "Monorepo of apps and apis for the Trestle TT Suite",
   "version": "0.0.1",
@@ -14,6 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:layout-api": "lerna run start --scope @ttt/layout-api --stream",
     "start:action-api": "lerna run start --scope @ttt/action-api --stream",
+    "start:dashboard-app": "lerna run start --scope @ttt/dashboard-app --stream",
     "start:dispatcher-app": "lerna run start --scope @ttt/dispatcher-app --verbose --stream",
     "start:all": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/layout-api --scope  @ttt/dashboard-app --scope  @ttt/throttle-app  --scope  @ttt/app --stream",
     "start": "lerna run start --scope @ttt/dispatcher-app --scope  @ttt/action-api --scope  @ttt/app --stream"
