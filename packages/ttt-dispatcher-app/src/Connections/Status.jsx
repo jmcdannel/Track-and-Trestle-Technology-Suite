@@ -7,6 +7,7 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import SignalWifiStatusbarConnectedNoInternet4OutlinedIcon from '@mui/icons-material/SignalWifiStatusbarConnectedNoInternet4Outlined';
 import UsbOutlinedIcon from '@mui/icons-material/UsbOutlined';
 import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
@@ -37,6 +38,17 @@ export const Status = () => {
   
   return (
     <>
+      <a href="/">
+        <ReplayIcon
+          sx={{ 
+            color: 'white',
+            display: {
+              xs: 'none',
+              sm: 'flex'
+            },
+            mr: 2 
+          }} />
+      </a>
       <Link to="/dcc">
         <Chip
           label="DCC"
