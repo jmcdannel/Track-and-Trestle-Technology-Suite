@@ -1,0 +1,123 @@
+button.power {
+  &-on, 
+  &-off, 
+  &-unknown, 
+  &-pending {
+    background-color: rgb(183, 183, 183);
+    &:hover {
+      background-color: rgb(226, 226, 226);
+    }
+    
+    svg.MuiSvgIcon-root {
+      fill: rgb(60, 60, 60);
+    }
+
+    .MuiSpeedDialAction-staticTooltipLabel {
+      background-color: darkviolet;
+      padding-right: 5rem;
+      right: 0;
+      padding: 0.8rem 4rem 0.8rem 1rem;
+      margin-right: 0;
+      white-space: nowrap;
+    }
+  }
+  &-on {
+    background-color: rgb(255, 255, 255);
+    svg.MuiSvgIcon-root{
+      fill: rgb(14, 192, 14);
+    }
+    &.MuiSvgIcon-root {
+      fill: rgb(14, 192, 14);
+    }
+  }
+  &-off {
+    background-color: rgb(255, 255, 255);
+    svg.MuiSvgIcon-root,
+    &.MuiSvgIcon-root {
+      fill: rgb(211, 0, 0);
+    }
+  }
+  &-unknown {
+    svg.MuiSvgIcon-root,
+    &.MuiSvgIcon-root {
+      fill: rgb(129, 129, 129);
+    }
+  }
+
+  &-pending {
+    svg.MuiSvgIcon-root,
+    &.MuiSvgIcon-root {
+      fill: #999;
+      animation: flickerAnimation 1s infinite;
+    }
+  }
+}
+
+.main-power {
+  &-on, 
+  &-off, 
+  &-unknown, 
+  &-pending {
+    > button {
+      background-color: rgb(183, 183, 183);
+      &:hover {
+        background-color: rgb(226, 226, 226);
+      
+      }
+    }
+    svg.MuiSvgIcon-root {
+      fill: rgb(60, 60, 60);
+    }
+
+    .MuiSpeedDialAction-staticTooltipLabel {
+      background-color: darkviolet;
+      padding-right: 5rem;
+      right: 0;
+      padding: 0.8rem 4rem 0.8rem 1rem;
+      margin-right: 0;
+      white-space: nowrap;
+    }
+  }
+  &-on {
+    > button {
+      background: radial-gradient(circle, rgba(0,255,1,1) 30%, rgb(0, 168, 3) 100%);
+      box-shadow: 0 0 10px 0 rgba(0,255,1,1);
+      svg.MuiSvgIcon-root {
+        fill: rgb(0, 0, 0);
+        font-size: 2rem;
+      }
+    }
+    &.MuiSvgIcon-root {
+      fill: rgb(255, 255, 255);
+    }
+  }
+  &-off {
+    > button {
+      background: radial-gradient(circle, rgb(255, 12, 12) 30%, rgb(167, 0, 0) 100%);
+      box-shadow: 0 0 10px 0 rgb(255, 46, 46);
+      svg.MuiSvgIcon-root {
+        fill: rgb(0, 0, 0);
+        font-size: 2rem;
+      }
+    }
+    svg.MuiSvgIcon-root,
+    &.MuiSvgIcon-root {
+      fill: rgb(211, 0, 0);
+    }
+  }
+  // &-unknown {
+  //   svg.MuiSvgIcon-root,
+  //   &.MuiSvgIcon-root {
+  //     fill: rgb(129, 129, 129);
+  //   }
+  // }
+
+  // &-pending {
+  //   svg.MuiSvgIcon-root,
+  //   &.MuiSvgIcon-root {
+  //     fill: #999;
+  //     animation: flickerAnimation 1s infinite;
+  //   }
+  // }
+
+}

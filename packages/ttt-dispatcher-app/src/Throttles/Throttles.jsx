@@ -1,13 +1,11 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, {  useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Fab from '@mui/material/Fab';
 import Drawer from '@mui/material/Drawer';
 import AddIcon from '@mui/icons-material/Add';
 
 import Throttle from './Throttle';
-import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
 
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
@@ -28,45 +26,42 @@ export const Throttles = () => {
     setIsDrawerOpen(false);
   };
 
-  const hasThrottles = locos.some(loco => loco.isAcquired);
-  const acquiredThrottles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl);
-  const cruiseThrottles = locos?.filter(loco => loco.isAcquired && loco.cruiseControl);
+  const hasThrottles = locos.some(loco => loco.isAcquired && !loco.cruiseControl);
+  const acquiredThrottles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl)
+  const cruiseThrottles = locos.filter(loco => loco.isAcquired && loco.cruiseControl)
   const availableThrottles = locos?.filter(loco => !loco.isAcquired);
 
+  const calculatedVariant = (loco) => {
+    if (up.md && acquiredThrottles.length === 1) {
+      return 'full';
+    } else {
+      return 'half';
+    }
+  }
+
+  console.log('acquiredThrottles', acquiredThrottles);
+
   return (
-    <>    
-      <Grid container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="stretch">
-        <Grid item xs={12}>
-          <Box 
-          flexGrow={0} 
-          display="flex" 
-          flexDirection="row" 
-          flexWrap="wrap"
-          >
-            {cruiseThrottles.map(loco => (
-                <MiniThrottle key={loco.address} loco={loco} />
-            ))}
-          </Box> 
-        </Grid>
-      </Grid>
-      <Box sx={{ 
-        position: 'relative', 
-        'display': 'flex', 
-        'flexWrap': 'wrap',
-        backgroundColor: 'rgb(55, 61, 72)',
-      }}>
-        {acquiredThrottles && acquiredThrottles.length 
-          ? acquiredThrottles.filter(loco => loco.isAcquired && !loco.cruiseControl)
-              .map(loco => (
-                <Throttle 
-                  key={loco.address}
-                  loco={loco}
-                  variant={down.md || acquiredThrottles.length === 1 ? 'full' : 'half'}
-                />))
-          : availableThrottles.map(loco => (
+    <>          
+      <Box 
+        className={`throttles-wrapper throttles-count-${acquiredThrottles.length}`}
+      >
+        {cruiseThrottles?.map(loco => (
+          <Throttle 
+            key={loco.address}
+            loco={loco}
+            variant="cruise"
+          />))          
+        }
+        {acquiredThrottles?.map(loco => (
+          <Throttle 
+            key={loco.address}
+            loco={loco}
+            variant={calculatedVariant(loco)}
+          />))          
+        }
+
+        {!acquiredThrottles?.length && availableThrottles?.map(loco => (
             <AvailableThrottle key={loco.address} loco={loco} />
           ))
         }
@@ -86,11 +81,15 @@ export const Throttles = () => {
         )}
 
         <Drawer anchor="right" open={isDrawerOpen} onClose={handleDrawerClose}>
-          <Box sx={{ 
-            width: '75vw', 
+          <Box className="available-throttle-menu-list" sx={{ 
+            width: '25vw', 
+            minWidth: '20rem',
             padding: 2, 
             display: 'flex', 
-            flexWrap: 'wrap' 
+            flexWrap: 'wrap',
+            flex: '1',
+            'alignItems': 'flex-end',
+            'alignContent': 'flex-end'
             }}>
             {availableThrottles.map(loco => (
               <AvailableThrottle key={loco.address} loco={loco} onLocoClick={() => setIsDrawerOpen(false)} />

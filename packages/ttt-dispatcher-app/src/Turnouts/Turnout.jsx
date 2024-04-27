@@ -128,11 +128,11 @@ export const Turnout = props => {
             <CallSplit className="turnout__line" />
 
             <Box className={`turnout__name`}>
-              <Typography component="span" variant="h6" noWrap  className="turnout__line">
+              <Typography component="span" variant="body2" noWrap className="turnout__line">
                 {turnout.name}
               </Typography>
               <Typography component="small" variant="small" noWrap sx={{ paddingLeft: '0.25rem'}} >
-                  [{line?.abbr.substring(0, 2) || '??'}]
+                  {line?.abbr.substring(0, 2) || ''}
               </Typography>
             </Box>
             <Chip label={turnout.turnoutId} size="small" />

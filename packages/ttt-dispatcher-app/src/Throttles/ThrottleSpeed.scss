@@ -50,5 +50,25 @@
   }
   &.throttle__speed--disabled {
     color: #999;
+    background: #666;
+    &:before {
+      color: #999;
+    }
+    &:after {
+      color: #999;
+    }
+    &.throttle__speed--reverse {
+      color: #999;
+      &:before {
+        display: none;
+      }
+    }
+  
+    &.throttle__speed--forward {
+      color: #999;
+      &:after {
+        display: none;
+      }
+    }
   }
 }

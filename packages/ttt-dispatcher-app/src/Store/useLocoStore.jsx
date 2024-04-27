@@ -19,7 +19,7 @@ const store = persist((set, get) => ({
       console.log('initLocos', loco, throttle, throttleCount)
       return { 
         ...loco, 
-        isAcquired: !!throttle,
+        isAcquired: !!throttle && throttle.speed > 0,
         cruiseControl: throttleCount > 2
       };
     });

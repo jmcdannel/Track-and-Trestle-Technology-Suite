@@ -49,7 +49,7 @@ export const DispatcherMenu = props => {
           <Button onClick={() => handleTurnoutsAction('toggle')}>Toggle All</Button>
           <Button onClick={() => handleTurnoutsAction('sweep')}>Sweep All</Button> 
         </ButtonGroup>
-        <Box>
+        {/* <Box>
           <FormControlLabel control={
             <Switch 
               checked={dispatcherLayout.map}
@@ -77,7 +77,7 @@ export const DispatcherMenu = props => {
             />
           } label="Show turnouts" />
 
-        </Box>
+        </Box> */}
       </Toolbar>
     </AppBar>
   );

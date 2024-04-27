@@ -1,15 +1,30 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
+import { useDccStore } from '../Store/useDccStore';
+
 import './ThrottleSpeed.scss';
 
 export const ThrottleSpeed = props => {
 
+  const powerStatus = useDccStore(state => state.powerStatus);
   const { speed, isDisabled = false } = props;
+
+  const getCurrentStateKey = () => {
+    if (typeof powerStatus === 'undefined') {
+      return 'unknown';
+    } else if (powerStatus === true) {
+      return 'on';
+    } else if (powerStatus === false) {
+      return 'off';
+    } else {
+      return 'unknown';
+    }
+  }
 
   const computedClassName = () => {
     return `throttle__speed 
-    ${isDisabled ? 'throttle__speed--disabled' : ''}
+    ${isDisabled || powerStatus !== true ? 'throttle__speed--disabled' : ''}
     ${speed < 0 
       ? 'throttle__speed--reverse' 
       : 'throttle__speed--forward'}`;

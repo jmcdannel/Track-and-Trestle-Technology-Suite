@@ -25,9 +25,7 @@
 --
 [x] clean up connections / env / config
 [x] tam junc config - servos 
-[ ] update readme with sccreenshots
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
-[ ] transition exploration (vue throttle app)
 [x] ssl localhost (https://stackoverflow.com/questions/69417788/vite-https-on-localhost)
 
 [x] stop all
@@ -38,7 +36,7 @@
 [-] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)
-[-] status display (mounted screen/tv?)
+[x] status display (mounted screen/tv?)
 [ ] ad hoc loco (enter loco address:___ [Acquire])
 [ ] icons to svg files
 
@@ -59,34 +57,42 @@
 
 #### Bugs:
 [ ] mqtt Disconnect
+[-] dispatcher throttle state on reload
 
 
 ### TODO
 
-[ ] Interchange Route Map + Helix
-[ ] Lower Level Route Map
+[-] Interchange Route Map + Helix
 
-[ ] Power / Main Control UI
-[ ] Route Button UI
-[ ] motion
+[-] Power / Main Control UI
+[ ] Clean Mem (localStorage, sessionStorage)
+[?] Route Button UI
+[ ] Motion
 [ ] Route Map styles to show status
+[ ] Mobile optimization
+[ ] Auto-version on release to main - show in header
+[ ] non-blaocking led
+[ ] Fucntions UI / Icons
+[ ] Macro Effects
+[ ] Turnout Effects
 
-[ ] dispatcher throttle state on reload
-[ ] show speed in available throttle
+[x] show speed in available throttle
 [ ] effect state management
 [ ] zustand optimization
+
+[x] platform lighting
+[-] city street/sidewalks
+[-] city bridge
+[ ] city buildings
+
+[-] dashboard UI
+[x] dashboard DCC log
+[ ] dashboard dcc command
+[-] dashboard throttle status
 
 [ ] README
 [ ] hotfix branch
 [ ] explore vercel options
 
-[-] dashboard UI
-[x] dashboard DCC log
-[ ] dashboard dcc command
-[x] dashboard throttle status
-
-[ ] platform lighting
-[ ] city street/sidewalks
-[ ] city bridge
-
-
+[ ] Sky
+[ ] Pi

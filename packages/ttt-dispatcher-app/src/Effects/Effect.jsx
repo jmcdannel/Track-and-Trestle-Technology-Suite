@@ -12,6 +12,7 @@ import HighlightIcon from '@mui/icons-material/Highlight';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import Signal from './Signal';
 import useLayoutEffect from './useLayoutEffect';
 
@@ -85,6 +86,8 @@ export const Effect = props => {
     switch(effect.type.toLowerCase()) {
       case 'light':
         return (<HighlightIcon fontSize={size} />);
+      case 'power':
+        return (<PowerSettingsNewIcon fontSize={size} />);
       case 'lighting animation':
         return (<MovieFilterIcon fontSize={size} />);
       case 'signal':

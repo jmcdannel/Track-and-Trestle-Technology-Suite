@@ -88,16 +88,7 @@ export const Dcc = props => {
               onDelete={() => setDccDevice(null)}
             />
           </Stack>
-        </CardContent>
-        <CardActions sx={{ justifyContent: 'space-between' }}>
-          <Button 
-            onClick={() => setDccDevice(null)} 
-            color="secondary"
-            variant="outlined">
-              Reset
-          </Button>
-          <Button onClick={() => setDeviceOpen(true)} disabled={!mqttConnected} variant="outlined">Select</Button>          
-        </CardActions>        
+        </CardContent>    
       </Card>
       <DccDeviceDialog
         onClose={() => setDeviceOpen(false)} 
