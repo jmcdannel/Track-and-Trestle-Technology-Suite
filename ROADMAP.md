@@ -63,15 +63,15 @@
 ### TODO
 
 [-] Interchange Route Map + Helix
+[-] non-blaocking led
 
-[-] Power / Main Control UI
-[ ] Clean Mem (localStorage, sessionStorage)
-[?] Route Button UI
+[x] Power / Main Control UI
+[x] Clean Mem (localStorage, sessionStorage)
+[x] Route Button UI
 [ ] Motion
 [ ] Route Map styles to show status
 [ ] Mobile optimization
 [ ] Auto-version on release to main - show in header
-[ ] non-blaocking led
 [ ] Fucntions UI / Icons
 [ ] Macro Effects
 [ ] Turnout Effects
@@ -81,9 +81,9 @@
 [ ] zustand optimization
 
 [x] platform lighting
-[-] city street/sidewalks
+[x] city street/sidewalks
 [-] city bridge
-[ ] city buildings
+[-] city buildings
 
 [-] dashboard UI
 [x] dashboard DCC log
@@ -96,3 +96,8 @@
 
 [ ] Sky
 [ ] Pi
+[ ] Coffee Website
+[ ] Coffee Station
+[ ] Coffee Corner
+[ ] Coffee Sides
+[ ] Coffee Glass

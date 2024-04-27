@@ -134,6 +134,8 @@ const effectCommand = async (payload) => {
         return [pinCommand(effect)];
       case 'ialed':
         return [ialedCommand(effect)];
+      case 'serial-ialed':
+        return [ialedCommand(effect)];
       case 'sound':
         return [soundCommand(effect)];
       case 'signal':
