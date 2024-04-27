@@ -7,6 +7,7 @@ import { useLocoStore } from '../../Store/useLocoStore';
 import { useLayoutStore } from '../../Store/useLayoutStore';
 import { useRouteStore } from '../../Store/useRouteStore';
 import { useTurnoutStore } from '../../Store/useTurnoutStore';
+import { useThrottleStore } from '../../Store/useThrottleStore';
 import { useMqtt } from './MqttProvider'
 import { DccListener } from '../../Dcc/DccListener';
 
@@ -27,6 +28,7 @@ function ApiEngine() {
   const initRoutes = useRouteStore(state => state.initRoutes);
 
   const layout = useLayoutStore(state => state.layout);
+  const throttles = useThrottleStore(state => state.throttles);
 
   const actionDevices = useConnectionStore(state => state.actionDevices);
   const setDccDeviceStatus = useConnectionStore(state => state.setDccDeviceStatus);
@@ -81,7 +83,7 @@ function ApiEngine() {
         
         initLayouts(await getByType('layouts'), layoutId);
         initTurnouts(await getByType('turnouts'));
-        initLocos(await getByType('locos'));
+        initLocos(await getByType('locos'), throttles);
         initEffects(await getByType('effects'));
         initRoutes(await getByType('routes'));
         setStatus(CONNECTION_STATUS.CONNECTED);

@@ -1,7 +1,7 @@
 import { FunctionComponent } from "preact"
 import { throttles, clearLog } from "../stores/ThrottleStore"
 
-export const DccLog: FunctionComponent = () => {
+export const Throttles: FunctionComponent = () => {
 
   return (
     <>
@@ -19,4 +19,4 @@ export const DccLog: FunctionComponent = () => {
 
 }
 
-export default DccLog
+export default Throttles

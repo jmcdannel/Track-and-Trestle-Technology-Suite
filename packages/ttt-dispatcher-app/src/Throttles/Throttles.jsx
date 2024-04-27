@@ -11,7 +11,6 @@ import MiniThrottle from './MiniThrottle';
 import AvailableThrottle from './AvailableThrottle';
 
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
-
 import { useLocoStore } from '../Store/useLocoStore';
 
 export const Throttles = () => {
@@ -30,7 +29,7 @@ export const Throttles = () => {
   };
 
   const hasThrottles = locos.some(loco => loco.isAcquired);
-  const throttles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl);
+  const acquiredThrottles = locos.filter(loco => loco.isAcquired && !loco.cruiseControl);
   const cruiseThrottles = locos?.filter(loco => loco.isAcquired && loco.cruiseControl);
   const availableThrottles = locos?.filter(loco => !loco.isAcquired);
 
@@ -48,9 +47,7 @@ export const Throttles = () => {
           flexWrap="wrap"
           >
             {cruiseThrottles.map(loco => (
-              <Box key={loco.address} flexBasis="100%">
-                <MiniThrottle loco={loco} />
-              </Box>
+                <MiniThrottle key={loco.address} loco={loco} />
             ))}
           </Box> 
         </Grid>
@@ -61,13 +58,13 @@ export const Throttles = () => {
         'flexWrap': 'wrap',
         backgroundColor: 'rgb(55, 61, 72)',
       }}>
-        {throttles && throttles.length 
-          ? throttles.filter(loco => loco.isAcquired && !loco.cruiseControl)
+        {acquiredThrottles && acquiredThrottles.length 
+          ? acquiredThrottles.filter(loco => loco.isAcquired && !loco.cruiseControl)
               .map(loco => (
                 <Throttle 
                   key={loco.address}
                   loco={loco}
-                  variant={down.md || throttles.length === 1 ? 'full' : 'half'}
+                  variant={down.md || acquiredThrottles.length === 1 ? 'full' : 'half'}
                 />))
           : availableThrottles.map(loco => (
             <AvailableThrottle key={loco.address} loco={loco} />

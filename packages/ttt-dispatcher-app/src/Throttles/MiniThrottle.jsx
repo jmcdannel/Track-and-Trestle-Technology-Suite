@@ -1,27 +1,26 @@
 import React, { useState, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Chip from '@mui/material/Chip';
-import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import SpeedControl from './SpeedControl';
+import AdvancedControls from './AdvancedControls';
+import DccExThrottleController from './DccExThrottleController';
 import Functions from './Functions';
-import ThrottleSettings from './ThrottleSettings';
-import ThrottleActions from './ThrottleActions';
 import LocoName from './LocoName';
 import NamePlate from '../Shared/components/NamePlate';
-import LocoAvatar from './LocoAvatar';
-import AdvancedControls from './AdvancedControls';
-import { ThrottleConsist } from './ThrottleConsist';
-// import JmriThrottleController from './JmriThrottleController';
-import DccExThrottleController from './DccExThrottleController';
+import SpeedControl from './SpeedControl';
+import ThrottleActions from './ThrottleActions';
+import ThrottleConsist from './ThrottleConsist';
+import ThrottleSettings from './ThrottleSettings';
+import ThrottleSlider from './ThrottleSlider';
+
 import useDebounce from '../Shared/Hooks/useDebounce';
-import { useThrottleStore } from '../Store/useThrottleStore';
-import { useLocoStore } from '../Store/useLocoStore';
-import { useMqtt } from '../Core/Com/MqttProvider'
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
+import { useDcc } from '../Dcc/useDcc';
+import { useLocoStore } from '../Store/useLocoStore';
+import { useThrottleStore } from '../Store/useThrottleStore';
 
 import './MiniThrottle.scss';
 
@@ -42,20 +41,21 @@ export const MiniThrottle = props => {
   } = props;
 
   const address = Number(props.loco.address);
-  const { dcc } = useMqtt();
   const throttle = useThrottleStore(state => state.getThrottle)(address);
   const updateLoco = useLocoStore(state => state.updateLoco);
   const speed = throttle?.speed || 0;
   const consist = throttle?.consist || [];
 
-  const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
+  // const calcSpeed = useCallback(origSpeed => origSpeed * (forward === true ? 1 : -1), [forward]);
 
   const [ showFunctionsDrawer, setShowFunctionsDrawer ] = useState(false);
   const [ showSettings, setShowSettings ] = useState(false);
   const [ showConsist, setShowConsist] = useState(false);
   const [ functionState, setFunctionState ] = useState([]);
-  const [ uiSpeed, setUiSpeed ] = useState(calcSpeed(speed));
+  const [ uiSpeed, setUiSpeed ] = useState(speed);
   const debouncedSpeed = useDebounce(uiSpeed, 100);
+
+  const { setFunction } = useDcc();
 
   const handleStopClick = () => {
     setUiSpeed(parseInt(STOP));
@@ -84,11 +84,7 @@ export const MiniThrottle = props => {
       : { on: true };
     newFunctionState[clickedIndex] = newState;
     setFunctionState(newFunctionState)
-    dcc('function', {
-        address,
-        state: newState.on,
-        func: clickedIndex
-      });
+    setFunction(address, clickedIndex, newState.on);
   }
 
   const handleLocoClick = async () => {
@@ -99,11 +95,10 @@ export const MiniThrottle = props => {
   }
 
   return (
-    <>
+    <Box flexBasis="100%">
       <DccExThrottleController 
         speed={debouncedSpeed} 
-        address={address} 
-        forward={(debouncedSpeed >= 0)} 
+        address={address}
         consist={consist}
       />
 
@@ -124,7 +119,12 @@ export const MiniThrottle = props => {
 
       <Dialog onClose={() => setShowConsist(false)} open={showConsist}>
         <DialogTitle>Consist</DialogTitle>
-        <ThrottleConsist address={address} consist={consist} onChange={() => { /* no op */ }} />
+        <ThrottleConsist
+          loco={loco}
+          consist={consist}
+          onClose={() => setShowConsist(false)}
+          onChange={() => { setShowConsist(false) }}
+        />
       </Dialog>
 
       <Paper className="mini-throttle">
@@ -164,7 +164,7 @@ export const MiniThrottle = props => {
           />
         </Box>
       </Paper>
-      </>
+    </Box>
   )
 
 }
