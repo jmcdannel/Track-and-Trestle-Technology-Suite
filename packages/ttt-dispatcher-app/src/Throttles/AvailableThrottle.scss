@@ -10,17 +10,24 @@ $bnsf: rgb(231, 109, 38);
 
 
 .available-throttle-wrapper {
-  padding: .25rem;
-  flex: 0 0 50%;
+  padding: .1rem;
+  flex: 0 0 33%;
   display: flex;
+}
+
+.available-throttle-menu-list {
+  .available-throttle-wrapper{
+    flex: 1 0 100%;
+  }
 }
 
 .available-throttle {
   display: flex;
+  flex-direction: row-reverse;
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 0 1rem;
+  padding: .25rem;
   cursor: pointer;
   background: linear-gradient(90deg, #555 0%, rgba(0,0,0,1) 80%);
 
@@ -29,8 +36,8 @@ $bnsf: rgb(231, 109, 38);
     display: flex;
     margin: 0 0 0 .5rem;
     svg, img {
-      height: 5rem;
-      max-width: 5rem;
+      height: 2rem;
+      max-width: 2rem;
     }
   }
 

@@ -33,6 +33,8 @@ export const Host = props => {
 
   const handleReset = () => {
     setLayoutId(null);
+    localStorage.clear();
+    sessionStorage.clear();
   }
   
   return (
@@ -70,15 +72,6 @@ export const Host = props => {
             variant="outlined">
               Reset
           </Button>
-          <Box>
-            <Button 
-              onClick={() => 
-              setLayoutOpen(true)} 
-              disabled={!connected} 
-              variant="outlined">
-                Select Layout
-            </Button>
-          </Box>
         </CardActions>        
       </Card>
       <LayoutDialog

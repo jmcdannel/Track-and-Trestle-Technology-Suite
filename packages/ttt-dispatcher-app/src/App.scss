@@ -158,36 +158,6 @@ main {
   border-radius: .25rem;
 }
 
-.power {
-  &-on, 
-  &-off, 
-  &-unknown, 
-  &-pending {
-  }
-  &-on {
-   svg.MuiSvgIcon-root {
-    fill: rgb(14, 192, 14);
-   }
-  }
-  &-off {
-    svg.MuiSvgIcon-root {
-      fill: rgb(211, 0, 0);
-    }
-
-  }
-  &-unknown {
-    svg.MuiSvgIcon-root {
-      fill: rgb(129, 129, 129);
-    }
-  }
-
-  &-pending {
-    svg.MuiSvgIcon-root {
-      fill: #999;
-      animation: flickerAnimation 1s infinite;
-    }
-  }
-}
 @keyframes flickerAnimation {
   0%   { opacity:1; }
   50%  { opacity:.5; }

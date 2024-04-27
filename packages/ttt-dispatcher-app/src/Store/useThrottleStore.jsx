@@ -28,6 +28,8 @@ const store = persist((set, get) => ({
       return t;
     })]
   })), 
+  deleteThrottle: (address) => set(state => ({ throttles: state.throttles.filter(t => t.address !== address) })),
+  clearThrottles: () => set({ throttles: [] }),
 }), {
   name: '@ttt/throttle-store',
   storage: createJSONStorage(() => sessionStorage)

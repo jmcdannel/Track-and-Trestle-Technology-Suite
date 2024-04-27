@@ -13,6 +13,7 @@ import CompressIcon from '@mui/icons-material/Compress';
 
 import { PrecisionDialog } from './PrecisionDialog';
 import { useLocoStore } from '../Store/useLocoStore';
+import { useThrottleStore } from '../Store/useThrottleStore';
 
 import './AdvancedControls.scss';
 
@@ -28,6 +29,7 @@ const AdvancedControls = (props) => {
   const address = Number(loco.address);
 
   const updateLoco = useLocoStore(state => state.updateLoco);
+  const deleteThrottle = useThrottleStore(state => state.deleteThrottle);
 
   const [showPrecision, setShowPrecision] = useState(false);
 
@@ -65,6 +67,7 @@ const AdvancedControls = (props) => {
     try {
       onStop();
       await updateLoco( { address, isAcquired: false, cruiseControl: false });
+      await deleteThrottle(address);
     } catch (err) {
       console.error(err);
     }    

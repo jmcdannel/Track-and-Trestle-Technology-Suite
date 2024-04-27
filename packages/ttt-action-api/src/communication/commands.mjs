@@ -130,6 +130,7 @@ const effectCommand = async (payload) => {
       case 'frog':
       case 'relay':
       case 'pin':
+      case 'power':
         return [pinCommand(effect)];
       case 'ialed':
         return [ialedCommand(effect)];

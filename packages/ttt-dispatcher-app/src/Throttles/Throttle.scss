@@ -21,9 +21,21 @@ $blue: #146fac;
 $red: #f44336;
 $orange: #f89719;
 $neutral: #f89719;
+
+.throttles-wrapper {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  padding: .5rem;
+  > .throttle-wrapper {
+    flex: 0 0 50%;
+  }
+  &.throttles-count-1 > .throttle-wrapper,
+  &.throttles-count-1 > .available-throttle-wrapper {
+    flex: 1 0 100%;
+  }
+}
 .halfthrottle {
-  // flex-basis: 50%;
-  // max-width: 50%;
   min-height: 540px;
 }
 .throttle {
@@ -31,7 +43,6 @@ $neutral: #f89719;
   flex-direction: column;
   height: 100%;
   flex: 1;
-
   &.fullthrottle {
     flex-basis: 100%;
     max-width: 100%;
@@ -39,35 +50,22 @@ $neutral: #f89719;
     min-height: 540px;
   }
   &.halfthrottle {
-    // flex-basis: 50%;
-    // max-width: 50%;
     min-height: 540px;
   }
-
   .MuiCardHeader-root {
     background: $bg-blue-green-1;
     background: $bg-grad-blue-green-1;
     padding: 0 0 0 .5rem;
   }
-
   .MuiCardHeader-action {
     margin: 0;
     align-self: auto;
-    // svg {
-    //   font-size: 1.8rem;
-    // }
   }
   .MuiCardContent-root {
     &:last-child {
       padding-bottom: 0;
     }
   }
-  .MuiAvatar-root {
-    // TODO: roadname color
-    background: rgb(254,0,107);
-    background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
-  }
-
   &__consist-badge {
     &.MuiBadge-root {
       .MuiBadge-badge {
@@ -75,48 +73,84 @@ $neutral: #f89719;
       }
     }
   }
-
-  // .MuiCardHeader-action {
-  //   padding: .5rem;
-  //   .MuiIconButton-root {
-  //     margin: auto .5rem;
-  //     &.settings {
-  //       background: rgb(181, 181, 181);      
-  //       border: .25rem solid rgb(87, 87, 87);
-  //     }
-
-  //     &.functions {
-  //       border: .25rem solid rgb(195, 254, 0);
-  //       color: rgb(195, 254, 0);
-  //     }
-
-  //     &.cruise-control {
-  //       border: .25rem solid rgb(254,0,107);
-  //       color: rgb(254,0,107);
-  //     }
-  //     &.park {
-  //       border: .25rem solid rgb(0, 72, 254);
-  //       color: rgb(0, 72, 254);
-  //     }
-  //   }
-  // }
-
   &__slider, &__controls, &__actions {
     justify-content: center;
   }
-
-  
-
-
   .throttle__slider__container {
     margin: 2rem 0 2rem 2rem;
   }
-  
+}
 
-  &__actions {
-    &__primary.MuiButtonBase-root {
-      margin-left: auto;
+.mini-throttle {
+  display: flex;
+  flex-direction: row;
+  margin: 0.25rem 0;
+  width: auto;
+  &.MuiPaper-root {
+    // @include linear-gradient(darken($red, 30%), darken($red, 40%));
+    padding: .25rem 0 .25rem 1rem;
+    align-items: center;
+  }
+  .MuiAvatar-root {
+    // TODO: roadname color
+    background: rgb(254,0,107);
+    background: linear-gradient(90deg, rgba(254,0,107,1) 0%, rgba(255,89,0,1) 100%);
+  }
+  .speed-control {
+    display: flex;
+    flex-direction: row;  
+    padding: 0; 
+  }
+  .throttle__speed {
+    padding: 0;
+    font-size: 1rem;
+    margin: 0rem .5rem 0 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    &:after, &:before {
+      display: none;
     }
   }
+  .throttle__controls__group {
+    flex: 1;
+    justify-content: center;
+    flex-direction: row;
+    padding: 0 1rem;
 
+    .MuiButtonBase-root.MuiIconButton-root {
+      background: linear-gradient(140deg, rgb(36, 191, 191) 0%, rgb(20, 133, 143) 100%);
+      background: linear-gradient(140deg, rgb(115 27 196) 0%, rgb(131 23 160) 100%);
+      border-radius: 0;
+      margin: .5rem auto;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+
+      &:first-child {
+        border-radius: 1rem 0 0 1rem;
+      }
+
+      &:last-child {
+        border-radius: 0 1rem 1rem 0;
+      }
+
+      &.speed-up-btn {
+        color: #4caf50;
+      }
+      &.speed-stop-btn {
+        padding: 1rem 0;
+        margin: 0 -2px;
+        width: 100%;
+        border-radius: 1rem;
+      }
+      &.speed-down-btn {
+        color: #f44336;
+      }
+
+    }
+
+    .MuiIconButton-root {
+
+    }
+  }
 }
