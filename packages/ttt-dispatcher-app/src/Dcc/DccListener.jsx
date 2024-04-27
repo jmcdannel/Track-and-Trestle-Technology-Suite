@@ -21,7 +21,7 @@ export const DccListener = () => {
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
   const appendtoDccLog = useDccStore(state => state.appendtoLog);
   const setPowerStatus = useDccStore(state => state.setPowerStatus);
-  const setPorts = useConnectionStore(state => state.setPorts);
+  // const setPorts = useConnectionStore(state => state.setPorts);
 
   const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
 
@@ -52,43 +52,27 @@ export const DccListener = () => {
       console.log('[DccListener] parseDccResponse locoResponse', locoResponse, address, dccSpeed, calculatedSpeed, direction);
     }
   }
-
-  const handleDccMessage = async (message) => {
-    try {
-      // console.log('[DccListener] handleDccMessage', message);
-      const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
-      // console.log('[DccListener] handleDccMessage', action, payload);
-      switch (action) {
-        case 'listPorts':
-          console.log('[DccListener] setPorts', action, payload);
-          setPorts(payload);
-          break;
-        case 'connected':
-          setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
-          setDccDevice(payload.path);
-          publish(`@ttt/dcc/${layoutId}`, {
-            action: 'dcc',
-            payload: 's'
-          });
-          break;
-        case 'broadcast':
-          parseDccResponse(payload);
-          appendtoDccLog(payload);
-          break;
-      }
-    } catch (err) { 
-      setDccDeviceStatus(CONNECTION_STATUS.DISCONNECTED);
-      console.error('[DccListener] handleDccMessage error', err); 
-    }
-  }
   
   useEffect(() => {
     const parse = function() {
       try {
-        const message = JSON.parse(mqttMessage.message);
-        // message && message.data && handleDccMessage(message);
-        // handleDccMessage({ data: mqttMessage?.message &&  mqttMessage?.topic === 'DCCEX.js' ?  mqttMessage.message : null });
-        handleDccMessage({ data: mqttMessage?.message ?  mqttMessage.message : null });
+        const message = { data: mqttMessage?.message ?  mqttMessage.message : null };
+        const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
+        // console.log('[DccListener] handleDccMessage', action, payload);
+        switch (action) {
+          case 'connected':
+            setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
+            setDccDevice(payload.path);
+            publish(`@ttt/dcc/${layoutId}`, {
+              action: 'dcc',
+              payload: 's'
+            });
+            break;
+          case 'broadcast':
+            parseDccResponse(payload);
+            appendtoDccLog(payload);
+            break;
+        }
       } catch (err) {
         log.error('api initialization error', err);
       }

@@ -7,6 +7,7 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import SignalWifiStatusbarConnectedNoInternet4OutlinedIcon from '@mui/icons-material/SignalWifiStatusbarConnectedNoInternet4Outlined';
 import UsbOutlinedIcon from '@mui/icons-material/UsbOutlined';
 import UsbOffOutlinedIcon from '@mui/icons-material/UsbOffOutlined';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import { useConnectionStore, CONNECTION_STATUS } from '../Store/useConnectionStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
@@ -14,7 +15,6 @@ import { useMqtt } from '../Core/Com/MqttProvider'
 export const Status = () => {
 
   const { isConnected: mqttConnected } = useMqtt();
-  const host = useConnectionStore(state => state.host);
   const layoutId = useConnectionStore(state => state.layoutId);
   const status = useConnectionStore(state => state.status);
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
@@ -38,6 +38,17 @@ export const Status = () => {
   
   return (
     <>
+      <a href="/">
+        <ReplayIcon
+          sx={{ 
+            color: 'white',
+            display: {
+              xs: 'none',
+              sm: 'flex'
+            },
+            mr: 2 
+          }} />
+      </a>
       <Link to="/dcc">
         <Chip
           label="DCC"
@@ -59,7 +70,7 @@ export const Status = () => {
       </Link>
       <Link to="/settings">
         <Chip
-          label={`${host} * ${layoutId}`}
+          label={`${layoutId}`}
           color={allConnected ? 'info' : 'error'}
           size="small"
           icon={renderIcon()}

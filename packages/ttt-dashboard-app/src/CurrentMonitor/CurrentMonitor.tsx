@@ -32,10 +32,13 @@ const options = {
     }
   }
 }
+interface CurrentMonitorProps {
+  layoutId: string | null
+}
 
 const initialZeros = Array.from({ length: 20 }).map(() => 0);
 
-const CurrentMonitor: FunctionComponent = () => {
+const CurrentMonitor: FunctionComponent<CurrentMonitorProps> = ({ layoutId }) => {
   const [current, setCurrent] = useState(0)
   const [chistory, setChistory] = useState(initialZeros)
   const [mqttClient, setMqttClient] = useState<MqttClient | null>(null)
@@ -57,13 +60,13 @@ const CurrentMonitor: FunctionComponent = () => {
       case 'broadcast':
         if (payload.startsWith('<jI ')) {
           const currentData = payload.split(' ')
-          console.log('currentData:', currentData)
+          // console.log('currentData:', currentData)
           setCurrent(parseInt(currentData[1]))
           setChistory(prevState => [...prevState, currentData[1]])
         }
         break
       default:
-        console.log('default:', payload)
+        // console.log('default:', payload)
         break
     }
 
@@ -75,7 +78,7 @@ const CurrentMonitor: FunctionComponent = () => {
 
   useEffect(() => {
     isConnected && setInterval(() => {
-      mqttClient?.publish('@ttt/dccex', JSON.stringify({ action: 'dcc', payload: 'JI'}))
+      mqttClient?.publish(`@ttt/DCCEX.js/${layoutId}`, JSON.stringify({ action: 'dcc', payload: 'JI'}))
     }, pollIntervalMS)
   }, [isConnected])
 
@@ -87,9 +90,9 @@ const CurrentMonitor: FunctionComponent = () => {
       })
       mqttClient.on('message', (topic, message) => {
         parseMqttMessage(JSON.parse(message.toString()))
-        console.log(`mqttClient received message:`,topic, message.toString())
+        // console.log(`mqttClient received message:`,topic, message.toString())
       })
-      mqttClient.subscribe('@ttt/DCCEX.js')
+      mqttClient.subscribe(`@ttt/DCCEX.js/${layoutId}`)
     }
   }, [mqttClient])
 

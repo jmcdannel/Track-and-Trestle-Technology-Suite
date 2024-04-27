@@ -24,7 +24,6 @@ import { ThrottleConsist } from './ThrottleConsist';
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
 import { roadClassName, formattedAddress, WAY_UP_STEP } from './throttleUtils';
-import dccApi from '../Shared/api/dccApi';
 import { useDcc } from '../Dcc/useDcc';
 import { useThrottleStore } from '../Store/useThrottleStore';
 
@@ -174,7 +173,7 @@ export const Throttle = props => {
                 <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
               </Grid>
             )} */}
-            {up.md && isVariantFull && (
+            
               <Grid item 
                 xs={5} sm={4} md={4} 
                 display="flex" 
@@ -183,26 +182,26 @@ export const Throttle = props => {
                   cruiseDisabled={cruiseDisabled}
                   loco={loco}
                   onStop={handleStopClick}
-                  onShowConsist={() => setShowConsist(true)}
-                  onFunctionClick={() => setShowFunctionsDrawer(true)}
                   onShowSettings={() => setShowSettings(true)}
-                  onShowFunctions={() => setShowFunctions(true)}
+                  onShowConsist={() => setShowConsist(true)}
+                  onShowFunctions={() => setShowFunctionsDrawer(true)}
                 />
               </Grid>
+            {up.md && isVariantFull && (
+              <Grid item
+                xs={4} sm={4} md={3} 
+                sx={{display: { xs: 'none', sm: 'flex' }}} 
+                flexGrow={1} 
+                className="throttle__slider">
+                  <ThrottleSlider
+                    max={maxSpeed}
+                    className="throttle__slider__control"
+                    speed={uiSpeed}
+                    autoStop={autoStop}
+                    onChange={handleSliderSpeed}
+                  />
+              </Grid>
             )}
-            <Grid item
-              xs={4} sm={4} md={3} 
-              sx={{display: { xs: 'none', sm: 'flex' }}} 
-              flexGrow={1} 
-              className="throttle__slider">
-                <ThrottleSlider
-                  max={maxSpeed}
-                  className="throttle__slider__control"
-                  speed={uiSpeed}
-                  autoStop={autoStop}
-                  onChange={handleSliderSpeed}
-                />
-            </Grid>
             <Grid item 
               xs 
               sx={{ flex: 1 }} 

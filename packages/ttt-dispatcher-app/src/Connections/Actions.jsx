@@ -38,14 +38,6 @@ export const Actions = props => {
   return (
     <>
       <Card className="connection">
-        <CardHeader 
-          title="Actions" 
-          avatar={
-            mqttConnected && devicesConnected 
-              ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor() }} />
-              : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor() }} />
-          } >
-        </CardHeader>
         <CardContent sx={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -56,7 +48,7 @@ export const Actions = props => {
                 ? <SignalWifiStatusbar4BarIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />
                 : <SignalWifiStatusbarNullIcon sx={{ fill: connectionStateColor(), fontSize: '8rem' }} />}
           </Box>
-          <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>                        
+          <Stack spacing={1} sx={{ padding: '1rem', flex: '1' }}>                    
             {actionDevices?.map((device, index) => 
               <ActionDevice key={`device.${index}`} device={device} />
             )}
