@@ -27,7 +27,7 @@ export const Dispatcher = props => {
 
   const { updateTurnout } = useTurnout();
   const turnouts = useTurnoutStore(state => state.turnouts);
-  const dispatcherLayout = { map: true, routes: true, turnouts: true };
+  const dispatcherLayout = { map: true, routes: false, turnouts: true };
   const {
     computedRoutes,
     handleRouteToggle,
@@ -135,7 +135,7 @@ export const Dispatcher = props => {
 
 Dispatcher.defaultProps = {
   filter: turnouts => turnouts,
-  enabled: ['menu'],
+  enabled: [],
   overrideUserPrefs: false
 };
 

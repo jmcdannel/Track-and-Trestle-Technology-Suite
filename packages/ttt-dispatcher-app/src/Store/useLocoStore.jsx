@@ -11,7 +11,20 @@ const store = persist((set, get) => ({
       return t;
     })]
   })),
-  initLocos: (locos) => set({ locos }),
+  initLocos: (locos, throttles) => {
+    let throttleCount = 0;
+    const locosWithThrottles = locos.map(loco => {
+      const throttle = throttles.find(t => t.address === loco.address);
+      !!throttle && throttleCount++;
+      console.log('initLocos', loco, throttle, throttleCount)
+      return { 
+        ...loco, 
+        isAcquired: !!throttle && throttle.speed > 0,
+        cruiseControl: throttleCount > 2
+      };
+    });
+    set({ locos: locosWithThrottles })
+  },
 }), {
   name: '@ttt/loco-store',
   storage: createJSONStorage(() => sessionStorage)

@@ -8,6 +8,8 @@ import Turnouts from '../Turnouts/Turnouts';
 import Routes from '../Routes/Routes';
 import Effects from '../Effects/Effects';
 
+const routesDisabled = true; // routes disabled, considering depracation do to lack of use
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -45,19 +47,19 @@ function ConductorTabs() {
           onChange={handleTabChange}
         >
           <Tab label="Turnouts" />
-          <Tab label="Routes" />
           <Tab label="Effects" />
+          {!routesDisabled && (<Tab label="Routes" />)}
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
         <Turnouts />
       </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <Routes />
-      </TabPanel>
-      <TabPanel value={tab} index={2} className="conductor-effects">
+      <TabPanel value={tab} index={1} className="conductor-effects">
         <Effects />
       </TabPanel>
+      {!routesDisabled && (<TabPanel value={tab} index={2}>
+        <Routes />
+      </TabPanel>)}
     </>
   );
 }

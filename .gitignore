@@ -7,3 +7,4 @@ yarn-error.log
 .nx/cache/
 .vercel
 .env*.local
+.vscode/settings.json

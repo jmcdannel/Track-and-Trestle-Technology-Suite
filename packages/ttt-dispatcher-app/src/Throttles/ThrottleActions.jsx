@@ -15,6 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
 
+import { useThrottleStore } from '../Store/useThrottleStore';
 import { useLocoStore } from '../Store/useLocoStore';
 
 const ThrottleActions = (props) => {
@@ -34,6 +35,7 @@ const ThrottleActions = (props) => {
   const address = Number(props.loco.address);
 
   const updateLoco = useLocoStore(state => state.updateLoco);
+  const deleteThrottle = useThrottleStore(state => state.deleteThrottle);
 
   const iconStyle = {
   }  
@@ -71,6 +73,7 @@ const ThrottleActions = (props) => {
     try {
       onStop();
       await updateLoco( { address, isAcquired: false, cruiseControl: false });
+      await deleteThrottle(address);
     } catch (err) {
       console.error(err);
     }    
