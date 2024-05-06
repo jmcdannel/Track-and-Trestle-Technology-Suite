@@ -16,15 +16,19 @@ export function useLayoutRoadnames(_id) {
   function getLogo(roadname, defaultLogo = null) {
     switch (roadname) {
       case 'bnsf':
-        return <BnsfLogoSvg />
+        // return <BnsfLogoSvg />
+        return <img src="/images/logos/bnsf.png" alt="BNSF" />
       case 'up':
         return <UpLogoSvg  />
       case 'sf':
         return <SfLogoSvg  />
       case 'mrl':
-        return <MrlLogoSvg />
+        // return <MrlLogoSvg />
+        return <img src="/images/logos/mrl.png" alt="Montana Rail Link" />
       case 'gn':
         return <img src="/images/logos/Great_Northern_Herald.png" alt="Great Northern" />
+      case 'amtk':
+        return <img src="/images/logos/amtrack.png" alt="Amtrack" sx={{ backgroundColor: '#fff', borderRadius: '50%' }} />
       default:
         return defaultLogo
     }
