@@ -57,7 +57,7 @@ function ApiEngine() {
           payload?.map(updateActionDeviceById)
           break;
         case 'connected':
-          console.log('[ApiEngine] connected', payload, dccDevice);
+          // console.log('[ApiEngine] connected', payload, dccDevice);
           if (payload.serial === dccDevice) {
             setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           } else {
@@ -153,14 +153,14 @@ function ApiEngine() {
       try {
         if (mqtt.payload?.message) {
           const message = JSON.parse(mqtt.payload.message);
-          console.log('[ApiEngine] mqtt.parse', message);
+          // console.log('[ApiEngine] mqtt.parse', message);
           message && message.data && handleMessage(message);
         }
       } catch (err) {
         log.error('api initialization error', err);
       }
     };    
-    console.log('[ApiEngine] mqtt.payload', mqtt.payload);
+    // console.log('[ApiEngine] mqtt.payload', mqtt.payload);
     mqtt.payload && parse();
   }, [mqtt.payload]);
     

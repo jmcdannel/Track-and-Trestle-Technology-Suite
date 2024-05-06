@@ -20,7 +20,7 @@ export function useLayoutEffect() {
       } else if (effect?.type === 'ialed') {
         await handleIALed(effect);
       } else if (effect?.type === 'macro') {
-        await handleMarcro(effect);
+        await handleMacro(effect);
       } else {
         publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({
           action: 'effects',
@@ -62,18 +62,45 @@ export function useLayoutEffect() {
     }
   }
 
-  async function handleMarcro(effect) {
+  const macroDelay = 3000
+  function delay(t, data) {
+    return new Promise(resolve => {
+        setTimeout(resolve.bind(null, data), t);
+    });
+  }
+
+// assume this is inside an async function    
+
+  async function handleMacro(effect) {
     try {
-      console.log('API.handleMarcro', effect);
-      effect.config?.on.map(async e => await handleUpdateEffect({...getEffectbyId(e), state: effect.state}));
-      effect.config?.off.map(async e => await handleUpdateEffect({...getEffectbyId(e), state: !effect.state}));
+      console.log('API.handleMacro', effect);
+
+      for (let e of effect.config?.on) {
+        await handleUpdateEffect({...getEffectbyId(e), state: effect.state}).then(delay.bind(null, macroDelay));
+      }
+      for (let e of effect.config?.off) {
+        await handleUpdateEffect({...getEffectbyId(e), state: !effect.state}).then(delay.bind(null, macroDelay));
+      }
+      // effect.config?.on.map(async e => 
+      //   setTimeout(
+      //     async () => await handleUpdateEffect({...getEffectbyId(e), state: effect.state}), 
+      //     macroDelay
+      //   )
+      // );
+      // effect.config?.off.map(async e => 
+      //   setTimeout(
+      //     async () => await handleUpdateEffect({...getEffectbyId(e), state: !effect.state}), 
+      //     macroDelay
+      //   )
+      // );
     } catch (err) {
       console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
     }
   }
 
   return {
-    updateEffect: handleUpdateEffect
+    updateEffect: handleUpdateEffect,
+    getEffectbyId
   }
 
 }

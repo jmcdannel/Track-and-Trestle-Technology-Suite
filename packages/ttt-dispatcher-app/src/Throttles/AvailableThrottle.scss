@@ -43,6 +43,10 @@ $bnsf: rgb(231, 109, 38);
 
   &.bnsf {
     background: linear-gradient(90deg, $bnsf 0%, rgba(0,0,0,1) 80%);
+    .throttle-logo {
+      background-color: $bnsf;
+      border-radius: 50%;
+    }
   }
 
   &.sf {
@@ -59,15 +63,20 @@ $bnsf: rgb(231, 109, 38);
   
   &.amtk {
     background: linear-gradient(90deg, $amtk 0%, rgba(0,0,0,1) 80%);
+    .throttle-logo {
+      padding: .5rem;
+      background-color: #fff;
+      border-radius: 50%;
+      svg, img {
+        height: 1rem;
+        max-width: 1rem;
+      }
+    }
   }
   
   &.mrl {
     background-color: $mrl;
     background: linear-gradient(90deg, $mrl 0%, rgba(0,0,0,1) 80%);
-    .throttle-logo {
-      padding: 0 1rem;
-      background-color: $mrl;
-    }
   }
 }
 
