@@ -1,63 +1,36 @@
 <script setup lang="ts">
-  import { onMounted, ref, watch, computed } from 'vue';
-  import { storeToRefs } from 'pinia';
-  import { useRoute } from 'vue-router'
-  import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import router from '../../router/index.ts';
-  import api from '../../api/api.ts';
-  import { useConnectionStore } from '../../store/connectionStore.jsx';
-  import { useMQTT } from 'mqtt-vue-hook'
+  import { ref, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import ConnectionStatus from '../../core/ConnectionStatus.component.vue'
+  import useDcc from '../../api/dccApi'
+  import router from '../../router'
+  import { useConnectionStore } from '../../store/connectionStore.jsx'
 
-
-  const route = useRoute()
-  const connectionId = route.params.connectionId
-
-  const ports = ref(api.dcc.ports())
-  const connStore = useConnectionStore()
-  const { connections } = storeToRefs(connStore)
-
-  const dccApi = computed(() => {
-    return connections.value.get(connectionId)
-  })
-
-  console.log('DccExConnect', connectionId, dccApi.value)
-
-
-  
-  onMounted(() => {
-    
-    
-    api.dcc.send('listPorts', { });
-    // mqttHook.publish('ttt-dcc', JSON.stringify({ action: 'listPorts', payload: { } }));
-  });
+  const dccApi = useDcc()
+  const conn = useConnectionStore()
+  const { ports, serialConnected } = storeToRefs(conn)
+  const dccStatus = ref(serialConnected.value ? 'connected' : 'disconnected')
 
   const handleRefreshClick = () => {
-    console.log('handleRefreshClick');
-    api.dcc.send('listPorts', { });
-    // mqttHook.publish('ttt-dcc', JSON.stringify({ action: 'listPorts', payload: { } }));
+    dccApi.send('listPorts', { });
   }
 
   const handlePortClick = async (e) => {
     try {
-      e.preventDefault();
-      const serial = e.target.value;
-      console.log('handlePortClick', serial);
-      // await api.config.set(connectionId, serial);
-      // await api.dcc.send('connect', { serial });
-      // mqttClient.publish(publishTopic, JSON.stringify({ action: 'connect', payload: { serial } }));
-      router.push({ name: 'home' });
+      e.preventDefault()
+      dccStatus.value = 'pending'
+      const serial = e.target.value
+      dccApi.send('connect', { serial })
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
   }
 
-  // watch(mqttHook.isConnected(), (o, n) => {
-  //   console.log('[DccExConnect].WATCH', o, n);
-  //   if (mqttHook.isConnected()) {
-  //     // api.dcc.send('listPorts', { });
-  //     api.dcc.send('listPorts', { });
-  //   }
-  // });
+  watch(serialConnected, (newValue) => {
+    if (newValue && dccStatus.value === 'pending') {
+      router.push({ name: 'home' });
+    }
+  })
 
 </script>
 
@@ -77,15 +50,12 @@
       </h2>
     </header>
     <main class="my-1 pt-8 flex-grow">  
-      
       <div class="p-2 text-error">
-          <ConnectionStatus :connected="dccApi?.connected" />
-          <!-- <pre>dccApi: {{ dccApi }}</pre>
-          <pre>dccApi?.connected: {{ dccApi?.connected }}</pre> -->
-        </div> 
-        <button class="btn btn-sm btn-outline w-full border-teal-500" @click="handleRefreshClick">Refresh</button>
-          
-        <div className="divider"></div> 
+          <ConnectionStatus connectedLabel="DCC-EX" disconnectedLabel="DCC-EX" :connected="conn.serialConnected" />
+          <ConnectionStatus connectedLabel="MQTT" disconnectedLabel="MQTT" :connected="conn.mqttConnected" />
+          <button class="btn btn-sm btn-outline  border-blue-500" @click="handleRefreshClick">Refresh</button>
+      </div>           
+      <div className="divider"></div> 
       <ul>
         <li v-for="port in ports" :key="port">
           <button class="btn btn-sm btn-outline w-full border-teal-500" :value="port" @click="handlePortClick">{{ port }}</button>
@@ -95,7 +65,3 @@
     </main>
   </main>
 </template>
-
-<style>
-
-</style>
