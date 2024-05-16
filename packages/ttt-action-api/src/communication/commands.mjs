@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'; // TODO: replace with fetch api
 // import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
@@ -58,14 +58,17 @@ const signalCommand = async effect => {
 
   await Promise.all(['red', 'yellow', 'green'].map(async color => {
     if (effect.config[color]) {
-      const uri = `${baseUri}/effects/${effect.config[color]}`;
-      log.fav('[COMMANDS] signalCommand.uri', uri);
-      const resp = await axios.get(uri);
-      log.fav('[COMMANDS] signalCommand.resp', resp?.data);
-      const signalEffect = resp?.data;
-      log.fav('[COMMANDS] signalEffect', signalEffect);
-      signalEffect.state = effect.state === color;
-      commands.push(pinCommand(signalEffect));
+      const newState = effect?.config?.invert
+        ? effect.state !== color
+        : effect.state === color;
+      commands.push({ 
+        iFaceId: effect?.config?.interface,
+        action: 'pin', 
+        payload: { 
+          pin: effect.config[color],
+          state: newState          
+        }
+      });
     }
 
   }));
@@ -112,7 +115,9 @@ const ialedCommand = effect => ({
   payload: { 
     start: effect?.config?.start,
     end: effect?.config?.end,
-    command: effect?.config?.command,
+    pattern: effect?.config?.pattern,
+    strip: effect?.config?.strip,
+    state: effect?.state,
     r: effect?.config?.r,
     g: effect?.config?.g,
     b: effect?.config?.b

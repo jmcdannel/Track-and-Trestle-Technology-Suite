@@ -21,6 +21,15 @@ export function useLayoutEffect() {
         await handleIALed(effect);
       } else if (effect?.type === 'macro') {
         await handleMacro(effect);
+      } else if (effect?.type === 'signal') {
+        publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({
+          action: 'effects',
+          payload: { 
+            effectId: effect.effectId, 
+            state: effect.state,
+            type: effect.type
+          }
+        }))
       } else {
         publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({
           action: 'effects',
@@ -76,10 +85,18 @@ export function useLayoutEffect() {
       console.log('API.handleMacro', effect);
 
       for (let e of effect.config?.on) {
-        await handleUpdateEffect({...getEffectbyId(e), state: effect.state}).then(delay.bind(null, macroDelay));
+        const onEffect = await getEffectbyId(e);
+        const onState = onEffect?.type !== 'signal'
+          ? effect.state
+          : effect.state ? 'green' : 'red';
+        await handleUpdateEffect({...onEffect, state: onState}).then(delay.bind(null, macroDelay));
       }
       for (let e of effect.config?.off) {
-        await handleUpdateEffect({...getEffectbyId(e), state: !effect.state}).then(delay.bind(null, macroDelay));
+        const offEffect = await getEffectbyId(e);
+        const offState = offEffect?.type !== 'signal'
+          ? !effect.state
+          : !effect.state ? 'green' : 'red';
+        await handleUpdateEffect({...offEffect, state: offState}).then(delay.bind(null, macroDelay));
       }
       // effect.config?.on.map(async e => 
       //   setTimeout(

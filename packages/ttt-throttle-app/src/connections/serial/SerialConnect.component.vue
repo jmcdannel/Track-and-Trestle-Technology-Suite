@@ -29,7 +29,7 @@ import { onMounted, ref, watch, computed } from 'vue';
       e.preventDefault();
       const serial = e.target.value;
       console.log('handlePortClick', serial, connectionId);
-      connStore.setConnection(connectionId, { serial, connected: false })
+      // connStore.setConnection(connectionId, { serial, connected: false })
       await api.config.set(connectionId, serial);
       await api.actionApi.put('serialConnect', { connectionId, serial });
       // router.push({ name: 'home' });

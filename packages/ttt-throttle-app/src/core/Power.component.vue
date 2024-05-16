@@ -1,22 +1,15 @@
 <script setup>
-  import { ref, computed } from 'vue'
-  import { storeToRefs } from 'pinia';
-  import { useConnectionStore } from '../store/connectionStore.tsx';
-  import dccJSApi from '../api/dccApi.ts';
+  import { ref } from 'vue'
+  import useDcc from '../api/dccApi'
 
-  const connStore = useConnectionStore();
-  const { connections } = storeToRefs(connStore);
+  const dccApi = useDcc()
 
-  const dccApi = computed(() => {
-    return connections.value.get('dcc-js-api');
-  })
-
-  const power = ref(false);
+  const power = ref(false)
 
   async function handlePower() {
     try {
       console.log('handlePower',  power);
-      await dccJSApi.setPower(power.value ? 0 : 1);
+      await dccApi.setPower(power.value ? 0 : 1);
       power.value = !power.value;
     } catch (err) {
       console.error(err);

@@ -18,18 +18,17 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 LED testStrip(4, 256);
 
-int outPins [] = { 2, 3, 4, 5 };
-
-/*
-[{"action":"pin","payload":{"pin":43,"value":0}}]
-[{"action":"turnout","payload":{"turnout":0,"state":1}}]
- */
-
+int outPins [] = { 2, 3, 4, 5, 10, 11, 12 };
 
 TurnoutPulser turnouts[] = {
   TurnoutPulser(8, 9),
   TurnoutPulser(6, 7) 
 };
+
+/*
+[{"action":"pin","payload":{"pin":43,"value":0}}]
+[{"action":"turnout","payload":{"turnout":0,"state":1}}]
+ */
 
 const size_t capacity = 20*JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
 DynamicJsonDocument doc(capacity);
