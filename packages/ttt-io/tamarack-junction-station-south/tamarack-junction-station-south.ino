@@ -4,31 +4,37 @@
 #include <TurnoutPulser.h>
 
 
-#define SERVOMIN  150 // This is the 'minimum' pulse length count (out of 4096)
-#define SERVOMAX  600 // This is the 'maximum' pulse length count (out of 4096)
+#define SERVOMIN 150  // This is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX 600  // This is the 'maximum' pulse length count (out of 4096)
 #define MIN_PULSE_WIDTH 650
 #define MAX_PULSE_WIDTH 2350
-#define USMIN  600 // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
-#define USMAX  2400 // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
-#define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
+#define USMIN 600      // This is the rounded 'minimum' microsecond length based on the minimum pulse of 150
+#define USMAX 2400     // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
+#define SERVO_FREQ 50  // Analog servos run at ~50 Hz updates
 #define SERVO_COUNT 16
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-int outPins [] = { 2, 3, 4, 5 };
+int outPins[] = { 2, 3, 4, 5, 18, 19, 20, 21, 22, 23, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 45, 47, 50, 52 };
+int signalPins[] = { 
+  8, 9, 10,  
+  24, 25, 26, 
+  49, 51, 53 
+};
+// int outPins [] = { 2, 3, 4, 5, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53 };
 
-/*
+/*f
 [{"action":"pin","payload":{"pin":43,"value":0}}]
 [{"action":"turnout","payload":{"turnout":0,"state":1}}]
  */
 
 
 TurnoutPulser turnouts[] = {
-  TurnoutPulser(8, 9),
-  TurnoutPulser(6, 7) 
+  TurnoutPulser(42, 44),
+  TurnoutPulser(46, 48)
 };
 
-const size_t capacity = 20*JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
+const size_t capacity = 20 * JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
 DynamicJsonDocument doc(capacity);
 
 void setup() {
@@ -36,38 +42,43 @@ void setup() {
   while (!Serial) continue;
   Serial.println("Setup");
 
-  for (int idx=0; idx<(sizeof(outPins) / sizeof(outPins[0])); idx++) {
+  for (int idx = 0; idx < (sizeof(outPins) / sizeof(outPins[0])); idx++) {
     pinMode(outPins[idx], OUTPUT);
   }
 
-  for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
+  for (int idx = 0; idx < (sizeof(signalPins) / sizeof(signalPins[0])); idx++) {
+    pinMode(signalPins[idx], OUTPUT);
+    digitalWrite(signalPins[idx], HIGH);
+  }
+
+  for (int idx = 0; idx < (sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
     turnouts[idx].begin();
   }
 
   pwm.begin();
   pwm.setOscillatorFrequency(27000000);
   pwm.setPWMFreq(SERVO_FREQ);
-//  pwm.setPWMFreq(1200);  // This is the maximum PWM frequency
+  //  pwm.setPWMFreq(1200);  // This is the maximum PWM frequency
 }
 
 void loop() {
-  
-  for (int idx=0; idx<(sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
+
+  for (int idx = 0; idx < (sizeof(turnouts) / sizeof(turnouts[0])); idx++) {
     turnouts[idx].loop();
   }
   if (Serial.available() > 0) {
     Serial.println("handleInput");
     handleInput();
   }
-  
-//  for (uint16_t pulselen = SERVOMIN; pulselen < SERVOMAX; pulselen++) {
-//    pwm.setPWM(2, 0, pulselen);
-//    Serial.println(pulselen);
-//  }
-//  pwm.setPWM(2, 0, 150);
-//  delay(500);
-//  pwm.setPWM(2, 0, 600);
-//  delay(500);
+
+  //  for (uint16_t pulselen = SERVOMIN; pulselen < SERVOMAX; pulselen++) {
+  //    pwm.setPWM(2, 0, pulselen);
+  //    Serial.println(pulselen);
+  //  }
+  //  pwm.setPWM(2, 0, 150);
+  //  delay(500);
+  //  pwm.setPWM(2, 0, 600);
+  //  delay(500);
 }
 
 void handleInput() {
@@ -75,9 +86,9 @@ void handleInput() {
   Serial.println(input);
   deserializeJson(doc, input);
   JsonArray array = doc.as<JsonArray>();
-  for(JsonVariant v : array) {
-    handleAction(v);    
-  }  
+  for (JsonVariant v : array) {
+    handleAction(v);
+  }
 }
 
 void handleAction(JsonVariant v) {
@@ -89,12 +100,11 @@ void handleAction(JsonVariant v) {
 
   if (action == "pin") {
     handlePin(payload);
-  } else  if (action == "servo") {
+  } else if (action == "servo") {
     handleServo(payload);
   } else if (action == "turnout") {
     handleTurnout(payload);
   }
-  
 }
 
 void handleTurnout(JsonObject payload) {
@@ -136,7 +146,7 @@ void handleServo(JsonObject payload) {
 
 int getPulseWidth(int angle) {
   int pulse_wide, analog_value;
-  pulse_wide   = map(angle, 0, 180, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
+  pulse_wide = map(angle, 0, 180, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
   analog_value = int(float(pulse_wide) / 1000000 * SERVO_FREQ * 4096);
   Serial.println(analog_value);
   return analog_value;
