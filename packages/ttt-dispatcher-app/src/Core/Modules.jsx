@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Route, Routes } from "react-router-dom";
 import Conductor from '../Conductor/Conductor';
-import Pinout from '../Settings/Pinout';
+import Pinout from '../Settings/Pinout'; // TODO: refactor
 import Settings from '../Core/Settings';
 import { Dashboard as DccDashboard } from '../Dcc/Dashboard';
 import Dispatcher from '../Dispatcher/Dispatcher';

@@ -27,6 +27,10 @@ export function useTurnout() {
       console.log('API.updateTurnout', turnout);
       if (turnout?.config?.effectId) {
         const efx = {...await getEffectbyId(turnout.config.effectId), state: turnout.state }
+        const newState = efx?.type !== 'signal'
+          ? turnout.state
+          : turnout.state ? 'green' : 'red';
+        efx.state = newState;
         await updateEffect(efx).then(delay.bind(null, macroDelay))
       }
       await handleTurnout(turnout)
