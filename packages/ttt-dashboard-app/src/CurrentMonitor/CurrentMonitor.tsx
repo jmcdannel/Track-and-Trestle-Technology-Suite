@@ -72,9 +72,9 @@ const CurrentMonitor: FunctionComponent<CurrentMonitorProps> = ({ layoutId }) =>
 
   }
 
-  useEffect(() => {
-    setMqttClient(mqtt.connect(mqttBroker, { port: mqttPort }))
-  }, [])
+  // useEffect(() => {
+  //   setMqttClient(mqtt.connect(mqttBroker, { port: mqttPort }))
+  // }, [])
 
   useEffect(() => {
     isConnected && setInterval(() => {
