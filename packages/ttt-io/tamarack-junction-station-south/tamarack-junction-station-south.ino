@@ -2,6 +2,7 @@
 #include <Adafruit_PWMServoDriver.h>
 #include <ArduinoJson.h>
 #include <TurnoutPulser.h>
+#include <SoftwareSerial.h>
 
 
 #define SERVOMIN 150  // This is the 'minimum' pulse length count (out of 4096)
@@ -28,6 +29,7 @@ int signalPins[] = {
 [{"action":"turnout","payload":{"turnout":0,"state":1}}]
  */
 
+SoftwareSerial SoftSerial(2, 3);
 
 TurnoutPulser turnouts[] = {
   TurnoutPulser(42, 44),
@@ -40,7 +42,11 @@ DynamicJsonDocument doc(capacity);
 void setup() {
   Serial.begin(115200);
   while (!Serial) continue;
+
+  SoftSerial.begin(9600);  
+
   Serial.println("Setup");
+  SoftSerial.println("<SoftSerial is ready>");
 
   for (int idx = 0; idx < (sizeof(outPins) / sizeof(outPins[0])); idx++) {
     pinMode(outPins[idx], OUTPUT);
@@ -104,7 +110,37 @@ void handleAction(JsonVariant v) {
     handleServo(payload);
   } else if (action == "turnout") {
     handleTurnout(payload);
+  } else if (action == "ialed") {
+    handleLED(payload);
   }
+}
+
+void handleLED(JsonObject payload) {
+  int strip = payload["strip"];
+  int pattern = payload["pattern"];
+  int r = payload["r"];
+  int g = payload["g"];
+  int b = payload["b"];
+  
+  SoftSerial.print(strip);
+  SoftSerial.print(", ");
+  SoftSerial.print(pattern);
+  SoftSerial.print(", ");
+  SoftSerial.print(r);
+  SoftSerial.print(", ");
+  SoftSerial.print(g);
+  SoftSerial.print(", ");
+  SoftSerial.println(b);
+  
+  Serial.print(strip);
+  Serial.print(", ");
+  Serial.print(pattern);
+  Serial.print(", ");
+  Serial.print(r);
+  Serial.print(", ");
+  Serial.print(g);
+  Serial.print(", ");
+  Serial.println(b);
 }
 
 void handleTurnout(JsonObject payload) {

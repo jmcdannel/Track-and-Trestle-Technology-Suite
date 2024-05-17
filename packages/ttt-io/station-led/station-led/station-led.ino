@@ -38,7 +38,7 @@ void setup() {
 }
 
 void loop() {
-  recvWithEndMarker();
+  recvWithEndMarker(); // check for incoming data
   showNewData();
 
   for (int idx=0; idx<numStrips; idx++) {
