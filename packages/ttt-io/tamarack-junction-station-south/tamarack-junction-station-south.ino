@@ -16,11 +16,14 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-int outPins[] = { 2, 3, 4, 5, 18, 19, 20, 21, 22, 23, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 45, 47, 50, 52 };
+int outPins[] = { 4, 5, 6, 8, 9, 10, 11, 14, 15, 16, 17, 20, 23, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 45, 46, 47, 48, 50, 52 };
 int signalPins[] = { 
-  8, 9, 10,  
-  24, 25, 26, 
-  49, 51, 53 
+  7, 12, 13
+  18, 19, 33
+  21, 22, 34
+  24, 25, 26
+  27, 28, 29
+  30, 31, 32
 };
 // int outPins [] = { 2, 3, 4, 5, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53 };
 
@@ -32,8 +35,7 @@ int signalPins[] = {
 SoftwareSerial SoftSerial(2, 3);
 
 TurnoutPulser turnouts[] = {
-  TurnoutPulser(42, 44),
-  TurnoutPulser(46, 48)
+  TurnoutPulser(42, 44)
 };
 
 const size_t capacity = 20 * JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
