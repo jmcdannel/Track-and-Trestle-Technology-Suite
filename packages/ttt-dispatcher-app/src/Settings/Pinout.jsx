@@ -1,63 +1,74 @@
-import React, { useContext } from 'react';
-
-import { Context } from '../Store/Store';
+import React from 'react';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardContent';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 
+import { useEffectStore } from '../Store/useEffectStore';
+import { useTurnoutStore } from '../Store/useTurnoutStore';
 
 export const Pinout = props => {
-  const [ state ] = useContext(Context);
-
+  const effects = useEffectStore(state => state.effects);
+  const turnouts = useTurnoutStore(state => state.turnouts);
+  
   // const debug = () => JSON.stringify(state, null, 2);
 
   const pins = () => {
-    console.log(state);
-    const turnouts = state?.turnouts?.reduce((acc, turnout) => {
-      if (turnout.type === "servo") {
-        acc.push({
-          pin: turnout.servo,
-          type: turnout.type,
-          name: turnout.name,
-          interface: turnout.interface
-        });
-      }
-      if (turnout.relay) {
-        acc.push({
-          pin: turnout.relay.pin,
-          type: 'relay',
-          name: turnout.name,
-          interface: turnout.relay.interface
-        });
-      }
-      if (turnout.relayCrossover) {
-        acc.push({
-          pin: turnout.relayCrossover.pin,
-          type: 'relay',
-          name: turnout.name,
-          interface: turnout.relayCrossover.interface
-        });
-      }
-      return acc;
-    }, []);
-    const effects = state?.effects?.reduce((acc, effect) => {
-      effect.actions.forEach(action => {
-        if (action.pin) {
-          acc.push({
-            pin: action.pin,
+    console.log(effects, turnouts);
+    const turnoutsPins = [];
+    // const turnouts = state?.turnouts?.reduce((acc, turnout) => {
+    //   if (turnout.type === "servo") {
+    //     acc.push({
+    //       pin: turnout.servo,
+    //       type: turnout.type,
+    //       name: turnout.name,
+    //       interface: turnout.interface
+    //     });
+    //   }
+    //   if (turnout.relay) {
+    //     acc.push({
+    //       pin: turnout.relay.pin,
+    //       type: 'relay',
+    //       name: turnout.name,
+    //       interface: turnout.relay.interface
+    //     });
+    //   }
+    //   if (turnout.relayCrossover) {
+    //     acc.push({
+    //       pin: turnout.relayCrossover.pin,
+    //       type: 'relay',
+    //       name: turnout.name,
+    //       interface: turnout.relayCrossover.interface
+    //     });
+    //   }
+    //   return acc;
+    // }, []);
+    const effectsPins = effects?.reduce((acc, effect) => {
+      
+      if (effect.type === 'signal') {
+        ['red', 'yellow', 'green'].forEach(state => {
+          effect.config[state] && acc.push({
+            pin: effect.config[state],
             type: effect.type,
-            name: effect.type === 'signal' 
-              ? `${effect.name} (${action.state.substring(0, 1)})` 
-              : effect.name,
-            interface: action.interface
+            effectId: effect.effectId,
+            name: effect.name + ' ' + state,
+            interface: effect.config.interface
+          });
+        });
+        
+      } else if (effect.config?.pin) {
+          acc.push({
+            pin: effect.config.pin,
+            type: effect.type,
+            name: effect.name,
+            effectId: effect.effectId,
+            interface: effect.config.interface
           });
         }
-      });
       return acc;
     }, []);
-    return [...turnouts || [], ...effects || []];
+    return [...turnoutsPins || [], ...effectsPins || []];
 
   }
 
@@ -68,14 +79,14 @@ export const Pinout = props => {
     return acc;
   }, []);
 
-  const interfacePins = iface => pins().filter(pin => pin.interface === iface);
+  const interfacePins = iface => pins().filter(pin => pin.interface === iface).sort((a, b) => a.pin - b.pin);
 
   console.log(interfaces());
 
   return (
     <Grid container
       direction="row" spacing={2}
-      justifyContent="space-between"
+      justifyContent="flex-start"
       alignItems="stretch">
       {interfaces().map(iface => (     
       <Grid key={iface} item xs={3} className="flex">   
@@ -94,9 +105,9 @@ export const Pinout = props => {
                 </thead>
                 <tbody>
                 {interfacePins(iface).map(pin => (
-                  <tr key={`${pin.pin}--${pin.interface}`}>
+                  <tr key={`${pin.effectId}--${pin.interface}`}>
                     <td>{pin.pin}</td>
-                    <td>{pin.name}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}>{pin.name}</td>
                     <td>{pin.type}</td>
                   </tr>
                 ))}       

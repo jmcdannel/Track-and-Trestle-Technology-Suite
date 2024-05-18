@@ -3,8 +3,8 @@
 #include <Adafruit_NeoPixel.h>
 
 LED::LED(int pin, int numPixels) {
-  this->_numPixels = 0;
-  this->_numPixels = numPixels;
+  this->pixelNumber = 0;
+  this->pixelNumber = numPixels;
   this->strip = Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
 }
 
@@ -14,45 +14,41 @@ void LED::begin() {
 }
 
 void LED::loop() {
-
-  if(this->pattern > 1 && millis() - this->lastUpdate > 20) this->updatePattern();
-}
-
-void LED::updatePattern() { 
-  switch(pattern) {
-      case 2:
-        this->rainbow();
-        break;
-      default:
-        break;
-    }
+  unsigned long currentMillis = millis();    
+  if(this->pattern > 1 && currentMillis - this->pixelPrevious >= this->pixelInterval) {        //  Check for expired time
+    this->pixelPrevious = currentMillis;                            //  Run current frame
+    this->updatePattern();
+  }
 }
 
 void LED::setPattern(int ledParams[5]) {
   this->pattern = ledParams[1];
   Serial.print("setPattern:");
   Serial.println(pattern);
-  this->wipe();
-  this->j = 0;
+  // this->wipe();
+  // this->j = 0;
   switch(pattern) {
       case 0:
         this->turnOff();
         break;
       case 1:
-        this->setColor(ledParams[2],  ledParams[3],  ledParams[4]);
+        this->color = this->strip.Color(ledParams[2],  ledParams[3],  ledParams[4]);
+        this->setColor(this->color);
         Serial.println("set to new color");
         break;
       case 2:
-        this->rainbow();
+        this->rainbow(10);
         break;
       case 3:
-        this->rainbowCycle();
+        this->theaterChaseRainbow(50);
         break;
       case 4:
-        theaterChaseRainbow(); 
+        this->color = this->strip.Color(ledParams[2],  ledParams[3],  ledParams[4]);
+        this->theaterChase(this->color, 50); 
         break;
       case 5:
-         this->colorWipe(strip.Color(ledParams[2],  ledParams[3],  ledParams[4])); 
+        this->color = this->strip.Color(ledParams[2],  ledParams[3],  ledParams[4]);
+         this->colorWipe(this->color, 50); 
          break;
       default:
         // this->setColor(r, g, b);
@@ -61,14 +57,33 @@ void LED::setPattern(int ledParams[5]) {
     }
 }
 
-void LED::setColor(int r, int g, int b) {
+void LED::updatePattern() { 
+  switch(pattern) {
+      case 2:
+        this->rainbow(10);
+        break;
+      case 3:
+        this->theaterChaseRainbow(50);
+        break;
+      case 4:
+        this->theaterChase(this->color, 50);  
+        break;
+      case 5:
+         this->colorWipe(this->color, 50); 
+         break;
+      default:
+        break;
+    }
+}
+
+void LED::setColor(uint32_t color) {
   Serial.print("setColor");
-  Serial.print(this->_numPixels);
+  Serial.print(this->pixelNumber);
   Serial.print(r);
   Serial.print(g);
   Serial.println(b);
-  for(int i=0; i < this->_numPixels; i++) {
-    this->strip.setPixelColor(i, this->strip.Color(r, g, b));
+  for(int i=0; i < this->pixelNumber; i++) {
+    this->strip.setPixelColor(i, this->color);
   }
   this->strip.show();
   // this->lastUpdate = millis() + 100;
@@ -76,70 +91,77 @@ void LED::setColor(int r, int g, int b) {
 
 void LED::turnOff() {
   this->pattern = 0;
-  for(int i=0; i < this->_numPixels; i++) {
+  for(int i=0; i < this->pixelNumber; i++) {
     this->strip.setPixelColor(i, this->strip.Color(0, 0, 0));
   }
   this->strip.show();
 }
 
-void LED::rainbow() {
+void LED::rainbow(uint8_t wait) {
   // Serial.print("rainbow");
-  // Serial.print(this->_numPixels);
-  // static uint16_t j=0;
-    for(int i=0; i<this->_numPixels; i++) {
-      this->strip.setPixelColor(i, this->Wheel((i+this->j) & 255));
-    }
-    this->strip.show();
-     this->j++;
-  if(this->j >= 256) this->j=0;
-  this->lastUpdate = millis();
+  if(this->pixelInterval !=wait)
+    this->pixelInterval = wait;                   
+  for(uint16_t i=0; i < this->pixelNumber; i++) {
+    strip.setPixelColor(i, Wheel((i + this->pixelCycle) & 255)); //  Update delay time  
+  }
+  strip.show();                             //  Update strip to match
+  this->pixelCycle++;                             //  Advance current cycle
+  if(this->pixelCycle >= 256)
+    this->pixelCycle = 0;                         //  Loop the cycle back to the begining
+
 }
 
-void LED::rainbowCycle() { // modified from Adafruit example to make it a state machine
-  for(int i=0; i< this->strip.numPixels(); i++) {
-    this->strip.setPixelColor(i, this->Wheel(((i * 256 / this->strip.numPixels()) + j) & 255));
+void LED::theaterChase(uint32_t color, int wait) {
+  static uint32_t loop_count = 0;
+  static uint16_t current_pixel = 0;
+
+  this->pixelInterval = wait;                   //  Update delay time
+
+  this->strip.clear();
+
+  for(int c=current_pixel; c < this->pixelNumber; c += 3) {
+    strip.setPixelColor(c, color);
   }
   this->strip.show();
-  this->j++;
-  if(this->j >= 256*5) this->j=0;
-  this->lastUpdate = millis(); // time for next change to the display
-}
 
-void LED::theaterChaseRainbow() { // modified from Adafruit example to make it a state machine
-  // static int j=0, q = 0;
-  static int q = 0;
-  static boolean on = true;
-     if(on){
-            for (int i=0; i < strip.numPixels(); i=i+3) {
-                strip.setPixelColor(i+q, this->Wheel( (i+this->j) % 255));    //turn every third pixel on
-             }
-     }
-      else {
-           for (int i=0; i < strip.numPixels(); i=i+3) {
-               strip.setPixelColor(i+q, 0);        //turn every third pixel off
-                 }
-      }
-     on = !on; // toggel pixelse on or off for next time
-      strip.show(); // display
-      q++; // update the q variable
-      if(q >=3 ){ // if it overflows reset it and update the J variable
-        q=0;
-        j++;
-        if(this->j >= 256) this->j = 0;
-      }
-    this->lastUpdate = millis(); // time for next change to the display    
-}
-
-void LED::colorWipe(uint32_t c) { // modified from Adafruit example to make it a state machine
-  static int i =0;
-    strip.setPixelColor(i, c);
-    strip.show();
-  i++;
-  if(i >= strip.numPixels()){
-    i = 0;
-    this->wipe(); // blank out strip
+  current_pixel++;
+  if (current_pixel >= 3) {
+    current_pixel = 0;
+    loop_count++;
   }
-  this->lastUpdate = millis(); // time for next change to the display
+
+  if (loop_count >= 10) {
+    current_pixel = 0;
+    loop_count = 0;
+  }
+}
+
+void LED::theaterChaseRainbow(uint8_t wait) { // modified from Adafruit example to make it a state machine
+  if(this->pixelInterval != wait)
+    this->pixelInterval = wait;                   //  Update delay time  
+  for(int i=0; i < this->pixelNumber; i+=3) {
+    this->strip.setPixelColor(i + this->pixelQueue, Wheel((i + this->pixelCycle) % 255)); //  Update delay time  
+  }
+  this->strip.show();
+  for(int i=0; i < this->pixelNumber; i+=3) {
+    strip.setPixelColor(i + this->pixelQueue, strip.Color(0, 0, 0)); //  Update delay time  
+  }      
+  this->pixelQueue++;                           //  Advance current queue  
+  this->pixelCycle++;                           //  Advance current cycle
+  if(this->pixelQueue >= 3)
+    this->pixelQueue = 0;                       //  Loop
+  if(this->pixelCycle >= 256)
+    this->pixelCycle = 0;                       //  Loop
+}
+
+void LED::colorWipe(uint32_t color, int wait) {
+  static uint16_t current_pixel = 0;
+  this->pixelInterval = wait;                        //  Update delay time
+  this->strip.setPixelColor(current_pixel++, color); //  Set pixel's color (in RAM)
+  this->strip.show();                                //  Update strip to match
+  if(current_pixel >= this->pixelNumber) {           //  Loop the pattern from the first LED
+    current_pixel = 0;
+  }
 }
 
 
