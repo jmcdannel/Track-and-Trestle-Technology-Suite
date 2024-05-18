@@ -17,22 +17,29 @@ class LED {
   private:
     // MARK: Variables
     Adafruit_NeoPixel strip;
-    int _numPixels;
+
+    unsigned long pixelPrevious = 0;        // Previous Pixel Millis
+    unsigned long patternPrevious = 0;      // Previous Pattern Millis
+
+    int           pixelInterval = 50;       // Pixel Interval (ms)
+    int           pixelQueue = 0;           // Pattern Pixel Queue
+    int           pixelCycle = 0;           // Pattern Pixel Cycle
+    uint16_t      pixelNumber = 0;  // Total Number of Pixels
+    
     int pattern;
+    uint32_t color;
     int r;
     int g;
     int b;
-    uint16_t j;
-    unsigned long lastUpdate; // for millis() when last update occoured
-    unsigned long intervals[]; // speed for each pattern
+    uint16_t j;    
     uint32_t Wheel(byte WheelPos);
-    void updatePattern();
-    void setColor(int r, int g, int b);
-    void rainbow();
     void wipe();
-    void rainbowCycle();
-    void theaterChaseRainbow();
-    void colorWipe(uint32_t c);
+    void updatePattern();
+    void setColor(uint32_t color);
+    void rainbow(uint8_t wait);
+    void theaterChase(uint32_t color, int wait);
+    void theaterChaseRainbow(uint8_t wait);
+    void colorWipe(uint32_t color, int wait);
     // Debuging Identifier
 
     // Private constructor to prevent direct instantiation
