@@ -22,11 +22,7 @@
         state: func1State.value,
         func: props.func
       })
-    dccApi.send('function', { 
-        address:  props.loco, 
-        state: func1State.value,
-        func: props.func
-      })
+    dccApi.setFunction(props.loco, props.func?.id, func1State.value)
   }
 </script>
 <template>

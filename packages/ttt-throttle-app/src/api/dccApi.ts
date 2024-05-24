@@ -59,9 +59,9 @@ export function useDcc() {
     }
   }
 
-  async function setFunction(address, func) {
+  async function setFunction(address, func, state) {
     try {   
-      await send('function', { address, func });
+      await send('function', { address, func, state });
     } catch (err) {
       console.error('[DCC API].setPower', err);
       throw new Error('Unable to read', err);
