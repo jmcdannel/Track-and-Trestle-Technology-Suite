@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import CurrentMonitor from './CurrentMonitor'
 import SelectLayout from './SelectLayout'
 import DccConnector from './DccConnector'
@@ -8,7 +8,15 @@ import './app.css'
 
 export function App() {
 
-  const [layoutId, setLayoutId] = useState<string | null>(null)
+  const [layoutId, setLayoutId] = useState<string | null>(window.localStorage.getItem('layoutId') || null)
+
+  useEffect(() => {
+    if (layoutId) {
+      window.localStorage.setItem('layoutId', layoutId)
+    } else {
+      window.localStorage.removeItem('layoutId')
+    }
+  }, [layoutId])
 
   return layoutId 
     ? (

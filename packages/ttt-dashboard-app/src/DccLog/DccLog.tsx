@@ -1,17 +1,25 @@
-import { FunctionComponent } from "preact"
+import { FunctionComponent, createRef } from "preact"
+import { useEffect } from 'preact/hooks'
 import { log, clearLog } from "../stores/DccStore"
 import { DccLogItem } from "./DccLogItem"
+
+const AlwaysScrollToBottom = () => {
+  const elementRef = createRef();
+  useEffect(() => elementRef.current.scrollIntoView());
+  return <div ref={elementRef} />;
+};
 
 export const DccLog: FunctionComponent = () => {
 
   return (
     <>
-      {/* <button onClick={() => onClear()}>Clear Log</button> */}
-      <div className="flex flex-col-reverse max-h-80 overflow-y-auto">
-        {[...log.value].map(({ message }, idx) => (
-          <pre key={`log${idx}`} className="slide-in-left">{message}</pre>
-          // <DccLogItem key={line.id} item={line} />
+      <button onClick={clearLog}>Clear Log</button>
+      <div className="flex flex-col mt-2 max-h-80 overflow-y-auto">
+        {[...log.value].map((item, idx) => (
+          // <pre key={`log${idx}`} className="slide-in-left">{message}</pre>
+          <DccLogItem key={`log${idx}`} item={item} />
         ))}
+        <AlwaysScrollToBottom />
       </div>
     </>
   )

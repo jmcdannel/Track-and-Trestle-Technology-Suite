@@ -22,7 +22,7 @@
     try {
       console.log('CONNECTING TO MQTT BROKER', mqttBroker, layoutId?.value, dejaTopic.value)
       mqttHook.registerEvent(
-        dejaTopic,
+        dejaTopic.value,
         (topic: string, message: string) => {
           dccApi.parseMessage(topic, message.toString())
         },
@@ -50,7 +50,7 @@
 <template>
   <main class="flex flex-col h-screen">
     <HeaderView />
-    <main class="flex-grow flex mb-16">
+    <main class="flex-grow flex mb-16 min-h-0">
       <RouterView />
     </main>
     <!-- <FooterView /> -->

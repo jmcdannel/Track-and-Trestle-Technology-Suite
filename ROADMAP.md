@@ -34,36 +34,45 @@
 
 
 #### Bugs:
-[ ] mqtt Disconnect
-[-] dispatcher throttle state on reload
+[x] mqtt Disconnect
+[ ] routes broken with update
+[x] dispatcher throttle state on reload
+[ ] connection store doesn't erase config when changing layout. add reset storage button
 
 
 ### TODO
 
-[*] non-blaocking led
+[x] non-blaocking led
+[x] frogs
+[x] tam south signals
+[ ] sounds
+[x] Valley ramp
+[x] Lower level prep
+[x] Coppertone sign
+[ ] sticks & dirt
+[ ] tufts, grass strips, cat tails
+[-] trees, bushes (trunks w/moss)
+[ ] granite rocks
 
-[x] Macro Effects
-[x] Turnout Effects
-[-] effect state management
-[ ] Motion
 [ ] Mobile optimization
+[ ] Motion
 [ ] Route Map styles to show status
 [ ] Auto-version on release to main - show in header
 [ ] Fucntions UI / Icons
-[ ] zustand optimization
-
-[-] city buildings
-[x] city relay
-[-] city electronics
-[x] re-org station north electronics
-[x] re-org power dist
-
+[-] zustand optimization (effects)
 [ ] README
 [ ] hotfix branch
 [ ] explore vercel options
+[-] dashboard UI
+[ ] dashboard dcc command
+[-] dashboard throttle status
+
+[-] city buildings
+[-] city electronics
+[ ] city traffic lights
+[ ] city street parking lines
 
 [*] Sky
-[x] Pi
 [ ] Coffee Website
 [ ] Coffee Station
 [ ] Coffee Corner
@@ -75,43 +84,52 @@
 [-] Helix Cover (foam)
 [-] Helix Entrance
 [-] Tunnels
-[ ] tufts, grass strips
-[-] Trees
-[x] River bank
+[ ] North ballast
 [-] Whitewater
-[x] bridge support (concrete)
-[ ] clean floors (sweep & vacuum)
+[-] clean floors (sweep & vacuum)
 [ ] place speakers
-[x] flip tam south facia
-[x] install dc power supplies
 [-] Bridges
-[ ] Rainbow Bridge
+[-] Rainbow Bridge
 [-] Printed details / signs
-[ ] sounds
-[ ] frogs
-[ ] tam south signals
-[ ] interchange signals
 [ ] town landscaping
-[ ] town sidewalks
-[x] people in city
 [ ] street lights
 [ ] station lights
-[x] station deets
-[ ] station signs
-[ ] station 
+[-] station signs
+[ ] station frontage
+[ ] station parking bumpers
+[ ] replace tam south facia
+[ ] Power Buttons
+[ ] Power Facia
+[-] South Mtn
+[ ] South Land forming
+[ ] South Electronics
+[ ] LED Wiring
+[ ] LED Guide Strips
+[ ]
+
 
 [ ] Casino
 [-] Uptown Roads / Sidewalk, lights
 [ ] Uptown Buildings
 
-[-] dashboard UI
-[ ] dashboard dcc command
-[-] dashboard throttle status
-
 ## Done
 ### MVC TODone:
 
 
+[x] interchange signals
+[x] town sidewalks
+[x] flip tam south facia
+[x] install dc power supplies
+[x] people in city
+[x] station deets
+[x] Macro Effects
+[x] Turnout Effects
+[x] city relay
+[x] re-org station north electronics
+[x] re-org power dist
+[x] Pi
+[x] River bank
+[x] bridge support (concrete)
 [x] temp uptown concrete jungle
 [x] River dams
 [x] Pour Rivers
