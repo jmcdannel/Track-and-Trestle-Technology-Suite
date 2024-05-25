@@ -31,8 +31,8 @@ pixelPlatformAnimation = Solid(pixelPlatform, color=(0, 0, 0))
 # pixelPlatformAnimation = Sparkle(pixelPlatform, speed=1, color=(220, 220, 220), num_sparkles=5)
 # pixelPlatformAnimation = SparklePulse(pixelPlatform, speed=0.05, period=3, color=(220, 220, 220))
 
-# broker = "test.mosquitto.org"
-broker = os.getenv('MQTT_BROKER') # "joshs-mac-mini.local"
+broker = "test.mosquitto.org"
+# broker = os.getenv('MQTT_BROKER') # "joshs-mac-mini.local"
 
 def connect(client, userdata, flags, rc):
     print("Connected to MQTT Broker {}".format(broker))
@@ -46,7 +46,7 @@ print("Connected, IPv4 Addr: ", wifi.radio.ipv4_address)
 
 mqtt_client = MQTT.MQTT(
     broker=broker,
-    port=1883,
+    port=8081,
     socket_pool=pool,
 )
 
@@ -66,10 +66,9 @@ def connected(client, userdata, flags, rc):
     # This function will be called when the client is connected
     # successfully to the broker.
     print(f"Connected to mqtt Listening for topic changes")
-    client.subscribe("ttt")
-    client.subscribe("ttt-turnout")
-    client.subscribe("ttt-ialed")
-    client.subscribe("ttt-effect")
+    client.subscribe("@ttt/turnout/tam")
+    client.subscribe("@ttt/ialed/tam")
+    client.subscribe("@ttt/effect/tam")
 
 
 def disconnected(client, userdata, rc):
