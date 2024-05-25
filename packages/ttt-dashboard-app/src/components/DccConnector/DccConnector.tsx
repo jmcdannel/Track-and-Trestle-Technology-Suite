@@ -2,7 +2,7 @@ import { FunctionComponent } from "preact";
 import { useEffect, useState, useId } from 'preact/hooks';
 import { signal } from "@preact/signals";
 import { useMqtt } from './hooks/useMqtt';
-import { appendToLog as appendToDcc, deviceStatus, updateDeviceStatus } from "../../stores/DccStore";
+import { appendToLog as appendToDcc, appendToCurrentLog, deviceStatus, updateDeviceStatus } from "../../stores/DccStore";
 import { upsertThrottle as addThrottle } from "../../stores/ThrottleStore";
 import { appendToLog as addTurnout } from "../stores/TurnoutStore";
 
@@ -85,12 +85,12 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
             
       case 'i':
         if (dccMessage.startsWith('iDCC-EX')) {
-          const parts = dccMessage.trim().split(' / ');
-          const dparts = parts?.[0].trim().split(' ');
-          const mparts = parts?.[2].trim().split(' ');
+          const iparts = dccMessage.trim().split(' / ');
+          const dparts = iparts?.[0].trim().split(' ');
+          const mparts = iparts?.[2].trim().split(' ');
           console.log('iDCC-EX', parts);
           updateDeviceStatus('version', dparts?.[1]);
-          updateDeviceStatus('deviceType', parts?.[1].trim());
+          updateDeviceStatus('deviceType', iparts?.[1].trim());
           updateDeviceStatus('motorShield', mparts?.[0]);
           updateDeviceStatus('clientId', mparts?.[1]);
         }
@@ -98,6 +98,11 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
       case 'l' :
         updateThrottle(payload);
         break;
+      case 'j' :
+        if (dccMessage.startsWith('jI')) {
+          appendToCurrentLog(parseInt(parts?.[1]))
+        }
+        break; 
       default:
         break;
     }
@@ -125,19 +130,30 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
     };    
     mqttMessage && parse();
   }, [mqttMessage]);
+
+  const pollIntervalMS = 2000
   
   // Connect MQTT Client
-  useEffect(() => {
+  useEffect(async () => {
+    const pollForCurrent = async () => {
+      while (isConnected) {
+        // console.log('polling for current', isConnected);
+        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'dcc', payload: 'JI' }));
+        await new Promise(resolve => setTimeout(resolve, pollIntervalMS));
+      }
+    };
     const initialize = async function() {
       try {        
+        console.log('mqtt initialization', layoutId);
         publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
         subscribe(`@ttt/DCCEX.js/${layoutId}`, null);
       } catch (err) {
         console.error('api initialization error', err);
       }
     };
-    !isConnected && connect();
-    isConnected && initialize();
+    !isConnected && connect()
+    isConnected && await initialize() 
+    isConnected&& await pollForCurrent();
   }, [isConnected ]);
 
   return (
