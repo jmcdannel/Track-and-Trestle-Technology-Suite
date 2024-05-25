@@ -15,8 +15,8 @@ kit = ServoKit(channels=16, i2c=i2c)
 
 pixel = neopixel.NeoPixel(board.GP2, 30)
 
-# broker = "test.mosquitto.org"
-broker = "joshs-mac-mini.local"
+broker = "test.mosquitto.org"
+# broker = "tamarackjunctionmbp.local"
 
 def connect(client, userdata, flags, rc):
     print("Connected to MQTT Broker {}".format(broker))
@@ -34,8 +34,9 @@ def connected(client, userdata, flags, rc):
     # This function will be called when the client is connected
     # successfully to the broker.
     print(f"Connected to mqtt Listening for topic changes")
+    client.publish("tj-north-pico-w", "Connected to mqtt Listening for topic changes")
     # Subscribe to all changes on the onoff_feed.
-    client.subscribe("ttt")
+    client.subscribe("@ttt/turnout/tam")
 
 
 def disconnected(client, userdata, rc):
@@ -49,7 +50,21 @@ def message(client, topic, message):
     print(f"New message on topic {topic}: {message}")
     action = json.loads(message)
     print(action)
-    kit.servo[action["servo"]].angle = action["angle"]
+    if action is "handleTurnout":
+        handleTurnout(turnout = action.get("turnout"))
+    else if action is "handle"
+
+def handleTurnout(turnout):
+    print("handleTurnout")
+    
+    if turnout is not None:
+        servo = action["turnout"]["config"]["servo"]
+        if action["turnout"]["state"] is True:
+            angle = action["turnout"]["config"]["straight"]
+        else:
+            angle = action["turnout"]["config"]["divergent"]
+        kit.servo[servo].angle = angle
+        client.publish("tj-north-pico-w", f"Toggled servo {servo} to angle {angle}")
 
 def subscribe(client, userdata, topic, granted_qos):
     # This method is called when the client subscribes to a new feed.
@@ -89,5 +104,7 @@ while True:
     
 #    led_on = not led_on
 #    time.sleep(2)
+
+
 
 

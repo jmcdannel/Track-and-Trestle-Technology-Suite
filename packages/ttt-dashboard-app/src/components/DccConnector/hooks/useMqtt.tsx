@@ -22,6 +22,7 @@ export function useMqtt() {
     let client:any;
     try {
       console.log('connecting to broker', mqttBroker)
+      // client = await mqtt.connect(mqttBroker)
       client = await mqtt.connect(mqttBroker, { port: mqttPort })
     } catch (err) {
       console.error(err)
