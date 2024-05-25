@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'preact/hooks'
-import CurrentMonitor from './CurrentMonitor'
-import SelectLayout from './SelectLayout'
-import DccConnector from './DccConnector'
-import DccLog from './DccLog/DccLog';
-import Throttles from './Throttles'
+import CurrentMonitor from './components/CurrentMonitor'
+import SelectLayout from './components/SelectLayout'
+import DccConnector from './components/DccConnector'
+import DccLog from './components/DccLog/DccLog';
+import Throttles from './components/Throttles'
+import LayoutInfo from './components/LayoutInfo'
 import './app.css'
 
 export function App() {
@@ -31,17 +32,18 @@ export function App() {
             </div>
           </header>
           <main class="grid gap-4 grid-cols-2 flex-1  h-full">
-            <section class="bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-violet-500 to-fuchsia-500">
+            <section class="relative bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-violet-500 to-fuchsia-500">
               <DccLog />
             </section>
-            <section class="bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-500">
-              <CurrentMonitor layoutId={layoutId} />
+            <section class="relative bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-cyan-500 to-blue-500">
+              <LayoutInfo />
             </section>
-            <section class="bg-stone-600 p-8 rounded-3xl bg-gradient-to-r  from-green-600 to-indigo-700">
+            <section class="relative bg-stone-600 p-8 rounded-3xl bg-gradient-to-r  from-green-600 to-indigo-700">
              <Throttles />
             </section>
-            <section class="bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-pink-500 to-violet-500">
+            <section class="relative bg-stone-600 p-8 rounded-3xl bg-gradient-to-r from-pink-500 to-violet-500">
               {/* Turnouts */}
+              <CurrentMonitor layoutId={layoutId} />
             </section>
           </main>
         </div>
