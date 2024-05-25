@@ -3,13 +3,14 @@ import { onMounted, ref, watch, computed } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router'
   import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import router from '../../router/index.ts';
-  import api from '../../api/api.ts';
+  import useDcc from '../../api/dccApi'
+  import router from '../../router'
   import { useConnectionStore } from '../../store/connectionStore.jsx';
 
   const route = useRoute();
   const connectionId = route.params.connectionId;
 
+  const dccApi = useDcc()
   const connStore = useConnectionStore();
   const { connections } = storeToRefs(connStore);
 
@@ -18,10 +19,6 @@ import { onMounted, ref, watch, computed } from 'vue';
   });
   const actionApiConnection = computed(() => {
     return connections.value.get('action-api')
-  });
-
-  onMounted(() => {
-    api.actionApi.put('ports', { });
   });
 
   const handlePortClick = async (e) => {

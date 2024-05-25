@@ -1,6 +1,6 @@
 import { FunctionComponent } from "preact";
 import { useState, useEffect } from "preact/hooks";
-import { getLayouts } from "../lib/layoutApi";
+import { getLayouts } from "../../lib/layoutApi";
 
 interface SelectLayoutProps {
   onSelected: (layout: any) => void;
