@@ -13,7 +13,7 @@ export function useTurnout() {
   const updateTurnoutState = useTurnoutStore(state => state.updateTurnout);
   const { updateEffect, getEffectbyId } = useLayoutEffect();
   const { publish } = useMqtt();
-  const { setTurnout } = useDcc()
+  const { setTurnout: setDccTurnout } = useDcc()
 
   const macroDelay = 3000
   function delay(t, data) {
@@ -41,28 +41,15 @@ export function useTurnout() {
   
   async function handleTurnout(turnout) {
     updateTurnoutState(turnout)
-    switch(turnout?.config?.interface) {
-      case 'dcc-js-api':
-        setTurnout(turnout.config.dccExId, turnout.state);
-        break;
-      case 'mqtt':
-        publish(`@ttt/turnout/${layoutId}`, JSON.stringify({ turnout }));
-        break;
-      case 'betatrack-io':
-      case 'tamarack-junction-station-south-io':
-      case 'serial':
-      case 'action-api':
-        // actionApi.turnouts.put(turnout);
-        publish(`@ttt/turnout/${layoutId}`, JSON.stringify({ 
-          action: 'turnouts',
-          payload: turnout 
-        }));
-        break;
-      default:
-        console.warn('Unknown interface type', turnout?.config?.interface, turnout);
-        break;
-      }
+    if (turnout?.config?.interface === 'dcc-js-api') {
+        setDccTurnout(turnout.config.dccExId, turnout.state);
     }
+    
+    publish(`@ttt/turnout/${layoutId}`, JSON.stringify({ 
+      action: 'turnouts',
+      payload: turnout 
+    }));
+  }
 
   return {
     updateTurnout
