@@ -1,11 +1,26 @@
 import { FunctionComponent } from "preact"
-import { throttles, clearLog } from "../stores/ThrottleStore"
+import { throttles, clearLog } from "../../stores/ThrottleStore"
+import XCircle from '../../assets/icons/x-circle'
 
 export const Throttles: FunctionComponent = () => {
 
   return (
     <>
-      <button onClick={clearLog}>Clear Log</button>
+      
+      <button onClick={clearLog} className="
+      bg-transparent
+      
+      ">
+        <XCircle className="
+          w-8 
+          h-8 
+          p-1 
+          bg-indigo-400 
+          rounded-full 
+          absolute 
+          -top-1
+          -right-1
+        " /></button>
       <div className="mt-2 flex flex-col-reverse max-h-80 overflow-y-auto">
         {[...throttles.value].map((throttle, idx) => (
           <div key={`throttles${idx}`} className="slide-in-left p-2 mb-1 bg-indigo-800 rounded-xl flex items-center justify-between shadow-md ">

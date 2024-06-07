@@ -42,14 +42,37 @@ const baseUri = `${host}/api/${layoutId}`;
 //   }
 // }
 
-const macroCommand = async (effect, action, delay = 0) => {
-  console.log('macroCommand', effect, action);
-  const uri = `${baseUri}/effects/${action.effectId}`;
-  log.log('[COMMANDS] macroCommand.uri', uri);
-  const resp = await axios.get(uri);
-  const macroEffect = resp?.data
-  log.log('[COMMANDS] macroEffect', macroEffect);
-  return macroEffect;
+const macroCommand = async (effect, delay = 0) => {
+  // console.log('macroCommand', effect, action);
+  // const uri = `${baseUri}/effects/${action.effectId}`;
+  // log.log('[COMMANDS] macroCommand.uri', uri);
+  // const resp = await axios.get(uri);
+  // const macroEffect = resp?.data
+  // log.log('[COMMANDS] macroEffect', macroEffect);
+    try {
+      let macroCommands = []
+      console.log('API.handleMacro', effect);
+
+      for (let e of effect.config?.on) {
+        macroCommands = [...macroCommands, ...await effectCommand({ effectId: e, state: effect.state })]
+        // const onEffect = await getEffect(e);
+        // const onState = onEffect?.type !== 'signal'
+        //   ? effect.state
+        //   : effect.state ? 'green' : 'red';
+        // macroCommands.push({...onEffect, state: onState})
+      }
+      for (let e of effect.config?.off) {
+        macroCommands = [...macroCommands, ...await effectCommand({ effectId: e, state: !effect.state })]
+        // const offEffect = await getEffect(e);
+        // const offState = offEffect?.type !== 'signal'
+        //   ? !effect.state
+        //   : !effect.state ? 'green' : 'red';
+        // macroCommands.push({...offEffect, state: offState})
+      }
+      return macroCommands
+    } catch (err) {
+      console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
+    }
   
 }
 
@@ -58,9 +81,18 @@ const signalCommand = async effect => {
 
   await Promise.all(['red', 'yellow', 'green'].map(async color => {
     if (effect.config[color]) {
-      const newState = effect?.config?.invert
-        ? effect.state !== color
-        : effect.state === color;
+      let newState
+      if (!!effect.state) {
+        newState = color === 'green'
+      } else {
+        newState = color === 'red'
+      }
+      // let newState = effect.state
+      //   ? color === 'green'
+      //   : color === 'red'
+      if (effect?.config?.invert) {
+        newState = !newState
+      }
       commands.push({ 
         iFaceId: effect?.config?.interface,
         action: 'pin', 
@@ -158,23 +190,37 @@ const effectCommand = async (payload) => {
   }
 }
 
+const getEffect = async (effectId) => {
+  const uri = `${host}/api/effects/${layoutId}/${effectId}`;
+  const resp = await axios.get(uri);
+  return resp.data;
+}
+
 const turnoutCommand = async (payload) => {
   try {
-    const uri = `${host}/api/turnouts/${layoutId}/${payload.turnoutId}`;
-    const resp = await axios.get(uri);
-    const turnout = {...resp.data, state: payload.state};
+    let commands = []
+    const uri = `${host}/api/turnouts/${layoutId}/${payload.turnoutId}`
+    const resp = await axios.get(uri)
+    const turnout = {...resp.data, state: payload.state}
+    if (turnout?.config?.effectId) {
+      const efx = await getEffect(turnout.config.effectId)
+      efx.state = turnout.state
+      const efxCommands =  await effectCommand(efx)
+      commands = [...commands, ...efxCommands]
+    }
     switch(turnout?.config?.type) {
       case 'kato':
-        return {
+        commands.push({
           iFaceId: turnout.config.interface,
           action: 'turnout', 
           payload: { 
             turnout: turnout.config.turnoutIdx, 
             state: turnout.state 
           }
-        };
+        })
+        break
       case 'servo':
-        return {
+        commands.push({
           iFaceId: turnout.config.interface,
           action: 'servo', 
           payload: { 
@@ -186,32 +232,34 @@ const turnoutCommand = async (payload) => {
               ? turnout.config.straight 
               : turnout.config.divergent
           }
-        };
+        })
+        break
       default:
         // no op
         break;
     }
+    return commands
   } catch (err) {
     log.error('[COMMANDS] turnoutCommand', err?.message);
   }
 }
 
 export const build = async (msg) => {
-  const { action, payload } = msg;
-  let commandList = [];
+  const { action, payload } = msg
+  let commandList = []
   switch(action) {
     case 'turnouts':
-      commandList.push(await turnoutCommand(payload));
-      break;
+      commandList = await turnoutCommand(payload)
+      break
     case 'effects':
-      commandList = await effectCommand(payload);
-      break;
+      commandList = await effectCommand(payload)
+      break
     default: 
       // no op
-      break;
+      break
   }
-  // log.debug('[COMMANDS] commandList', commandList);
-  return commandList;
+  // log.debug('[COMMANDS] commandList', commandList)
+  return commandList
 }
 
 export const send = (commands) => {
@@ -223,7 +271,9 @@ export const send = (commands) => {
     coms.map(iFaceId => {
         // log.debug('[COMMANDS] interface', iFaceId, interfaces.interfaces, interfaces.interfaces[iFaceId], commands.map(cmdFormatter));
         log.info('[COMMANDS] interface', iFaceId, commands.map(cmdFormatter));
-        const { send: sendCmd, connection } = interfaces.interfaces[iFaceId];
+        const { send: sendCmd, connection } = interfaces.interfaces?.[iFaceId]
+          ? interfaces.interfaces[iFaceId]
+          : { send: undefined, connection: undefined }
         sendCmd && sendCmd(connection, commands.map(cmdFormatter));
     });
   } catch (err) {

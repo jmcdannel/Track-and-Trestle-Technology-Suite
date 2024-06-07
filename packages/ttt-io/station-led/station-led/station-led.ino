@@ -10,7 +10,8 @@
 #include "LED.h"
 
 LED strips[] = {
-   LED(4, 256)
+   LED(4, 47),
+   LED(5, 256)
 };
 
 int numStrips = (sizeof(strips) / sizeof(strips[0]));
@@ -24,10 +25,8 @@ char receivedChars[numChars];   // an array to store the received data
 
 void setup() {
   Serial.begin(9600);
-  Serial.flush();
 
   SoftSerial.begin(9600);
-  SoftSerial.flush();
 
   Serial.println("<Arduino is listening>");
   SoftSerial.println("<Arduino is listening>");
