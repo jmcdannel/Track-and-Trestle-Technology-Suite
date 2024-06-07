@@ -24,7 +24,7 @@
     "pinia": "^2.1.6",
     "realm-web": "^2.0.0",
     "vue": "^3.3.4",
-    "vue-debounce": "^4.0.0",
+    "vue-debounce": "^5.0.0",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
