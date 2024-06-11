@@ -44,7 +44,7 @@ export const Throttles = () => {
   return (
     <>          
       <Box 
-        className={`throttles-wrapper throttles-count-${acquiredThrottles.length}`}
+        className={`throttles-wrapper throttles-count-${acquiredThrottles.length} throttles-size-${getCurrentSize()}`}
       >
         {cruiseThrottles?.map(loco => (
           <Throttle 

@@ -31,6 +31,7 @@ $neutral: #f89719;
     flex: 0 0 50%;
   }
   &.throttles-count-1 > .throttle-wrapper,
+  &.throttles-size-sm > .throttle-wrapper,
   &.throttles-count-1 > .available-throttle-wrapper {
     flex: 1 0 100%;
   }
