@@ -70,7 +70,11 @@ export const DccListener = () => {
             break;
           case 'broadcast':
             parseDccResponse(payload);
-            appendtoDccLog(payload);
+            const firstChar = payload?.charAt(1)
+            const ignore = ['j']
+            if (!ignore.includes(firstChar)) {
+              appendtoDccLog(payload);
+            }
             break;
         }
       } catch (err) {

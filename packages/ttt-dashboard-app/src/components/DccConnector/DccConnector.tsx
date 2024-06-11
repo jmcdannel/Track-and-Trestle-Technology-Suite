@@ -48,9 +48,10 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
   const parseDccResponse = (payload:string) => {
     const match = payload.match(dccRegex)
     const dccMessage = match ? match[1] : ''
-    const parts = dccMessage.trim().split(' ');
+    const parts = dccMessage.trim().split(' ')
+    const firstChar = payload?.charAt(1)
     // console.log('parseDccResponse', dccMessage?.charAt(0), dccMessage, payload)
-    switch(payload?.charAt(1)) {
+    switch(firstChar) {
       case '*' :
         const statusMessage = payload.match(dccStatusRegex)?.[1] || '';
         console.log('statusMessage', statusMessage)
@@ -102,11 +103,14 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
         if (dccMessage.startsWith('jI')) {
           appendToCurrentLog(parseInt(parts?.[1]))
         }
-        break; 
-      default:
         break;
+      default:
+        break
     }
-    appendToDcc(payload);
+    const ignore = ['j']
+    if (!ignore.includes(firstChar)) {
+      appendToDcc(payload)
+    }
   }
   
   useEffect(() => {

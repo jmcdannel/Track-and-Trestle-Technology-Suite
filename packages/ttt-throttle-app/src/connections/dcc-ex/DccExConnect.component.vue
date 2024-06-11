@@ -15,7 +15,7 @@
     dccApi.send('listPorts', { });
   }
 
-  const handlePortClick = async (e) => {
+  const handlePortClick = async (e:any) => {
     try {
       e.preventDefault()
       dccStatus.value = 'pending'

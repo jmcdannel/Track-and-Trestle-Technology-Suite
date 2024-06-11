@@ -7,7 +7,7 @@ export function useDcc() {
   const mqttHook = useMQTT()
   const topic = '@ttt/dcc/betatrack'
 
-  let ports: string[] = [];
+  let ports: never[] = [];
 
   async function parseMessage(topic: string, message: string) {
     try {
@@ -16,8 +16,8 @@ export function useDcc() {
       console.log('[DCC API] parseMessage', topic, message, action, payload);
       switch (action) {
         case 'listPorts':
-          ports = payload
-          connStore.$patch({ ports })
+          ports = payload || []
+          connStore.ports = ports
           break;
         case 'status':
           connStore.serialConnected = !!payload?.isConnected
@@ -35,50 +35,50 @@ export function useDcc() {
     try {   
       console.log('[DCC API].setPower', payload);
       await send('power', payload);
-    } catch (err) {
+    } catch (err:any) {
       console.error('[DCC API].setPower', err);
-      throw new Error('Unable to read', err);
+      throw new Error(err);
     }
   }
 
-  async function setSpeed(address, speed) {
+  async function setSpeed(address: any, speed: any) {
     try {   
       await send('throttle', { address, speed });
-    } catch (err) {
+    } catch (err:any) {
       console.error('[DCC API].setPower', err);
-      throw new Error('Unable to read', err);
+      throw new Error(err);
     }
   }
 
-  async function setTurnout(turnoutId, state) {
+  async function setTurnout(turnoutId: any, state: any) {
     try {   
       send('turnout', { turnoutId, state });
-    } catch (err) {
+    } catch (err:any) {
       console.error('[DCC API].setTurnout', err);
-      throw new Error('Unable to read', err);
+      throw new Error(err);
     }
   }
 
-  async function setFunction(address, func, state) {
+  async function setFunction(address: any, func: any, state: any) {
     try {   
       await send('function', { address, func, state });
-    } catch (err) {
+    } catch (err:any) {
       console.error('[DCC API].setPower', err);
-      throw new Error('Unable to read', err);
+      throw new Error(err);
     }
   }
 
-  async function sendOutput(pin, state) {
+  async function sendOutput(pin: any, state: any) {
     try {   
       console.log('[DCC API].sendOutput', pin, state);
       await send( 'output', { pin, state });
-    } catch (err) {
+    } catch (err:any) {
       console.error('[DCC API].setPower', err);
-      throw new Error('Unable to read', err, pin, state);
+      throw new Error(err);
     }
   }
 
-  async function send(action, payload) {
+  async function send(action: string, payload?: object) {
     try {
       console.log('[dccApi] send', action, payload);
       mqttHook.publish(topic, JSON.stringify({ action, payload }))

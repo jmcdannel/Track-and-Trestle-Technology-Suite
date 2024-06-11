@@ -54,6 +54,7 @@ export const DccCommand = () => {
         fullWidth
         value={cmd}
         onChange={e => setCmd(e.target.value)}
+        onKeyUp={e => e.key === 'Enter' && sendDccCommand()}
       />
       <Divider orientation="vertical" flexItem className="divider" />
       <Button variant="contained" onClick={sendDccCommand} sx={{ mr: 1 }}>Send</Button>
@@ -80,6 +81,7 @@ export const DccCommand = () => {
       <Button 
         variant="outlined" 
         color="info" 
+        disabled
         onClick={handleCurrentClick} 
         sx={{ whiteSpace: 'nowrap' }}
         >

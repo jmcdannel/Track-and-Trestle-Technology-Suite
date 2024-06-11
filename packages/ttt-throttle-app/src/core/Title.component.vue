@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { RouterLink } from 'vue-router'
-  import { useRoute } from 'vue-router'
+  import { useRoute, type RouteRecordName } from 'vue-router'
 
-  const titles = {
+  const titles: { [key in RouteRecordName]: string } = {
     'effects': 'Effects',
     'throttle': 'Throttle',
     'turnouts': 'Turnouts'
