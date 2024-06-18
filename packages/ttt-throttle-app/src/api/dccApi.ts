@@ -1,18 +1,20 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useConnectionStore } from '../store/connectionStore.jsx'
+import { storeToRefs } from 'pinia'
 import { useMQTT } from 'mqtt-vue-hook'
 
 export function useDcc() {
 
   const mqttHook = useMQTT()
-  const topic = '@ttt/dcc/betatrack'
+  const connStore = useConnectionStore()
+  const { layoutId } = storeToRefs(connStore)
+  const topic = `@ttt/dcc/${layoutId}`
 
   let ports: never[] = [];
 
   async function parseMessage(topic: string, message: string) {
     try {
       const { action, payload } = JSON.parse(message);
-      const connStore = useConnectionStore();
       console.log('[DCC API] parseMessage', topic, message, action, payload);
       switch (action) {
         case 'listPorts':
