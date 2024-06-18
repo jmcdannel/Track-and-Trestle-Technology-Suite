@@ -29,6 +29,12 @@ export const DccLogItem: FunctionComponent<DccLogItemProps> = ({ item }): JSX.El
           <span className="text-cyan-900">{item.message}</span>
         </>
         )
+      case 'p' : return (
+        <>
+          <span className="text-red-500 bg-fuchsia-300 m-1 rounded-full py-1 px-3 text-sm">POWER</span>
+          <span className="text-purple-500f">{item.message}</span>
+        </>
+        )
       case 'H' : return (
         <>
           <span className="text-fuchsia-300 bg-blue-900 m-1 rounded-full py-1 px-3 text-sm">TURNOUT</span>

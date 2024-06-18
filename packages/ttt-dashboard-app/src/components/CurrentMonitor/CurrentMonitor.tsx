@@ -1,7 +1,5 @@
 import { FunctionComponent } from "preact";
-import { useState, useEffect } from 'preact/hooks'
-import { currentLog, current } from "../../stores/DccStore"
-import { useMqtt } from '../DccConnector/hooks/useMqtt'
+import { currentLog, current, enablePolling } from "../../stores/DccStore"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,8 +8,6 @@ import {
   LineElement
 } from 'chart.js';
 import { Line } from 'react-chartjs-2'
-
-const pollIntervalMS = 2000
 
 ChartJS.register(
   CategoryScale,
@@ -33,9 +29,7 @@ interface CurrentMonitorProps {
   layoutId: string | null
 }
 
-const CurrentMonitor: FunctionComponent<CurrentMonitorProps> = ({ layoutId }) => {
-
-  const { isConnected, publish } = useMqtt();
+const CurrentMonitor: FunctionComponent<CurrentMonitorProps> = () => {
 
   const visibleHistory = currentLog.value.slice(-20)
   const historyChartData = {
@@ -47,26 +41,26 @@ const CurrentMonitor: FunctionComponent<CurrentMonitorProps> = ({ layoutId }) =>
       }
     ],
   };
-  
-  console.log(currentLog.value)
-
-  
+    
   return (
     <div class="flex flex-col items-center">
       <Line options={options} data={historyChartData} />
-      <div class="
-        border-2
-        px-24 
-        py-4 
-        rounded-2xl 
-        border-cyan-500 
-        bg-cyan-950 
-        text-3xl 
-        text-green-500
-        
-      ">
-        {current}, [{isConnected.toString()}]
-      </div>
+      <footer class="flex">
+        <div class="
+          border-2
+          px-24 
+          py-4 
+          rounded-2xl 
+          border-cyan-500 
+          bg-cyan-950 
+          text-3xl 
+          text-green-500
+          
+        ">
+          {current}
+        </div>
+        <button onClick={() => enablePolling.value = !enablePolling.value}>{enablePolling.value ? 'Pause' : 'Resume'}</button>
+      </footer>
     </div>
   )
 }
