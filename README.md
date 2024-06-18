@@ -1,6 +1,6 @@
 # Track and Trestle Technology
 
-This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps (Throttle App, Dispatcher App, Dashboard App) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([DEJA.js](https://github.com/jmcdannel/DEJA.js)) for DCC commands, Action API for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [DEJA.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands]https://dcc-ex.com/reference/software/command-summary-consolidated.html via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
+This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps (Throttle App, Dispatcher App, Dashboard App) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([DEJA.js](https://github.com/jmcdannel/DEJA.js)) for DCC commands, Action API for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [DEJA.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands](https://dcc-ex.com/reference/software/command-summary-consolidated.html) via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
 
 ## ✨ Features
 
@@ -13,24 +13,21 @@ This suite of applications is designed and developed to support a model railroad
 - ✨ Toggle relays, control motor drivers, juice frogs, control LCDs
 - 👑 Rule over your tiny world
 
-> [TODO] => INSERT ARCHITECURE DIAGRAM
-
 ## Usage
 
 ### Prerequisites for all configurations
 
-1. 📦 [Install & Configure DCC-EX CommandStation](https://dcc-ex.com/ex-commandstation/index.html) via USB to Mac/PC/Linux/Raspberry Pi
+1. 📦 [Install & Configure DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) via USB to Mac/PC/Linux/Raspberry Pi
 2. 📦 Install NodeJS 21+ on Mac/PC/Linux/Raspberry Pi
   - Install NVM, Node 21 [Recommended] 
     > `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash`
     ```
     $ nvm install 21
     ```
-  - OR: Install Node 21
 
 2. 📦 Install Lerna
   ```
-  $ npm install -g lerna
+  $ pnpm install -g lerna
   ```
 
 3. 📝 Configure Environments
@@ -46,7 +43,7 @@ $ lerna run start
 ### Bare Minumum [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [Throttle]
 
 1. 📦 Install DEJA.js
-2. 🚀 Launch Throttle App
+2. 🚀 Launch [Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture3.png" alt="Basic Architecture Diagram" />
@@ -59,7 +56,7 @@ $ lerna run start
 1. 📦 Install DEJA.js
 2. 📦 Install ActionApi
 3. 📝 Configure App
-4. 🚀 Launch Dispatcher
+4. 🚀 Launch [Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture2.png" alt="Basic Architecture Diagram" />
@@ -69,16 +66,14 @@ $ lerna run start
 
 1. 📦 Install DEJA.js
 2. 📦 Install ActionApi
-3. 📝 Configure App
+3. 📝 Configure App (currently a manual step)
 4. 🚀 Launch Dashboard
-4. 🚀 Launch Throttle
-4. 🚀 Launch Dispatcher
+5. 🚀 Launch [Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
+6. 🚀 Launch [Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture1.png" alt="Basic Architecture Diagram" />
 </p>
-
-
 
 ### DCC-EC
 
