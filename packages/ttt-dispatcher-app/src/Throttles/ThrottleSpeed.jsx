@@ -45,9 +45,9 @@ export const ThrottleSpeed = props => {
           xl: '3rem'
         },
         padding: {
-          xs: '0',
-          md: '1.5rem .5rem',
-          lg: '1.5rem 1rem'
+          xs: '1rem 1rem',
+          md: '1.5rem 1rem',
+          lg: '2rem 1rem'
         }
       }}>
         {Math.abs(parseInt(speed))}

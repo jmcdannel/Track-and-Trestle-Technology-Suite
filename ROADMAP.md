@@ -8,71 +8,60 @@
 [-] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)
-[ ] ad hoc loco (enter loco address:___ [Acquire])
-[ ] icons to svg files
+[-] ad hoc loco (enter loco address:___ [Acquire])
+[-] icons to svg files
 
 ### DCC-JS
 
 [x] Fork DCC-JS
   [ ] release v0.1.0? DCC-EX-JS-API [DEJA.js - the DCC-EX JavaScript API by Track & Trestle Technology (Josh McDannel)]
 
-
-  - DCC-JS EX-API Server
-  - DCC-JS DEJA Throttle (hosted, self hosted)
-  - DCC-JS DEJA Dispatcher (hosted, self hosted)
+  - DEJA - DCC-JS EX-API Server
+  - DEJA Throttle (hosted, self hosted)
+  - DEJA Dispatcher (hosted, self hosted)
   - Future:
-    - DCC-JS Programmer (hosted, self hosted)
-    - DCC-JS (hosted, self hosted-wifi)
+    - DEJA Programmer (hosted, self hosted)
+    - DEJA Arduino (hosted, self hosted-wifi)
     - Plugins (custom serial connections, servers, automation)
 
   [x] DEJA Throttle
     [ ] Dynamic Power Status
-    [ ] Launch on Vercel
+    [-] Launch on Vercel
     [ ] Select Layout ID
     [ ] Consist
     [ ] Loco Memory
 
 
 #### Bugs:
-[x] mqtt Disconnect
-[ ] routes broken with update
+[-] mqtt Disconnect
+[-] routes broken with update
 [x] dispatcher throttle state on reload
-[ ] connection store doesn't erase config when changing layout. add reset storage button
+[x] connection store doesn't erase config when changing layout. add reset storage button
 
 
 ### TODO
-
-[x] non-blaocking led
-[x] frogs
-[x] tam south signals
 [ ] sounds
-[x] Valley ramp
-[x] Lower level prep
-[x] Coppertone sign
 [ ] sticks & dirt
 [ ] tufts, grass strips, cat tails
 [-] trees, bushes (trunks w/moss)
 [ ] granite rocks
 
-[ ] Mobile optimization
+[-] Mobile optimization
 [ ] Motion
 [ ] Route Map styles to show status
 [ ] Auto-version on release to main - show in header
 [ ] Fucntions UI / Icons
+[ ] Functions renaming
 [-] zustand optimization (effects)
-[ ] README
+[-] README
 [ ] hotfix branch
-[ ] explore vercel options
-[-] dashboard UI
-[ ] dashboard dcc command
-[-] dashboard throttle status
+[-] explore vercel options
 
 [-] city buildings
 [-] city electronics
 [ ] city traffic lights
 [ ] city street parking lines
 
-[*] Sky
 [ ] Coffee Website
 [ ] Coffee Station
 [ ] Coffee Corner
@@ -85,15 +74,13 @@
 [-] Helix Entrance
 [-] Tunnels
 [ ] North ballast
-[-] Whitewater
-[-] clean floors (sweep & vacuum)
-[ ] place speakers
+[-] place speakers
 [-] Bridges
 [-] Rainbow Bridge
 [-] Printed details / signs
 [ ] town landscaping
 [ ] street lights
-[ ] station lights
+[-] station lights
 [-] station signs
 [ ] station frontage
 [ ] station parking bumpers
@@ -105,17 +92,25 @@
 [ ] South Electronics
 [ ] LED Wiring
 [ ] LED Guide Strips
-[ ]
-
 
 [ ] Casino
 [-] Uptown Roads / Sidewalk, lights
 [ ] Uptown Buildings
 
 ## Done
-### MVC TODone:
 
-
+[*] Sky
+[x] dashboard UI
+[x] dashboard dcc command
+[x] dashboard throttle status
+[x] non-blaocking led
+[x] frogs
+[x] tam south signals
+[x] Valley ramp
+[x] Lower level prep
+[x] Coppertone sign
+[x] Whitewater
+[x] clean floors (sweep & vacuum)
 [x] interchange signals
 [x] town sidewalks
 [x] flip tam south facia

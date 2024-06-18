@@ -1,84 +1,32 @@
-import axios from 'axios'; // TODO: replace with fetch api
-// import { getById as getEffectById } from '../modules/effects.mjs';
+import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
 
-const layoutId = process.env.LAYOUT_ID; // TODO: move to config
+const layoutId = process.env.LAYOUT_ID;
 
 // const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
 const host = process.env.VITE_LAYOUT_API_HOST
 // const baseUri = `http://127.0.0.1:5001/api/${layoutId}`;
 const baseUri = `${host}/api/${layoutId}`;
 
-// const tunroutCommand = turnout => {
-//   console.log('tunroutCommand', turnout);
-//   switch(turnout.config.type) {
-//     case 'kato':
-//       return {
-//         iFaceId: turnout.config.interface,
-//         action: 'turnout', 
-//         payload: { 
-//           turnout: turnout.config.turnoutIdx, 
-//           state: turnout.state 
-//         }
-//       };
-//     case 'servo':
-//       return {
-//         iFaceId: turnout.config.interface,
-//         action: 'servo', 
-//         payload: { 
-//           servo: turnout.config.servo, 
-//           value: turnout.state 
-//             ? turnout.config.straight 
-//             : turnout.config.divergent, 
-//           current: !turnout.state 
-//             ? turnout.config.straight 
-//             : turnout.config.divergent
-//         }
-//       };
-//     default:
-//       // no op
-//       break;
-//   }
-// }
-
 const macroCommand = async (effect, delay = 0) => {
-  // console.log('macroCommand', effect, action);
-  // const uri = `${baseUri}/effects/${action.effectId}`;
-  // log.log('[COMMANDS] macroCommand.uri', uri);
-  // const resp = await axios.get(uri);
-  // const macroEffect = resp?.data
-  // log.log('[COMMANDS] macroEffect', macroEffect);
     try {
       let macroCommands = []
-      console.log('API.handleMacro', effect);
-
+      log.log('API.handleMacro', effect);
       for (let e of effect.config?.on) {
         macroCommands = [...macroCommands, ...await effectCommand({ effectId: e, state: effect.state })]
-        // const onEffect = await getEffect(e);
-        // const onState = onEffect?.type !== 'signal'
-        //   ? effect.state
-        //   : effect.state ? 'green' : 'red';
-        // macroCommands.push({...onEffect, state: onState})
       }
       for (let e of effect.config?.off) {
         macroCommands = [...macroCommands, ...await effectCommand({ effectId: e, state: !effect.state })]
-        // const offEffect = await getEffect(e);
-        // const offState = offEffect?.type !== 'signal'
-        //   ? !effect.state
-        //   : !effect.state ? 'green' : 'red';
-        // macroCommands.push({...offEffect, state: offState})
       }
       return macroCommands
     } catch (err) {
-      console.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
-    }
-  
+      log.error('[IALED ERROR]', err?.message, JSON.stringify(effect));
+    }  
 }
 
 const signalCommand = async effect => {
   const commands = [];
-
   await Promise.all(['red', 'yellow', 'green'].map(async color => {
     if (effect.config[color]) {
       let newState
@@ -87,9 +35,6 @@ const signalCommand = async effect => {
       } else {
         newState = color === 'red'
       }
-      // let newState = effect.state
-      //   ? color === 'green'
-      //   : color === 'red'
       if (effect?.config?.invert) {
         newState = !newState
       }
@@ -105,10 +50,7 @@ const signalCommand = async effect => {
 
   }));
   log.fav('[COMMANDS] signalCommand', commands);
-
   return commands;
-  
-  
 }
 
 const pinCommand = effect => ({ 
@@ -158,9 +100,7 @@ const ialedCommand = effect => ({
 
 const effectCommand = async (payload) => {
   try {
-    const uri = `${host}/api/effects/${layoutId}/${payload.effectId}`;
-    const resp = await axios.get(uri);
-    const effect = {...resp.data, state: payload.state};  
+    const effect = await getEffectById(payload.effectId);
     
     switch(effect.type) {
       case 'light':
@@ -190,12 +130,6 @@ const effectCommand = async (payload) => {
   }
 }
 
-const getEffect = async (effectId) => {
-  const uri = `${host}/api/effects/${layoutId}/${effectId}`;
-  const resp = await axios.get(uri);
-  return resp.data;
-}
-
 const turnoutCommand = async (payload) => {
   try {
     let commands = []
@@ -203,7 +137,7 @@ const turnoutCommand = async (payload) => {
     const resp = await axios.get(uri)
     const turnout = {...resp.data, state: payload.state}
     if (turnout?.config?.effectId) {
-      const efx = await getEffect(turnout.config.effectId)
+      const efx = await getEffectById(turnout.config.effectId)
       efx.state = turnout.state
       const efxCommands =  await effectCommand(efx)
       commands = [...commands, ...efxCommands]

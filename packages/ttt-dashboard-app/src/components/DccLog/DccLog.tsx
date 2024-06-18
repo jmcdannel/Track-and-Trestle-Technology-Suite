@@ -1,6 +1,6 @@
 import { FunctionComponent, createRef } from "preact"
 import { useEffect } from 'preact/hooks'
-import { log, clearLog } from "../../stores/DccStore"
+import { log, clearLog, DccLogType } from "../../stores/DccStore"
 import { DccLogItem } from "./DccLogItem"
 import XCircle from '../../assets/icons/x-circle'
 
@@ -11,6 +11,12 @@ const AlwaysScrollToBottom = () => {
 };
 
 export const DccLog: FunctionComponent = () => {
+
+
+  const ignore = ['<jI'];
+  const ignoreFilter = (item:DccLogType) => {
+    return !ignore.some(i => item?.message.startsWith(i));
+  }
 
   return (
     <>
@@ -29,7 +35,7 @@ export const DccLog: FunctionComponent = () => {
           -right-1
         " /></button>
       <div className="flex flex-col mt-2 max-h-80 overflow-y-auto">
-        {[...log.value].map((item, idx) => (
+        {[...log.value].filter(ignoreFilter).map((item, idx) => (
           // <pre key={`log${idx}`} className="slide-in-left">{message}</pre>
           <DccLogItem key={`log${idx}`} item={item} />
         ))}

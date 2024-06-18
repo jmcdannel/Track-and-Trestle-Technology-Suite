@@ -20,6 +20,7 @@ export interface CurrentLogType {
   id: string
 }
 
+export const enablePolling = signal<boolean>(true);
 export const current = signal<number>(0);
 export const currentLog = signal<CurrentLogType[]>(
   Array.from({ length: 20 }).map(() => ({ current: 0, id: Math.random().toString() }))

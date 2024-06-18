@@ -4,7 +4,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import axios from 'axios';
 import serial from './serial.mjs';
-import cmdex from './cmdex.mjs';
 import emulator from './emulator.mjs';
 import audioplayer from './audioplayer.mjs';
 import commands from './commands.mjs';
@@ -16,9 +15,9 @@ const baudRate = 115200;
 
 const getLayout = async layoutId => {
   // const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
+  // const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
   const host = process.env.VITE_LAYOUT_API_HOST
   const uri = `${host}/api/layouts/${layoutId}`;
-  // const uri = `http://127.0.0.1:5001/api/layouts/${layoutId}`;
   try {
     const { data } = await axios.get(uri);
     console.log('[GETLAYOUT]', uri, data)
@@ -107,36 +106,9 @@ const intialize = async (com) => {
         log.error(err);
       }
       break;
-    // case 'cmd-ex':
-    //   try {
-    //     com.connection = await cmdex.connect(com);
-    //     com.send = cmdex.send;
-    //     com.status = 'connected';
-    //   } catch (err) {
-    //     com.status = 'fail';
-    //     log.error(err);
-    //   }
-    //   break;
     case 'audio':
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
-      break;
-    case 'ialed':
-      const uri =
-      com.connection = `${com.config.address}/led`;
-      com.send = async (uri, data) => {
-        try {
-          console.log('[IALED]', uri, JSON.stringify(data?.[0].payload));
-          delete process.env['http_proxy'];
-          delete process.env['HTTP_PROXY'];
-          delete process.env['https_proxy'];
-          delete process.env['HTTPS_PROXY'];
-          const resp = await axios.post(uri, JSON.stringify(data?.[0].payload));
-          return resp?. data;
-        } catch (err) {
-          console.error('[IALED ERROR]', uri, err?.message, JSON.stringify(data?.[0].payload));
-        }
-      };
       break;
     case 'default':
       log.warn('[INTERFACES] Interface type not found', com.type);

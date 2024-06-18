@@ -2,17 +2,12 @@ import { FunctionComponent } from "preact";
 import { useEffect, useState, useId } from 'preact/hooks';
 import { signal } from "@preact/signals";
 import { useMqtt } from './hooks/useMqtt';
-import { appendToLog as appendToDcc, appendToCurrentLog, deviceStatus, updateDeviceStatus } from "../../stores/DccStore";
+import { appendToLog as appendToDcc, appendToCurrentLog, deviceStatus, updateDeviceStatus, enablePolling, DccLogType } from "../../stores/DccStore";
 import { upsertThrottle as addThrottle } from "../../stores/ThrottleStore";
 import { appendToLog as addTurnout } from "../stores/TurnoutStore";
 
 interface DccListenerProps {
   layoutId: string | null
-}
-
-interface DccLogType {
-  message: string,
-  id: string
 }
 
 export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) => {
@@ -109,8 +104,8 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
     }
     const ignore = ['j']
     if (!ignore.includes(firstChar)) {
-      appendToDcc(payload)
     }
+    appendToDcc(payload)
   }
   
   useEffect(() => {
@@ -136,16 +131,20 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
   }, [mqttMessage]);
 
   const pollIntervalMS = 2000
-  
-  // Connect MQTT Client
+
   useEffect(async () => {
     const pollForCurrent = async () => {
-      while (isConnected) {
-        // console.log('polling for current', isConnected);
+      while (isConnected && enablePolling.value) {
         publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'dcc', payload: 'JI' }));
         await new Promise(resolve => setTimeout(resolve, pollIntervalMS));
       }
     };
+    if (isConnected && enablePolling.value) await pollForCurrent();
+  }, [isConnected, enablePolling.value])
+  
+  // Connect MQTT Client
+  useEffect(async () => {
+    
     const initialize = async function() {
       try {        
         console.log('mqtt initialization', layoutId);
@@ -157,7 +156,7 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
     };
     !isConnected && connect()
     isConnected && await initialize() 
-    isConnected&& await pollForCurrent();
+    // isConnected&& await pollForCurrent();
   }, [isConnected ]);
 
   return (
