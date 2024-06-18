@@ -1,6 +1,6 @@
 # Track and Trestle Technology
 
-This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps (Throttle App, Dispatcher App, Dashboard App) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers (DEJA.js for DCC commands, Action API for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. DEJA.js sends [DCC-EX Native Commands]https://dcc-ex.com/reference/software/command-summary-consolidated.html via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
+This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps (Throttle App, Dispatcher App, Dashboard App) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([DEJA.js](https://github.com/jmcdannel/DEJA.js)) for DCC commands, Action API for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [DEJA.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands]https://dcc-ex.com/reference/software/command-summary-consolidated.html via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
 
 ## ✨ Features
 
@@ -33,7 +33,7 @@ This suite of applications is designed and developed to support a model railroad
   $ npm install -g lerna
   ```
 
-3. Configure Environments
+3. 📝 Configure Environments
 > See package README files for configuration instructions.
 
 ### Run all packages Locally
@@ -43,7 +43,7 @@ $ lerna run start
 
 ---
 
-### Bare Minumum [DEJA.js] + [Throttle]
+### Bare Minumum [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [Throttle]
 
 1. 📦 Install DEJA.js
 2. 🚀 Launch Throttle App
@@ -54,7 +54,7 @@ $ lerna run start
 
 ---
 
-### [DEJA.js] + [ActionAPI] + [App] + [Dispatcher]
+### [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [ActionAPI] + [App] + [Dispatcher]
 
 1. 📦 Install DEJA.js
 2. 📦 Install ActionApi
@@ -65,7 +65,7 @@ $ lerna run start
   <img src="./.resources/img/ttt-architecture2.png" alt="Basic Architecture Diagram" />
 </p>
 
-### [DEJA.js] + [ActionAPI] + [App] + [Dispatcher] + [Throttle] + [Dashboard]
+### [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [ActionAPI] + [App] + [Dispatcher] + [Throttle] + [Dashboard]
 
 1. 📦 Install DEJA.js
 2. 📦 Install ActionApi
@@ -82,7 +82,7 @@ $ lerna run start
 
 ### DCC-EC
 
-// 🛰️ DEJA.js Server
+// 🛰️ [DEJA.js](https://github.com/jmcdannel/DEJA.js) Server
  
 ## Packages
 
