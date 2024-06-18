@@ -8,7 +8,7 @@ export function useDcc() {
   const mqttHook = useMQTT()
   const connStore = useConnectionStore()
   const { layoutId } = storeToRefs(connStore)
-  const topic = `@ttt/dcc/${layoutId}`
+  const topic = `@ttt/dcc/${layoutId.value}`
 
   let ports: never[] = [];
 
