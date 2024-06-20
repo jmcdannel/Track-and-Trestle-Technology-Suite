@@ -7,7 +7,16 @@ Create a `.env` file and define `MONGODB_URI` with your MongoDB URI.
 
 Visit [TTT App](https://trestle-tt-suite-ttt-app.vercel.app/)
 
-// TODO: describe local usage
+### 📦 Prerequisites
+
+See [Global Prerequisites](../../README.md)
+
+### 📦 Installation
+
+```sh
+pnpm install
+pnpm run start
+```
 
 > NOTE: Layout and related data configuration is not availabled at this time.
 

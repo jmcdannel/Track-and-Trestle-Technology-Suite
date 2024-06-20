@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Track and Trestle Technology</h1>
 
-This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps ([🎚️ Throttle App](packages/ttt-throttle-app/README.md), [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md), [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) for DCC commands, [🔱 TTT App](packages/ttt-app/README.md) for REST API access, and [🧠Action Api](packages/ttt-action-api/README.md)for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands](https://dcc-ex.com/reference/software/command-summary-consolidated.html) via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
+This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The client apps ([🎚️ Throttle App](packages/ttt-throttle-app/README.md), [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md), [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) for DCC commands, [🔱 TTT App](packages/ttt-app/README.md) for REST API access, and [🧠Action Api](packages/ttt-action-api/README.md) for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands](https://dcc-ex.com/reference/software/command-summary-consolidated.html) via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
 
 ## ✨ Features
 
@@ -65,7 +65,7 @@ $ lerna run start
   <img src="./.resources/img/ttt-architecture2.png" alt="Basic Architecture Diagram" />
 </p>
 
-### [[🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)] + [🧠Action Api](packages/ttt-action-api/README.md) + [🔱 TTT App](packages/ttt-app/README.md) + [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md) + [🎚️ Throttle App](packages/ttt-throttle-app/README.md) + [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)
+### [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) + [🧠Action Api](packages/ttt-action-api/README.md) + [🔱 TTT App](packages/ttt-app/README.md) + [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md) + [🎚️ Throttle App](packages/ttt-throttle-app/README.md) + [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)
 
 1. 📦 Install [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)
 2. 📦 Install  [🧠Action Api](packages/ttt-action-api/README.md)
@@ -77,19 +77,15 @@ $ lerna run start
 <p align="center">
   <img src="./.resources/img/ttt-architecture1.png" alt="Basic Architecture Diagram" />
 </p>
-
-// 🛰️ [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) Server
  
 ## 📦 Packages
 
-###  [🧠Action Api](packages/ttt-action-api/README.md)
+###  [🧠 Action Api](packages/ttt-action-api/README.md)
 
 The Action API listens to commands sent from the [🎚️ Throttle App](packages/ttt-throttle-app/README.md), [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md) or [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md) and sends or executes those commands on the target interface. Supported interfaces include:
 - Arduino via USB
 - Raspberry Pi Pico W (via MQTT)
 - Audio output
-
-- Required [App]
 
 [📜 Read More](packages/ttt-action-api/README.md)
 
@@ -144,10 +140,10 @@ Preact app that displays layout information about the DCC-EX EX-CommandStation.
 ### 🧬 IO
 
 This package contains source code for the devices found in Tamarack Junction - the author's model railroad. These scripts are specific for each device and the connections to those devices. 🚧 Future improvements to these scripts will allow each device to run a single source package and configured using `config.h` files.
-
+<!-- 
 ## Resources
 
-# 🚂🚆🚇🚊🚉🛰️🚀🚦🚧⛰️🛤️📱💻📡🎛️⚙️⚠️🔱🟢🟣🔵🟠🟡🔴❤️‍🔥🎼🧩✨☄️🍀☘️🌲🕶️🧠🔗🖲f🏓🪢🧶🎨👑🔈🔀🔁
+# 🚂🚆🚇🚊🚉🛰️🚀🚦🚧⛰️🛤️📱💻📡🎛️⚙️⚠️🔱🟢🟣🔵🟠🟡🔴❤️‍🔥🎼🧩✨☄️🍀☘️🌲🕶️🧠🔗🖲f🏓🪢🧶🎨👑🔈🔀🔁 -->
 
 
 ## 🛠️ Built With
@@ -212,8 +208,6 @@ This package contains source code for the devices found in Tamarack Junction - t
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
-
-
 [Tailwind.css]: https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white
 [Tailwind-url]: https://tailwindcss.com/
 [MQTT.js]: https://img.shields.io/badge/MQTT-660066?style=for-the-badge&logo=mqtt&logoColor=white
