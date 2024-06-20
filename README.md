@@ -13,7 +13,7 @@ This suite of applications is designed and developed to support a model railroad
 - ✨ Toggle relays, control motor drivers, juice frogs, control LCDs
 - 👑 Rule over your tiny world
 
-## Usage
+## 🧩 Usage
 
 ### Prerequisites for all configurations
 
@@ -79,7 +79,7 @@ $ lerna run start
 
 // 🛰️ [DEJA.js](https://github.com/jmcdannel/DEJA.js) Server
  
-## Packages
+## 📦 Packages
 
 ### 🧠 Action Api
 
