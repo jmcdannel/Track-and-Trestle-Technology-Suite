@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">Track and Trestle Technology</h1>
 
-This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps (Throttle App, Dispatcher App, Dashboard App) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([DEJA.js](https://github.com/jmcdannel/DEJA.js)) for DCC commands, Action API for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [DEJA.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands](https://dcc-ex.com/reference/software/command-summary-consolidated.html) via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
+This suite of applications is designed and developed to support a model railroad using a [DCC-EX EX-CommandStation](https://dcc-ex.com/ex-commandstation/index.html) and additional Arduinos, Raspberry Pis or other devices that support the required protocols. The applications communicate using [MQTT 📡](https://mqtt.org/). The apps ([🎚️ Throttle App](packages/ttt-throttle-app/README.md), [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md), [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)) publish commands like throttle speed and direction, turnouts, or effects like lights, sounds and signals. The servers ([🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) for DCC commands, [🔱 TTT App](packages/ttt-app/README.md) for REST API access, and [🧠Action Api](packages/ttt-action-api/README.md)for Arduinos and other supported interfaces) subscibe to those commands, process them, and then send them to the appropriate interface. [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) sends [DCC-EX Native Commands](https://dcc-ex.com/reference/software/command-summary-consolidated.html) via Serial over USB to the DCC-EX CommandStation, while the ActionAPI sends serial commands to usb-connected Arduinos.
 
 ## ✨ Features
 
@@ -43,10 +43,10 @@ $ lerna run start
 
 ---
 
-### Bare Minumum [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [Throttle]
+### Bare Minumum : [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) + [🎚️ Throttle App](packages/ttt-throttle-app/README.md)
 
-1. 📦 Install DEJA.js
-2. 🚀 Launch [Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
+1. 📦 Install [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)
+2. 🚀 Launch [🎚️ Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture3.png" alt="Basic Architecture Diagram" />
@@ -54,39 +54,37 @@ $ lerna run start
 
 ---
 
-### [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [ActionAPI] + [App] + [Dispatcher]
+###  [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) + [🧠Action Api](packages/ttt-action-api/README.md) + [🔱 TTT App](packages/ttt-app/README.md) + [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md)
 
-1. 📦 Install DEJA.js
-2. 📦 Install ActionApi
-3. 📝 Configure App
-4. 🚀 Launch [Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
+1. 📦 Install [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)
+2. 📦 Install [🧠Action Api](packages/ttt-action-api/README.md)
+3. 📝 Configure [🔱 TTT App](packages/ttt-app/README.md)
+4. 🚀 Launch [🚆 Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture2.png" alt="Basic Architecture Diagram" />
 </p>
 
-### [[DEJA.js](https://github.com/jmcdannel/DEJA.js)] + [ActionAPI] + [App] + [Dispatcher] + [Throttle] + [Dashboard]
+### [[🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)] + [🧠Action Api](packages/ttt-action-api/README.md) + [🔱 TTT App](packages/ttt-app/README.md) + [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md) + [🎚️ Throttle App](packages/ttt-throttle-app/README.md) + [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)
 
-1. 📦 Install DEJA.js
-2. 📦 Install ActionApi
-3. 📝 Configure App (currently a manual step)
-4. 🚀 Launch Dashboard
-5. 🚀 Launch [Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
-6. 🚀 Launch [Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
+1. 📦 Install [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js)
+2. 📦 Install  [🧠Action Api](packages/ttt-action-api/README.md)
+3. 📝 Configure [🔱 TTT App](packages/ttt-app/README.md) (currently a manual step)
+4. 🚀 Launch [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)
+5. 🚀 Launch [🎚️ Throttle App](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
+6. 🚀 Launch [🚆 Dispatcher App](https://ttt-dispatcher-app.vercel.app/)
 
 <p align="center">
   <img src="./.resources/img/ttt-architecture1.png" alt="Basic Architecture Diagram" />
 </p>
 
-### DCC-EC
-
-// 🛰️ [DEJA.js](https://github.com/jmcdannel/DEJA.js) Server
+// 🛰️ [🛰️ Deja.js](https://github.com/jmcdannel/DEJA.js) Server
  
 ## 📦 Packages
 
-### 🧠 [Action Api](packages/ttt-action-api/README.md)
+###  [🧠Action Api](packages/ttt-action-api/README.md)
 
-The Action API listens to commands sent from the Throttle App, Dispatcher App or Dashboard and sends or executes those commands on the target interface. Supported interfaces include:
+The Action API listens to commands sent from the [🎚️ Throttle App](packages/ttt-throttle-app/README.md), [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md) or [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md) and sends or executes those commands on the target interface. Supported interfaces include:
 - Arduino via USB
 - Raspberry Pi Pico W (via MQTT)
 - Audio output
@@ -96,7 +94,7 @@ The Action API listens to commands sent from the Throttle App, Dispatcher App or
 [📜 Read More](packages/ttt-action-api/README.md)
 
 ---
-### 🚆 [Dispatcher App](packages/ttt-dispatcher-app/README.md)
+###  [🚆 Dispatcher App](packages/ttt-dispatcher-app/README.md)
 
 React App that handles all layout operations including throttles, turnouts and effects.
 
@@ -111,7 +109,7 @@ React App that handles all layout operations including throttles, turnouts and e
 [📜 Read More](packages/ttt-dispatcher-app/README.md)
 
 ---
-### 🎚️ [Throttle App](packages/ttt-throttle-app/README.md)
+### [🎚️ Throttle App](packages/ttt-throttle-app/README.md)
 
 VueJS app for simple throttle operations.
 
@@ -124,14 +122,14 @@ VueJS app for simple throttle operations.
 [📜 Read More](packages/ttt-throttle-app/README.md)
 
 ---
-### 🔱 [TTT App](packages/ttt-app/README.md)
+### [🔱 TTT App](packages/ttt-app/README.md)
 
-NextJS app hosted on Vercel. The main purpose of this package is to provide secure REST API access to MongoDB. 🚧 Future enhancements will include landing pages, documentation, demos, and the Dashboard App.
+NextJS app hosted on Vercel. The main purpose of this package is to provide secure REST API access to MongoDB. 🚧 Future enhancements will include landing pages, documentation, demos, and the [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md) App.
 
 [📜 Read More](packages/ttt-app/README.md)
 
 ---
-### 🎛️ [Dashboard App](packages/ttt-dashboard-app/README.md)
+### [🎛️ Dashboard App](packages/ttt-dashboard-app/README.md)
 
 Preact app that displays layout information about the DCC-EX EX-CommandStation.
 
@@ -150,23 +148,6 @@ This package contains source code for the devices found in Tamarack Junction - t
 ## Resources
 
 # 🚂🚆🚇🚊🚉🛰️🚀🚦🚧⛰️🛤️📱💻📡🎛️⚙️⚠️🔱🟢🟣🔵🟠🟡🔴❤️‍🔥🎼🧩✨☄️🍀☘️🌲🕶️🧠🔗🖲f🏓🪢🧶🎨👑🔈🔀🔁
-
-### Layouts
-
-// TODO: Describe
-### Locos
-
-// TODO: Describe
-### Turnouts
-
-// TODO: Describe
-### Effects
-
-// TODO: Describe
-### Routes
-
-// TODO: Describe
-### Sensors
 
 
 ## 🛠️ Built With
