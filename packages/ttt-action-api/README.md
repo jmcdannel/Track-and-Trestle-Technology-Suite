@@ -17,6 +17,11 @@ See [Global Prerequisites](../../README.md)
 
 ### 📦 Installation
 
+```sh
+pnpm install
+pnpm run start
+```
+
 ## 🧩 Usage
 
 Run `pnpm run start` from this directory (`./packages/ttt-action-api/`) or `pnpm run start:action-api` from the monrepo root.
