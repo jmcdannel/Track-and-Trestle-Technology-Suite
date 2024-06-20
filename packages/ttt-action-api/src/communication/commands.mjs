@@ -1,4 +1,3 @@
-import { getById as getEffectById } from '../modules/effects.mjs';
 import interfaces from '../communication/interfaces.mjs';
 import log from '../core/logger.mjs';
 
@@ -97,6 +96,16 @@ const ialedCommand = effect => ({
     b: effect?.config?.b
   }
 });
+
+const getEffectById = async (effectId) => {
+  try {
+    const uri = `${baseUri}/effects/${effectId}`;
+    const resp = await axios.get(uri);
+    return resp.data;
+  } catch (err) {
+    log.error('[COMMANDS] getEffectById', err);
+  }
+}
 
 const effectCommand = async (payload) => {
   try {
