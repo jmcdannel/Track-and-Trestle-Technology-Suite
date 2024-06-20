@@ -1,52 +1,41 @@
-# WebThrottle-EX-Vue
+# Throttle App
 
-This template should help get you started developing with Vue 3 in Vite.
+VueJS 3 App to control locomotives with DEJA.js and DCC-EX EX-CommandStation.
 
-## Recommended IDE Setup
+[Demo](https://trestle-tt-suite-ttt-throttle-app.vercel.app/)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+<p align="center">
+  <img src="../../.resources/img/screenshots/throttle-1.png" alt="Size Limit CLI" width="360">
+  <img src="../../.resources/img/screenshots/throttle-2.png" alt="Size Limit CLI" width="360">
+  <img src="../../.resources/img/screenshots/throttle-3.png" alt="Size Limit CLI" width="360">
+</p>
 
-## Type Support for `.vue` Imports in TS
+## 🚀 Getting Started
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+### 📦 Prerequisites
+See [Global Prerequisites](../../README.md)
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+### 📦 Installation
 
 ```sh
-npm install
+pnpm install
+pnpm run start
 ```
 
-### Compile and Hot-Reload for Development
+## 🧩 Usage
 
-```sh
-npm run dev
-```
+### Connections
 
-### Type-Check, Compile and Minify for Production
+// TODO
 
-```sh
-npm run build
-```
+### Selecting a Loco
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+// TODO
 
-```sh
-npm run test:unit
-```
+### Throttle Controls
 
-### Lint with [ESLint](https://eslint.org/)
+// TODO
 
-```sh
-npm run lint
-```
+## 🛠️ Built With
+
+// TODO

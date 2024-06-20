@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.0449,0,0,1.0449,-20.898,-41.7959)">
+        <path d="M1000,285C1000,149.781 890.219,40 755,40L265,40C129.781,40 20,149.781 20,285L20,775C20,910.219 129.781,1020 265,1020L755,1020C890.219,1020 1000,910.219 1000,775L1000,285Z"/>
+    </g>
+    <g id="Layer2">
+        <g>
+            <g id="Tracks-and-Ts" serif:id="Tracks and Ts">
+                <g id="Ties">
+                    <clipPath id="_clip1">
+                        <path d="M1024,256C1024,114.71 909.29,0 768,0L256,0C114.71,0 0,114.71 0,256L0,768C0,909.29 114.71,1024 256,1024L768,1024C909.29,1024 1024,909.29 1024,768L1024,256Z"/>
+                    </clipPath>
+                    <g clip-path="url(#_clip1)">
+                        <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,980.41,-600.588)">
+                            <rect x="380" y="200" width="290" height="40" style="fill:rgb(76,76,76);"/>
+                        </g>
+                        <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,500.41,-600.588)">
+                            <rect x="380" y="200" width="290" height="40" style="fill:rgb(76,76,76);"/>
+                        </g>
+                        <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,740.41,-600.588)">
+                            <rect x="380" y="200" width="290" height="40" style="fill:rgb(76,76,76);"/>
+                        </g>
+                        <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,1220.41,-599.816)">
+                            <rect x="380" y="200" width="290" height="40" style="fill:rgb(76,76,76);"/>
+                        </g>
+                        <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,1460.41,-599.816)">
+                            <rect x="380" y="200" width="290" height="40" style="fill:rgb(76,76,76);"/>
+                        </g>
+                    </g>
+                </g>
+                <g id="Rails" transform="matrix(1,0,0,1,0,-5)">
+                    <g transform="matrix(-1.06667,0.000709878,-0.000708769,-1.065,1066.81,495.931)">
+                        <rect x="40" y="200" width="960" height="40" style="fill:rgb(76,76,76);"/>
+                    </g>
+                    <g transform="matrix(-1.06667,0.000709878,-0.000708769,-1.065,1066.81,1005.93)">
+                        <rect x="40" y="200" width="960" height="40" style="fill:rgb(76,76,76);"/>
+                    </g>
+                </g>
+                <g id="Ts">
+                    <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,980.41,-600.588)">
+                        <rect x="380" y="200" width="290" height="40" style="fill:rgb(255,104,0);"/>
+                    </g>
+                    <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,1220.41,-600.588)">
+                        <rect x="380" y="200" width="290" height="40" style="fill:rgb(255,104,0);"/>
+                    </g>
+                    <g transform="matrix(0.00140996,2.11862,-2.1325,0.0014192,740.41,-600.588)">
+                        <rect x="380" y="200" width="290" height="40" style="fill:rgb(255,104,0);"/>
+                    </g>
+                    <g transform="matrix(2.55172,2.34381e-16,-4.21004e-16,2.5,-829.655,-294.65)">
+                        <rect x="380" y="200" width="290" height="40" style="fill:rgb(255,104,0);"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -40,7 +40,5 @@
           </button>
         </router-link>
       </li>
-    </ul>    
-    
   </main>
 </template>
