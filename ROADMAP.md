@@ -2,14 +2,31 @@
 
 ## TTT
 
+[x] Emulator for throttle
+[ ] Serial for throttle
+[-] responsive for throttle
+[ ] Emulator for dispatcher
+[ ] Launch Dashboard
+[-] ad hoc loco (enter loco address:___ [Acquire])
+[-] icons to svg files
+[ ] sounds
+
+[-] Mobile optimization
+[ ] Motion
+[ ] Route Map styles to show status
+[ ] Auto-version on release to main - show in header
+[ ] Fucntions UI / Icons
+[ ] Functions renaming
+[-] zustand optimization (effects)
+[x] README
+[ ] hotfix branch
+[-] explore vercel options
 
 [ ] slots/compose/inherit base component for status list - refactor (vue and react) - wait for graphql?
 [-] GrpahQL / better state management
 [-] convert to typescript
 [ ] write unit tests
 [ ] handheld throttle (bluetooth?)
-[-] ad hoc loco (enter loco address:___ [Acquire])
-[-] icons to svg files
 
 ### DCC-JS
 
@@ -26,36 +43,21 @@
 
   [x] DEJA Throttle
     [ ] Dynamic Power Status
-    [-] Launch on Vercel
+    [x] Launch on Vercel
     [ ] Select Layout ID
     [ ] Consist
-    [ ] Loco Memory
+    [x] Loco Memory
 
 
 #### Bugs:
 [-] mqtt Disconnect
-[-] routes broken with update
-[x] dispatcher throttle state on reload
-[x] connection store doesn't erase config when changing layout. add reset storage button
 
 
 ### TODO
-[ ] sounds
 [ ] sticks & dirt
 [ ] tufts, grass strips, cat tails
 [-] trees, bushes (trunks w/moss)
 [ ] granite rocks
-
-[-] Mobile optimization
-[ ] Motion
-[ ] Route Map styles to show status
-[ ] Auto-version on release to main - show in header
-[ ] Fucntions UI / Icons
-[ ] Functions renaming
-[-] zustand optimization (effects)
-[-] README
-[ ] hotfix branch
-[-] explore vercel options
 
 [-] city buildings
 [-] city electronics
@@ -99,6 +101,9 @@
 
 ## Done
 
+[x] routes broken with update
+[x] dispatcher throttle state on reload
+[x] connection store doesn't erase config when changing layout. add reset storage button
 [*] Sky
 [x] dashboard UI
 [x] dashboard dcc command

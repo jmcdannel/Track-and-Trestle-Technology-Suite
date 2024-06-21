@@ -22,10 +22,10 @@ export function useDcc() {
           connStore.ports = ports
           break;
         case 'status':
-          connStore.serialConnected = !!payload?.isConnected
+          connStore.dccExConnected = !!payload?.isConnected
           break;
         case 'connected':
-          connStore.serialConnected = true
+          connStore.dccExConnected = true
           break;
       }
     } catch { 
@@ -82,6 +82,10 @@ export function useDcc() {
 
   async function send(action: string, payload?: object) {
     try {
+      if (connStore.isEmulated) {
+        console.log('[DEJA EMULATOR] send', action, payload);
+        return;
+      }
       console.log('[dccApi] send', action, payload);
       mqttHook.publish(topic, JSON.stringify({ action, payload }))
     } catch (err) {

@@ -53,54 +53,55 @@
   const setSpeed = debounce((val: number): void => { currentSpeed.value = val; }, `${DEBOUNCE_DELAY}ms`)
 
   function onSlider(e:any) {
-    const newSpeed = parseInt(e.target.value);
-    rangeValue.value = newSpeed;
-    setSpeed(newSpeed);
+    const newSpeed = parseInt(e.target.value)
+    rangeValue.value = newSpeed
+    setSpeed(newSpeed)
   }
 
   async function handleStop() {
-    currentSpeed.value = 0;
-    rangeValue.value = currentSpeed.value;
+    currentSpeed.value = 0
+    rangeValue.value = currentSpeed.value
   }
 
   async function handleUp() {
-    currentSpeed.value = currentSpeed.value + 1;
-    rangeValue.value = currentSpeed.value;
+    currentSpeed.value = currentSpeed.value + 1
+    rangeValue.value = currentSpeed.value
   }
 
   async function handleDown() {
-    currentSpeed.value = currentSpeed.value - 1;
-    rangeValue.value = currentSpeed.value;
+    currentSpeed.value = currentSpeed.value - 1
+    rangeValue.value = currentSpeed.value
   }
 
   async function sendLocoSpeed(newSpeed:number, oldSpeed:number) {
 
-    const address = loco.value;
+    const address = loco.value
     if (!address) {
       // TODO: handle error
-      return;
+      return
     }
-    let delay = 0;
+    let delay = 0
     if (newSpeed > 0 && oldSpeed < 0) {
       //change direction to forward
-      console.log('change direction to forward');
-      await dccApi.setSpeed(loco.value, 0); // stop
-      delay = SWITCH_DIR_DELAY;
+      console.log('change direction to forward')
+      await dccApi.setSpeed(loco.value, 0) // stop
+      delay = SWITCH_DIR_DELAY
     } else if (newSpeed < 0 && oldSpeed > 0) {
       //change direction to reverse
-      console.log('change direction to reverse');
-      await dccApi.setSpeed(loco.value, 0); // stop
-      delay = SWITCH_DIR_DELAY;
+      console.log('change direction to reverse')
+      await dccApi.setSpeed(loco.value, 0) // stop
+      delay = SWITCH_DIR_DELAY
     }
     setTimeout(() => {
-      dccApi.setSpeed(loco.value, currentSpeed.value);
-    }, delay);
+      dccApi.setSpeed(loco.value, currentSpeed.value)
+    }, delay)
     
   }
 
   async function clearLoco() {
-    await handleStop();
-    router.push({ 'name': 'throttle'})
+    console.log('clearLoco')
+    await handleStop()
+    router.push({ name: 'home' })
   }
 
   watch(currentSpeed, sendLocoSpeed)
@@ -111,7 +112,7 @@
 
   <!-- TODO: break into small components -->
 
-  <main class="card m-5 bg-slate-600 shadow-xl flex-grow h-full">
+  <main class="card m-5 bg-slate-600 shadow-xl flex-grow h-full mb-24 overflow-auto">
     <header class="p-2 text-lg text-gray-900 bg-gradient-to-r from-green-500 to-cyan-500 flex  items-center justify-between">
       <div class="avatar placeholder">
         <div class="bg-orange-600 text-neutral-content rounded-full w-8">

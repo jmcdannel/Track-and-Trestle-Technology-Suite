@@ -4,7 +4,7 @@
   import { RouterView } from 'vue-router'
   import { useMQTT } from 'mqtt-vue-hook'
   import HeaderView from './views/HeaderView.vue'
-  // import FooterView from './views/FooterView.vue'
+  import FooterView from './views/FooterView.vue'
   import useDcc from './api/dccApi'
   import { useConnectionStore } from './store/connectionStore'
   
@@ -21,21 +21,25 @@
   onMounted(async () => {
     try {
       console.log('CONNECTING TO MQTT BROKER', mqttBroker, layoutId?.value, dejaTopic.value)
-      mqttHook.registerEvent(
-        dejaTopic.value,
-        (topic: string, message: string) => {
-          dccApi.parseMessage(topic, message.toString())
-        },
-        'string_key',
-      )      
+      if (layoutId?.value) {
+        mqttHook.registerEvent(
+          dejaTopic.value,
+          (topic: string, message: string) => {
+            dccApi.parseMessage(topic, message.toString())
+          },
+          'string_key',
+        )      
+      }
       mqttHook.registerEvent(
           'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
           (_topic: string, message: string) => {
               console.log('MQTT BROKER CONNECTION SUCCESSFUL')
-              mqttHook.subscribe([dejaTopic.value])
+              if (layoutId?.value) {
+                  mqttHook.subscribe([dejaTopic.value])
+                dccApi.send('listPorts', { })
+                dccApi.send('getStatus', { })
+              }
               conn.$patch({ mqttConnected: true })
-              dccApi.send('listPorts', { })
-              dccApi.send('getStatus', { })
           },
           'string_key',
       )
@@ -53,6 +57,6 @@
     <main class="flex-grow flex mb-16 min-h-0">
       <RouterView />
     </main>
-    <!-- <FooterView /> -->
+    <FooterView />
   </main>
 </template>
