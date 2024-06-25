@@ -4,8 +4,8 @@ import log from '../core/logger.mjs';
 const layoutId = process.env.LAYOUT_ID;
 
 // const host = 'https://trestle-tt-suite-ttt-app.vercel.app'
-const host = process.env.VITE_LAYOUT_API_HOST
 // const baseUri = `http://127.0.0.1:5001/api/${layoutId}`;
+const host = process.env.VITE_LAYOUT_API_HOST
 const baseUri = `${host}/api/${layoutId}`;
 
 const macroCommand = async (effect, delay = 0) => {
@@ -100,7 +100,7 @@ const ialedCommand = effect => ({
 const getEffectById = async (effectId) => {
   try {
     const uri = `${baseUri}/effects/${effectId}`;
-    const resp = await axios.get(uri);
+    const resp = await fetch(uri);
     return resp.data;
   } catch (err) {
     log.error('[COMMANDS] getEffectById', err);
