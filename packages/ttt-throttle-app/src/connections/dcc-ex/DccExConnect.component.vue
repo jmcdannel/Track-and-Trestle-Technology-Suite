@@ -8,11 +8,14 @@
 
   const dccApi = useDcc()
   const conn = useConnectionStore()
-  const { ports, serialConnected } = storeToRefs(conn)
-  const dccStatus = ref(serialConnected.value ? 'connected' : 'disconnected')
+  const { ports, dccExConnected } = storeToRefs(conn)
+  const dccStatus = ref(dccExConnected.value ? 'connected' : 'disconnected')
 
+  dccApi.send('listPorts', { })
+  
   const handleRefreshClick = () => {
-    dccApi.send('listPorts', { });
+    conn.isEmulated = false
+    dccApi.send('listPorts', { })
   }
 
   const handlePortClick = async (e:any) => {
@@ -21,14 +24,15 @@
       dccStatus.value = 'pending'
       const serial = e.target.value
       dccApi.send('connect', { serial })
+      conn.isEmulated = false
     } catch (err) {
       console.error(err)
     }
   }
 
-  watch(serialConnected, (newValue) => {
+  watch(dccExConnected, (newValue) => {
     if (newValue && dccStatus.value === 'pending') {
-      router.push({ name: 'home' });
+      router.push({ name: 'home' })
     }
   })
 
@@ -51,7 +55,7 @@
     </header>
     <main class="my-1 pt-8 flex-grow">  
       <div class="p-2 text-error">
-          <ConnectionStatus connectedLabel="DCC-EX" disconnectedLabel="DCC-EX" :connected="conn.serialConnected" />
+          <ConnectionStatus connectedLabel="DCC-EX" disconnectedLabel="DCC-EX" :connected="conn.dccExConnected" />
           <ConnectionStatus connectedLabel="MQTT" disconnectedLabel="MQTT" :connected="conn.mqttConnected" />
           <button class="btn btn-sm btn-outline  border-blue-500" @click="handleRefreshClick">Refresh</button>
       </div>           

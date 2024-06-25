@@ -77,28 +77,34 @@ body {
   background-image: url('@/assets/northernlights.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom center;
 }
 
 .tracks1-background {
   background-image: url('@/assets/tracks1.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom center;
 }
 
 .forest-background {
   background-image: url('@/assets/foresttracks.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
+  background-position: bottom center;
 }
 
 .vertwaves-background {
   background-image: url('@/assets/vertwaves.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom center;
 }
 
 .viaduct-background {
   background-image: url('@/assets/viaduct.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: bottom center;
 }
