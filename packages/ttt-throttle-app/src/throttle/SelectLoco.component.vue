@@ -9,7 +9,7 @@
 
   const handleGoClick = async () => {
     console.log('SELECTLOCO.handleGoClick', loco.value)
-    const locoId = parseInt(loco.value)
+    const locoId = parseInt(loco.value as unknown as string) 
     !!locoId && saveLoco(locoId)
     router.push({ name: 'throttle', params: { locoId } })
     

@@ -22,7 +22,7 @@
       <div class="card-actions justify-between items-center">
         <div class="flex">
           <div class="p-2 text-error">            
-            <ConnectionStatus :connected="isEmulated" :connected-label="Emulator" />
+            <ConnectionStatus :connected="isEmulated" :connected-label="'Emulator'" />
           </div> 
         </div>
         

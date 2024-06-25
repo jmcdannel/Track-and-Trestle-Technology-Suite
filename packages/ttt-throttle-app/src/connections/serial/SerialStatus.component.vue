@@ -40,7 +40,6 @@ import linkIconSvg from '@/assets/icons/link.svg'
             @click="navigate"
             role="link"
             class="btn btn-primary btn-outline"
-            :disabled="!mqttConnected || !layoutId"
           >
           <span v-if="!connection?.connected">Connect</span>
           <span v-else>Configure</span>
