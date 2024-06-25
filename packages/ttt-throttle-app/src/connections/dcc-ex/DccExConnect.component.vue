@@ -12,7 +12,7 @@
   const dccStatus = ref(dccExConnected.value ? 'connected' : 'disconnected')
 
   dccApi.send('listPorts', { })
-  
+
   const handleRefreshClick = () => {
     conn.isEmulated = false
     dccApi.send('listPorts', { })

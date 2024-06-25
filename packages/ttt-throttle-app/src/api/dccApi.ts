@@ -1,95 +1,94 @@
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useConnectionStore } from '../store/connectionStore.jsx'
-import { storeToRefs } from 'pinia'
-import { useMQTT } from 'mqtt-vue-hook'
+import { ref, onMounted, onUnmounted } from "vue"
+import { useConnectionStore } from "../store/connectionStore.jsx"
+import { storeToRefs } from "pinia"
+import { useMQTT } from "mqtt-vue-hook"
 
 export function useDcc() {
-
   const mqttHook = useMQTT()
   const connStore = useConnectionStore()
   const { layoutId } = storeToRefs(connStore)
   const topic = `@ttt/dcc/${layoutId.value}`
 
-  let ports: never[] = [];
+  let ports: never[] = []
 
   async function parseMessage(topic: string, message: string) {
     try {
-      const { action, payload } = JSON.parse(message);
-      console.log('[DCC API] parseMessage', topic, message, action, payload);
+      const { action, payload } = JSON.parse(message)
+      console.log("[DCC API] parseMessage", topic, message, action, payload)
       switch (action) {
-        case 'listPorts':
+        case "portList":
           ports = payload || []
           connStore.ports = ports
-          break;
-        case 'status':
+          break
+        case "status":
           connStore.dccExConnected = !!payload?.isConnected
-          break;
-        case 'connected':
+          break
+        case "connected":
           connStore.dccExConnected = true
-          break;
+          break
       }
-    } catch { 
-      console.warn('Message not in JSON format.'); 
+    } catch {
+      console.warn("Message not in JSON format.")
     }
   }
 
   async function setPower(payload: object) {
-    try {   
-      console.log('[DCC API].setPower', payload);
-      await send('power', payload);
-    } catch (err:any) {
-      console.error('[DCC API].setPower', err);
-      throw new Error(err);
+    try {
+      console.log("[DCC API].setPower", payload)
+      await send("power", payload)
+    } catch (err: any) {
+      console.error("[DCC API].setPower", err)
+      throw new Error(err)
     }
   }
 
   async function setSpeed(address: any, speed: any) {
-    try {   
-      await send('throttle', { address, speed });
-    } catch (err:any) {
-      console.error('[DCC API].setPower', err);
-      throw new Error(err);
+    try {
+      await send("throttle", { address, speed })
+    } catch (err: any) {
+      console.error("[DCC API].setPower", err)
+      throw new Error(err)
     }
   }
 
   async function setTurnout(turnoutId: any, state: any) {
-    try {   
-      send('turnout', { turnoutId, state });
-    } catch (err:any) {
-      console.error('[DCC API].setTurnout', err);
-      throw new Error(err);
+    try {
+      send("turnout", { turnoutId, state })
+    } catch (err: any) {
+      console.error("[DCC API].setTurnout", err)
+      throw new Error(err)
     }
   }
 
   async function setFunction(address: any, func: any, state: any) {
-    try {   
-      await send('function', { address, func, state });
-    } catch (err:any) {
-      console.error('[DCC API].setPower', err);
-      throw new Error(err);
+    try {
+      await send("function", { address, func, state })
+    } catch (err: any) {
+      console.error("[DCC API].setPower", err)
+      throw new Error(err)
     }
   }
 
   async function sendOutput(pin: any, state: any) {
-    try {   
-      console.log('[DCC API].sendOutput', pin, state);
-      await send( 'output', { pin, state });
-    } catch (err:any) {
-      console.error('[DCC API].setPower', err);
-      throw new Error(err);
+    try {
+      console.log("[DCC API].sendOutput", pin, state)
+      await send("output", { pin, state })
+    } catch (err: any) {
+      console.error("[DCC API].setPower", err)
+      throw new Error(err)
     }
   }
 
   async function send(action: string, payload?: object) {
     try {
       if (connStore.isEmulated) {
-        console.log('[DEJA EMULATOR] send', action, payload);
-        return;
+        console.log("[DEJA EMULATOR] send", action, payload)
+        return
       }
-      console.log('[dccApi] send', action, payload);
+      console.log("[dccApi] send", action, payload)
       mqttHook.publish(topic, JSON.stringify({ action, payload }))
     } catch (err) {
-      console.error('[DCC API].send', err);
+      console.error("[DCC API].send", err)
     }
   }
 
@@ -101,9 +100,8 @@ export function useDcc() {
     sendOutput,
     setTurnout,
     parseMessage,
-    ports: ports
+    ports: ports,
   }
-
 }
 
-export default useDcc;
+export default useDcc
