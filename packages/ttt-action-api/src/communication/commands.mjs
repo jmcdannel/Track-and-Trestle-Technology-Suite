@@ -111,7 +111,7 @@ const effectCommand = async (payload) => {
   try {
     const effect = await getEffectById(payload.effectId);
     
-    switch(effect.type) {
+    switch(effect?.type) {
       case 'light':
       case 'frog':
       case 'relay':
