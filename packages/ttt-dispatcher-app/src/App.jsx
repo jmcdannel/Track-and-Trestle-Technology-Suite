@@ -22,7 +22,7 @@ function App() {
     <MuiThemeProvider theme={theme}>
       <Store>
         <MqttProvider>
-        <CssBaseline />
+          <CssBaseline />
           <BrowserRouter>
             <ApiEngine />
             <AppLayout

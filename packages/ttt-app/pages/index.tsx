@@ -53,6 +53,8 @@ export default function Home({
           Welcome to <a href="https://nextjs.org">Next.js with MongoDB!</a>
         </h1>
 
+
+
         {isConnected ? (
           <div>
             <h2 className="subtitle">You are connected to MongoDB</h2>

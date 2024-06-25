@@ -6,9 +6,9 @@ import { useDccStore } from '../Store/useDccStore';
 import { useMqtt } from '../Core/Com/MqttProvider'
 
 export const DccListener = () => {
-  
+
   const powerOnStates = ['<p1>', '<p1 MAIN>']
-  const powerOffStates = ['<p0>', '<p0 MAIN>']  
+  const powerOffStates = ['<p0>', '<p0 MAIN>']
 
   const { isConnected, publish, subscribe, payload: mqttMessage, isConnected: mqttConnected } = useMqtt();
 
@@ -21,9 +21,12 @@ export const DccListener = () => {
   const dccDeviceStatus = useConnectionStore(state => state.dccDeviceStatus);
   const appendtoDccLog = useDccStore(state => state.appendtoLog);
   const setPowerStatus = useDccStore(state => state.setPowerStatus);
-  // const setPorts = useConnectionStore(state => state.setPorts);
+  const setPorts = useConnectionStore(state => state.setPorts);
 
   const upsertThrottle = useThrottleStore(state => state.upsertThrottle);
+
+  const publishTopic = `@ttt/dcc/${layoutId}`;
+  const subscribeTopic = `@ttt/DEJA.js/${layoutId}`;
 
   const parseDccResponse = (payload) => {
     // console.log('[DccListener] parseDccResponse', payload);
@@ -35,7 +38,7 @@ export const DccListener = () => {
       }
     } else if (payload.startsWith('<l')) { // loco status response
       const locoResponse = payload
-        .replace( /(^.*\<|\>.*$)/g, '' )
+        .replace(/(^.*\<|\>.*$)/g, '')
         .split(' ');
       const address = parseInt(locoResponse[1]);
       const dccSpeed = parseInt(locoResponse[3]);
@@ -47,26 +50,32 @@ export const DccListener = () => {
       } else {
         calculatedSpeed = dccSpeed - 129;
       }
-      const direction= parseInt(locoResponse[4]);
+      const direction = parseInt(locoResponse[4]);
       upsertThrottle({ address, speed: calculatedSpeed });
       console.log('[DccListener] parseDccResponse locoResponse', locoResponse, address, dccSpeed, calculatedSpeed, direction);
     }
   }
-  
+
   useEffect(() => {
-    const parse = function() {
+    const parse = function () {
       try {
-        const message = { data: mqttMessage?.message ?  mqttMessage.message : null };
+        const message = { data: mqttMessage?.message ? mqttMessage.message : null };
+        const topic = mqttMessage?.topic ? mqttMessage.topic : null;
+        console.log('[DccListener] handleDccMessage', message, topic);
+        if (topic !== subscribeTopic) return; // ignore topics not subscribed
         const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
-        // console.log('[DccListener] handleDccMessage', action, payload);
+
         switch (action) {
           case 'connected':
             setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
             setDccDevice(payload.path);
-            publish(`@ttt/dcc/${layoutId}`, {
+            publish(publishTopic, {
               action: 'dcc',
               payload: 's'
             });
+            break;
+          case 'portList':
+            setPorts(payload);
             break;
           case 'broadcast':
             parseDccResponse(payload);
@@ -80,30 +89,30 @@ export const DccListener = () => {
       } catch (err) {
         log.error('api initialization error', err);
       }
-    };    
+    };
     mqttMessage && parse();
   }, [mqttMessage]);
-  
+
   // Connect MQTT Client
   useEffect(() => {
-    const initialize = async function() {
-      try {        
-        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
-        subscribe(`@ttt/DCCEX.js/${layoutId}`);
+    const initialize = async function () {
+      try {
+        publish(publishTopic, JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
+        subscribe(subscribeTopic);
       } catch (err) {
         log.error('api initialization error', err);
       }
-    };    
+    };
     isConnected && initialize();
-  }, [isConnected ]);
+  }, [isConnected]);
 
   // Connect DCC Device
   useEffect(() => {
-    const initialize = async function() {
+    const initialize = async function () {
       console.log('[DccListener] Connect DCC Device', mqttConnected, dccDeviceStatus, dccDevice);
       try {
         setDccDeviceStatus(CONNECTION_STATUS.PENDING);
-        publish(`@ttt/dcc/${layoutId}`, {
+        publish(publishTopic, {
           action: 'connect',
           payload: { serial: dccDevice, dcc: true }
         });
@@ -111,7 +120,7 @@ export const DccListener = () => {
         log.error('dcc device initialization error', err);
       }
     };
-    mqttConnected && dccDevice 
+    mqttConnected && dccDevice
       && (dccDeviceStatus === CONNECTION_STATUS.DISCONNECTED || dccDeviceStatus === CONNECTION_STATUS.UNKNOWN)
       && initialize();
     !dccDevice && setDccDeviceStatus(CONNECTION_STATUS.DISCONNECTED);
