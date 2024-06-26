@@ -2,56 +2,21 @@
   import { onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { RouterView } from 'vue-router'
-  import { useMQTT } from 'mqtt-vue-hook'
-  import HeaderView from './views/HeaderView.vue'
-  import FooterView from './views/FooterView.vue'
-  import useDcc from './api/dccApi'
-  import { useConnectionStore } from './store/connectionStore'
+  import HeaderView from '@/views/HeaderView.vue'
+  import FooterView from '@/views/FooterView.vue'
+  import DEJAConnect from '@/core/DEJAConnect.component.vue'
+  import { useConnectionStore } from '@/store/connectionStore'
   
-  const mqttBroker = import.meta.env.VITE_MQTT_BROKER
-  const mqttPort = 8081
-
-  const dccApi = useDcc()
-  const mqttHook = useMQTT()
   const conn = useConnectionStore()
 
   const { layoutId } = storeToRefs(conn)
-  const dejaTopic = ref(`@ttt/DCCEX.js/${layoutId.value}`)
   
-  onMounted(async () => {
-    try {
-      console.log('CONNECTING TO MQTT BROKER', mqttBroker, layoutId?.value, dejaTopic.value)
-      if (layoutId?.value) {
-        mqttHook.registerEvent(
-          dejaTopic.value,
-          (topic: string, message: string) => {
-            dccApi.parseMessage(topic, message.toString())
-          },
-          'string_key',
-        )      
-      }
-      mqttHook.registerEvent(
-          'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
-          (_topic: string, message: string) => {
-              console.log('MQTT BROKER CONNECTION SUCCESSFUL')
-              if (layoutId?.value) {
-                  mqttHook.subscribe([dejaTopic.value])
-                dccApi.send('listPorts', { })
-                dccApi.send('getStatus', { })
-              }
-              conn.$patch({ mqttConnected: true })
-          },
-          'string_key',
-      )
-      await mqttHook.connect(mqttBroker, { port: mqttPort })
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
 </script>
 
 <template>
+  <template v-if="layoutId">
+    <DEJAConnect />
+  </template>
   <main class="flex flex-col h-screen">
     <HeaderView />
     <main class="flex-grow flex mb-16 min-h-0">

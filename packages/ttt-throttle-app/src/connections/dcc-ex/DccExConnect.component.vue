@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
-  import ConnectionStatus from '../../core/ConnectionStatus.component.vue'
-  import useDcc from '../../api/dccApi'
-  import router from '../../router'
-  import { useConnectionStore } from '../../store/connectionStore.jsx'
+  import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
+  import useDcc from '@/api/dccApi'
+  import router from '@/router'
+  import { useConnectionStore } from '@/store/connectionStore.jsx'
 
   const dccApi = useDcc()
   const conn = useConnectionStore()
