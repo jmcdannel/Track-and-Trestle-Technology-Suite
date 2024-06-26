@@ -1,10 +1,13 @@
 <script setup lang="ts">
+  import { storeToRefs } from 'pinia'
   import LayoutIdStatus from './layout-id/LayoutIdStatus.component.vue';
   import DccExStatus from './dcc-ex/DccExStatus.component.vue';
   import SerialStatus from './serial/SerialStatus.component.vue';
   import EmulatorStatus from './emulator/EmulatorStatus.component.vue';
+  import Status from './Status.component.vue';
   import { useConnectionStore } from '@/store/connectionStore'
  
+  const { isEmulated, dccExConnected, serialConnected } = storeToRefs(useConnectionStore())  
 </script>
 
 <template>
@@ -15,14 +18,11 @@
       <strong class="text-8xl font-extralight uppercase">Layout</strong>
     </h2>
 
-    <LayoutIdStatus />
-    <!-- <div class="divider"></div>
-    <EmulatorStatus /> -->
-    <div class="divider"></div>
-    <DccExStatus />
-    <div class="divider"></div>
-    <SerialStatus /> 
-    
+    <section class="flex flex-col">
+      <Status :isConnected="dccExConnected" :connectPath="'/connect/dcc-ex'" :connectedLabel="'DEJA.js'" />
+      <Status :isConnected="serialConnected" :connectPath="'/connect/serial'" :connectedLabel="'USB Serial'" />
+      <Status :isConnected="isEmulated" :connectPath="'/connect/emulator'" :connectedLabel="'Emulator'" />
+    </section>
   </main>
 </template>
 

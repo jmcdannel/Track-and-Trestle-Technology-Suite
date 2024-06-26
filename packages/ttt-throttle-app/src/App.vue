@@ -8,7 +8,6 @@
   import { useConnectionStore } from '@/store/connectionStore'
   
   const conn = useConnectionStore()
-
   const { layoutId } = storeToRefs(conn)
   
 </script>

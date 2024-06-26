@@ -5,6 +5,7 @@ export const useConnectionStore = defineStore('connections', {
     mqttConnected: false,
     ports: [],
     dccExConnected: false,
+    serialConnected: false,
     isEmulated: false,
     layoutId: localStorage.getItem('@DEJA/layoutId') || null
   })

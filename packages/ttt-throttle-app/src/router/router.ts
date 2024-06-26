@@ -39,7 +39,7 @@ const router = createRouter({
         import("../connections/layout-id/LayoutConnect.component.vue"),
     },
     {
-      path: "/connect/serial/:connectionId",
+      path: "/connect/serial",
       name: "serial",
       component: () =>
         import("../connections/serial/SerialConnect.component.vue"),

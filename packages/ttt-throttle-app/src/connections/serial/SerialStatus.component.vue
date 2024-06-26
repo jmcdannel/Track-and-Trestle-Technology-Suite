@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
-import linkIconSvg from '@/assets/icons/link.svg'
+  import { storeToRefs } from 'pinia'
+  import { RouterLink } from 'vue-router'
+  import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
+  import { useConnectionStore } from '@/store/connectionStore'
+  import linkIconSvg from '@/assets/icons/link.svg'
   
-  const props = defineProps({
-    connection: {
-        type: Object
-    },
-    iface: {
-        type: Object
-    }
-  });
+  const { serialConnected } = storeToRefs(useConnectionStore())  
 
 </script>
 
@@ -27,12 +22,12 @@ import linkIconSvg from '@/assets/icons/link.svg'
       <div class="card-actions justify-between items-center">
         <div class="flex">
           <div class="p-2 text-error">            
-            <ConnectionStatus :connected="connection?.connected" :connected-label="iface?.id" />
+            <ConnectionStatus :connected="serialConnected" :connected-label="'USB'" />
           </div> 
         </div>
         
         <router-link
-          :to="`/connect/serial/${iface?.id}`"
+          :to="`/connect/serial`"
           custom
           v-slot="{ navigate }"          
         >

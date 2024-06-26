@@ -2,17 +2,12 @@
 import { onMounted, ref, watch, computed } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router'
-  import ConnectionStatus from '../../core/ConnectionStatus.component.vue';
-  import useDcc from '../../api/dccApi'
-  import router from '../../router'
-  import { useConnectionStore } from '../../store/connectionStore.jsx';
+  import { useConnectionStore } from '@/store/connectionStore'
+  import ConnectionStatus from '@/core/ConnectionStatus.component.vue';
+  import useSerial from '@/api/serialApi'
 
-  const route = useRoute();
-  const connectionId = route.params.connectionId;
-
-  const dccApi = useDcc()
-  const connStore = useConnectionStore();
-  // const { connections } = storeToRefs(connStore);
+  const serialApi = useSerial()
+  const { serialConnected } = storeToRefs(useConnectionStore())
 
   // const connection = computed(() => {
   //   return connections.value.get(connectionId)
@@ -21,15 +16,10 @@ import { onMounted, ref, watch, computed } from 'vue';
   //   return connections.value.get('action-api')
   // });
 
-  const handlePortClick = async (e:any) => {
+  const handleConnectClick = async (e:any) => {
     try {
       e.preventDefault();
-      const serial = e.target.value;
-      console.log('handlePortClick', serial, connectionId);
-      // connStore.setConnection(connectionId, { serial, connected: false })
-      // await api.config.set(connectionId, serial);
-      // await api.actionApi.put('serialConnect', { connectionId, serial });
-      // router.push({ name: 'home' });
+      serialApi.connect()
     } catch (err) {
       console.error(err);
     }
@@ -68,18 +58,12 @@ import { onMounted, ref, watch, computed } from 'vue';
     </header>
     <main class="my-1 pt-8 flex-grow">  
       
-      <!-- <div class="p-2 text-error">
-          <ConnectionStatus :connected="connection?.connected" />
-           <pre>connection: {{ connection }}</pre>
-           <pre>actionApiConnection: {{ actionApiConnection }}</pre>
-        </div> 
-        <div className="divider"></div> 
-      <ul>
-        <li v-for="port in actionApiConnection?.ports" :key="port">
-          <button class="btn btn-sm btn-outline w-full border-teal-500" :value="port" @click="handlePortClick">{{ port }}</button>
-          <div className="divider"></div> 
-        </li>
-      </ul> -->
+      <div class="p-2 text-error">
+        <ConnectionStatus :connected="serialConnected" />
+      </div> 
+      <div className="divider"></div> 
+      <button class="btn btn-md btn-outline w-full border-teal-500" @click="handleConnectClick">Connect</button>
+          
     </main>
   </main>
 </template>
