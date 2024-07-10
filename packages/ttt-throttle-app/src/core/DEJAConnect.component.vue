@@ -18,6 +18,7 @@
 
   function handleMessage(topic: string, message: string) {
     try {
+      console.log('handleMessage', topic, message.toString())
       dccApi.parseMessage(topic, message.toString())
     } catch (err) {
       console.error(err);
@@ -28,9 +29,9 @@
     try {
       console.log('MQTT BROKER CONNECTION SUCCESSFUL', _topic, message, dejaTopic.value)
       mqttHook.subscribe([dejaTopic.value])
+      conn.$patch({ mqttConnected: true })
       dccApi.send('listPorts', { })
       dccApi.send('getStatus', { })
-      conn.$patch({ mqttConnected: true })
     } catch (err) {
       console.error(err);
     }

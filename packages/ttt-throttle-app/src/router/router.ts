@@ -21,10 +21,9 @@ const router = createRouter({
       component: SelectConnections,
     },
     {
-      path: "/connect/dcc-ex",
-      name: "dcc-ex",
-      component: () =>
-        import("../connections/dcc-ex/DccExConnect.component.vue"),
+      path: "/connect/deja",
+      name: "deja",
+      component: () => import("../connections/deja/DejaConnect.component.vue"),
     },
     {
       path: "/connect/emulator",

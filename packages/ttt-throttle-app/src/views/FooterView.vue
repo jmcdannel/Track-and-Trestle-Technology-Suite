@@ -3,7 +3,7 @@
 </script>
 <template>
   <footer>
-    <div class="btm-nav">
+    <div class="btm-nav max-w-screen-md mx-auto">
       <!-- <router-link
         to="/effects"
         custom

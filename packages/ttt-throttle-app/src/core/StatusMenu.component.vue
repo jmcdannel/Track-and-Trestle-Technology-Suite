@@ -2,26 +2,26 @@
   import { storeToRefs } from 'pinia'
   import { useConnectionStore } from '../store/connectionStore'
 
-  const { mqttConnected, dccExConnected, isEmulated } = storeToRefs(useConnectionStore())
+  const { mqttConnected, dejaConnected, isEmulated, serialConnected } = storeToRefs(useConnectionStore())
 
   function emulated() {
     console.log(isEmulated.value)
     return isEmulated.value
   }
 
-  function allConnected() {
-    const conn = (!isEmulated.value && mqttConnected.value && dccExConnected.value)
-    return conn
-  }
-
-  function allDisconnected() {
-    const conn = !isEmulated.value && !mqttConnected.value && !dccExConnected.value
-    return conn
-  }
-
   function anyConnected() {
-    const conn = !isEmulated.value &&  !allConnected() && (mqttConnected.value || !!dccExConnected.value)
+    const conn = isEmulated.value || dejaConnected.value || serialConnected.value
     return conn
+  }
+
+  function getLabel() {
+    return serialConnected.value
+      ? 'Serial'
+      : dejaConnected.value
+        ? 'DEJA.js'
+        : isEmulated.value
+          ? 'Emulated'
+          : ''
   }
 
 </script>
@@ -33,11 +33,10 @@
       class="btn btn-ghost relative flex flex-row"
           :class="{
           'text-blue-500': emulated(),
-          'text-error': allDisconnected(),
-          'text-success': allConnected(),
-          'text-warning': anyConnected()
+          'text-error': !anyConnected(),
+          'text-success': anyConnected()
       }">
-      <span>{{ emulated() ? 'EMULATOR' : '' }}</span> 
+      <span>{{ getLabel() }}</span> 
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 mr-1">
         <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71l1.992-7.302H3.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
       </svg>

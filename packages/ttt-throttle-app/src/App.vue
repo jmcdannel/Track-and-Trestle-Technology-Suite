@@ -16,11 +16,36 @@
   <template v-if="layoutId">
     <DEJAConnect />
   </template>
-  <main class="flex flex-col h-screen">
+  <main class="flex flex-col h-screen max-w-screen-md mx-auto">
     <HeaderView />
     <main class="flex-grow flex mb-16 min-h-0">
+      <!-- <RouterView v-slot="{ Component }">
+        <Transition name="slide-out" mode="out-in">
+          <component :is="Component" />
+        </Transition> 
+      </RouterView> -->
       <RouterView />
     </main>
     <FooterView />
   </main>
 </template>
+<style>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .slide-out-enter-active, .slide-out-leave-active {
+    transition: transform 0.5s;
+  }
+  .slide-out-enter-active {
+    transform: translateX(100%);
+  }
+  .slide-out-enter-to {
+    transform: translateX(0);
+  }
+</style>

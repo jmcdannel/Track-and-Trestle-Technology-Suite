@@ -25,11 +25,11 @@ export function useSerial() {
     rosterComplete,
     routesComplete
 
-  navigator.serial.getPorts().then((ports) => {
-    console.log("iniit connected port", ports)
-    port = ports[0]
-    connStore.serialConnected = true
-  })
+  // navigator.serial.getPorts().then((ports) => {
+  //   console.log("iniit connected port", ports)
+  //   port = ports[0]
+  //   connStore.serialConnected = true
+  // })
 
   async function send(action: string, payload: object | undefined) {
     try {
@@ -100,6 +100,15 @@ export function useSerial() {
     await writeToStream(cmd)
   }
 
+  async function disconnect() {
+    try {
+      disconnectServer()
+      connStore.disconnect()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   async function connect() {
     // - Request a port and open an asynchronous connection,
     //   which prevents the UI from blocking when waiting for
@@ -118,6 +127,7 @@ export function useSerial() {
 
       await port.open({ baudRate: 115200 }) // open the port at the proper supported baud rate
       connectServer()
+      connStore.connect("serial")
     } catch (err) {
       console.error(err)
     }
@@ -147,7 +157,6 @@ export function useSerial() {
       reader = inputStream.getReader()
       readLoop()
       displayLog("[CONNECTION] Serial connected")
-      connStore.serialConnected = true
       // To put the system into a known state and stop it from echoing back the characters that we send it,
       // we need to send a CTRL-C and turn off the echo
       writeToStream("\x03", "echo(false);")
@@ -821,20 +830,32 @@ export function useSerial() {
     // Stops data being written to nonexistent port if using emulator
     // if (emulatorClass == null) displayLog("[i] emulatorClass is null")
     // let stream = emulatorClass
-    if (port) {
+    try {
       stream = window.serialOutputStream.getWriter()
-    }
 
-    lines.forEach((line) => {
-      if (line == "\x03" || line == "echo(false);") {
+      if (stream) {
+        lines.forEach((line) => {
+          if (line == "\x03" || line == "echo(false);") {
+          } else {
+            displayLog("[S] &lt;" + line.toString() + "&gt;")
+          }
+          const packet = `<${line}>\n`
+          stream.write(packet)
+          console.log(packet)
+        })
+        stream.releaseLock()
       } else {
-        displayLog("[S] &lt;" + line.toString() + "&gt;")
+        console.error(
+          "No stream to write to",
+          outputStream,
+          window.serialOutputStream,
+          port,
+          stream
+        )
       }
-      const packet = `<${line}>\n`
-      stream.write(packet)
-      console.log(packet)
-    })
-    stream.releaseLock()
+    } catch (err) {
+      console.error("Error writing to stream:", err)
+    }
   }
 
   // Transformer for the Web Serial API. Data comes in as a stream so we
@@ -915,7 +936,7 @@ export function useSerial() {
       displayLog("[CONNECTION] Emulator disconnected")
     }
     // Allows a new method to be chosen
-    selectMethod.disabled = false
+    // selectMethod.disabled = false
   }
 
   // Connect or disconnect from the command station
@@ -1101,6 +1122,7 @@ export function useSerial() {
 
   return {
     connect,
+    disconnect,
     send,
   }
 }

@@ -1,10 +1,19 @@
 <script setup>
   import { ref } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import { useConnectionStore } from '../store/connectionStore'
   import useDcc from '../api/dccApi'
 
+  const { dejaConnected, isEmulated, serialConnected } = storeToRefs(useConnectionStore())
   const dccApi = useDcc()
-
   const power = ref(false)
+
+
+  function anyConnected() {
+    const conn = isEmulated.value || dejaConnected.value || serialConnected.value
+    console.log('anyConnected', conn)
+    return conn
+  }
 
   async function handlePower() {
     try {
@@ -21,11 +30,12 @@
 <template>
 
   <button @click="handlePower"
+    :disabled="!anyConnected()"
     class="btn btn-ghost btn-circle relative"
     :class="{
-      'text-gray-500': disabled,
-      'text-success': !disabled && power,
-      'text-error': !disabled && !power,  
+      'text-gray-500': !anyConnected(),
+      'text-success': anyConnected() && power,
+      'text-error': anyConnected() && !power,  
     }">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" />

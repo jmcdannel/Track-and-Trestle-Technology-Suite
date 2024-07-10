@@ -8,7 +8,7 @@
   const DCCJS_LABEL = 'DEJA Server'
   const DCCEX_LABEL = 'DEJA.js API'
 
-  const { mqttConnected, dccExConnected, layoutId } = storeToRefs(useConnectionStore())  
+  const { mqttConnected, dejaConnected, layoutId } = storeToRefs(useConnectionStore())  
 
 </script>
 
@@ -23,10 +23,10 @@
       <div class="card-actions justify-between items-center">
         <div class="flex p-2 text-error flex-col">
           <ConnectionStatus :connected="mqttConnected" :connected-label="DCCJS_LABEL" :disconnected-label="DCCJS_LABEL" />
-          <ConnectionStatus :connected="dccExConnected" :connected-label="DCCEX_LABEL" :disconnected-label="DCCEX_LABEL" />
+          <ConnectionStatus :connected="dejaConnected" :connected-label="DCCEX_LABEL" :disconnected-label="DCCEX_LABEL" />
         </div>         
         <router-link
-          :to="`/connect/dcc-ex/`"
+          :to="`/connect/deja/`"
           custom
           v-slot="{ navigate }"          
         >
@@ -36,7 +36,7 @@
             class="btn btn-primary btn-outline"
             :disabled="!mqttConnected || !layoutId"
           >
-            <span v-if="!dccExConnected">Connect</span>
+            <span v-if="!dejaConnected">Connect</span>
             <span v-else>Configure</span>          
           </button>
         </router-link>
