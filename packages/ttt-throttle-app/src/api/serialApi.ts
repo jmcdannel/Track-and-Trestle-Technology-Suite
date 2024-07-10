@@ -1,5 +1,16 @@
 import { useConnectionStore } from "@/store/connectionStore"
-import { storeToRefs } from "pinia"
+
+declare global {
+  interface Window {
+    serialOutputStream: WritableStream<string>
+  }
+}
+
+type SendFunctionPayload = {
+  address: number
+  func: number
+  state: boolean
+}
 
 export function useSerial() {
   const connStore = useConnectionStore()
@@ -9,48 +20,53 @@ export function useSerial() {
       While there is data, we read the results in loop function
   */
   let commandString = ""
-  let port,
-    outputDone,
-    outputStream,
-    inputDone,
+  let port: {
+      opened: any
+      open: (arg0: { baudRate: number }) => any
+      writable: WritableStream<Uint8Array>
+      readable: { pipeTo: (arg0: WritableStream<BufferSource>) => any }
+      close: () => any
+    } | null,
+    outputDone: Promise<void> | null,
+    outputStream: WritableStream<string> | null,
+    inputDone: Promise<any> | null,
     inputStream,
-    reader,
-    stream,
-    csVersion,
-    csIsReadyRequestSent,
-    csIsReady,
-    cmdArray,
-    cmdArrayClean,
+    reader: ReadableStreamDefaultReader<string> | null,
+    stream: { write: (arg0: string) => void; releaseLock: () => void },
+    csVersion: string | number,
+    csIsReadyRequestSent: boolean,
+    csIsReady: boolean,
     last,
     rosterComplete,
     routesComplete
 
-  // navigator.serial.getPorts().then((ports) => {
-  //   console.log("iniit connected port", ports)
-  //   port = ports[0]
-  //   connStore.serialConnected = true
-  // })
-
-  async function send(action: string, payload: object | undefined) {
+  async function send(action: string, payload: object | undefined | number) {
     try {
       switch (action) {
         case "dcc":
           await writeToStream(payload)
           break
         case "power":
-          await power(payload)
+          if (typeof payload === "number") {
+            await power(payload)
+          }
           break
         case "throttle":
-          await sendSpeed(payload)
+          await sendSpeed(payload as { address: number; speed: number })
           break
         case "turnout":
-          await sendTurnout(payload)
+          await sendTurnout(
+            payload as {
+              turnoutId: number
+              state: Boolean | undefined
+            }
+          )
           break
         case "output":
-          await sendOutput(payload)
+          await sendOutput(payload as { pin: number; state: Boolean })
           break
         case "function":
-          await sendFunction(payload)
+          await sendFunction(payload as SendFunctionPayload)
           break
         default:
           //noop
@@ -60,21 +76,18 @@ export function useSerial() {
       console.error("Error handling message:", err)
     }
   }
-
-  const _send = async (data) => {
-    try {
-      console.log("Writing to port", data)
-      writeToStream(data)
-    } catch (err) {
-      console.error("Error writting to port:", err)
-    }
-  }
-  const power = async (state) => {
+  const power = async (state: number) => {
     await writeToStream(state)
     console.log("Power", state)
   }
 
-  const sendSpeed = async ({ address, speed }) => {
+  const sendSpeed = async ({
+    address,
+    speed,
+  }: {
+    address: number
+    speed: number
+  }) => {
     const direction = speed > 0 ? 1 : 0
     const absSpeed = Math.abs(speed)
     console.log("Throttle", address, speed, direction)
@@ -82,21 +95,36 @@ export function useSerial() {
     await writeToStream(cmd)
   }
 
-  const sendTurnout = async ({ turnoutId, state }) => {
+  const sendTurnout = async ({
+    turnoutId,
+    state,
+  }: {
+    turnoutId: number
+    state: Boolean | undefined
+  }) => {
     console.log("Turnout", turnoutId, state)
     const cmd = `T ${turnoutId} ${state ? 1 : 0}`
     await writeToStream(cmd)
   }
 
-  const sendFunction = async ({ address, func, state }) => {
-    console.log("Function", address, func)
+  const sendFunction = async ({
+    address,
+    func,
+    state,
+  }: SendFunctionPayload) => {
     const cmd = `F ${address} ${func} ${state ? 1 : 0}`
     await writeToStream(cmd)
   }
 
-  const sendOutput = async (payload) => {
-    console.log("Output", payload)
-    const cmd = `Z ${payload.pin} ${payload.state ? 1 : 0}`
+  const sendOutput = async ({
+    pin,
+    state,
+  }: {
+    pin: number
+    state: Boolean | undefined
+  }) => {
+    console.log("Output", pin, state)
+    const cmd = `Z ${pin} ${state ? 1 : 0}`
     await writeToStream(cmd)
   }
 
@@ -115,17 +143,18 @@ export function useSerial() {
     //   input, and allows serial to be received by the web page
     //   whenever it arrives.
     try {
+      if (!(navigator as any)?.serial) return
       // - Request a port and open an asynchronous connection,
       //   which prevents the UI from blocking when waiting for
       //   input, and allows serial to be received by the web page
       //   whenever it arrives.
       if (!port) {
-        port = await navigator.serial.requestPort() // prompt user to select device connected to a com port
+        port = await (navigator as any)?.serial?.requestPort() // prompt user to select device connected to a com port
         // - Wait for the port to open.
         console.log("User selected a port to connect to", port, port?.opened)
       }
 
-      await port.open({ baudRate: 115200 }) // open the port at the proper supported baud rate
+      await port?.open({ baudRate: 115200 }) // open the port at the proper supported baud rate
       connectServer()
       connStore.connect("serial")
     } catch (err) {
@@ -140,15 +169,17 @@ export function useSerial() {
     try {
       // create a text encoder output stream and pipe the stream to port.writeable
       const encoder = new TextEncoderStream()
-      outputDone = encoder.readable.pipeTo(port.writable)
-      outputStream = encoder.writable
+      if (port?.writable) {
+        outputDone = encoder.readable.pipeTo(port.writable)
+        outputStream = encoder.writable
 
-      window.serialOutputStream = outputStream
+        window.serialOutputStream = outputStream
+      }
 
       // Create an input stream and a reader to read the data. port.readable gets the readable stream
       // DCC++ commands are text, so we will pipe it through a text decoder.
       let decoder = new TextDecoderStream()
-      inputDone = port.readable.pipeTo(decoder.writable)
+      inputDone = port?.readable.pipeTo(decoder.writable)
       inputStream = decoder.readable
       //  .pipeThrough(new TransformStream(new LineBreakTransformer())); // added this line to pump through transformer
       //.pipeThrough(new TransformStream(new JSONTransformer()));
@@ -172,14 +203,15 @@ export function useSerial() {
   // all the data has been read or the port is closed
   async function readLoop() {
     while (true) {
-      const { value, done } = await reader.read()
+      const readerResult = await reader?.read()
+      // const { value, done } = readerResult
       // if (value && value.button) { // alternate check and calling a function
       // buttonPushed(value);
 
       let thisCommandString = ""
 
-      if (value) {
-        commandString = commandString + value
+      if (readerResult?.value) {
+        commandString = commandString + readerResult.value
 
         var moreToProcess = true
         while (moreToProcess) {
@@ -212,18 +244,19 @@ export function useSerial() {
           }
         }
       }
-      if (done) {
-        console.log(getTimeStamp() + " [readLoop] DONE " + done.toString())
-        reader.releaseLock()
+      if (readerResult?.done) {
+        console.log(
+          getTimeStamp() + " [readLoop] DONE " + readerResult?.done.toString()
+        )
+        reader?.releaseLock()
         break
       }
     }
   }
 
-  function parseResponse(cmd) {
-    // some basic ones only
-    cmd = cmd.replaceAll("\n", "")
-    cmd = cmd.replaceAll("\r", "")
+  function parseResponse(cmd: string) {
+    cmd = cmd.replace(/\n/g, "")
+    cmd = cmd.replace(/\r/g, "")
 
     if (!csIsReadyRequestSent) {
       writeToStream("s")
@@ -243,6 +276,8 @@ export function useSerial() {
       //intialise the roster
       writeToStream("JR")
     } else if (cmd.charAt(0) == "<") {
+      let locoAddr, cmdArray: string | any[], cmdArrayClean
+
       cmdArray = cmd.split(" ")
       cmdArrayClean = cmd
         .substring(0, cmd.length - 1)
@@ -263,7 +298,7 @@ export function useSerial() {
           //version
           try {
             versionText = cmdArray[1].substring(2, cmdArray[1].length)
-            versionArray = versionText.split(".")
+            let versionArray = versionText.split(".")
             csVersion =
               parseInt(versionArray[0]) +
               parseInt(versionArray[1]) / 100 +
@@ -282,55 +317,56 @@ export function useSerial() {
         // --------------------------------------------------------------------
       } else if (cmd.charAt(1) == "l") {
         try {
-          let lastLocoReceived = parseInt(cmdArray[1])
-          let speedbyte = parseInt(cmdArray[3])
-          let functMap = parseInt(cmdArray[4])
-          if (getCV() == lastLocoReceived) {
-            let now = new Date()
-            lastTimeReceived = now
-            if (
-              getSecondSinceMidnight(now) -
-                getSecondSinceMidnight(lastTimeSent) >
-              0.1
-            ) {
-              if (speedbyte >= 2 && speedbyte <= 127) {
-                // reverse
-                lastSpeedReceived = speedbyte - 1
-                lastDirReceived = DIRECTION_REVERSED
-              } else if (speedbyte >= 130 && speedbyte <= 255) {
-                //forward
-                lastSpeedReceived = speedbyte - 129
-                lastDirReceived = DIRECTION_FORWARD
-              } else if (speedbyte == 0) {
-                //stop
-                lastSpeedReceived = 0
-                lastDirReceived = DIRECTION_REVERSED
-              } else if (speedbyte == 128) {
-                //stop
-                lastSpeedReceived = 0
-                lastDirReceived = DIRECTION_FORWARD
-              } else {
-                lastSpeedReceived = 0
-                lastDirReceived = getDirection()
-              }
+          console.log("parseCommand", cmd)
+          // let lastLocoReceived = parseInt(cmdArray[1])
+          // let speedbyte = parseInt(cmdArray[3])
+          // let functMap = parseInt(cmdArray[4])
+          // if (getCV() == lastLocoReceived) {
+          //   let now = new Date()
+          //   lastTimeReceived = now
+          //   if (
+          //     getSecondSinceMidnight(now) -
+          //       getSecondSinceMidnight(lastTimeSent) >
+          //     0.1
+          //   ) {
+          //     if (speedbyte >= 2 && speedbyte <= 127) {
+          //       // reverse
+          //       lastSpeedReceived = speedbyte - 1
+          //       lastDirReceived = DIRECTION_REVERSED
+          //     } else if (speedbyte >= 130 && speedbyte <= 255) {
+          //       //forward
+          //       lastSpeedReceived = speedbyte - 129
+          //       lastDirReceived = DIRECTION_FORWARD
+          //     } else if (speedbyte == 0) {
+          //       //stop
+          //       lastSpeedReceived = 0
+          //       lastDirReceived = DIRECTION_REVERSED
+          //     } else if (speedbyte == 128) {
+          //       //stop
+          //       lastSpeedReceived = 0
+          //       lastDirReceived = DIRECTION_FORWARD
+          //     } else {
+          //       lastSpeedReceived = 0
+          //       lastDirReceived = getDirection()
+          //     }
 
-              setDirection(lastDirReceived)
-              setSpeed(lastSpeedReceived)
-              setPositionOfDirectionSlider(lastDirReceived)
-              setPositionofControllers()
-            } else {
-              console.log(
-                "[i] Ignoring Received Speed - too soon since last speed sent."
-              )
-            }
-            for (i = 0; i <= 28; i++) {
-              fnState = (functMap >> i) & 0x1
-              fnStateText = fnState == 1 ? "true" : "false"
-              if (getFunCurrentVal("f" + i) != fnStateText) {
-                // $("#f" + i).attr("aria-pressed", fnStateText)
-              }
-            }
-          }
+          //     setDirection(lastDirReceived)
+          //     setSpeed(lastSpeedReceived)
+          //     setPositionOfDirectionSlider(lastDirReceived)
+          //     setPositionofControllers()
+          //   } else {
+          //     console.log(
+          //       "[i] Ignoring Received Speed - too soon since last speed sent."
+          //     )
+          //   }
+          //   for (i = 0; i <= 28; i++) {
+          //     fnState = (functMap >> i) & 0x1
+          //     fnStateText = fnState == 1 ? "true" : "false"
+          //     if (getFunCurrentVal("f" + i) != fnStateText) {
+          //       // $("#f" + i).attr("aria-pressed", fnStateText)
+          //     }
+          //   }
+          // }
         } catch (e) {
           console.log(getTimeStamp + "[ERROR] Unable to process speed commands")
         }
@@ -367,8 +403,8 @@ export function useSerial() {
         // --------------------------------------------------------------------
       } else if (cmd.charAt(1) == "v" || cmd.charAt(1) == "r") {
         try {
-          cvid = parseInt(cmdArray[1])
-          cvValue = parseInt(cmdArray[2])
+          let cvid = parseInt(cmdArray[1])
+          let cvValue = parseInt(cmdArray[2])
           if (cvid > 0 && cvValue > -1) {
             // $("#cv-cvid").val(cvid)
             // $("#cv-cvvalue").val(cvValue)
@@ -426,195 +462,191 @@ export function useSerial() {
 
         if (cmdArray[0].charAt(2) == "R") {
           //roster
-          last = cmdArray.length - 1
-          if (cmdArrayClean.length > 1) {
-            // if ==1, then no roster
-            if (
-              cmdArrayClean.length == 2 ||
-              (cmdArrayClean.length > 2 && cmdArrayClean[2].charAt(0) != '"')
-            ) {
-              rosterCount = cmdArrayClean.length - 1
-              console.log(getTimeStamp() + " Processing roster: " + rosterCount)
-              try {
-                for (i = 1; i < cmdArrayClean.length; i++) {
-                  rosterIds[i - 1] = cmdArrayClean[i]
-                  rosterNames[i - 1] = ""
-                  rosterFunctions[i - 1] = ""
-                  rosterFunctionsJSON[i - 1] = ""
-                  // writeToStream("JR " + cmdArrayClean[i]);
-                }
-                if (!rosterRequested) {
-                  writeToStream("JR " + rosterIds[0]) // get the details for the first
-                  ToastMaker("Please wait - Loading Roster", 1000, {
-                    valign: "bottom",
-                    align: "center",
-                  })
-                  rosterRequested = true
-                }
-              } catch (e) {
-                console.log(getTimeStamp() + " [ERROR] Unable process roster: ")
-              }
-            } else {
-              // individual roster entry
-              console.log(
-                getTimeStamp() +
-                  " Processing individual roster entry: " +
-                  cmdArrayClean[1]
-              )
-
-              rosterComplete = true
-              for (i = 0; i < rosterIds.length; i++) {
-                if (rosterIds[i] == cmdArrayClean[1]) {
-                  rosterNames[i] = cmdArrayClean[2].substring(
-                    1,
-                    cmdArrayClean[2].length - 1
-                  )
-                  rosterFunctions[i] = cmdArrayClean[3].substring(
-                    1,
-                    cmdArrayClean[3].length - 1
-                  )
-                  splitFns = rosterFunctions[i].split("/")
-
-                  empty = true
-                  for (j = 0; j < splitFns.length; j++) {
-                    if (splitFns[j].length > 0) {
-                      empty = false
-                      break
-                    }
-                  }
-                  rosterFunctionsJSON[i] =
-                    '{"mname":"' + rosterNames[i] + '","fnData":{'
-                  if (!empty) {
-                    for (j = 0; j < splitFns.length; j++) {
-                      // console.log(getTimeStamp() + ' splitFns: ' + j + " : " + splitFns[j]);
-                      momentary = 0
-                      if (splitFns[j].charAt(0) == "*") {
-                        momentary = 1
-                        splitFns[j] = splitFns[j].substring(1)
-                      }
-                      rosterFunctionsJSON[i] =
-                        rosterFunctionsJSON[i] +
-                        '"f' +
-                        j +
-                        '":[0,' +
-                        momentary +
-                        ',"' +
-                        splitFns[j] +
-                        '",1]'
-                      if (j < splitFns.length - 1)
-                        rosterFunctionsJSON[i] = rosterFunctionsJSON[i] + ","
-                    }
-                  }
-                  rosterFunctionsJSON[i] = rosterFunctionsJSON[i] + "}}"
-                }
-              }
-              for (i = 0; i < rosterIds.length; i++) {
-                if (rosterNames[i].length == 0) {
-                  writeToStream("JR " + rosterIds[i]) // get the next
-                  rosterComplete = false
-                  break
-                }
-              }
-
-              if (rosterComplete) {
-                rosterJSON = "["
-                for (i = 0; i < rosterCount; i++) {
-                  rosterJSON = rosterJSON + '{"name":"' + rosterNames[i] + '",'
-                  rosterJSON = rosterJSON + '"cv":"' + rosterIds[i] + '",'
-                  rosterJSON = rosterJSON + '"type":"ROSTER",'
-                  rosterJSON = rosterJSON + '"brand":"_",'
-                  rosterJSON = rosterJSON + '"decoder":"_",'
-                  rosterJSON = rosterJSON + '"map":"' + rosterNames[i] + '"'
-                  rosterJSON = rosterJSON + "}"
-                  if (i < rosterCount - 1) rosterJSON = rosterJSON + ","
-                }
-                rosterJSON = rosterJSON + "]"
-                combinedLocoList = getCombinedLocoList()
-                loadmaps()
-                //intialise the routes
-                if (!routesRequested) {
-                  writeToStream("JA")
-                }
-              }
-            }
-          } else {
-            //intialise the routes
-            rosterComplete = true
-            writeToStream("JA")
-          }
-
+          // last = cmdArray.length - 1
+          // if (cmdArrayClean.length > 1) {
+          //   // if ==1, then no roster
+          //   if (
+          //     cmdArrayClean.length == 2 ||
+          //     (cmdArrayClean.length > 2 && cmdArrayClean[2].charAt(0) != '"')
+          //   ) {
+          //     let rosterCount = cmdArrayClean.length - 1,
+          //     rosterIds = [],
+          //     rosterNames = [],
+          //     rosterFunctions = [],
+          //     rosterFunctionsJSON = [],
+          //     console.log(getTimeStamp() + " Processing roster: " + rosterCount)
+          //     try {
+          //       for (i = 1; i < cmdArrayClean.length; i++) {
+          //         rosterIds[i - 1] = cmdArrayClean[i]
+          //         rosterNames[i - 1] = ""
+          //         rosterFunctions[i - 1] = ""
+          //         rosterFunctionsJSON[i - 1] = ""
+          //         // writeToStream("JR " + cmdArrayClean[i]);
+          //       }
+          //       if (!rosterRequested) {
+          //         writeToStream("JR " + rosterIds[0]) // get the details for the first
+          //         ToastMaker("Please wait - Loading Roster", 1000, {
+          //           valign: "bottom",
+          //           align: "center",
+          //         })
+          //         rosterRequested = true
+          //       }
+          //     } catch (e) {
+          //       console.log(getTimeStamp() + " [ERROR] Unable process roster: ")
+          //     }
+          //   } else {
+          //     // individual roster entry
+          //     console.log(
+          //       getTimeStamp() +
+          //         " Processing individual roster entry: " +
+          //         cmdArrayClean[1]
+          //     )
+          //     rosterComplete = true
+          //     for (i = 0; i < rosterIds.length; i++) {
+          //       if (rosterIds[i] == cmdArrayClean[1]) {
+          //         rosterNames[i] = cmdArrayClean[2].substring(
+          //           1,
+          //           cmdArrayClean[2].length - 1
+          //         )
+          //         rosterFunctions[i] = cmdArrayClean[3].substring(
+          //           1,
+          //           cmdArrayClean[3].length - 1
+          //         )
+          //         splitFns = rosterFunctions[i].split("/")
+          //         empty = true
+          //         for (j = 0; j < splitFns.length; j++) {
+          //           if (splitFns[j].length > 0) {
+          //             empty = false
+          //             break
+          //           }
+          //         }
+          //         rosterFunctionsJSON[i] =
+          //           '{"mname":"' + rosterNames[i] + '","fnData":{'
+          //         if (!empty) {
+          //           for (j = 0; j < splitFns.length; j++) {
+          //             // console.log(getTimeStamp() + ' splitFns: ' + j + " : " + splitFns[j]);
+          //             momentary = 0
+          //             if (splitFns[j].charAt(0) == "*") {
+          //               momentary = 1
+          //               splitFns[j] = splitFns[j].substring(1)
+          //             }
+          //             rosterFunctionsJSON[i] =
+          //               rosterFunctionsJSON[i] +
+          //               '"f' +
+          //               j +
+          //               '":[0,' +
+          //               momentary +
+          //               ',"' +
+          //               splitFns[j] +
+          //               '",1]'
+          //             if (j < splitFns.length - 1)
+          //               rosterFunctionsJSON[i] = rosterFunctionsJSON[i] + ","
+          //           }
+          //         }
+          //         rosterFunctionsJSON[i] = rosterFunctionsJSON[i] + "}}"
+          //       }
+          //     }
+          //     for (i = 0; i < rosterIds.length; i++) {
+          //       if (rosterNames[i].length == 0) {
+          //         writeToStream("JR " + rosterIds[i]) // get the next
+          //         rosterComplete = false
+          //         break
+          //       }
+          //     }
+          //     if (rosterComplete) {
+          //       rosterJSON = "["
+          //       for (i = 0; i < rosterCount; i++) {
+          //         rosterJSON = rosterJSON + '{"name":"' + rosterNames[i] + '",'
+          //         rosterJSON = rosterJSON + '"cv":"' + rosterIds[i] + '",'
+          //         rosterJSON = rosterJSON + '"type":"ROSTER",'
+          //         rosterJSON = rosterJSON + '"brand":"_",'
+          //         rosterJSON = rosterJSON + '"decoder":"_",'
+          //         rosterJSON = rosterJSON + '"map":"' + rosterNames[i] + '"'
+          //         rosterJSON = rosterJSON + "}"
+          //         if (i < rosterCount - 1) rosterJSON = rosterJSON + ","
+          //       }
+          //       rosterJSON = rosterJSON + "]"
+          //       combinedLocoList = getCombinedLocoList()
+          //       loadmaps()
+          //       //intialise the routes
+          //       if (!routesRequested) {
+          //         writeToStream("JA")
+          //       }
+          //     }
+          //   }
+          // } else {
+          //   //intialise the routes
+          //   rosterComplete = true
+          //   writeToStream("JA")
+          // }
           // --------------------------------------------------------------------
         } else if (cmdArray[0].charAt(2) == "A") {
           //routes/automations
-          last = cmdArray.length - 1
-          if (cmdArrayClean.length > 1) {
-            // if ==1, then no routes
-            if (
-              cmdArrayClean.length == 2 ||
-              (cmdArrayClean.length > 3 && cmdArrayClean[3].charAt(0) != '"')
-            ) {
-              routesCount = cmdArrayClean.length - 1
-              console.log(getTimeStamp() + " Processing routes: " + routesCount)
-              try {
-                for (i = 1; i < cmdArrayClean.length; i++) {
-                  routesIds[i - 1] = cmdArrayClean[i]
-                  routesTypes[i - 1] = ""
-                  routesNames[i - 1] = ""
-                  routesStates[i - 1] = -1 // unknown
-                  routesLabels[i - 1] = "Set"
-                }
-                if (!routesRequested) {
-                  // If we havn't already asked
-                  writeToStream("JA " + routesIds[0]) // get the details for the first
-                  routesRequested = true
-                }
-                ToastMaker("Please wait - Loading Routes/Automations", 1000, {
-                  valign: "bottom",
-                  align: "right",
-                })
-              } catch (e) {
-                console.log(getTimeStamp() + " [ERROR] Unable process routes: ")
-              }
-            } else {
-              // individual entry
-              console.log(
-                getTimeStamp() +
-                  " Processing individual route entry: " +
-                  cmdArrayClean[1]
-              )
-
-              routesComplete = true
-              for (i = 0; i < routesIds.length; i++) {
-                if (routesIds[i] == cmdArrayClean[1]) {
-                  routesTypes[i] = cmdArrayClean[2]
-                  routesNames[i] = cmdArrayClean[3].substring(
-                    1,
-                    cmdArrayClean[3].length - 1
-                  )
-                }
-              }
-              for (i = 0; i < routesIds.length; i++) {
-                if (routesNames[i].length == 0) {
-                  writeToStream("JA " + routesIds[i]) // get the next
-                  routesComplete = false
-                  break
-                }
-              }
-
-              if (routesComplete) {
-                buildRoutesJSON()
-                routesComplete = true
-
-                //intialise the turnouts/points
-                if (!turnoutsRequested) {
-                  writeToStream("JT")
-                }
-              }
-            }
-          } else {
-            routesComplete = true
-          }
-
+          // last = cmdArray.length - 1
+          // if (cmdArrayClean.length > 1) {
+          //   // if ==1, then no routes
+          //   if (
+          //     cmdArrayClean.length == 2 ||
+          //     (cmdArrayClean.length > 3 && cmdArrayClean[3].charAt(0) != '"')
+          //   ) {
+          //     routesCount = cmdArrayClean.length - 1
+          //     console.log(getTimeStamp() + " Processing routes: " + routesCount)
+          //     try {
+          //       for (i = 1; i < cmdArrayClean.length; i++) {
+          //         routesIds[i - 1] = cmdArrayClean[i]
+          //         routesTypes[i - 1] = ""
+          //         routesNames[i - 1] = ""
+          //         routesStates[i - 1] = -1 // unknown
+          //         routesLabels[i - 1] = "Set"
+          //       }
+          //       if (!routesRequested) {
+          //         // If we havn't already asked
+          //         writeToStream("JA " + routesIds[0]) // get the details for the first
+          //         routesRequested = true
+          //       }
+          //       ToastMaker("Please wait - Loading Routes/Automations", 1000, {
+          //         valign: "bottom",
+          //         align: "right",
+          //       })
+          //     } catch (e) {
+          //       console.log(getTimeStamp() + " [ERROR] Unable process routes: ")
+          //     }
+          //   } else {
+          //     // individual entry
+          //     console.log(
+          //       getTimeStamp() +
+          //         " Processing individual route entry: " +
+          //         cmdArrayClean[1]
+          //     )
+          //     routesComplete = true
+          //     for (i = 0; i < routesIds.length; i++) {
+          //       if (routesIds[i] == cmdArrayClean[1]) {
+          //         routesTypes[i] = cmdArrayClean[2]
+          //         routesNames[i] = cmdArrayClean[3].substring(
+          //           1,
+          //           cmdArrayClean[3].length - 1
+          //         )
+          //       }
+          //     }
+          //     for (i = 0; i < routesIds.length; i++) {
+          //       if (routesNames[i].length == 0) {
+          //         writeToStream("JA " + routesIds[i]) // get the next
+          //         routesComplete = false
+          //         break
+          //       }
+          //     }
+          //     if (routesComplete) {
+          //       buildRoutesJSON()
+          //       routesComplete = true
+          //       //intialise the turnouts/points
+          //       if (!turnoutsRequested) {
+          //         writeToStream("JT")
+          //       }
+          //     }
+          //   }
+          // } else {
+          //   routesComplete = true
+          // }
           // --------------------------------------------------------------------
         } else if (cmdArray[0].charAt(2) == "B") {
           //routes/automations updates
@@ -623,210 +655,166 @@ export function useSerial() {
           console.log(
             getTimeStamp() +
               " Processing individual route entry update: " +
-              cmdArrayClean[1]
+              cmdArrayClean?.[1]
           )
 
-          routesComplete = true
-          for (i = 0; i < routesIds.length; i++) {
-            if (routesIds[i] == cmdArrayClean[1]) {
-              if (cmdArrayClean[2].charAt(0) != '"') {
-                // state change
-                routesStates[i] = cmdArrayClean[2]
-              } else {
-                // label change
-                routesLabels[i] = cmdArrayClean[2].substring(
-                  1,
-                  cmdArrayClean[2].length - 1
-                )
-              }
-            }
-          }
-          buildRoutesJSON()
-          loadRoutes()
+          // routesComplete = true
+          // for (i = 0; i < routesIds.length; i++) {
+          //   if (routesIds[i] == cmdArrayClean[1]) {
+          //     if (cmdArrayClean[2].charAt(0) != '"') {
+          //       // state change
+          //       routesStates[i] = cmdArrayClean[2]
+          //     } else {
+          //       // label change
+          //       routesLabels[i] = cmdArrayClean[2].substring(
+          //         1,
+          //         cmdArrayClean[2].length - 1
+          //       )
+          //     }
+          //   }
+          // }
+          // buildRoutesJSON()
+          // loadRoutes()
 
           // --------------------------------------------------------------------
         } else if (cmdArray[0].charAt(2) == "T") {
           //turnouts/points
-          last = cmdArray.length - 1
-          if (cmdArrayClean.length > 1) {
-            // if ==1, then no turnouts
-            if (
-              cmdArrayClean.length == 2 ||
-              (cmdArrayClean.length > 3 && cmdArrayClean[3].charAt(0) != '"')
-            ) {
-              turnoutsCount = cmdArrayClean.length - 1
-              console.log(
-                getTimeStamp() + " Processing turnouts: " + turnoutsCount
-              )
-              try {
-                for (i = 1; i < cmdArrayClean.length; i++) {
-                  turnoutsIds[i - 1] = cmdArrayClean[i]
-                  turnoutsStates[i - 1] = ""
-                  turnoutsNames[i - 1] = ""
-                }
-                if (!turnoutsRequested) {
-                  // If we havn't already asked
-                  writeToStream("JT " + turnoutsIds[0]) // get the details for the first
-                  turnoutsRequested = true
-                }
-                ToastMaker("Please wait - Loading Turnouts/Points", 1000, {
-                  valign: "bottom",
-                  align: "right",
-                })
-              } catch (e) {
-                console.log(
-                  getTimeStamp() + " [ERROR] Unable process turnouts: "
-                )
-              }
-            } else {
-              // individual entry
-              console.log(
-                getTimeStamp() +
-                  " Processing individual turnout entry: " +
-                  cmdArrayClean[1]
-              )
-
-              turnoutsComplete = true
-              for (i = 0; i < turnoutsIds.length; i++) {
-                if (turnoutsIds[i] == cmdArrayClean[1]) {
-                  turnoutsStates[i] = cmdArrayClean[2]
-                  tName = cmdArrayClean[3].substring(
-                    1,
-                    cmdArrayClean[3].length - 1
-                  )
-                  turnoutsNames[i] = tName.length > 0 ? tName : "-blank-"
-                }
-              }
-              for (i = 0; i < turnoutsIds.length; i++) {
-                if (turnoutsNames[i].length == 0) {
-                  writeToStream("JT " + turnoutsIds[i]) // get the next
-                  turnoutsComplete = false
-                  break
-                }
-              }
-
-              if (turnoutsComplete) {
-                buildTurnoutsJSON()
-
-                turnoutsComplete = true
-                ToastMaker("Your Command Station is ready.", 15000, {
-                  valign: "bottom",
-                  align: "left",
-                })
-                ToastMaker("Use the [Loco ID] field select a Loco.", 10000, {
-                  valign: "bottom",
-                  align: "right",
-                })
-              }
-            }
-          } else {
-            turnoutsComplete = true
-            ToastMaker("Your Command Station is ready.", 15000, {
-              valign: "bottom",
-              align: "left",
-            })
-            ToastMaker("Use the [Loco ID] field select a Loco.", 10000, {
-              valign: "bottom",
-              align: "right",
-            })
+          //   last = cmdArray.length - 1
+          //   if (cmdArrayClean.length > 1) {
+          //     // if ==1, then no turnouts
+          //     if (
+          //       cmdArrayClean.length == 2 ||
+          //       (cmdArrayClean.length > 3 && cmdArrayClean[3].charAt(0) != '"')
+          //     ) {
+          //       turnoutsCount = cmdArrayClean.length - 1
+          //       console.log(
+          //         getTimeStamp() + " Processing turnouts: " + turnoutsCount
+          //       )
+          //       try {
+          //         for (i = 1; i < cmdArrayClean.length; i++) {
+          //           turnoutsIds[i - 1] = cmdArrayClean[i]
+          //           turnoutsStates[i - 1] = ""
+          //           turnoutsNames[i - 1] = ""
+          //         }
+          //         if (!turnoutsRequested) {
+          //           // If we havn't already asked
+          //           writeToStream("JT " + turnoutsIds[0]) // get the details for the first
+          //           turnoutsRequested = true
+          //         }
+          //         ToastMaker("Please wait - Loading Turnouts/Points", 1000, {
+          //           valign: "bottom",
+          //           align: "right",
+          //         })
+          //       } catch (e) {
+          //         console.log(
+          //           getTimeStamp() + " [ERROR] Unable process turnouts: "
+          //         )
+          //       }
+          //     } else {
+          //       // individual entry
+          //       console.log(
+          //         getTimeStamp() +
+          //           " Processing individual turnout entry: " +
+          //           cmdArrayClean[1]
+          //       )
+          //       turnoutsComplete = true
+          //       for (i = 0; i < turnoutsIds.length; i++) {
+          //         if (turnoutsIds[i] == cmdArrayClean[1]) {
+          //           turnoutsStates[i] = cmdArrayClean[2]
+          //           tName = cmdArrayClean[3].substring(
+          //             1,
+          //             cmdArrayClean[3].length - 1
+          //           )
+          //           turnoutsNames[i] = tName.length > 0 ? tName : "-blank-"
+          //         }
+          //       }
+          //       for (i = 0; i < turnoutsIds.length; i++) {
+          //         if (turnoutsNames[i].length == 0) {
+          //           writeToStream("JT " + turnoutsIds[i]) // get the next
+          //           turnoutsComplete = false
+          //           break
+          //         }
+          //       }
+          //       if (turnoutsComplete) {
+          //         buildTurnoutsJSON()
+          //         turnoutsComplete = true
+          //         ToastMaker("Your Command Station is ready.", 15000, {
+          //           valign: "bottom",
+          //           align: "left",
+          //         })
+          //         ToastMaker("Use the [Loco ID] field select a Loco.", 10000, {
+          //           valign: "bottom",
+          //           align: "right",
+          //         })
+          //       }
+          //     }
+          //   } else {
+          //     turnoutsComplete = true
+          //     ToastMaker("Your Command Station is ready.", 15000, {
+          //       valign: "bottom",
+          //       align: "left",
+          //     })
+          //     ToastMaker("Use the [Loco ID] field select a Loco.", 10000, {
+          //       valign: "bottom",
+          //       align: "right",
+          //     })
+          //   }
+          // }
+          // *********************************************************************
+        } else if (cmd.charAt(1) == "H") {
+          // turnout/point update
+          // console.log(
+          //   getTimeStamp() +
+          //     " Processing individual turnout state change: " +
+          //     cmdArrayClean[1]
+          // )
+          // turnoutsComplete = true
+          // for (i = 0; i < turnoutsIds.length; i++) {
+          //   if (turnoutsIds[i] == cmdArrayClean[1]) {
+          //     turnoutsStates[i] = cmdArrayClean[2]
+          //     if (turnoutsStates[i] == "1") {
+          //       turnoutsStates[i] = "T"
+          //     } else if (turnoutsStates[i] == "0") {
+          //       turnoutsStates[i] = "C"
+          //     }
+          //     break
+          //   }
+          // }
+          // buildTurnoutsJSON()
+          // loadTurnouts()
+          // *********************************************************************
+        } else if (cmdArray[0].charAt(1) == "m") {
+          // announcement/messages
+          if (cmdArrayClean?.length == 2) {
+            // ToastMaker(
+            //   cmdArrayClean[1].substring(1, cmdArrayClean[1].length - 1),
+            //   10000,
+            //   { valign: "top", align: "center" }
+            // )
           }
-        }
 
-        // *********************************************************************
-      } else if (cmd.charAt(1) == "H") {
-        // turnout/point update
-
-        console.log(
-          getTimeStamp() +
-            " Processing individual turnout state change: " +
-            cmdArrayClean[1]
-        )
-
-        turnoutsComplete = true
-        for (i = 0; i < turnoutsIds.length; i++) {
-          if (turnoutsIds[i] == cmdArrayClean[1]) {
-            turnoutsStates[i] = cmdArrayClean[2]
-            if (turnoutsStates[i] == "1") {
-              turnoutsStates[i] = "T"
-            } else if (turnoutsStates[i] == "0") {
-              turnoutsStates[i] = "C"
-            }
-            break
+          // *********************************************************************
+        } else if (cmdArray[0].charAt(1) == "*") {
+          // alert
+          if (
+            cmdArrayClean?.length >= 2 &&
+            cmdArrayClean?.[1] == "TRACK" &&
+            cmdArrayClean?.[3] == "ALERT"
+          ) {
+            // ToastMaker(
+            //   "FAULT on Track: " + cmdArrayClean[2] + " - Response: " + cmd,
+            //   5000,
+            //   { valign: "top", align: "center" }
+            // )
           }
-        }
-        buildTurnoutsJSON()
-        loadTurnouts()
 
-        // *********************************************************************
-      } else if (cmdArray[0].charAt(1) == "m") {
-        // announcement/messages
-        if (cmdArrayClean.length == 2) {
-          ToastMaker(
-            cmdArrayClean[1].substring(1, cmdArrayClean[1].length - 1),
-            10000,
-            { valign: "top", align: "center" }
-          )
+          // *********************************************************************
         }
-
-        // *********************************************************************
-      } else if (cmdArray[0].charAt(1) == "*") {
-        // alert
-        if (
-          cmdArrayClean.length >= 2 &&
-          cmdArrayClean[1] == "TRACK" &&
-          cmdArrayClean[3] == "ALERT"
-        ) {
-          ToastMaker(
-            "FAULT on Track: " + cmdArrayClean[2] + " - Response: " + cmd,
-            5000,
-            { valign: "top", align: "center" }
-          )
-        }
-
-        // *********************************************************************
       }
     }
   }
 
-  function turnoutStateText(state) {
-    console.log(getTimeStamp() + ' Individual turnout state: "' + state + '"')
-    rslt = state
-    if (state == "0" || state == "C") {
-      rslt = "Closed"
-    } else if (state == "1" || state == "T") {
-      rslt = "Thrown"
-    } else if (state == "X") {
-      rslt = "unknown"
-    }
-    return rslt
-  }
-  function buildRoutesJSON() {
-    routesJSON = "["
-    for (i = 0; i < routesCount; i++) {
-      routesJSON = routesJSON + '{"name":"' + routesNames[i] + '",'
-      routesJSON = routesJSON + '"id":"' + routesIds[i] + '",'
-      routesJSON = routesJSON + '"type":"' + routesTypes[i] + '",'
-      routesJSON = routesJSON + '"state":"' + routesStates[i] + '",'
-      routesJSON = routesJSON + '"label":"' + routesLabels[i] + '"'
-      routesJSON = routesJSON + "}"
-      if (i < routesCount - 1) routesJSON = routesJSON + ","
-    }
-    routesJSON = routesJSON + "]"
-  }
-
-  function buildTurnoutsJSON() {
-    turnoutsJSON = "["
-    for (i = 0; i < turnoutsCount; i++) {
-      turnoutsJSON = turnoutsJSON + '{"name":"' + turnoutsNames[i] + '",'
-      turnoutsJSON = turnoutsJSON + '"id":"' + turnoutsIds[i] + '",'
-      turnoutsJSON = turnoutsJSON + '"state":"' + turnoutsStates[i] + '"'
-      turnoutsJSON = turnoutsJSON + "}"
-      if (i < turnoutsCount - 1) turnoutsJSON = turnoutsJSON + ","
-    }
-    turnoutsJSON = turnoutsJSON + "]"
-  }
-
-  function writeToStream(...lines) {
+  function writeToStream(...lines: (string | number | object | undefined)[]) {
     // Stops data being written to nonexistent port if using emulator
     // if (emulatorClass == null) displayLog("[i] emulatorClass is null")
     // let stream = emulatorClass
@@ -837,7 +825,7 @@ export function useSerial() {
         lines.forEach((line) => {
           if (line == "\x03" || line == "echo(false);") {
           } else {
-            displayLog("[S] &lt;" + line.toString() + "&gt;")
+            displayLog("[S] &lt;" + line?.toString() + "&gt;")
           }
           const packet = `<${line}>\n`
           stream.write(packet)
@@ -845,55 +833,10 @@ export function useSerial() {
         })
         stream.releaseLock()
       } else {
-        console.error(
-          "No stream to write to",
-          outputStream,
-          window.serialOutputStream,
-          port,
-          stream
-        )
+        console.error("No stream to write to", outputStream, port, stream)
       }
     } catch (err) {
       console.error("Error writing to stream:", err)
-    }
-  }
-
-  // Transformer for the Web Serial API. Data comes in as a stream so we
-  // need a container to buffer what is coming from the serial port and
-  // parse the data into separate lines by looking for the breaks
-  class LineBreakTransformer {
-    constructor() {
-      // A container for holding stream data until it sees a new line.
-      this.container = ""
-    }
-
-    transform(chunk, controller) {
-      // Handle incoming chunk
-      this.container += chunk // add new data to the container
-      const lines = this.container.split("\r\n") // look for line breaks and if it finds any
-      this.container = lines.pop() // split them into an array
-      lines.forEach((line) => controller.enqueue(line)) // iterate parsed lines and send them
-    }
-
-    flush(controller) {
-      // When the stream is closed, flush any remaining data
-      controller.enqueue(this.container)
-    }
-  }
-
-  // Optional transformer for use with the web serial API
-  // to parse a JSON file into its component commands
-  class JSONTransformer {
-    transform(chunk, controller) {
-      // Attempt to parse JSON content
-      try {
-        controller.enqueue(JSON.parse(chunk))
-      } catch (e) {
-        //displayLog(chunk.toString());
-        //displayLog(chunk);
-        console.log("No JSON, dumping the raw chunk", chunk)
-        controller.enqueue(chunk)
-      }
     }
   }
 
@@ -911,7 +854,7 @@ export function useSerial() {
       // Close the input stream (reader).
       if (reader) {
         await reader.cancel() // .cancel is asynchronous so must use await to wave for it to finish
-        await inputDone.catch(() => {})
+        await inputDone?.catch(() => {})
         reader = null
         inputDone = null
         console.log("close reader")
@@ -940,59 +883,24 @@ export function useSerial() {
   }
 
   // Connect or disconnect from the command station
-  async function toggleServer(btn) {
-    // If already connected, disconnect
-    if (port) {
-      await disconnectServer()
-      btn.attr("aria-state", "Disconnected")
-      btn.html('<span class="con-ind"></span>Connect EX-CS') //<span id="con-ind"></span>Connect EX-CS
-      return
-    }
-
-    // Otherwise, call the connect() routine when the user clicks the connect button
-    success = await connectServer()
-    // Checks if the port was opened successfully
-    // if (success) {
-    //   resetRoster()
-    //   resetRoutes()
-    //   resetTurnouts()
-    //   ToastMaker(
-    //     "Please wait while information from the Command Station is loaded",
-    //     10000
-    //   )
-    //   btn.attr("aria-state", "Connected")
-    //   btn.html('<span class="con-ind connected"></span>Disconnect EX-CS')
-    // } else {
-    //   selectMethod.disabled = false
-    // }
-  }
 
   // Display log of events
-  function displayLog(data) {
-    data = data.replaceAll("\n", "")
-    data = data.replaceAll("\r", "")
-    data = data.replaceAll("\\n", "")
-    data = data.replaceAll("\\r", "")
-    data = data.replaceAll("\\0", "")
-    data = data.replaceAll("<br>", "\n")
-    data = data.replaceAll("<", "&lt;")
-    data = data.replaceAll(">", "&gt;")
-    data = data.replaceAll("\n", "<br>")
+  function displayLog(data: string) {
+    data = data.replace(/\n/g, "")
+    data = data.replace(/\r/g, "")
+    data = data.replace(/\\n/g, "")
+    data = data.replace(/\\r/g, "")
+    data = data.replace(/\\0/g, "")
+    data = data.replace(/<br>/g, "\n")
+    data = data.replace(/</g, "&lt;")
+    data = data.replace(/>/g, "&gt;")
+    data = data.replace(/\n/g, "<br>")
     if (data.length > 0) data = getTimeStamp() + " <b>" + data + "</b>"
     // $("#log-box").append(data.toString() + "<br>")
     // $("#log-box").scrollTop($("#log-box").prop("scrollHeight"))
 
     // $("#log-box2").append(data.toString() + "<br>")
     // $("#log-box2").scrollTop($("#log-box2").prop("scrollHeight"))
-  }
-
-  // Function to generate commands for functions F0 to F28
-  function sendCommandForFunction(fn, opr) {
-    setFunCurrentVal("f" + fn, opr)
-    writeToStream("F " + getCV() + " " + fn + " " + getFunCurrentVal("f" + fn))
-    console.log(
-      "Command: " + "F " + getCV() + " " + fn + " " + getFunCurrentVal("f" + fn)
-    )
   }
 
   function getTimeStamp() {
@@ -1026,7 +934,7 @@ export function useSerial() {
     )
   }
 
-  function getSecondSinceMidnight(myDate) {
+  function getSecondSinceMidnight(myDate: Date) {
     var seconds = myDate.getHours() * 60 * 60
     seconds = seconds + myDate.getMinutes() * 60
     seconds = seconds + myDate.getSeconds()
@@ -1042,8 +950,8 @@ export function useSerial() {
     // displayLog("[i] Content copied to clipboard")
   }
 
-  function isBitOn(n, index) {
-    i = index - 1
+  function isBitOn(n: number, index: number) {
+    let i = index - 1
     // return Boolean(number & (1 << index));
 
     var mask = 1 << i // gets the i'th bit
@@ -1054,8 +962,8 @@ export function useSerial() {
     }
   }
 
-  function toggleBit(n, index) {
-    i = index - 1
+  function toggleBit(n: number, index: number) {
+    let i = index - 1
     var mask = 1 << i // gets the index'th bit
     n ^= mask
     return n
@@ -1106,18 +1014,6 @@ export function useSerial() {
       )
     }
     return "[i] Web browser: " + browser + " - '" + userAgent + "'"
-  }
-
-  function sortResults(list, prop, asc) {
-    rslt = list
-    rslt.sort(function (a, b) {
-      if (asc) {
-        return a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0
-      } else {
-        return b[prop] > a[prop] ? 1 : b[prop] < a[prop] ? -1 : 0
-      }
-    })
-    return rslt
   }
 
   return {

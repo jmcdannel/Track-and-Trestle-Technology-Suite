@@ -36,9 +36,6 @@
             role="link"
             class="btn btn-primary btn-outline"
           >
-          <span v-if="!connection?.connected">Connect</span>
-          <span v-else>Configure</span>
-          
           </button>
         </router-link>
       </div>
