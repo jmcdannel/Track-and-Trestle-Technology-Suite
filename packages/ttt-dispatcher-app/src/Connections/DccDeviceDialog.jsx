@@ -13,7 +13,6 @@ export const DccDeviceDialog = ({ onClose, open }) => {
   const setDccDevice = useConnectionStore(state => state.setDccDevice);
   const layoutId = useConnectionStore(state => state.layoutId);
   const connsStore = useConnectionStore(state => state);
-  console.log('[DccDeviceDialog] connsStore', connsStore);
   const ports = useConnectionStore(state => state.ports);
   const { publish, isConnected } = useMqtt();
   const [newDccDevice, setNewDccDevice] = useState(null);
@@ -21,7 +20,7 @@ export const DccDeviceDialog = ({ onClose, open }) => {
   useEffect(() => {
     function requestPorts() {
       console.log('[DccDeviceDialog] requestPorts', isConnected, open);
-      publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({ action: 'listPorts', payload: {} }));
+      publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'listPorts', payload: {} }));
     }
     open && isConnected && requestPorts()
 
@@ -38,26 +37,26 @@ export const DccDeviceDialog = ({ onClose, open }) => {
       <DialogTitle> DCC-EX Serial Connection </DialogTitle>
       <pre>mqtt Status: {isConnected.toString()}</pre>
       <Autocomplete
-          sx={{ padding: '1rem', width: '360px' }}
-          id="dcc-deviced"
-          freeSolo
-          options={Array.isArray(ports) ? ports : []} // Added array check
-          value={newDccDevice}
-          onInputChange={(event, newValue) => {
-            setNewDccDevice(newValue);
-          }}
-          onChange={(event, newValue) => {
-            setNewDccDevice(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} label="DCC Serial Port" />}
-        />
-        <Button 
-          size="large" 
-          startIcon={<SaveIcon />}
-          onClick={handleUpdate}>
-            Save              
-        </Button>
-      </Dialog>
+        sx={{ padding: '1rem', width: '360px' }}
+        id="dcc-deviced"
+        freeSolo
+        options={Array.isArray(ports) ? ports : []} // Added array check
+        value={newDccDevice}
+        onInputChange={(event, newValue) => {
+          setNewDccDevice(newValue);
+        }}
+        onChange={(event, newValue) => {
+          setNewDccDevice(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} label="DCC Serial Port" />}
+      />
+      <Button
+        size="large"
+        startIcon={<SaveIcon />}
+        onClick={handleUpdate}>
+        Save
+      </Button>
+    </Dialog>
   )
 }
 

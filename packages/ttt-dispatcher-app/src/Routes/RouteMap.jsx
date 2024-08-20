@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Chip from '@mui/material/Chip';
 import { useConnectionStore } from '../Store/useConnectionStore';
 import { useRouteStore } from '../Store/useRouteStore';
-import TamStationSvg from './tamarack-junction-map.svg?react';
 import useLayoutRoute from '../Routes/useLayoutRoute';
 import TamIntSvg from './tamarack-junction-interchange.svg?react';
+import TamStationSvg from './tamarack-junction-map.svg?react';
 import BetatrackMapSvg from './betatrack-map.svg?react';
 
 import './RouteMap.scss';
@@ -17,24 +17,24 @@ const mapConfig = {
 const RouteMap = ({ onRouteToggle, onTurnoutToggle, routes, turnouts, routeOrigin, routeDestination }) => {
 
   const layoutId = useConnectionStore(state => state.layoutId);
-  const [ selectedMap, setSelectedMap ] = useState(mapConfig[layoutId][0]);
+  const [selectedMap, setSelectedMap] = useState(mapConfig[layoutId][0]);
 
   const routeClasses = routes?.reduce((acc, rte) => {
-      return `${acc} ${rte.disabled ? `disabled-${rte.svgId}` : ''}`;
-    }, '');
+    return `${acc} ${rte.disabled ? `disabled-${rte.svgId}` : ''}`;
+  }, '');
   const turnoutClasses = turnouts.map(t => {
-      return t.state
-        ? `turnout-${t.turnoutId}-straight`
-        : `turnout-${t.turnoutId}-divergent`
-    }).join(' ');
+    return t.state
+      ? `turnout-${t.turnoutId}-straight`
+      : `turnout-${t.turnoutId}-divergent`
+  }).join(' ');
   const mapClassName = `${routeClasses} ${turnoutClasses}`
 
   const findClickableParent = target => {
-    const clickableContainers = ['Routes', 'Turnouts', 'TurnoutLabels']; 
+    const clickableContainers = ['Routes', 'Turnouts', 'TurnoutLabels'];
     let found = false;
     let currentTarget = target;
     let targetType = '';
-    while(!found && currentTarget && currentTarget.parentNode) {
+    while (!found && currentTarget && currentTarget.parentNode) {
       if (currentTarget.parentNode.nodeName.toLowerCase() === 'svg') {
         currentTarget = null;
       } else if (clickableContainers.includes(currentTarget.parentNode.id)) {
@@ -49,9 +49,9 @@ const RouteMap = ({ onRouteToggle, onTurnoutToggle, routes, turnouts, routeOrigi
 
   const handleMapClick = async (e) => {
     e.preventDefault();
-    const svgBtn = findClickableParent(e.target);    
+    const svgBtn = findClickableParent(e.target);
     if (svgBtn) {
-      switch(svgBtn.type) {
+      switch (svgBtn.type) {
         case 'Routes':
           const rte = routes.find(r => r.svgId === svgBtn.target.id);
           console.log('handleMapRouteClick', svgBtn.target.id, routeOrigin, routeDestination);
@@ -80,14 +80,15 @@ const RouteMap = ({ onRouteToggle, onTurnoutToggle, routes, turnouts, routeOrigi
             variant={m === selectedMap ? 'filled' : 'outlined'}
             onClick={() => setSelectedMap(m)}
           />
-        )})
-      : null    
+        )
+      })
+      : null
   }
 
   function renderMap() {
-    switch(selectedMap) {
+    switch (selectedMap) {
       case 'Tamarack Station':
-        return <TamIntSvg className={mapClassName} onClick={handleMapClick} />
+        return <TamStationSvg className={mapClassName} onClick={handleMapClick} />
       case 'Interchange':
         return <TamIntSvg className={mapClassName} onClick={handleMapClick} />
       case 'betatrack':
@@ -99,7 +100,7 @@ const RouteMap = ({ onRouteToggle, onTurnoutToggle, routes, turnouts, routeOrigi
     {renderMapNav()}
     {renderMap()}
   </>)
-  
+
 }
 
 export default RouteMap;

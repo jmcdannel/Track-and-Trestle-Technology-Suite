@@ -21,6 +21,8 @@ export default function MqttProvider({ children }) {
     let client;
     try {
       console.log('connecting to broker', mqttBroker)
+      if (!layoutId) throw new Error('No LayoutID provided')
+      if (!mqttBroker) throw new Error('No MQTT Broker provided')
       client = await mqtt.connect(mqttBroker, { port: mqttPort })
     } catch (err) {
       console.error(err)
@@ -28,7 +30,7 @@ export default function MqttProvider({ children }) {
     } finally {
       setMqttClient(client)
     }
-    
+
   };
 
   // Function to disconnect from MQTT broker
@@ -66,7 +68,6 @@ export default function MqttProvider({ children }) {
 
   // Initiate MQTT CLient
   useEffect(() => {
-    console.log('Initiating MQTT Client', mqttClient)
     if (mqttClient) {
       // https://github.com/mqttjs/MQTT.js#event-connect
       mqttClient.on('connect', () => {
@@ -89,8 +90,8 @@ export default function MqttProvider({ children }) {
       // https://github.com/mqttjs/MQTT.js#event-message
       mqttClient.on('message', (topic, message) => {
         const payload = { topic, message: message.toString() }
-        setPayload({...payload, topic })
-        // console.log(`mqttClient received message: ${message} from topic: ${topic}`, {...payload, topic })
+        setPayload({ ...payload, topic })
+        console.log(`mqttClient received message: ${message} from topic: ${topic}`, { ...payload, topic })
       })
     }
   }, [mqttClient])

@@ -113,7 +113,7 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
       try {
         const message = { data: mqttMessage?.message ?  mqttMessage.message : null };
         const { action, payload } = message.data ? JSON.parse(message.data) : { action: null, payload: null };
-        // console.log('[DccListener] handleDccMessage', mqttMessage, action, payload);
+        console.log('[DccListener] handleDccMessage', mqttMessage, action, payload);
         switch (action) {
           case 'broadcast':
             parseDccResponse(payload);
@@ -130,32 +130,31 @@ export const DccConnector: FunctionComponent<DccListenerProps> = ({ layoutId }) 
     mqttMessage && parse();
   }, [mqttMessage]);
 
-  const pollIntervalMS = 2000
+  // const pollIntervalMS = 2000
 
-  useEffect(async () => {
-    const pollForCurrent = async () => {
-      while (isConnected && enablePolling.value) {
-        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'dcc', payload: 'JI' }));
-        await new Promise(resolve => setTimeout(resolve, pollIntervalMS));
-      }
-    };
-    if (isConnected && enablePolling.value) await pollForCurrent();
-  }, [isConnected, enablePolling.value])
+  // useEffect(async () => {
+  //   const pollForCurrent = async () => {
+  //     while (isConnected && enablePolling.value) {
+  //       publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'dcc', payload: 'JI' }));
+  //       await new Promise(resolve => setTimeout(resolve, pollIntervalMS));
+  //     }
+  //   };
+  //   if (isConnected && enablePolling.value) await pollForCurrent();
+  // }, [isConnected, enablePolling.value])
   
   // Connect MQTT Client
-  useEffect(async () => {
-    
+  useEffect(() => {    
     const initialize = async function() {
       try {        
         console.log('mqtt initialization', layoutId);
-        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'status', payload: 'dcclistener connected' }));
-        subscribe(`@ttt/DCCEX.js/${layoutId}`, null);
+        publish(`@ttt/dcc/${layoutId}`, JSON.stringify({ action: 'status', payload: 'DccConnector connected' }));
+        subscribe(`@ttt/DEJA.js/${layoutId}`, null);
       } catch (err) {
         console.error('api initialization error', err);
       }
     };
     !isConnected && connect()
-    isConnected && await initialize() 
+    isConnected && initialize() 
     // isConnected&& await pollForCurrent();
   }, [isConnected ]);
 

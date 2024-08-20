@@ -38,26 +38,24 @@ function ApiEngine() {
   const updateActionDeviceById = useConnectionStore(state => state.updateActionDeviceById);
   const resetConnectionStatus = useConnectionStore(state => state.resetConnectionStatus);
 
-
   const topics = {
     dispatcher: `@ttt/dispatcher/${layoutId}`,
     turnouts: `@ttt/turnouts/${layoutId}`,
   }
-  
+
   const handleMessage = async (message) => {
     try {
       console.log('[ApiEngine] handleMessage', message);
       const { action, payload } = message.data;
-      // console.log('[DccListener] handleDccMessage', action, payload);
       switch (action) {
-        case 'ports':
+        case 'portList':
           setPorts(payload);
           break;
         case 'interfaces':
           payload?.map(updateActionDeviceById)
           break;
         case 'connected':
-          // console.log('[ApiEngine] connected', payload, dccDevice);
+          console.log('[ApiEngine] connected', payload, dccDevice);
           if (payload.serial === dccDevice) {
             setDccDeviceStatus(CONNECTION_STATUS.CONNECTED);
           } else {
@@ -65,22 +63,22 @@ function ApiEngine() {
           }
           break;
       }
-    } catch (err) { 
+    } catch (err) {
       // setDccDeviceStatus(CONNECTION_STATUS.DISCONNECTED);
-      console.error('[ApiEngine] handleMessage error', err); 
+      console.error('[ApiEngine] handleMessage error', err);
     }
   }
 
   // Connect Layout
   useEffect(async () => {
-    const initialize = async function() {
+    const initialize = async function () {
       try {
         log.info('[ApiEngine] api initialize ', layoutId);
         setStatus(CONNECTION_STATUS.PENDING);
         resetConnectionStatus();
         mqtt.reset();
-        mqtt.connect();        
-        
+        mqtt.connect();
+
         initLayouts(await getByType('layouts'), layoutId);
         initTurnouts(await getByType('turnouts'));
         initLocos(await getByType('locos'), throttles);
@@ -94,11 +92,11 @@ function ApiEngine() {
     layoutId && await initialize();
     !layoutId && setStatus(CONNECTION_STATUS.DISCONNECTED);
   }, [layoutId]);
-  
+
   // Setup MQTT Topics
   useEffect(() => {
-    const initialize = async function() {
-      try {        
+    const initialize = async function () {
+      try {
         const msg = { action: 'status', payload: 'ApiEngine connected' };
         mqtt.publish(topics.dispatcher, JSON.stringify(msg));
         mqtt.subscribe(topics.dispatcher);
@@ -106,16 +104,15 @@ function ApiEngine() {
       } catch (err) {
         log.error('mqtt pub/sub error', err);
       }
-      
-    };    
+    };
     layoutId && mqtt.isConnected && initialize();
-  }, [mqtt.isConnected, layoutId ]);
+  }, [mqtt.isConnected, layoutId]);
 
   // Initialze Serial Action Device(s)
   useEffect(() => {
-    const initialize = async function() {
+    const initialize = async function () {
       try {
-        console.log('[ApiEngine] Action Device(s) initialize', actionDevices);    
+        console.log('[ApiEngine] Action Device(s) initialize', actionDevices);
         layout.interfaces?.filter(i => i.type === 'serial').map(addActionDevice);
       } catch (err) {
         log.error('dcc device initialization error', err);
@@ -146,10 +143,10 @@ function ApiEngine() {
         });
     }
   }, [mqtt.isConnected, actionDevices]);
-  
+
   // handle mqtt messages
   useEffect(() => {
-    const parse = function() {
+    const parse = function () {
       try {
         if (mqtt.payload?.message) {
           const message = JSON.parse(mqtt.payload.message);
@@ -159,11 +156,11 @@ function ApiEngine() {
       } catch (err) {
         log.error('api initialization error', err);
       }
-    };    
+    };
     // console.log('[ApiEngine] mqtt.payload', mqtt.payload);
     mqtt.payload && parse();
   }, [mqtt.payload]);
-    
+
   return (<><DccListener /></>);
 }
 

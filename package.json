@@ -5,7 +5,7 @@
     "lerna": "^7.1.1"
   },
   "engines": {
-    "node": ">=21"
+    "node": ">=20"
   },
   "description": "Monorepo of apps and apis for the Trestle TT Suite",
   "version": "0.0.1",

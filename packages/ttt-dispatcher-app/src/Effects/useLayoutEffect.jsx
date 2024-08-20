@@ -22,11 +22,7 @@ export function useLayoutEffect() {
       } else {
         publish(`@ttt/dispatcher/${layoutId}`, JSON.stringify({
           action: 'effects',
-          payload: { 
-            effectId: effect.effectId, 
-            state: effect.state,
-            type: effect.type
-          }
+          payload: effect
         }))
       }
       await updateEffect(effect);
@@ -43,7 +39,7 @@ export function useLayoutEffect() {
   async function handleIALed(effect) {
     try {
       const action = {
-        ...effect.config, 
+        ...effect.config,
         command: effect.state ? effect.config.command : 'off'
       }
       publish(`@ttt/ialed/${layoutId}`, JSON.stringify(action));

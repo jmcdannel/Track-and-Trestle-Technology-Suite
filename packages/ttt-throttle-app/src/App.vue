@@ -2,57 +2,45 @@
   import { onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { RouterView } from 'vue-router'
-  import { useMQTT } from 'mqtt-vue-hook'
-  import HeaderView from './views/HeaderView.vue'
-  // import FooterView from './views/FooterView.vue'
-  import useDcc from './api/dccApi'
-  import { useConnectionStore } from './store/connectionStore'
+  import HeaderView from '@/views/HeaderView.vue'
+  import FooterView from '@/views/FooterView.vue'
+  import DEJAConnect from '@/core/DEJAConnect.component.vue'
+  import { useConnectionStore } from '@/store/connectionStore'
   
-  const mqttBroker = import.meta.env.VITE_MQTT_BROKER
-  const mqttPort = 8081
-
-  const dccApi = useDcc()
-  const mqttHook = useMQTT()
   const conn = useConnectionStore()
-
   const { layoutId } = storeToRefs(conn)
-  const dejaTopic = ref(`@ttt/DCCEX.js/${layoutId.value}`)
   
-  onMounted(async () => {
-    try {
-      console.log('CONNECTING TO MQTT BROKER', mqttBroker, layoutId?.value, dejaTopic.value)
-      mqttHook.registerEvent(
-        dejaTopic.value,
-        (topic: string, message: string) => {
-          dccApi.parseMessage(topic, message.toString())
-        },
-        'string_key',
-      )      
-      mqttHook.registerEvent(
-          'on-connect', // mqtt status: on-connect, on-reconnect, on-disconnect, on-connect-fail
-          (_topic: string, message: string) => {
-              console.log('MQTT BROKER CONNECTION SUCCESSFUL')
-              mqttHook.subscribe([dejaTopic.value])
-              conn.$patch({ mqttConnected: true })
-              dccApi.send('listPorts', { })
-              dccApi.send('getStatus', { })
-          },
-          'string_key',
-      )
-      await mqttHook.connect(mqttBroker, { port: mqttPort })
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
 </script>
 
 <template>
-  <main class="flex flex-col h-screen">
+  <template v-if="layoutId">
+    <DEJAConnect />
+  </template>
+  <main class="flex flex-col h-screen max-w-screen-md mx-auto">
     <HeaderView />
     <main class="flex-grow flex mb-16 min-h-0">
       <RouterView />
     </main>
-    <!-- <FooterView /> -->
+    <FooterView />
   </main>
 </template>
+<style>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .slide-out-enter-active, .slide-out-leave-active {
+    transition: transform 0.5s;
+  }
+  .slide-out-enter-active {
+    transform: translateX(100%);
+  }
+  .slide-out-enter-to {
+    transform: translateX(0);
+  }
+</style>

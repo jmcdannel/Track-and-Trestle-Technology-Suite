@@ -51,7 +51,7 @@ export const handleMessage = async (msg, onSuccess) => {
       case 'listPorts':
         const response = await getPorts();
         // log.info('[INTERFACES] response', response);
-        onSuccess(JSON.stringify({ success: true, data: { action: 'ports', payload: response }}));
+        onSuccess(JSON.stringify({ success: true, data: { action: 'portList', payload: response }}));
         break;
       case 'status':
         const connectedInterfaces = Object.keys(interfaces).filter(key => interfaces[key].status === 'connected');

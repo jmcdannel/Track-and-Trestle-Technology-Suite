@@ -6,7 +6,7 @@ const store = persist((set, get) => ({
   updateLoco: (loco) => set(state => ({
     locos: [...state.locos.map(t => {
       if (t.address === loco.address) {
-        return {...t, ...loco}
+        return { ...t, ...loco }
       }
       return t;
     })]
@@ -16,9 +16,8 @@ const store = persist((set, get) => ({
     const locosWithThrottles = locos.map(loco => {
       const throttle = throttles.find(t => t.address === loco.address);
       !!throttle && throttleCount++;
-      console.log('initLocos', loco, throttle, throttleCount)
-      return { 
-        ...loco, 
+      return {
+        ...loco,
         isAcquired: !!throttle && throttle.speed > 0,
         cruiseControl: throttleCount > 2
       };

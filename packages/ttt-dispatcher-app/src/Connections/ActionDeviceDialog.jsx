@@ -27,7 +27,7 @@ export const ActionDeviceDialog = ({ onClose, open, device }) => {
 
   const handleUpdate = async () => {
     console.log('[ActionDeviceDialog] handleUpdate', device, newPort);
-    updateActionDevice({ ...device, ...{ port: newPort }});
+    updateActionDevice({ ...device, ...{ port: newPort } });
     onClose()
   }
 
@@ -36,26 +36,26 @@ export const ActionDeviceDialog = ({ onClose, open, device }) => {
       <DialogTitle> Action Serial Connection </DialogTitle>
       <pre>mqqt: {isConnected.toString()}</pre>
       <Autocomplete
-          sx={{ padding: '1rem', width: '360px' }}
-          id="device-port"
-          freeSolo
-          options={ports}
-          value={newPort}
-          onInputChange={(event, newValue) => {
-            setNewPort(newValue);
-          }}
-          onChange={(event, newValue) => {
-            setNewPort(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} label="Serial Port" />}
-        />
-        <Button 
-          size="large" 
-          startIcon={<SaveIcon />}
-          onClick={handleUpdate}>
-            Save              
-        </Button>
-      </Dialog>
+        sx={{ padding: '1rem', width: '360px' }}
+        id="device-port"
+        freeSolo
+        options={ports || []}
+        value={newPort}
+        onInputChange={(event, newValue) => {
+          setNewPort(newValue);
+        }}
+        onChange={(event, newValue) => {
+          setNewPort(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} label="Serial Port" />}
+      />
+      <Button
+        size="large"
+        startIcon={<SaveIcon />}
+        onClick={handleUpdate}>
+        Save
+      </Button>
+    </Dialog>
   )
 }
 

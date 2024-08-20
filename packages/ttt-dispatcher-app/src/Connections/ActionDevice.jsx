@@ -34,31 +34,31 @@ export const ActionDevice = props => {
       return 'red';
     }
   }
-  
-  
+
+
   return (
     <>
       <Box>
-        {/* <pre>{ JSON.stringify(device, null, 2) }</pre> */} 
-        <Typography>{device.id} </Typography>   
-        <Chip 
+        {/* <pre>{ JSON.stringify(device, null, 2) }</pre> */}
+        <Typography>{device.id} </Typography>
+        <Chip
           sx={{
             borderColor: connectionStateColor()
           }}
-          label={`${device.port}` || <Skeleton width={120} />} 
+          label={`${device?.port || ''}` || <Skeleton width={120} />}
           onDelete={() => setDccDevice(null)}
           onClick={() => setDeviceOpen(true)}
           icon={
-            <UsbIcon 
-              className={`status--${deviceConnected ? 'connected' : 'disconnected'}`} 
-              sx={{ paddingLeft: '.5rem' }} 
+            <UsbIcon
+              className={`status--${deviceConnected ? 'connected' : 'disconnected'}`}
+              sx={{ paddingLeft: '.5rem' }}
             />
           }
         />
       </Box>
       <ActionDeviceDialog
         device={device}
-        onClose={() => setDeviceOpen(false)} 
+        onClose={() => setDeviceOpen(false)}
         open={deviceOpen}
       />
     </>
