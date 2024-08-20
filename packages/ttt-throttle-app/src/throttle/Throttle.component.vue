@@ -68,8 +68,18 @@
     rangeValue.value = currentSpeed.value
   }
 
+  async function handleUp5() {
+    currentSpeed.value = currentSpeed.value + 5
+    rangeValue.value = currentSpeed.value
+  }
+
   async function handleDown() {
     currentSpeed.value = currentSpeed.value - 1
+    rangeValue.value = currentSpeed.value
+  }
+
+  async function handleDown5() {
+    currentSpeed.value = currentSpeed.value - 5
     rangeValue.value = currentSpeed.value
   }
 
@@ -124,15 +134,56 @@
       </button>
     </header>
     <section class="throttle flex flex-row flex-grow overflow-auto">
+
       <section class="py-8 px-3 text-center  flex-1">
         <input type="range" min="-100" max="100" step="1" :value="rangeValue" @input="onSlider" class="throttle-slider range-style bg-slate-800 px-3 rounded-md" />
       </section>
 
       <section class="py-8 px-3 flex flex-col items-center justify-between flex-1">
-       <div class=" direction-fwd flex justify-center">
+
+        <div class="direction-fwd flex justify-center">
           <span class="current-speed [min-width:8rem] shadow-lg shadow-blue-500/50 text-center text-5xl p-4 rounded-xl shadow-inner bg-gradient-to-r from-purple-500 to-pink-600">{{ rangeValue }}</span>
         </div>
+
+        <div class="drawer drawer-end">
+          <input id="consist-drawer" type="checkbox" class="drawer-toggle" />
+          <div class="drawer-content flex justify-center">
+            <!-- Page content here -->
+            <label for="consist-drawer" class="drawer-button btn btn-primary btn-outline">Consist</label>
+          </div>
+          <div class="drawer-side">
+            <label for="consist-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <div class="menu bg-base-200 text-base-content min-h-full w-80 p-4 pb-24">
+              <h2>Consist</h2>
+            </div>            
+          </div>
+        </div>
+
+        <div class="drawer drawer-end">
+          <input id="func-drawer" type="checkbox" class="drawer-toggle" />
+          <div class="drawer-content flex justify-center">
+            <label for="func-drawer" class="drawer-button btn btn-primary btn-outline">Functions</label>
+          </div>
+          <div class="drawer-side">
+            <label for="func-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4 pb-24">
+              <template v-for="func in functions">
+                <li>
+                  <Function :func="func" :loco="loco"  />
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+
         <div class="px-2 py-4 flex flex-col">
+          <div>
+            <button class="speed-btn btn btn-accent btn-xl" @click="handleUp5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </div>
           <div>
             <button class="speed-btn btn btn-accent btn-xl" @click="handleUp">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16">
@@ -154,14 +205,14 @@
               </svg>
             </button>
           </div>
+          <div>
+            <button class="speed-btn btn btn-accent btn-xl" @click="handleDown5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </section>
-        <section class="functions p-2 bg-gradient-to-r flex flex-col from-cyan-900 to-blue-900 max-h-fit overflow-y-auto">
-        
-        <template v-for="func in functions">
-          <Function :func="func" :loco="loco"  />
-        </template>
-        
       </section>
     </section>
   </main>
@@ -179,7 +230,6 @@
   input[type=range]::-moz-range-thumb {
     border: none;
   }
-
 
   .range-style::-webkit-slider-runnable-track {
     display: flex;

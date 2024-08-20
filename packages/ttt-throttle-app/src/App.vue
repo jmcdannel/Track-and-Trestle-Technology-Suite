@@ -19,11 +19,6 @@
   <main class="flex flex-col h-screen max-w-screen-md mx-auto">
     <HeaderView />
     <main class="flex-grow flex mb-16 min-h-0">
-      <!-- <RouterView v-slot="{ Component }">
-        <Transition name="slide-out" mode="out-in">
-          <component :is="Component" />
-        </Transition> 
-      </RouterView> -->
       <RouterView />
     </main>
     <FooterView />

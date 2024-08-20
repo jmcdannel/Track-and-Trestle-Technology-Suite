@@ -103,11 +103,10 @@
           </svg>
         </div>
         <template v-else>
-          <div v-if="!ports?.length"
-            <!-- ports loading -->
+          <div v-if="!ports?.length">
             <span class=" ">Loading</span>
           </div>
-          <ul>
+          <ul v-else>
             <li v-for="port in ports" :key="port">
               <button class="btn btn-sm btn-outline w-full border-teal-500" :value="port" @click="handlePortClick">{{ port }}</button>
               <div className="divider"></div> 

@@ -23,7 +23,8 @@ const router = createRouter({
     {
       path: "/connect/deja",
       name: "deja",
-      component: () => import("../connections/deja/DejaConnect.component.vue"),
+      component: () =>
+        import("../connections/deja/DejaConnection.component.vue"),
     },
     {
       path: "/connect/emulator",
