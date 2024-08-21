@@ -6,6 +6,7 @@
   import router from '@/router'
   import tttButton from '@/shared/ui/tttButton.component.vue'
   import { useConnectionStore } from '@/store/connectionStore.jsx'
+  import closeIconSvg from '@/assets/icons/close.svg'
 
   const dccApi = useDcc()
   const conn = useConnectionStore()
@@ -68,6 +69,13 @@
     !!newLayoutId && savelayout(newLayoutId)
   }
 
+  const clearLayout = (e:any) => {
+    e.preventDefault()
+    layoutId.value = null
+    ports.value = []
+    localStorage.removeItem('@DEJA/layoutId')
+  }
+
 </script>
 
 <template>
@@ -94,6 +102,10 @@
         <h2 class="text-5xl flex items-end ">
           <span class="bg-clip-text bg-gradient-to-r from-red-800 to-fuchsia-700 uppercase font-extrabold">
             {{ layoutId}}
+            
+            <button class="btn btn-circle btn-outline text-white btn-xs bg-gray-200 border-gray-200" @click="clearLayout">
+              <img :src="closeIconSvg" alt="clear layout"  class="h-3 w-3" />
+            </button>
           </span>
         </h2>
         <div className="divider"></div>

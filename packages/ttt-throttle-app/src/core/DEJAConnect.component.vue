@@ -30,8 +30,8 @@
       console.log('MQTT BROKER CONNECTION SUCCESSFUL', _topic, message, dejaTopic.value)
       mqttHook.subscribe([dejaTopic.value])
       conn.$patch({ mqttConnected: true })
-      dccApi.send('listPorts', { })
       dccApi.send('getStatus', { })
+      dccApi.send('listPorts', { })
     } catch (err) {
       console.error(err);
     }

@@ -8,27 +8,21 @@
   const dccApi = useDcc()
   const power = ref(false)
 
-
   function anyConnected() {
     const conn = isEmulated.value || dejaConnected.value || serialConnected.value
-    console.log('anyConnected', conn)
     return conn
   }
 
   async function handlePower() {
     try {
-      console.log('handlePower',  power);
       await dccApi.setPower(power.value ? 0 : 1);
       power.value = !power.value;
     } catch (err) {
       console.error(err);
     }
   }
-
 </script>
-
 <template>
-
   <button @click="handlePower"
     :disabled="!anyConnected()"
     class="btn btn-ghost btn-circle relative"
@@ -42,5 +36,4 @@
       </svg>
       <span class="w-1 h-1 bg-red-500 rounded-full absolute top-0.5"></span>
     </button>
-
 </template>
