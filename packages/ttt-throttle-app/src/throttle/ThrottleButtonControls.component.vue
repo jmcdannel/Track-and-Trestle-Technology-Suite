@@ -5,6 +5,17 @@
   import minusIconSvg from '@/assets/icons/minus.svg'
   import stopIconSvg from '@/assets/icons/stop.svg'
 
+  const props  = defineProps({
+    speed: {
+      type: Number,
+      required: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  })
+
   const emit = defineEmits(['update:currentSpeed', 'stop'])
 
   async function handleUp() {
