@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, ButtonGroup, IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import PanToolIcon from '@mui/icons-material/PanTool';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -7,14 +9,14 @@ import ThrottleSpeed from './ThrottleSpeed';
 
 import './SpeedControl.scss';
 
-export const SpeedControl = ({ 
+export const SpeedControl = ({
   orientation,
-  uiSpeed, 
-  maxSpeed, 
-  minSpeed, 
-  handleUpClick, 
-  handleWayUpClick, 
-  handleStopClick, 
+  uiSpeed,
+  maxSpeed,
+  minSpeed,
+  handleUpClick,
+  handleWayUpClick,
+  handleStopClick,
   handleDownClick,
   handleWayDownClick
 }) => {
@@ -40,7 +42,7 @@ export const SpeedControl = ({
     flexDirection: 'row'
   }
   return (
-    <Box 
+    <Box
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -50,7 +52,7 @@ export const SpeedControl = ({
         padding: ' 0 0 2rem 0'
       }}
       className="speed-control"
-      >
+    >
       <ThrottleSpeed speed={uiSpeed} />
       <ButtonGroup
         orientation={orientation}
@@ -58,44 +60,44 @@ export const SpeedControl = ({
         aria-label="outlined primary button group"
         className="rounded-button-group throttle__controls__group disable-dbl-tap-zoom"
       >
-        <IconButton 
+        <IconButton
           sx={{ display: 'flex', flexDirection: 'row' }}
           className="speed-up-btn disable-dbl-tap-zoom"
-          disabled={uiSpeed === maxSpeed} 
+          disabled={uiSpeed === maxSpeed}
           style={btnStlye}
           onClick={handleWayUpClick}>
-            <AddIcon />
-            <AddIcon />
+          <AddIcon />
+          <AddIcon />
         </IconButton>
-        <IconButton 
+        <IconButton
           className="speed-up-btn disable-dbl-tap-zoom"
-          disabled={uiSpeed === maxSpeed} 
+          disabled={uiSpeed === maxSpeed}
           style={btnStlye}
           onClick={handleUpClick}>
-            <AddIcon />
+          <AddIcon />
         </IconButton>
-        <IconButton 
+        <IconButton
           className="speed-stop-btn disable-dbl-tap-zoom"
-          color="primary" 
+          color="primary"
           style={btnStopStlye}
           onClick={handleStopClick} >
-            <PanToolIcon />
+          <PanToolIcon />
         </IconButton>
-        <IconButton 
+        <IconButton
           className="speed-down-btn disable-dbl-tap-zoom"
-          disabled={uiSpeed === minSpeed} 
+          disabled={uiSpeed === minSpeed}
           style={btnStlye}
           onClick={handleDownClick}>
-            <RemoveIcon />
+          <RemoveIcon />
         </IconButton>
-        <IconButton 
+        <IconButton
           sx={{ display: 'flex', flexDirection: 'row' }}
           className="speed-down-btn disable-dbl-tap-zoom"
-          disabled={uiSpeed === minSpeed} 
+          disabled={uiSpeed === minSpeed}
           style={btnStlye}
           onClick={handleWayDownClick}>
-            <RemoveIcon />
-            <RemoveIcon />
+          <RemoveIcon />
+          <RemoveIcon />
         </IconButton>
       </ButtonGroup>
     </Box>

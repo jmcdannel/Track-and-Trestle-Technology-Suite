@@ -1,4 +1,4 @@
-import React, { useContext, useState}  from 'react';
+import React, { useContext, useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -36,9 +36,9 @@ export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
   const locos = useLocoStore(state => state.locos);
   const [newConsist, setNewConsist] = useState(consist);
 
-  const handleAddLoco = async (newLoco) => {
-    console.log('Add loco: ', newLoco, consist);
-    await setNewConsist([...newConsist, newLoco]);
+  const handleAddLoco = async (address, direction, trim = 0) => {
+    console.log('Add loco: ', address, direction, trim, consist);
+    await setNewConsist([...newConsist, { address, direction, trim }]);
   }
 
   const handleClose = () => {
@@ -64,7 +64,7 @@ export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
   }
 
   const isLocoInThrottles = (aloco) => {
-    return throttles.some(t => t?.consist?.includes(aloco.address) || t?.consist?.includes(-aloco.address));
+    return throttles.some(t => t?.consist?.map(c => c.address)?.includes(aloco.address) || t?.consist?.map(c => c.address).includes(-aloco.address));
   }
 
   return (
@@ -87,7 +87,7 @@ export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Stack 
+      <Stack
         className="current-consist"
         direction="row"
         alignItems="flex-start"
@@ -97,16 +97,16 @@ export const ThrottleConsist = ({ loco, consist = [], onChange, onClose }) => {
         <ConsistLoco loco={loco} dir="left" />
         {newConsist && newConsist.length > 0 && (newConsist.map((cloco, idx) => (
           // <div key={cloco}>{Math.abs(cloco)} {locos.find(l => l.address === Math.abs(cloco))?.name}</div>
-          <ConsistLoco 
-            key={cloco} 
-            dir={cloco < 0 ? 'right' : 'left'} 
+          <ConsistLoco
+            key={cloco.address}
+            dir={cloco.direction ? 'left' : 'rigth'}
             locoIdx={idx}
             onRemoveLoco={handleRemoveLoco}
-            loco={locos.find(l => l.address === Math.abs(cloco))} />
+            loco={locos.find(l => l.address === cloco.address)} />
         )))}
       </Stack>
 
-      <Stack 
+      <Stack
         className="available-locos"
         direction="row"
         useFlexGap

@@ -101,6 +101,28 @@ main {
 
   }
 
+  &--vertical {
+    flex-direction: row;
+    .MuiButtonBase-root {
+
+      &:first-child {
+        border-radius: 1.5rem 0 0 1.5rem;
+      }
+  
+      &:last-child {
+        border-radius: 0 1.5rem 1.5rem 0;
+      }
+  
+    }
+  }
+
+  &--small {
+    .MuiButtonBase-root {
+      padding: .25rem 1.5rem;
+    }
+
+  }
+
 }
 
 // Status Monitor
