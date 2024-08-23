@@ -11,24 +11,25 @@ const limitString = (str, maxLength) => {
   }
 };
 
-export const NamePlate = ({ 
-  name, 
+export const NamePlate = ({
+  name,
   size,
   consistCount = 0,
   sx = {},
   disabled = false,
-  onClick = () => {}
+  onClick = () => { }
 }) => {
 
   return (
-    <Badge 
-      badgeContent={consistCount} 
+    <Badge
+      badgeContent={consistCount}
       color="info"
-      invisible={ consistCount < 2 }>
-      <Chip 
-        className="throttle-nameplate" 
+      invisible={consistCount < 2}>
+      <Chip
+        className="throttle-nameplate"
         label={limitString(name, 4)}
         size={size}
+        disabled={disabled}
         onClick={onClick}
         variant="outlined">
       </Chip>
