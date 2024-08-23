@@ -29,8 +29,11 @@
 
 
   onMounted(() => {
-    sliderHeight = slider.value.clientHeight
-    sliderTop = slider.value.getBoundingClientRect().top
+    if (slider?.value) {
+      const sliderEl = slider.value as HTMLElement
+      sliderHeight = sliderEl.clientHeight
+      sliderTop = sliderEl.getBoundingClientRect().top
+    }
     updateSlider(speed.value)
   })
 
@@ -42,7 +45,7 @@
     down = false
   }
 
-  function sliderDown(event) {
+  function sliderDown(event: MouseEvent) {
     if (props.disabled) {
       return
     }
@@ -51,7 +54,7 @@
     return false
   }
 
-  function sliderMove(event) {
+  function sliderMove(event: MouseEvent) {
     if (props.disabled) {
       return
     }

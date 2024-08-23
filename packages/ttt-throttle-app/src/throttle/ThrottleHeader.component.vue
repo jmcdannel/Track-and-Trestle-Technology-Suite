@@ -4,7 +4,7 @@ import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   loco: {
-    type: String,
+    type: number,
     required: true
   }
 });
