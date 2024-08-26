@@ -1,8 +1,8 @@
 <script setup>
   import { ref } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { useConnectionStore } from '../store/connectionStore'
-  import useDcc from '../api/dccApi'
+  import { useConnectionStore } from '@/connections/connectionStore'
+  import useDcc from '@/api/dccApi'
 
   const { dejaConnected, isEmulated, serialConnected } = storeToRefs(useConnectionStore())
   const dccApi = useDcc()
@@ -31,7 +31,7 @@
       'text-success': anyConnected() && power,
       'text-error': anyConnected() && !power,  
     }">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" />
       </svg>
       <span class="w-1 h-1 bg-red-500 rounded-full absolute top-0.5"></span>

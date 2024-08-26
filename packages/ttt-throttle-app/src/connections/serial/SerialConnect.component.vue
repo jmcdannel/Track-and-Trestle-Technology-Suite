@@ -4,7 +4,7 @@
   import tttButton from '@/shared/ui/tttButton.component.vue'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue';
   import useSerial from '@/api/serialApi'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
 
   const serialApi = useSerial()
   const connStore = useConnectionStore()
@@ -61,7 +61,3 @@
     </main>
   </main>
 </template>
-
-<style>
-
-</style>

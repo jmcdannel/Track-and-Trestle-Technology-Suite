@@ -4,7 +4,7 @@
   import { useMQTT } from 'mqtt-vue-hook'
   import useDcc from '@/api/dccApi'
   import router from '@/router';
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
 
   const mqttHook = useMQTT()
   const dccApi = useDcc()

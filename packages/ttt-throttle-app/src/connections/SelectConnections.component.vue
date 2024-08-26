@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import LayoutIdStatus from './layout-id/LayoutIdStatus.component.vue';
   import Status from './Status.component.vue';
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
  
   const { isEmulated, dejaConnected, serialConnected } = storeToRefs(useConnectionStore())  
 </script>

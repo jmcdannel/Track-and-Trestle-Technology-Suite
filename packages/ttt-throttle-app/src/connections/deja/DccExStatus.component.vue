@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import { RouterLink } from 'vue-router'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
   import linkIconSvg from '@/assets/icons/link.svg'
 
   const DCCJS_LABEL = 'DEJA Server'

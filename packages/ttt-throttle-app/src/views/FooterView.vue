@@ -1,9 +1,20 @@
 <script setup lang="ts">
+  import { storeToRefs } from 'pinia'
+  import { useConnectionStore } from '@/connections/connectionStore.jsx'
+  import { BsFillLightningChargeFill } from 'vue3-icons/bs'
   
+  const { layoutId } = storeToRefs(useConnectionStore())
 </script>
 <template>
   <footer>
+      
     <div class="btm-nav max-w-screen-md mx-auto">
+      <span>
+        <label v-if="layoutId" class="inline-flex text-xs bg-sky-800 text-white px-2 py-1 rounded-full items-center">
+          [{{ layoutId }}]
+          <BsFillLightningChargeFill class="w-3 h-3 fill-green-300 stroke-green-300" />
+      </label>
+      </span>
       <!-- <router-link
         to="/effects"
         custom

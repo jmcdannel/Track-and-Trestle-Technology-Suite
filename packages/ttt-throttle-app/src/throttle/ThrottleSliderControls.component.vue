@@ -77,8 +77,19 @@
       <ThrottleSlider :speed="speed" @update:currentSpeed="handleSliderUpdate" @stop="$emit('stop')" :disabled="isDisabled()" />
     </div>
     <div class="flex mt-4 align-middle justify-center">
-      <button @click="handleReverse" :class="'btn btn-outline mx-1 rounded-l-full min-w-28 text-xs' + getButtonColors(false) ">Reverse</button>
-      <button @click="handleForward" :class="'btn btn-outline mx-1 rounded-r-full min-w-28 text-xs' + getButtonColors(true) ">Forward</button>
+      <button 
+        @click="handleReverse" 
+        class="
+          btn 
+          btn-xs"
+      >Reverse</button>
+      <button 
+        @click="handleForward"
+        class="
+        btn 
+        btn-outline 
+        btn-xs"
+      >Forward</button>
     </div>
   </div>
 </template>
