@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  import { defineProps, defineEmits, ref } from 'vue';
+  import { ref, type PropType, } from 'vue';
   import Modal from '@/core/Modal.component.vue'
-  import type { ConsistLoco, Loco } from './types';
+  import type { ConsistLoco, Loco } from '@/throttle/types';
 
   const props = defineProps({
     locos: {
-      type: Array,
+      type: Array as PropType<Loco[]>,
       required: true
     }
   })
@@ -42,7 +42,6 @@
           <button
             role="link"
             @click="$emit('addLoco', cloco.address)"
-            :value="cloco"
             class="btn bg-gradient-to-br from-orange-700 to-rose-500 text-white text-lg btn-wide btn-lg"
           >
           {{cloco.address}}          

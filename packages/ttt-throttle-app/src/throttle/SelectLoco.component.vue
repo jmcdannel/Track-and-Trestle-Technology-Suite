@@ -1,5 +1,5 @@
 <script setup lang="ts">  
-  import { defineProps, ref } from 'vue';
+  import { ref, type PropType } from 'vue';
   import router from '@/router';
   import type { Loco } from './types';
 
@@ -7,7 +7,7 @@
 
   const props = defineProps({
     locos: {
-      type: Array,
+      type: Array as PropType<Loco[]>,
       required: true
     },
   })
@@ -55,7 +55,7 @@
       <button @click="handleGoClick" class="ml-2 btn btn-primary">GO</button>
     </div>
     <ul class="p-2 flex flex-col items-center" v-if="locos?.length > 0">
-      <li class="mb-2" v-for="loco in locos" :key="loco">
+      <li class="mb-2" v-for="loco in locos" :key="loco.address">
           <button
             @click="navigate"
             role="link"

@@ -14,7 +14,6 @@
   const emit = defineEmits(['saveLoco'])
 
   const settingsRef = ref<HTMLDialogElement | null>(null)
-  const address = ref<Number>((props.loco as Loco).address)
   const loco = ref<Loco | null>(props.loco as Loco)
 
   const functions = [
@@ -93,12 +92,12 @@
 </script>
 <template>
   <section>
-    <ul class="flex flex-wrap justify-center w-48">
+    <ul class="flex flex-wrap justify-center w-48" v-if="loco">
       <li v-for="(locoFunc, locoIdx) in locoFunctions" :key="locoFunc.id" class="flex-basis-1/3">
-        <Function :func="locoFunc" :address="address" :class="getRoundedClasses(locoIdx)" />
+        <Function :func="locoFunc" :address="loco.address" :class="getRoundedClasses(locoIdx)" />
       </li>
       <li v-for="(locoFunc, locoIdx) in availableFunctions" :key="locoFunc.id" class="flex-basis-1/3">
-        <Function :func="locoFunc" :address="address" :class="getRoundedClasses(locoIdx + locoFunctions.length)" />
+        <Function :func="locoFunc" :address="loco.address" :class="getRoundedClasses(locoIdx + locoFunctions.length)" />
       </li>
       <!-- 
       <li class="flex-basis-1/3">
