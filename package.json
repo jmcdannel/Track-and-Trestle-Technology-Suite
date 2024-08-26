@@ -2,7 +2,7 @@
   "name": "trestle-tt-suite",
   "private": true,
   "devDependencies": {
-    "lerna": "^7.1.1"
+    "lerna": "^7.4.2"
   },
   "engines": {
     "node": ">=20"
@@ -23,7 +23,7 @@
   "author": "Josh McDannel",
   "license": "MIT",
   "dependencies": {
-    "mqtt": "^5.3.5",
-    "wait-on": "^7.0.1"
+    "mqtt": "^5.10.0",
+    "wait-on": "^7.2.0"
   }
 }
