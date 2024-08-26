@@ -12,7 +12,7 @@
   import Functions from '@/functions/Functions.component.vue'
   import useDcc from '../api/dccApi'
   import router from '../router'
-  import type { Loco, LocoFunction } from './types';
+  import type { Loco, LocoFunction, ConsistLoco } from './types';
   import { useThrottleStore } from '@/throttle/throttleStore'
 
   const DEBOUNCE_DELAY = 100 // debounce speed changes by 100ms to prevent too many requests
@@ -62,9 +62,32 @@
     router.push({ name: 'home' })
   }
 
-  async function sendLocoSpeed(newSpeed:number, oldSpeed:number) {
+  function calculateConsistSpeed(newSpeed: number, consistLoco: ConsistLoco): number | undefined {
+    if (!consistLoco.trim) {
+      return newSpeed
+    }
+    let consistSpeed = newSpeed
+    if (consistLoco.direction) {
+        consistSpeed = (newSpeed > 0)
+          ? consistSpeed + consistLoco.trim
+          : consistSpeed - consistLoco.trim
 
-    const address = loco.value
+    } else {
+      consistSpeed = (newSpeed > 0)
+          ? consistSpeed - consistLoco.trim
+          : consistSpeed + consistLoco.trim
+    }
+
+    if (newSpeed > 0 && consistSpeed <= 0) {
+      consistSpeed = 1
+    } else if (newSpeed < 0 && consistSpeed >= 0) {
+      consistSpeed = -1
+    }
+
+    return consistSpeed
+  }
+
+  async function sendLocoSpeed(newSpeed:number, oldSpeed:number) {
     if (!loco.value) {
       // TODO: handle error
       return
@@ -102,14 +125,14 @@
       }
     } else {
       // set speed
-      console.log('set speed')
-     
+      console.log('set speed')     
       setTimeout(() => {
         loco.value && dccApi.setSpeed(loco.value.address, currentSpeed.value)
         if (loco.value && loco.value.consist.length > 0) {
           Promise.all(loco.value.consist.map(async (consistLoco) => {
-            await dccApi.setSpeed(consistLoco.address, newSpeed + consistLoco.trim) // set consist speed
-            console.log('set consist speed', newSpeed, consistLoco.trim, newSpeed + consistLoco.trim)
+            const consistSpeed = calculateConsistSpeed(newSpeed, consistLoco)
+            await dccApi.setSpeed(consistLoco.address, consistSpeed) // set consist speed
+            console.log('set consist speed', newSpeed, consistSpeed, consistLoco.direction, consistLoco.trim)
           }))
         }
       }, delay)
