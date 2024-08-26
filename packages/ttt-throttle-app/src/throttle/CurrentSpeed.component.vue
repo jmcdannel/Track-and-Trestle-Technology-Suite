@@ -10,7 +10,21 @@ const props = defineProps({
 </script>
 <template>
   <div class="flex justify-center mt-4">
-    <span class="current-speed [min-width:8rem] shadow-lg shadow-blue-500/50 text-center text-5xl p-4 rounded-xl shadow-inner bg-gradient-to-r from-purple-500 to-pink-600">{{ speed }}</span>
+    <span class="
+      current-speed 
+      [min-width:5rem] 
+      md:[min-width:8rem] 
+      shadow-lg 
+      shadow-blue-500/50 
+      text-center 
+      text-xl
+      md:text-5xl 
+      p-4 
+      rounded-xl 
+      shadow-inner 
+      bg-gradient-to-r 
+      from-purple-500 
+      to-pink-600">{{ speed }}</span>
   </div>
 </template>
 

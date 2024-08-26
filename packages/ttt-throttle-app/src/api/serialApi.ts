@@ -1,4 +1,4 @@
-import { useConnectionStore } from "@/store/connectionStore"
+import { useConnectionStore } from "@/connections/connectionStore"
 
 declare global {
   interface Window {

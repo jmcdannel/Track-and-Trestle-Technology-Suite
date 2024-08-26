@@ -3,7 +3,7 @@
   import router from '@/router';
   import tttButton from '@/shared/ui/tttButton.component.vue'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
-  import { useConnectionStore } from '@/store/connectionStore.jsx'
+  import { useConnectionStore } from '@/connections/connectionStore.jsx'
 
   const connStore = useConnectionStore()
   const { isEmulated } = storeToRefs(connStore)

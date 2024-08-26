@@ -5,7 +5,7 @@
   import HeaderView from '@/views/HeaderView.vue'
   import FooterView from '@/views/FooterView.vue'
   import DEJAConnect from '@/core/DEJAConnect.component.vue'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
   
   const conn = useConnectionStore()
   const { layoutId } = storeToRefs(conn)

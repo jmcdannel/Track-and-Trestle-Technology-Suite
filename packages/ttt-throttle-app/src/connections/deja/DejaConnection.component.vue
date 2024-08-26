@@ -5,7 +5,7 @@
   import useDcc from '@/api/dccApi'
   import router from '@/router'
   import tttButton from '@/shared/ui/tttButton.component.vue'
-  import { useConnectionStore } from '@/store/connectionStore.jsx'
+  import { useConnectionStore } from '@/connections/connectionStore.jsx'
   import closeIconSvg from '@/assets/icons/close.svg'
 
   const dccApi = useDcc()

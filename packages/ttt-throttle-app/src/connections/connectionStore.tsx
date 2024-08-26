@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { disconnect } from 'process'
 
 export const useConnectionStore = defineStore('connections', {
   state: () => ({

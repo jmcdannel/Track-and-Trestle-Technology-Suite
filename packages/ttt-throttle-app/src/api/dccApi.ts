@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from "vue"
-import { useConnectionStore } from "../store/connectionStore.jsx"
+import { useConnectionStore } from "../connections/connectionStore.jsx"
 import { storeToRefs } from "pinia"
 import { useMQTT } from "mqtt-vue-hook"
 import { useSerial } from "@/api/serialApi.js"

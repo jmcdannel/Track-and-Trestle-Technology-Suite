@@ -1,8 +1,9 @@
 <script setup lang="ts">
-
   import { defineEmits } from 'vue'
-  import plusIconSvg from '@/assets/icons/plus.svg'
-  import minusIconSvg from '@/assets/icons/minus.svg'
+  import chevronUpIconSvg from '@/assets/icons/chevron-up.svg'
+  import chevronDownIconSvg from '@/assets/icons/chevron-down.svg'
+  import chevronDoubleUpIconSvg from '@/assets/icons/chevron-double-up.svg'
+  import chevronDoubleDownIconSvg from '@/assets/icons/chevron-double-down.svg'
   import stopIconSvg from '@/assets/icons/stop.svg'
 
   const props  = defineProps({
@@ -38,40 +39,54 @@
     emit('stop')
   }
 
+  const btnClasses = 'btn btn-accent relative h-auto mx-auto md:w-24 '
+  const iconClasses = 'h-8 w-8 md:h-16 md:w-16 relative'
+
 </script>
 <template>
-  <div class="px-2 py-4 flex flex-col">
-    <div class="relative">
-      <button class="speed-btn btn btn-accent btn-xl relative rounded-b-none rounded-t-3xl" @click="handleUp5">
-        <img :src="plusIconSvg" class="speed-icon h-16 w-16 relative" />
-        <span class="speed-val absolute right-4 border-black border-2 text-xs font-bold rounded-full p-1 bg-black text-white w-6 h-6 flex justify-center align-middle">5</span>
-      </button>
-    </div>
+  <div class="px-2 py-4 flex flex-col justify-center align-middle">
+    <button 
+      class="rounded-b-none rounded-t-3xl" 
+      :class="btnClasses"
+      @click="handleUp5">
+      <img 
+        :src="chevronDoubleUpIconSvg" 
+        :class="iconClasses"
+      />
+    </button>
     <hr class="border-black" />
-    <div class="relative">
-      <button class="speed-btn btn btn-accent btn-xl relative rounded-none" @click="handleUp">
-        <img :src="plusIconSvg" class="speed-icon h-16 w-16 relative" />
-        <span class="speed-val absolute right-4 border-black border-2 text-xs font-bold rounded-full p-1 bg-black text-white w-6 h-6 flex justify-center align-middle">1</span>
-      </button>
-    </div>
-    <div class="relative">
-      <button class="stop-btn btn btn-primary btn-xl rounded-3xl" @click="handleStop">
-        <img :src="stopIconSvg" class="h-16 w-16" />
-      </button>
-    </div>
-    <div class="relative">
-      <button class="speed-btn btn btn-accent btn-xl relative rounded-none" @click="handleDown">
-        <img :src="minusIconSvg" class="speed-icon h-16 w-16 relative" />
-        <span class="speed-val absolute right-4 border-black border-2 text-xs font-bold rounded-full p-1 bg-black text-white w-6 h-6 flex justify-center align-middle">1</span>
-      </button>
-    </div>
+    <button 
+      class="rounded-none" 
+      :class="btnClasses"
+      @click="handleUp">
+      <img 
+        :src="chevronUpIconSvg" 
+        :class="iconClasses"
+      />
+    </button>
+    <button 
+      class="btn btn-primary rounded-3xl h-auto mx-auto w-28 md:w-36 relative z-10" @click="handleStop">
+      <img :src="stopIconSvg" :class="iconClasses" />
+    </button>
+    <button 
+      class="rounded-none"
+      :class="btnClasses" 
+      @click="handleDown">
+      <img 
+        :src="chevronDownIconSvg" 
+        :class="iconClasses"
+      />
+    </button>
     <hr class="border-black" />
-    <div class="relative">
-      <button class="speed-btn btn btn-accent btn-xl relative rounded-t-none rounded-b-3xl" @click="handleDown5">
-        <img :src="minusIconSvg" class="speed-icon h-16 w-16 relative" />
-        <span class="speed-val absolute right-4 border-black border-2 text-xs font-bold rounded-full p-1 bg-black text-white w-6 h-6 flex justify-center align-middle">5</span>
-      </button>
-    </div>
+    <button 
+      class="rounded-t-none rounded-b-3xl" 
+      :class="btnClasses"
+      @click="handleDown5">
+      <img 
+        :src="chevronDoubleDownIconSvg" 
+        :class="iconClasses"
+      />
+    </button>
   </div>
 </template>
 <style scroped>

@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
   import SelectConnections from '../connections/SelectConnections.component.vue'
   import ThrottleView from '../views/ThrottleView.vue'
-  import { useConnectionStore } from '../store/connectionStore.jsx'
+  import { useConnectionStore } from '@/connections/connectionStore.jsx'
 
   const { dejaConnected, isEmulated, serialConnected } = storeToRefs(useConnectionStore())
 

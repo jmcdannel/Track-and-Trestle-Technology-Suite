@@ -1,17 +1,30 @@
 <script setup lang="ts">
-  import Throttle from '../throttle/Throttle.component.vue'
-  import SelectLoco from '../throttle/SelectLoco.component.vue'
+  import { ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  const route = useRoute();
+  import Throttle from '@/throttle/Throttle.component.vue'
+  import SelectLoco from '@/throttle/SelectLoco.component.vue'
+  import { useThrottleStore, localStorageKey } from '@/throttle/throttleStore'
+
+  import type { Loco } from '../throttle/types'
+
+  const route = useRoute()
+
+  const throttleStore = useThrottleStore()
+  watch(() => throttleStore.$state?.locos,
+    (state) => {
+      localStorage.setItem(localStorageKey, JSON.stringify(state));
+    },
+    { deep: true }
+  )
   
 </script>
 
 <template>
   <template v-if="route.params.locoId">
-    <Throttle />
+    <Throttle :locos="throttleStore.locos" :address="parseInt(route.params.locoId?.toString())" />
   </template>
   <template v-else>
-    <SelectLoco />
+    <SelectLoco :locos="throttleStore.locos" />
   </template>
 </template>

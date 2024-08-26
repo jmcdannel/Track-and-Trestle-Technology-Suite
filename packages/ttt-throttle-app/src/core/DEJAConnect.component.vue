@@ -3,7 +3,7 @@
   import { storeToRefs } from 'pinia'
   import { useMQTT } from 'mqtt-vue-hook'
   import useDcc from '@/api/dccApi'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
 
   const mqttBroker = import.meta.env.VITE_MQTT_BROKER
   const mqttPort = 8081

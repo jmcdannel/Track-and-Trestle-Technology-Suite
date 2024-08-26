@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import { RouterLink } from 'vue-router'
   import router from '@/router';
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
   import linkIconSvg from '@/assets/icons/link.svg'
   
