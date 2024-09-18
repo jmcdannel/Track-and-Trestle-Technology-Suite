@@ -1,18 +1,24 @@
 <script setup lang="ts">  
-  import { ref } from 'vue';
+  import { ref, type PropType } from 'vue';
   import router from '@/router';
+  import type { Loco } from './types';
 
-  const storedLocosData = localStorage.getItem('@DEJA/locos')
-  const locos = ref(storedLocosData ? JSON.parse(storedLocosData) : [])
-  const loco = ref(null)
   const MAX_SAVED_LOCOS = 20
 
+  const props = defineProps({
+    locos: {
+      type: Array as PropType<Loco[]>,
+      required: true
+    },
+  })
+
+  const locos = ref<Loco[]>(props.locos as Loco[])
+  const loco = ref(null)
+
   const handleGoClick = async () => {
-    console.log('SELECTLOCO.handleGoClick', loco.value)
     const locoId = parseInt(loco.value as unknown as string) 
     !!locoId && saveLoco(locoId)
     router.push({ name: 'throttle', params: { locoId } })
-    
   }
 
   const navigate = (e:any) => {
@@ -22,13 +28,17 @@
     !!locoId && router.push({ name: 'throttle', params: { locoId } })
   }
 
-  const saveLoco = (loco:number) => {
-    if (!locos.value.includes(loco)) {
-      locos.value.push(loco);
+  const saveLoco = (address:number) => {
+    if (!locos.value.find(l => l.address === address)) {
+      locos.value.push({
+        address,
+        consist: [],
+        functions: []
+      });
       if (locos.value.length > MAX_SAVED_LOCOS) {
         locos.value.shift();
       }
-      localStorage.setItem('@DEJA/locos', JSON.stringify(locos.value))
+      // localStorage.setItem('@DEJA/locos', JSON.stringify(locos.value))
     }
   }
 
@@ -41,18 +51,18 @@
       <strong class="text-9xl uppercase">Loco</strong>
     </h2>
     <div class="p-2 flex flex-row items-center justify-center">
-      <input v-model="loco" class="text-black rounded p-2 text-xl w-auto">
-      <button @click="handleGoClick" class="btn">GO</button>
+      <input v-model="loco" class="input input-bordered w-24 text-right max-w-xs" pattern="[0-9]*" inputmode="numeric">
+      <button @click="handleGoClick" class="ml-2 btn btn-primary">GO</button>
     </div>
     <ul class="p-2 flex flex-col items-center" v-if="locos?.length > 0">
-      <li class="mb-2" v-for="loco in locos" :key="loco">
+      <li class="mb-2" v-for="loco in locos" :key="loco.address">
           <button
             @click="navigate"
             role="link"
-            :value="loco"
+            :value="loco.address"
             class="btn bg-gradient-to-br from-orange-700 to-rose-500 text-white text-lg btn-wide btn-lg"
           >
-          {{loco}}          
+          {{loco.address}}
           </button>
       </li>
     </ul>

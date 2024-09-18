@@ -19,6 +19,7 @@ import ThrottleActions from './ThrottleActions';
 import ThrottleConsist from './ThrottleConsist';
 import ThrottleSettings from './ThrottleSettings';
 import ThrottleSlider from './ThrottleSlider';
+import ConsistTrim from './ConsistTrim';
 
 import useDebounce from '../Shared/Hooks/useDebounce';
 import { useBreakpoints } from '../Shared/Hooks/useBreakpoints';
@@ -31,36 +32,38 @@ import './Throttle.scss';
 
 export const Throttle = props => {
 
-	const STOP = '0.0';
-  const { 
-    loco, 
+  const STOP = '0.0';
+  const {
+    loco,
     cruiseDisabled,
     variant = 'full',
-    onLocoClick, 
+    onLocoClick,
     loco: {
       autoStop,
       maxSpeed = 100
-    } 
+    }
   } = props;
 
   const address = Number(props.loco.address);
-  const throttle = useThrottleStore(state => state.getThrottle)(address);
+  const throttleStore = useThrottleStore();
+  const { throttles } = throttleStore;
+  const throttle = throttles.find(t => t.address === address);
   const updateLoco = useLocoStore(state => state.updateLoco);
   const speed = throttle?.speed || 0;
   const consist = throttle?.consist || [];
 
   // const calcSpeed = origSpeed => origSpeed * (forward === true ? 1 : -1);
 
-  const [ showFunctionsDrawer, setShowFunctionsDrawer ] = useState(false);
-  const [ showSettings, setShowSettings ] = useState(false);
-  const [ showConsist, setShowConsist] = useState(false);
-  const [ functionState, setFunctionState ] = useState([]);
-  const [ uiSpeed, setUiSpeed ] = useState(speed);
+  const [showFunctionsDrawer, setShowFunctionsDrawer] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showConsist, setShowConsist] = useState(false);
+  const [functionState, setFunctionState] = useState([]);
+  const [uiSpeed, setUiSpeed] = useState(speed);
   const debouncedSpeed = useDebounce(uiSpeed, 100);
 
   const { setFunction } = useDcc();
 
-  const [ isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize ] = useBreakpoints();
+  const [isXs, isSm, isMd, isLg, isXl, up, down, getCurrentSize] = useBreakpoints();
 
   const isVariantFull = variant === 'full';
   const isVariantHalf = variant === 'half';
@@ -90,7 +93,7 @@ export const Throttle = props => {
   }
 
   const handleLocoClick = async () => {
-    await updateLoco({ address: loco.address, cruiseControl: !loco.cruiseControl }); 
+    await updateLoco({ address: loco.address, cruiseControl: !loco.cruiseControl });
     if (onLocoClick) {
       onLocoClick(loco);
     }
@@ -122,13 +125,13 @@ export const Throttle = props => {
           <CardHeader
             title={null}
             avatar={
-              <NamePlate 
-                name={loco.name} 
-                size="small" 
-                consistCount={1 + (consist?.length || 0)} 
+              <NamePlate
+                name={loco.name}
+                size="small"
+                consistCount={1 + (consist?.length || 0)}
                 onClick={handleLocoClick}
               />
-            } 
+            }
             action={
               <ThrottleActions
                 cruiseDisabled={cruiseDisabled}
@@ -141,9 +144,6 @@ export const Throttle = props => {
               />
             }
           />
-          {/* {down.lg && (
-            <CardHeader title={<LocoName loco={loco} />}></CardHeader>
-          )} */}
           <CardContent className="throttle__content grow flex">
             <Grid container spacing={1} className="grow">
               {/* {up.lg && showFunctions && (
@@ -154,11 +154,13 @@ export const Throttle = props => {
                   <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
                 </Grid>
               )} */}
-              
-                <Grid item 
-                  xs={5} sm={4} md={4} 
-                  display="flex" 
-                  className="throttle__actions">
+
+              <Grid item
+                xs={5} sm={4} md={4}
+                display="flex"
+                justifyContent="center"
+                className="throttle__actions">
+                <Box display="flex" flexDirection="column" justifyContent="center">
                   <AdvancedControls
                     cruiseDisabled={cruiseDisabled}
                     loco={loco}
@@ -167,37 +169,43 @@ export const Throttle = props => {
                     onShowConsist={() => setShowConsist(true)}
                     onShowFunctions={() => setShowFunctionsDrawer(true)}
                   />
-                </Grid>
+                </Box>
+              </Grid>
               {isVariantFull && (
-              // {up.md && isVariantFull && (
                 <Grid item
-                  xs={4} sm={4} md={3} 
-                  sx={{display: { xs: 'none', sm: 'flex' }}} 
-                  flexGrow={1} 
+                  xs={4} sm={4} md={3}
+                  sx={{ display: { xs: 'none', sm: 'flex' } }}
+                  flexGrow={1}
                   className="throttle__slider">
-                    <ThrottleSlider
-                      max={maxSpeed}
-                      className="throttle__slider__control"
-                      speed={uiSpeed}
-                      autoStop={autoStop}
-                      onChange={handleSliderSpeed}
-                    />
+                  <ThrottleSlider
+                    max={maxSpeed}
+                    className="throttle__slider__control"
+                    speed={uiSpeed}
+                    autoStop={autoStop}
+                    onChange={handleSliderSpeed}
+                  />
                 </Grid>
               )}
-              <Grid item 
-                xs 
-                sx={{ flex: 1 }} 
+              <Grid item
+                xs
+                sx={{ flex: 1 }}
                 className="throttle__controls">
-                <SpeedControl
-                  uiSpeed={uiSpeed}
-                  maxSpeed={maxSpeed}
-                  minSpeed={-maxSpeed}
-                  handleWayUpClick={handleWayUpClick}
-                  handleUpClick={handleUpClick}
-                  handleStopClick={handleStopClick}
-                  handleDownClick={handleDownClick}
-                  handleWayDownClick={handleWayDownClick}
-                />
+                <Box display="flex" flexDirection="column" justifyContent="center">
+                  <ConsistTrim
+                    loco={loco}
+                    consist={throttle?.consist}
+                  />
+                  <SpeedControl
+                    uiSpeed={uiSpeed}
+                    maxSpeed={maxSpeed}
+                    minSpeed={-maxSpeed}
+                    handleWayUpClick={handleWayUpClick}
+                    handleUpClick={handleUpClick}
+                    handleStopClick={handleStopClick}
+                    handleDownClick={handleDownClick}
+                    handleWayDownClick={handleWayDownClick}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </CardContent>
@@ -208,13 +216,13 @@ export const Throttle = props => {
 
   function renderMiniThrottle() {
     return (
-      <Box sx={{ padding: '.5rem', flexBasis: '100%' }}>    
+      <Box sx={{ padding: '.5rem', flexBasis: '100%' }}>
         <Paper className="mini-throttle">
-          <NamePlate 
-            size="small" 
-            name={loco.name} 
+          <NamePlate
+            size="small"
+            name={loco.name}
             onClick={handleLocoClick}
-            consistCount={1 + (consist?.length || 0)} 
+            consistCount={1 + (consist?.length || 0)}
           />
           {/* <LocoName loco={loco} /> */}
           <SpeedControl
@@ -228,7 +236,7 @@ export const Throttle = props => {
             handleDownClick={handleDownClick}
             handleWayDownClick={handleWayDownClick}
           />
-          <Box sx={{ 
+          <Box sx={{
             alignSelf: 'center',
             display: {
               xs: 'none',
@@ -269,12 +277,12 @@ export const Throttle = props => {
         anchor={'right'}
         open={showFunctionsDrawer}
         onClose={() => setShowFunctionsDrawer(false)}
-        >
+      >
         <DialogTitle>Functions</DialogTitle>
         <Functions onFunctionClick={handleFunctionClick} functionMap={loco.functions} />
       </Dialog>
 
-      <Dialog 
+      <Dialog
         fullScreen
         onClose={() => setShowConsist(false)} open={showConsist}>
         <ThrottleConsist

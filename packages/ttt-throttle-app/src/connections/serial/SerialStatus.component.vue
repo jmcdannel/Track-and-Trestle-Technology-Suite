@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import { RouterLink } from 'vue-router'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
   import linkIconSvg from '@/assets/icons/link.svg'
   
   const { serialConnected } = storeToRefs(useConnectionStore())  
@@ -36,9 +36,6 @@
             role="link"
             class="btn btn-primary btn-outline"
           >
-          <span v-if="!connection?.connected">Connect</span>
-          <span v-else>Configure</span>
-          
           </button>
         </router-link>
       </div>

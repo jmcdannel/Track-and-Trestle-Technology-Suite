@@ -112,11 +112,22 @@ $neutral: #f89719;
       display: none;
     }
   }
+
+  .throttle__controls__group {
+    flex-direction: column;
+    padding: 0 1rem;
+
+  }
+  .throttle__consist-trim__controls__group {
+    flex-direction: row;
+    padding: 0 0.25rem;  
+  }
+
+  .throttle__consist-trim__controls__group,
   .throttle__controls__group {
     flex: 1;
-    justify-content: center;
     flex-direction: row;
-    padding: 0 1rem;
+    justify-content: center;
 
     .MuiButtonBase-root.MuiIconButton-root {
       background: linear-gradient(140deg, rgb(36, 191, 191) 0%, rgb(20, 133, 143) 100%);

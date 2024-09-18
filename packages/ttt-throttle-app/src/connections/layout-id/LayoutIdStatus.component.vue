@@ -2,15 +2,15 @@
   import { storeToRefs } from 'pinia'
   import { RouterLink } from 'vue-router'
   import router from '@/router';
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
   import ConnectionStatus from '@/core/ConnectionStatus.component.vue'
   import linkIconSvg from '@/assets/icons/link.svg'
   
-  const { layoutId, isEmulated, dccExConnected } = storeToRefs(useConnectionStore())  
+  const { layoutId, isEmulated, dejaConnected } = storeToRefs(useConnectionStore())  
 
   const handleConnectClick = () => {
     isEmulated.value = true
-    dccExConnected.value = false
+    dejaConnected.value = false
     router.push({ name: 'home' })
   }
   const handleDisconnectClick = () => {

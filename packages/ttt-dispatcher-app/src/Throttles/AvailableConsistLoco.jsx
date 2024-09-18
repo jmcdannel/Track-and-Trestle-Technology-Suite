@@ -22,11 +22,11 @@ const AvailableConsistLoco = ({ loco, disabled, onAddLoco }) => {
   const [roadname] = useLayoutRoadnames(loco?.meta?.roadname);
 
   const handleLeftCLick = () => {
-    onAddLoco(loco.address)
+    onAddLoco(loco.address, true)
   }
 
   const handleRightCLick = () => {
-    onAddLoco(-loco.address)
+    onAddLoco(loco.address, false)
   }
 
   return (
@@ -34,7 +34,7 @@ const AvailableConsistLoco = ({ loco, disabled, onAddLoco }) => {
       {/* <Chip className="throttle-nameplate" label={limitString(name, 4)} size="small" variant="outlined"></Chip>             */}
       <Grid container spacing={1} alignItems="center" padding={1}>
         <Grid item xs={4}>
-          <Chip disabled={disabled} className="throttle-nameplate" label={limitString(loco.name, 4)} size="small" variant="outlined"></Chip>            
+          <Chip disabled={disabled} className="throttle-nameplate" label={limitString(loco.name, 4)} size="small" variant="outlined"></Chip>
         </Grid>
         <Grid item xs={4}>
           <Button disabled={disabled} variant="outlined" startIcon={<AddIcon />} onClick={handleLeftCLick}>
@@ -46,7 +46,7 @@ const AvailableConsistLoco = ({ loco, disabled, onAddLoco }) => {
             <DieselLocoSvg className="consist-loco consist-loco--right" />
           </Button>
         </Grid>
-      </Grid>            
+      </Grid>
     </Paper>
   );
 };

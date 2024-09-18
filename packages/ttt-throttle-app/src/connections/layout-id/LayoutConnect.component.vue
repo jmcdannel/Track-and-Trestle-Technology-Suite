@@ -4,7 +4,7 @@
   import { useMQTT } from 'mqtt-vue-hook'
   import useDcc from '@/api/dccApi'
   import router from '@/router';
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
 
   const mqttHook = useMQTT()
   const dccApi = useDcc()
@@ -19,27 +19,27 @@
     console.log('LayoutConnect.handleGoClick', layout.value)
     layoutId.value = layout.value
     !!layout.value && savelayout(layout.value)
-    router.push({ name: 'connect' })
+    // router.push({ name: 'connect' })
     
   }
 
   const navigate = (e:any) => {
-    console.log('SELECTlayout.navigate', e.target.value)
-    const newLayoutId = e.target.value
-    layoutId.value = newLayoutId
+    // console.log('SELECTlayout.navigate', e.target.value)
+    // const newLayoutId = e.target.value
+    // layoutId.value = newLayoutId
 
-    mqttHook.registerEvent(
-      dejaTopic.value,
-      (topic: string, message: string) => {
-        dccApi.parseMessage(topic, message.toString())
-      },
-      'string_key',
-    )      
+    // mqttHook.registerEvent(
+    //   dejaTopic.value,
+    //   (topic: string, message: string) => {
+    //     dccApi.parseMessage(topic, message.toString())
+    //   },
+    //   'string_key',
+    // )      
 
-    mqttHook.subscribe([dejaTopic.value])
+    // mqttHook.subscribe([dejaTopic.value])
     
-    !!newLayoutId && savelayout(newLayoutId)
-    !!newLayoutId && router.push({ name: 'connect' })
+    // !!newLayoutId && savelayout(newLayoutId)
+    // !!newLayoutId && router.push({ name: 'connect' })
   }
 
   const savelayout = (layout:string) => {

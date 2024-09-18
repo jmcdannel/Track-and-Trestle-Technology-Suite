@@ -3,7 +3,7 @@
   import { storeToRefs } from 'pinia'
   import { useMQTT } from 'mqtt-vue-hook'
   import useDcc from '@/api/dccApi'
-  import { useConnectionStore } from '@/store/connectionStore'
+  import { useConnectionStore } from '@/connections/connectionStore'
 
   const mqttBroker = import.meta.env.VITE_MQTT_BROKER
   const mqttPort = 8081
@@ -18,6 +18,7 @@
 
   function handleMessage(topic: string, message: string) {
     try {
+      console.log('handleMessage', topic, message.toString())
       dccApi.parseMessage(topic, message.toString())
     } catch (err) {
       console.error(err);
@@ -28,9 +29,9 @@
     try {
       console.log('MQTT BROKER CONNECTION SUCCESSFUL', _topic, message, dejaTopic.value)
       mqttHook.subscribe([dejaTopic.value])
-      dccApi.send('listPorts', { })
-      dccApi.send('getStatus', { })
       conn.$patch({ mqttConnected: true })
+      dccApi.send('getStatus', { })
+      dccApi.send('listPorts', { })
     } catch (err) {
       console.error(err);
     }
