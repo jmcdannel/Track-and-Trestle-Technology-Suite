@@ -6,6 +6,9 @@ lerna-debug.log
 yarn-error.log
 .nx/cache/
 .vercel
+.vscode/
 .env*.local
 .vscode/settings.json
 **/*/dist/
+
+**/*settings.toml
