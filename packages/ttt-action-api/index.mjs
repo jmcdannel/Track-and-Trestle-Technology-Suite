@@ -6,7 +6,7 @@ import log from './src/core/logger.mjs';
 async function main() {
   try {
     mqtt.connect();
-    await interfaces.connect();
+    await interfaces.initialize();
   } catch (err) {
     log.fatal('main', err);
   }

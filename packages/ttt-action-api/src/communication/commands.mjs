@@ -99,9 +99,10 @@ const ialedCommand = effect => ({
 
 const getEffectById = async (effectId) => {
   try {
-    const uri = `${baseUri}/effects/${effectId}`;
+    const uri = `${host}/api/effects/${layoutId}/${effectId}`;
     const resp = await fetch(uri);
-    return resp.data;
+    const effect = await resp.json();
+    return effect;
   } catch (err) {
     log.error('[COMMANDS] getEffectById', err);
   }
@@ -117,6 +118,7 @@ const effectCommand = async (payload) => {
       case 'relay':
       case 'pin':
       case 'power':
+        effect.state = payload.state;
         return [pinCommand(effect)];
       case 'ialed':
         return [ialedCommand(effect)];
