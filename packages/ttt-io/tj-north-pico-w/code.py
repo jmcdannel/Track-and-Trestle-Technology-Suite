@@ -69,12 +69,16 @@ def message(client, topic, message):
     print("payload")
     print(payload)
     
+    
     if payload is not None and "config" in payload:
       config = payload["config"]
+      interface = config.get("interface")
+      print("interface")
+      print(interface)
       # Rest of your code here
-      if action == "turnouts" and config["interface"] == ifaceId:
+      if action == "turnouts" and interface == ifaceId:
           handleTurnout(client, payload)
-      elif action == "effects" and config["interface"] == ifaceId:
+      elif action == "effects" and interface == ifaceId:
           handlePin(client, payload)
     else:
       print("Payload does not contain a 'config' object")
@@ -136,5 +140,6 @@ def runMqtt():
         mqtt_client.loop()
 
 runMqtt()
+
 
 
