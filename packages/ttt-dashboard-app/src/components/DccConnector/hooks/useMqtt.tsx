@@ -3,7 +3,7 @@ import { signal } from "@preact/signals";
 import mqtt from "mqtt";
 
 // const mqttBroker = import.meta.env.VITE_MQTT_BROKER; // 'mqtt://joshs-mac-mini.local'
-const mqttBroker = 'mqtt://test.mosquitto.org'; // 'mqtt://joshs-mac-mini.local'
+const mqttBroker = 'wss://test.mosquitto.org'; // 'mqtt://joshs-mac-mini.local'
 const mqttPort = 8081;
 export const connected = signal<boolean>(false);
 export function useMqtt() {
