@@ -1,7 +1,6 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <ArduinoJson.h>
-#include <TurnoutPulser.h>
 
 #if __has_include("config.h")
 #include "config.h"
@@ -16,8 +15,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 TurnoutPulser turnouts[] = {
     TurnoutPulser(8, 9),
-    TurnoutPulser(10, 11)
-};
+    TurnoutPulser(10, 11)};
 
 const size_t capacity = 20 * JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
 DynamicJsonDocument doc(capacity);

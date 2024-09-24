@@ -1,12 +1,10 @@
+#include <TurnoutPulser.h>
+
 #define DEVICE_ID "betatrack-A"
 #define ENABLE_PWM false
 #define ENABLE_OUTPUTS true
 #define ENABLE_SIGNALS true
 #define ENABLE_TURNOUTS true
-
-int OUTPINS[] = { 2, 3, 20, 21, 22, 23, 24, 25, 26, 27, 42, 44, 46, 48 };
-
-int  SIGNALPINS[] = { 42, 44, 46, 48 };
 
 #define SERVOMIN 150 // This is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX 600 // This is the 'maximum' pulse length count (out of 4096)
@@ -16,3 +14,9 @@ int  SIGNALPINS[] = { 42, 44, 46, 48 };
 #define USMAX 2400    // This is the rounded 'maximum' microsecond length based on the maximum pulse of 600
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 #define SERVO_COUNT 16
+
+int OUTPINS[] = {2, 3, 20, 21, 22, 23, 24, 25, 26, 27, 42, 44, 46, 48};
+
+int SIGNALPINS[] = {42, 44, 46, 48};
+
+TurnoutPulser turnouts[] = {};
