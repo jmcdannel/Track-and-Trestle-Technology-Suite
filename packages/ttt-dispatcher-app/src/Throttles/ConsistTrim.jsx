@@ -17,21 +17,7 @@ export const ConsistTrim = ({ loco, consist = [] }) => {
 
   const btnStlye = {
     padding: {
-      xs: '0.25rem 1rem',
-      sm: '0.5rem 2rem',
-      md: '1rem 2rem',
-      lg: '1rem 2rem',
-      xl: '1rem 2rem'
-    },
-    flexDirection: 'row'
-  }
-  const btnStopStlye = {
-    padding: {
-      xs: '.75rem 0',
-      sm: '.8rem 0',
-      md: '1rem 0',
-      lg: '1.5rem 0',
-      xl: '2rem 0'
+      xs: '0.25rem 1rem'
     },
     flexDirection: 'row'
   }
@@ -119,16 +105,6 @@ export const ConsistTrim = ({ loco, consist = [] }) => {
       ))}
     </Box>
   );
-
-  // return (
-  //   <Box>
-  //     ConsistTrim
-  //     {consist && consist.length > 0 && (consist.map((cloco, idx) => (
-  //       <div key={cloco}>{cloco.address} {locos.find(l => l.address === cloco.address)?.name}</div>
-
-  //     )))}
-  //   </Box>
-  // );
 }
 
 export default ConsistTrim;

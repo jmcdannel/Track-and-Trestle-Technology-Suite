@@ -1,7 +1,3 @@
-// import { get as getLayoutConfig }  from '../modules/layout.mjs';
-import { writeFile } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import axios from 'axios';
 import serial from './serial.mjs';
 import emulator from './emulator.mjs';
@@ -32,83 +28,90 @@ const identifySerialConnections = async () => {
   return serialPorts;
 }
 
+async function handleCommandMessage(msg, onSuccess) {
+  const commandList = await commands.build(msg);
+  log.info('[INTERFACES] commandList', commandList);
+  if (commandList && commandList.length > 0) {
+    await commands.send(commandList);
+    // onSuccess(JSON.stringify({ success: true, data: msg }));
+  } else {
+    // onSuccess(JSON.stringify({ success: false, data: msg }));
+  }
+}
+
+async function handleResponseMessage(msg, onSuccess) {
+  switch(msg.action) { 
+    case 'listPorts':
+      const response = await getPorts();
+      // log.info('[INTERFACES] response', response);
+      onSuccess(JSON.stringify({ success: true, data: { action: 'portList', payload: response }}));
+      break;
+    case 'status':
+      const connectedInterfaces = Object.keys(interfaces).filter(key => interfaces[key].isConnected);
+      onSuccess(JSON.stringify({ success: true, data: { action: 'interfaces', payload: connectedInterfaces }}));
+      break
+    case 'connect':
+      connectSerialDevice(msg, onSuccess);
+      break;
+    default:
+      // no op
+      break;
+  }
+}
+
+async function connectSerialDevice(msg, onSuccess) {
+  try {
+    const com = interfaces[msg.payload.device.id];
+    if (!com.isConnected) {
+      // const handleMessage = async (payload) => await onSuccess(JSON.stringify({ success: true, data: payload }));
+      const handleMessage = async (payload) => console.log('[SERIAL] handleMessage', payload);
+      const port = await serial.connect({ path: msg.payload.serial, baudRate, handleMessage });
+      com.connection = port;
+      com.send = serial.send;
+      com.isConnected = true;
+    }    
+    await onSuccess(JSON.stringify({ success: true, data: { action: 'connected', payload: msg.payload }}));
+    log.info('[INTERFACES] serialConnected', msg, typeof com);
+  } catch (err) {
+    log.error('[INTERFACES] connect', err);
+  }
+}
+
 export const handleMessage = async (msg, onSuccess) => {
   const commandActions = ['effects', 'turnouts'];
   const reponseActions = ['listPorts', 'connect', 'status'];
 
   log.info('[INTERFACES] handleMessage', msg, commandActions.includes(msg?.action));
   if (commandActions.includes(msg?.action)) { // command actions
-    const commandList = await commands.build(msg);
-    log.info('[INTERFACES] commandList', commandList);
-    if (commandList && commandList.length > 0) {
-      await commands.send(commandList);
-      // onSuccess(JSON.stringify({ success: true, data: msg }));
-    } else {
-      onSuccess(JSON.stringify({ success: false, data: msg }));
-    }
+    handleCommandMessage(msg, onSuccess);
   } else if (reponseActions.includes(msg.action)) { // response actions
-    switch(msg.action) { 
-      case 'listPorts':
-        const response = await getPorts();
-        // log.info('[INTERFACES] response', response);
-        onSuccess(JSON.stringify({ success: true, data: { action: 'portList', payload: response }}));
-        break;
-      case 'status':
-        const connectedInterfaces = Object.keys(interfaces).filter(key => interfaces[key].status === 'connected');
-        onSuccess(JSON.stringify({ success: true, data: { action: 'interfaces', payload: connectedInterfaces }}));
-        break
-      case 'connect':
-        try {
-          const com = { ...interfaces[msg.payload.device.id], ...msg.payload, baudRate };
-          log.info('[INTERFACES] serialConnect', msg, typeof com?.serial, baudRate);
-          if (!com?.serial) throw new Error('No serial port specified');
-
-          const handleMessage = async (payload) => await onSuccess(JSON.stringify({ success: true, data: payload }));
-          com.connection = await serial.connect({ path: com.serial, baudRate: com.baudRate, handleMessage });
-          com.send = serial.send;
-          com.status = 'connected';
-          // com.connection = await serial.connect(com);
-          // com.send = serial.send;
-          // com.status = 'connected';
-          // interfaces[msg.payload.connectionId] = com;
-          interfaces[com.device.id] = com; // TODO: refactor
-          log.info('[INTERFACES] serialConnected', msg, typeof com);
-          onSuccess(JSON.stringify({ success: true, data:{ action: 'connected', payload: msg.payload }}));
-        } catch (err) {
-          log.error('[INTERFACES] connect', err);
-        }
-        break;
-      default:
-        // no op
-        break;
-    }
-
+    handleResponseMessage(msg, onSuccess);
   }
 }
 
-const intialize = async (com) => {
+const intializeDevice = async (com) => {
   log.info('[INTERFACES] intializing', com?.type, com?.id);
   let interfaceId = com.id;
   switch(com.type) {
     case 'emulate':
       com.connection = await emulator.connect();
       com.send = emulator.send;
+      com.isConnected = true;
       break;
     case 'serial':
       try {
-        // com.serial && (com.connection = await serial.connect(com));
-        // com.send = serial.send;
-        // com.status = 'connected';
-        // com.id = 'serial'; // TODO: refactor
+        // TODO: refactor
+        com.isConnected = false;
         interfaceId = com?.id;
       } catch (err) {
-        com.status = 'fail';
+        com.isConnected = false;
         log.error(err);
       }
       break;
     case 'audio':
       com.connection = audioplayer.connect(com);
       com.send = audioplayer.send;
+      com.isConnected = true;
       break;
     case 'default':
       log.warn('[INTERFACES] Interface type not found', com.type);
@@ -117,11 +120,11 @@ const intialize = async (com) => {
   interfaces[interfaceId] = com;
 }
 
-export const connect = async () => {
-  log.start('Connecting Interfaces', process.env.LAYOUT_ID);
+export const initialize = async () => {
+  log.start('Initializing Interfaces', process.env.LAYOUT_ID);
   await identifySerialConnections();
   const layoutConfig = await getLayout(process.env.LAYOUT_ID);
-  layoutConfig.interfaces?.map(await intialize);
+  layoutConfig.interfaces?.map(await intializeDevice);
 }
 
-export default { connect, interfaces, handleMessage };
+export default { initialize, interfaces, handleMessage };
