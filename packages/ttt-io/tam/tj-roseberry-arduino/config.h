@@ -5,6 +5,7 @@
 #define ENABLE_OUTPUTS true
 #define ENABLE_SIGNALS true
 #define ENABLE_TURNOUTS true
+#define ENABLE_SENSORS true
 
 #define SERVOMIN 150 // This is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX 600 // This is the 'maximum' pulse length count (out of 4096)
@@ -16,8 +17,8 @@
 #define SERVO_COUNT 16
 
 int OUTPINS[] = {52};
-
 int SIGNALPINS[] = {};
+int SENSORPINS[] = {};
 
 TurnoutPulser turnouts[] = {
     TurnoutPulser(2, 3),   // 0

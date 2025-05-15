@@ -42,6 +42,13 @@ void setup()
   }
 #endif
 
+#if ENABLE_SENSORS
+  for (int idx = 0; idx < (sizeof(SENSORPINS) / sizeof(SENSORPINS[0])); idx++)
+  {
+    pinMode(SENSORPINS[idx], INPUT);
+  }
+#endif
+
   for (int idx = 0; idx < (sizeof(turnouts) / sizeof(turnouts[0])); idx++)
   {
     turnouts[idx].begin();
@@ -66,6 +73,15 @@ void loop()
   {
     Serial.println("handleInput");
     handleInput();
+  }
+  int sensorValue = digitalRead(A0);  // Read the value from the IR sensor
+
+  if (sensorValue == LOW) {
+    // Obstacle detected
+    Serial.println("Obstacle detected!");
+  } else {
+    // No obstacle
+    Serial.println("No obstacle.");
   }
 }
 

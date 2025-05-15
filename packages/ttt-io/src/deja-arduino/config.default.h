@@ -16,7 +16,7 @@
 #define SERVO_COUNT 16
 
 int OUTPINS[] = {};
-
 int SIGNALPINS[] = {};
+int SENSORPINS[] = {};
 
 TurnoutPulser turnouts[] = {};
