@@ -28,8 +28,8 @@ ledParams
 #include "LED.h"
 
 LED strips[] = {
-    LED(6, 47),
-    LED(5, 256)};
+    LED(6, 213),
+    LED(5, 47)};
 
 int numStrips = (sizeof(strips) / sizeof(strips[0]));
 

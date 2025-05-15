@@ -58,7 +58,7 @@ void LED::setPattern(char *pattern, char *range, char *config)
   Serial.println(this->end);
   Serial.println(this->range);
 
-if (strcmp(this->pattern, "color") == 0 || strcmp(this->pattern, "chasecolor") == 0 || strcmp(this->pattern, "wipe") == 0)
+if (strcmp(this->pattern, "solid") == 0 || strcmp(this->pattern, "chasecolor") == 0 || strcmp(this->pattern, "wipe") == 0)
 {
   int rgbParams[3];
   TextParser configParser(":");
@@ -70,7 +70,7 @@ if (strcmp(this->pattern, "off") == 0)
 {
   this->turnOff();
 }
-else if (strcmp(this->pattern, "color") == 0)
+else if (strcmp(this->pattern, "solid") == 0)
 {
   this->setColor();
 }
@@ -78,7 +78,7 @@ else if (strcmp(this->pattern, "rainbow") == 0)
 {
   this->rainbow(10);
 }
-else if (strcmp(this->pattern, "rainbowchase") == 0)
+else if (strcmp(this->pattern, "chaserainbow") == 0)
 {
   this->theaterChaseRainbow(50);
 }
@@ -98,7 +98,7 @@ void LED::updatePattern()
   {
     this->rainbow(10);
   }
-  else if (strcmp(this->pattern, "rainbowchase") == 0)
+  else if (strcmp(this->pattern, "chaserainbow") == 0)
   {
     this->theaterChaseRainbow(50);
   }
