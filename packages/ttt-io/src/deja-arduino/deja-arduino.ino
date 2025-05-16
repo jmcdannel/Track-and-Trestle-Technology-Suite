@@ -13,12 +13,13 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #endif
 
-TurnoutPulser turnouts[] = {
-    TurnoutPulser(8, 9),
-    TurnoutPulser(10, 11)};
-
 const size_t capacity = 20 * JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + 60;
 DynamicJsonDocument doc(capacity);
+
+#if ENABLE_SENSORS
+static int lastSensorValues[sizeof(SENSORPINS) / sizeof(SENSORPINS[0])] = {HIGH};      // Store last states, initialized to HIGH
+static unsigned long lastChangeTime[sizeof(SENSORPINS) / sizeof(SENSORPINS[0])] = {0}; // Array to store last change times
+#endif
 
 void setup()
 {
@@ -30,7 +31,6 @@ void setup()
   for (int idx = 0; idx < (sizeof(OUTPINS) / sizeof(OUTPINS[0])); idx++)
   {
     pinMode(OUTPINS[idx], OUTPUT);
-    Serial.println(OUTPINS[idx]);
   }
 #endif
 
@@ -74,14 +74,23 @@ void loop()
     Serial.println("handleInput");
     handleInput();
   }
-  int sensorValue = digitalRead(A0);  // Read the value from the IR sensor
 
-  if (sensorValue == LOW) {
-    // Obstacle detected
-    Serial.println("Obstacle detected!");
-  } else {
-    // No obstacle
-    Serial.println("No obstacle.");
+  static unsigned long lastChangeTime[sizeof(SENSORPINS) / sizeof(SENSORPINS[0])] = {0}; // Array to store last change times
+  unsigned long currentTime = millis();
+
+  for (int i = 0; i < (sizeof(SENSORPINS) / sizeof(SENSORPINS[0])); i++)
+  {
+    int sensorValue = digitalRead(SENSORPINS[i]); // Read current sensor value
+    if (sensorValue != lastSensorValues[i] && (currentTime - lastChangeTime[i] >= 500))
+    {
+      Serial.print("{ \"sensor\": ");
+      Serial.print(i);
+      Serial.print(", \"state\": ");
+      Serial.print(sensorValue);
+      Serial.println(" }");
+      lastSensorValues[i] = sensorValue; // Update last known state
+      lastChangeTime[i] = currentTime;   // Update last change time
+    }
   }
 }
 

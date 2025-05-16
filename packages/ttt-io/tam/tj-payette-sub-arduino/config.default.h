@@ -1,10 +1,11 @@
 #include <TurnoutPulser.h>
 
-#define DEVICE_ID "betatrack-A"
+#define DEVICE_ID "daja-arduino"
 #define ENABLE_PWM false
-#define ENABLE_OUTPUTS true
-#define ENABLE_SIGNALS true
-#define ENABLE_TURNOUTS true
+#define ENABLE_OUTPUTS false
+#define ENABLE_SIGNALS false
+#define ENABLE_TURNOUTS false
+#define ENABLE_SENSORS false
 
 #define SERVOMIN 150 // This is the 'minimum' pulse length count (out of 4096)
 #define SERVOMAX 600 // This is the 'maximum' pulse length count (out of 4096)
@@ -16,7 +17,7 @@
 #define SERVO_COUNT 16
 
 int OUTPINS[] = {};
-
 int SIGNALPINS[] = {};
+int SENSORPINS[] = {};
 
 TurnoutPulser turnouts[] = {};
